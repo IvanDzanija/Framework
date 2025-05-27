@@ -14,6 +14,10 @@ const int OUT_OF_BOUNDS = -1;
 const int NOT_SQUARE = -2;
 
 template <typename T> constexpr T EPSILON = static_cast<T>(1e-6);
+template <typename T> inline bool is_close(T v1, T v2) {
+    return std::abs(v1 - v2) < EPSILON<T>;
+}
+
 namespace math {
 template <typename T> class Matrix {
   private:
@@ -267,25 +271,40 @@ template <typename T> class Matrix {
 
     // Methods
 
-    void transpose() {
-        if (!is_square()) {
-            throw std::invalid_argument("Matrix must be square to transpose.");
-        }
-        if (_rows > 1000) {
-
-#pragma omp parallel for
-            for (size_t i = 0; i < _rows; ++i) {
-                for (size_t j = i + 1; j < _cols; ++j) {
-                    std::swap(_data[_get_index(i, j)], _data[_get_index(j, i)]);
-                }
-            }
-        }
-    }
-
+    // Inplace fill
     void fill(T value) {
         for (size_t i = 0; i < _size; ++i) {
             _data[i] = value;
         }
+    }
+
+    // Inplace transpose
+    void transpose() {
+        if (!is_square()) {
+            throw std::invalid_argument("Matrix must be square to transpose.");
+        }
+
+#pragma omp parallel for
+        for (size_t i = 0; i < _rows; ++i) {
+            for (size_t j = i + 1; j < _cols; ++j) {
+                std::swap(this->at(i, j), this->at(j, i));
+            }
+        }
+    }
+
+    // New transposed matrix
+    const Matrix transposed() {
+        T *result = new T[_size];
+#pragma omp parallel for
+        for (size_t i = 0; i < _rows; ++i) {
+            for (size_t j = i + 1; j < _cols; ++j) {
+                result[_get_index(i, j)] = this->at(j, i);
+                result[_get_index(j, i)] = this->at(i, j);
+            }
+        }
+        Matrix ret(_cols, _rows, result);
+        delete[] result;
+        return ret;
     }
 
     // Operators
@@ -410,7 +429,6 @@ template <typename T> class Matrix {
     }
 
     // Scalar * Matrix
-
     template <class U>
     friend Matrix<U> operator*(const U &scalar, const Matrix<U> &matrix);
 
