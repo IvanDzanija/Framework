@@ -1,0 +1,457 @@
+#ifndef CONTAINERS_H
+#define CONTAINERS_H
+
+#pragma once
+#include <cmath>
+#include <iomanip>
+#include <iostream>
+#include <omp.h>
+#include <stdexcept>
+#include <type_traits>
+#include <vector>
+
+const int OUT_OF_BOUNDS = -1;
+const int NOT_SQUARE = -2;
+
+template <typename T> constexpr T EPSILON = static_cast<T>(1e-6);
+namespace math {
+template <typename T> class Matrix {
+  private:
+    size_t _rows;
+    size_t _cols;
+    size_t _size;
+    T *_data;
+
+    bool _is_valid_index(size_t row, size_t col) const {
+        return row < _rows && col < _cols;
+    }
+    size_t _get_index(size_t row, size_t col) const {
+        if (!_is_valid_index(row, col)) {
+            throw std::out_of_range("Index out of bounds.");
+        }
+        return row * _cols + col;
+    }
+
+  public:
+    // Constructors and destructors
+
+    // Default constructor
+    Matrix() {
+        _rows = 0;
+        _cols = 0;
+        _size = 0;
+        _data = nullptr;
+    }
+
+    ~Matrix() {
+        if (_data != nullptr) {
+            delete[] _data;
+        }
+    }
+
+    // Construct from raw data
+    Matrix(size_t rows, size_t cols, T *data) {
+        if (rows == 0 || cols == 0) {
+            throw std::invalid_argument(
+                "Matrix dimensions must be greater than zero.");
+        }
+        if (data == nullptr) {
+            throw std::invalid_argument("Data pointer cannot be null.");
+        }
+        _rows = rows;
+        _cols = cols;
+        _size = rows * cols;
+        _data = new T[_size];
+        for (size_t i = 0; i < _size; ++i) {
+            _data[i] = data[i];
+        }
+    }
+
+    // Construct empty of size rows x cols
+    Matrix(size_t rows, size_t cols) {
+        if (rows == 0 || cols == 0) {
+            throw std::invalid_argument(
+                "Matrix dimensions must be greater than zero.");
+        }
+        _rows = rows;
+        _cols = cols;
+        _size = rows * cols;
+        _data = new T[_size];
+
+        // Default initialization
+        for (size_t i = 0; i < rows * cols; ++i) {
+            _data[i] = T();
+        }
+    }
+
+    // Copy constructor
+    Matrix(const Matrix &other) {
+        _rows = other._rows;
+        _cols = other._cols;
+        _size = other._size;
+        _data = new T[_size];
+        for (size_t i = 0; i < _size; ++i) {
+            _data[i] = other._data[i];
+        }
+    }
+
+    // Move constructor
+    Matrix(Matrix &&other) noexcept {
+        _rows = other._rows;
+        _cols = other._cols;
+        _size = other._size;
+        _data = other._data;
+
+        // Reset the moved-from object
+        other._rows = 0;
+        other._cols = 0;
+        other._size = 0;
+        other._data = nullptr;
+    }
+
+    // Assignment operator
+    Matrix &operator=(const Matrix &other) {
+        if (this != &other) {
+            if (_data != nullptr) {
+                delete[] _data;
+            }
+            _rows = other._rows;
+            _cols = other._cols;
+            _size = other._size;
+            _data = new T[_size];
+            for (size_t i = 0; i < _size; ++i) {
+                _data[i] = other._data[i];
+            }
+        }
+        return *this;
+    }
+
+    // Move assignment operator
+    Matrix &operator=(Matrix &&other) noexcept {
+        if (this != &other) {
+            if (_data != nullptr) {
+                delete[] _data;
+            }
+            _rows = other._rows;
+            _cols = other._cols;
+            _size = other._size;
+            _data = other._data;
+
+            // Reset the moved-from object
+            other._rows = 0;
+            other._cols = 0;
+            other._size = 0;
+            other._data = nullptr;
+        }
+        return *this;
+    }
+
+    // Constructors for std::vector and std::array
+    template <typename U>
+    Matrix(size_t rows, size_t cols, const std::vector<U> &data) {
+        if (rows == 0 || cols == 0) {
+            throw std::invalid_argument(
+                "Matrix dimensions must be greater than zero.");
+        }
+        if (data.size() != rows * cols) {
+            throw std::invalid_argument(
+                "Data size does not match matrix size.");
+        }
+        _rows = rows;
+        _cols = cols;
+        _size = rows * cols;
+        _data = new T[_size];
+        for (size_t i = 0; i < _size; ++i) {
+            _data[i] = static_cast<T>(data[i]);
+        }
+    }
+
+    template <typename U, size_t N>
+    Matrix(size_t rows, size_t cols, const std::array<U, N> &data) {
+        if (rows == 0 || cols == 0) {
+            throw std::invalid_argument(
+                "Matrix dimensions must be greater than zero.");
+        }
+        if (N != rows * cols) {
+            throw std::invalid_argument(
+                "Data size does not match matrix size.");
+        }
+        _rows = rows;
+        _cols = cols;
+        _size = N;
+        _data = new T[_size];
+        for (size_t i = 0; i < _size; ++i) {
+            _data[i] = static_cast<T>(data[i]);
+        }
+    }
+
+    T &at(int row, int col) {
+        if (!_is_valid_index(row, col)) {
+            throw std::out_of_range("Matrix index out of bounds");
+        }
+        return _data[_get_index(row, col)];
+    }
+
+    const T &at(int row, int col) const {
+        if (!_is_valid_index(row, col)) {
+            throw std::out_of_range("Matrix index out of bounds");
+        }
+        return _data[_get_index(row, col)];
+    }
+
+    // Getters
+    size_t rowsSize() const { return _rows; }
+    size_t colsSize() const { return _cols; }
+
+    // Equality operator
+    bool operator==(const Matrix &other) const {
+        if (_rows != other._rows || _cols != other._cols) {
+            return false;
+        }
+        for (size_t i = 0; i < _size; ++i) {
+            if (_data[i] != other._data[i]) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    // Checkers
+
+    bool is_square() const { return _rows == _cols; }
+
+    bool is_symmetric() const {
+        if (!is_square()) {
+            throw std::invalid_argument(
+                "Matrix must be square to check symmetry.");
+        }
+        for (size_t i = 0; i < _rows; ++i) {
+            for (size_t j = i + 1; j < _cols; ++j) {
+                if (std::abs(this->at(i, j) - this->at(j, i)) >= EPSILON<T>) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    bool is_upper_triangular() const {
+        for (size_t i = 1; i < _rows; ++i) {
+            for (size_t j = 0; j < i; ++j) {
+                if (std::abs(this->at(i, j)) >= EPSILON<T>) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    bool is_lower_triangular() const {
+        for (size_t i = 0; i < _rows - 1; ++i) {
+            for (size_t j = i + 1; j < _cols; ++j) {
+                if (std::abs(this->at(i, j)) >= EPSILON<T>) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    bool is_diagonal() const {
+        if (!is_square()) {
+            throw std::invalid_argument(
+                "Matrix must be square to check diagonality.");
+        }
+        return is_upper_triangular() && is_lower_triangular();
+    }
+
+    // Methods
+
+    void transpose() {
+        if (!is_square()) {
+            throw std::invalid_argument("Matrix must be square to transpose.");
+        }
+        if (_rows > 1000) {
+
+#pragma omp parallel for
+            for (size_t i = 0; i < _rows; ++i) {
+                for (size_t j = i + 1; j < _cols; ++j) {
+                    std::swap(_data[_get_index(i, j)], _data[_get_index(j, i)]);
+                }
+            }
+        }
+    }
+
+    void fill(T value) {
+        for (size_t i = 0; i < _size; ++i) {
+            _data[i] = value;
+        }
+    }
+
+    // Operators
+
+    // Matrix + Matrix
+    Matrix<T> operator+(const Matrix &other) const {
+        if (_rows != other.rowsSize() || _cols != other.colsSize()) {
+            throw std::invalid_argument(
+                "Matrices have to be of same dimensions!");
+        }
+        Matrix<T> result(_rows, _cols);
+
+        if (_size < 100 * 100) {
+#pragma omp parallel for collapse(2)
+            for (size_t i = 0; i < _rows; ++i) {
+                for (size_t j = 0; j < _cols; ++j) {
+                    result.at(i, j) = this->at(i, j) + other.at(i, j);
+                }
+            }
+        } else {
+#pragma omp parallel for schedule(static, 1024)
+            for (size_t idx = 0; idx < _size; ++idx) {
+                size_t i = idx / _cols;
+                size_t j = idx % _cols;
+                result.at(i, j) = this->at(i, j) + other.at(i, j);
+            }
+        }
+        return result;
+    }
+
+    // Matrix + Scalar
+    Matrix<T> operator+(const T &scalar) const {
+        T *result = new T[_size];
+
+        if (_size < 100 * 100) {
+            for (size_t i = 0; i < _size; ++i) {
+                result[i] = _data[i] + scalar;
+            }
+        } else {
+#pragma omp parallel for simd schedule(static, 1024)
+            for (size_t i = 0; i < _size; ++i) {
+                result[i] = _data[i] + scalar;
+            }
+        }
+
+        Matrix<T> ret(_rows, _cols, result);
+        delete[] result;
+        return ret;
+    }
+
+    // Scalar + Matrix
+    template <class U>
+    friend Matrix<U> operator+(const U &scalar, const Matrix<U> &matrix);
+
+    // Matrix - Matrix
+    Matrix<T> operator-(const Matrix &other) const {
+        if (_rows != other.rowsSize() || _cols != other.colsSize()) {
+            throw std::invalid_argument(
+                "Matrices have to be of same dimensions!");
+        }
+        Matrix<T> result(_rows, _cols);
+
+        if (_size < 100 * 100) {
+#pragma omp parallel for collapse(2)
+            for (size_t i = 0; i < _rows; ++i) {
+                for (size_t j = 0; j < _cols; ++j) {
+                    result.at(i, j) = this->at(i, j) - other.at(i, j);
+                }
+            }
+        } else {
+#pragma omp parallel for schedule(static, 1024)
+            for (size_t idx = 0; idx < _size; ++idx) {
+                size_t i = idx / _cols;
+                size_t j = idx % _cols;
+                result.at(i, j) = this->at(i, j) - other.at(i, j);
+            }
+        }
+    }
+
+    // Matrix - Scalar
+    Matrix<T> operator-(const T &scalar) const {
+        T *result = new T[_size];
+
+        if (_size < 100 * 100) {
+            for (size_t i = 0; i < _size; ++i) {
+                result[i] = _data[i] - scalar;
+            }
+        } else {
+#pragma omp parallel for simd schedule(static, 1024)
+            for (size_t i = 0; i < _size; ++i) {
+                result[i] = _data[i] - scalar;
+            }
+        }
+
+        Matrix<T> ret(_rows, _cols, result);
+        delete[] result;
+        return ret;
+    }
+
+    // Scalar - Matrix
+    template <class U>
+    friend Matrix<U> operator-(const U &scalar, const Matrix<U> &matrix);
+
+    // Matrix * Scalar
+    Matrix<T> operator*(const T &scalar) const {
+        T *result = new T[_size];
+
+        if (_size < 100 * 100) {
+            for (size_t i = 0; i < _size; ++i) {
+                result[i] = _data[i] * scalar;
+            }
+        } else {
+#pragma omp parallel for simd schedule(static, 1024)
+            for (size_t i = 0; i < _size; ++i) {
+                result[i] = _data[i] * scalar;
+            }
+        }
+
+        Matrix<T> ret(_rows, _cols, result);
+        delete[] result;
+        return ret;
+    }
+
+    // Scalar * Matrix
+
+    template <class U>
+    friend Matrix<U> operator*(const U &scalar, const Matrix<U> &matrix);
+
+    // Debugging and printing
+
+    void print() const {
+        if constexpr (std::is_floating_point_v<T>) {
+            std::cout << std::setprecision(5);
+        }
+        for (size_t i = 0; i < _rows; ++i) {
+            for (size_t j = 0; j < _cols; ++j) {
+                std::cout << this->at(i, j) << ' ';
+            }
+            std::cout << std::endl;
+        }
+        std::cout << std::fixed;
+    }
+};
+
+template <class U>
+Matrix<U> operator+(const U &scalar, const Matrix<U> &matrix) {
+    return matrix + scalar;
+}
+template <class U>
+Matrix<U> operator-(const U &scalar, const Matrix<U> &matrix) {
+    return matrix - scalar;
+}
+
+template <class U>
+Matrix<U> operator*(const U &scalar, const Matrix<U> &matrix) {
+    return matrix * scalar;
+}
+
+template <typename T> class Vector {
+  private:
+    enum Orientation { ROW, COLUMN };
+    Orientation _orientation;
+    T *_data;
+
+  public:
+};
+} // namespace math
+
+#endif
