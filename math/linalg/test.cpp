@@ -1,8 +1,9 @@
 #include "Containers.hpp"
 #include <cassert>
+#include <chrono>
 #include <iostream>
+#include <random>
 #include <stdexcept>
-
 int main(void) {
     // Original test data
     int len = 12;
@@ -262,7 +263,238 @@ int main(void) {
                      "non-square matrix: "
                   << e.what() << std::endl;
     }
+    std::cout << std::endl;
 
-    std::cout << "\n=== All tests completed successfully! ===" << std::endl;
+    std::cout << "=== Matrix Multiplication Tests ===" << std::endl;
+
+    // Test 1: Basic 2x3 * 3x2 multiplication
+    double data_a[6] = {1, 2, 3, 4, 5, 6};    // 2x3 matrix
+    double data_b[6] = {7, 8, 9, 10, 11, 12}; // 3x2 matrix
+    math::Matrix<double> mult_a(2, 3, data_a);
+    math::Matrix<double> mult_b(3, 2, data_b);
+
+    std::cout << "Matrix A (2x3):" << std::endl;
+    mult_a.print();
+    std::cout << "Matrix B (3x2):" << std::endl;
+    mult_b.print();
+
+    auto result_ab = mult_a * mult_b;
+    std::cout << "A * B (2x2):" << std::endl;
+    result_ab.print();
+
+    // Verify the result manually:
+    // [1*7+2*9+3*11, 1*8+2*10+3*12] = [58, 64]
+    // [4*7+5*9+6*11, 4*8+5*10+6*12] = [139, 154]
+    assert(result_ab.at(0, 0) == 58);
+    assert(result_ab.at(0, 1) == 64);
+    assert(result_ab.at(1, 0) == 139);
+    assert(result_ab.at(1, 1) == 154);
+    std::cout << "✓ Basic multiplication test passed" << std::endl;
+
+    // Test 2: Square matrix multiplication
+    double square_a[4] = {1, 2, 3, 4}; // 2x2
+    double square_b[4] = {5, 6, 7, 8}; // 2x2
+    math::Matrix<double> sq_a(2, 2, square_a);
+    math::Matrix<double> sq_b(2, 2, square_b);
+
+    std::cout << "\nSquare Matrix A:" << std::endl;
+    sq_a.print();
+    std::cout << "Square Matrix B:" << std::endl;
+    sq_b.print();
+
+    auto sq_result = sq_a * sq_b;
+    std::cout << "A * B:" << std::endl;
+    sq_result.print();
+
+    // Verify: [1*5+2*7, 1*6+2*8] = [19, 22]
+    //         [3*5+4*7, 3*6+4*8] = [43, 50]
+    assert(sq_result.at(0, 0) == 19);
+    assert(sq_result.at(0, 1) == 22);
+    assert(sq_result.at(1, 0) == 43);
+    assert(sq_result.at(1, 1) == 50);
+    std::cout << "✓ Square matrix multiplication test passed" << std::endl;
+
+    // Test 3: Identity matrix multiplication
+    std::cout << "\n--- Identity Matrix Tests ---" << std::endl;
+    double test_data[9] = {1, 2, 3, 4, 5, 6, 7, 8, 9}; // 3x3 test matrix
+    math::Matrix<double> identity(3, 3);
+    identity.make_identity();
+    math::Matrix<double> test_matrix(3, 3, test_data);
+
+    std::cout << "Identity matrix:" << std::endl;
+    identity.print();
+    std::cout << "Test matrix:" << std::endl;
+    test_matrix.print();
+
+    auto id_result1 = identity * test_matrix;
+    auto id_result2 = test_matrix * identity;
+
+    std::cout << "Identity * Test:" << std::endl;
+    id_result1.print();
+    std::cout << "Test * Identity:" << std::endl;
+    id_result2.print();
+
+    // Both should equal the original test matrix
+    assert(id_result1 == test_matrix);
+    assert(id_result2 == test_matrix);
+    std::cout << "✓ Identity matrix multiplication test passed" << std::endl;
+
+    // Test 4: Matrix chain multiplication (associativity)
+    std::cout << "\n--- Chain Multiplication (Associativity) Test ---"
+              << std::endl;
+    double chain_a[6] = {1, 2, 3, 4, 5, 6};                       // 2x3
+    double chain_b[12] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12}; // 3x4
+    double chain_c[8] = {1, 2, 3, 4, 5, 6, 7, 8};                 // 4x2
+
+    math::Matrix<double> chain_ma(2, 3, chain_a);
+    math::Matrix<double> chain_mb(3, 4, chain_b);
+    math::Matrix<double> chain_mc(4, 2, chain_c);
+
+    // Test (A * B) * C vs A * (B * C)
+    auto ab = chain_ma * chain_mb;
+    auto abc_left = ab * chain_mc;
+
+    auto bc = chain_mb * chain_mc;
+    auto abc_right = chain_ma * bc;
+
+    std::cout << "(A * B) * C:" << std::endl;
+    abc_left.print();
+    std::cout << "A * (B * C):" << std::endl;
+    abc_right.print();
+
+    assert(abc_left == abc_right);
+    std::cout << "✓ Associativity test passed" << std::endl;
+
+    // Test 5: Single element matrices
+    std::cout << "\n--- Single Element Matrix Test ---" << std::endl;
+    double single_a[1] = {5};
+    double single_b[1] = {3};
+    math::Matrix<double> single_ma(1, 1, single_a);
+    math::Matrix<double> single_mb(1, 1, single_b);
+
+    auto single_result = single_ma * single_mb;
+    std::cout << "5 * 3 = " << single_result.at(0, 0) << std::endl;
+    assert(single_result.at(0, 0) == 15);
+    std::cout << "✓ Single element multiplication test passed" << std::endl;
+
+    // Test 6: Vector-like matrices
+    std::cout << "\n--- Vector-like Matrix Tests ---" << std::endl;
+    double row_vec[3] = {1, 2, 3}; // 1x3 row vector
+    double col_vec[3] = {4, 5, 6}; // 3x1 column vector
+    math::Matrix<double> row_vector(1, 3, row_vec);
+    math::Matrix<double> col_vector(3, 1, col_vec);
+
+    std::cout << "Row vector (1x3):" << std::endl;
+    row_vector.print();
+    std::cout << "Column vector (3x1):" << std::endl;
+    col_vector.print();
+
+    // Dot product (1x3) * (3x1) = (1x1)
+    auto dot_product = row_vector * col_vector;
+    std::cout << "Dot product (1x1):" << std::endl;
+    dot_product.print();
+    assert(dot_product.at(0, 0) == 32); // 1*4 + 2*5 + 3*6 = 32
+
+    // Outer product (3x1) * (1x3) = (3x3)
+    auto outer_product = col_vector * row_vector;
+    std::cout << "Outer product (3x3):" << std::endl;
+    outer_product.print();
+    std::cout << "✓ Vector-like matrix tests passed" << std::endl;
+
+    // Test 7: Zero matrix multiplication
+    std::cout << "\n--- Zero Matrix Test ---" << std::endl;
+    math::Matrix<double> zero_matrix(2, 3);
+    zero_matrix.fill(0.0);
+
+    auto zero_result = zero_matrix * mult_b;
+    std::cout << "Zero matrix * B:" << std::endl;
+    zero_result.print();
+
+    // All elements should be zero
+    for (int i = 0; i < zero_result.rowsSize(); ++i) {
+        for (int j = 0; j < zero_result.colsSize(); ++j) {
+            assert(zero_result.at(i, j) == 0.0);
+        }
+    }
+    std::cout << "✓ Zero matrix multiplication test passed" << std::endl;
+
+    // Test 8: Large matrix multiplication performance test
+    std::cout << "\n--- Performance Test (100x100 matrices) ---" << std::endl;
+    const int size = 100;
+    std::vector<double> large_data_a(size * size);
+    std::vector<double> large_data_b(size * size);
+
+    // Fill with random data
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_real_distribution<double> dis(0.0, 10.0);
+
+    for (int i = 0; i < size * size; ++i) {
+        large_data_a[i] = dis(gen);
+        large_data_b[i] = dis(gen);
+    }
+
+    math::Matrix<double> large_a(size, size, large_data_a);
+    math::Matrix<double> large_b(size, size, large_data_b);
+
+    auto start = std::chrono::high_resolution_clock::now();
+    auto large_result = large_a * large_b;
+    auto end = std::chrono::high_resolution_clock::now();
+
+    auto duration =
+        std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+    std::cout << "100x100 matrix multiplication completed in "
+              << duration.count() << " ms" << std::endl;
+    std::cout << "✓ Performance test completed" << std::endl;
+
+    // Test 9: Different data types
+    std::cout << "\n--- Different Data Types Test ---" << std::endl;
+    int int_a[4] = {1, 2, 3, 4};
+    int int_b[4] = {5, 6, 7, 8};
+    math::Matrix<int> int_ma(2, 2, int_a);
+    math::Matrix<int> int_mb(2, 2, int_b);
+
+    auto int_result = int_ma * int_mb;
+    std::cout << "Integer matrix multiplication:" << std::endl;
+    int_result.print();
+    assert(int_result.at(0, 0) == 19);
+    assert(int_result.at(1, 1) == 50);
+    std::cout << "✓ Integer matrix multiplication test passed" << std::endl;
+
+    // Test 10: Error handling for incompatible dimensions
+    std::cout << "\n--- Error Handling Tests ---" << std::endl;
+    try {
+        math::Matrix<double> incompatible_a(2, 3);
+        math::Matrix<double> incompatible_b(4, 2); // 3 != 4, should fail
+        auto should_fail = incompatible_a * incompatible_b;
+        assert(false); // Should not reach here
+    } catch (const std::invalid_argument &e) {
+        std::cout << "✓ Caught expected error for incompatible dimensions: "
+                  << e.what() << std::endl;
+    }
+
+    // Test 11: Matrix multiplication properties
+    std::cout << "\n--- Matrix Properties Tests ---" << std::endl;
+
+    // Test that (A + B) * C = A*C + B*C (distributivity)
+    math::Matrix<double> prop_a(2, 2, square_a);
+    math::Matrix<double> prop_b(2, 2, square_b);
+    math::Matrix<double> prop_c(2, 2);
+    prop_c.make_identity();
+
+    auto left_dist = (prop_a + prop_b) * prop_c;
+    auto right_dist = (prop_a * prop_c) + (prop_b * prop_c);
+
+    std::cout << "(A + B) * C:" << std::endl;
+    left_dist.print();
+    std::cout << "A*C + B*C:" << std::endl;
+    right_dist.print();
+
+    assert(left_dist == right_dist);
+    std::cout << "✓ Distributivity test passed" << std::endl;
+
+    std::cout
+        << "\n=== All matrix multiplication tests completed successfully! ==="
+        << std::endl;
     return 0;
 }

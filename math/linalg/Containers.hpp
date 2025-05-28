@@ -285,6 +285,17 @@ template <typename T> class Matrix {
         }
     }
 
+    // Set to indentity
+    void make_identity() {
+        if (!is_square()) {
+            throw std::invalid_argument(
+                "Only square matrices can be set to identity!");
+        }
+        for (size_t i = 0; i < _rows; ++i) {
+            this->at(i, i) = 1;
+        }
+    }
+
     // Inplace transpose
     void transpose() {
         if (!is_square()) {
@@ -441,6 +452,28 @@ template <typename T> class Matrix {
     // Scalar * Matrix
     template <class U>
     friend Matrix<U> operator*(const U &scalar, const Matrix<U> &matrix);
+
+    // Matrix * Matrix
+    Matrix<T> operator*(const Matrix &other) const {
+        if (_cols != other.rowsSize()) {
+            throw std::invalid_argument("Matrix dimensions do not match!");
+        }
+
+        Matrix<T> result(_rows, other.colsSize());
+
+#pragma omp parallel for collapse(2) schedule(static)
+        for (size_t i = 0; i < _rows; ++i) {
+            for (size_t j = 0; j < other.colsSize(); ++j) {
+                T temp = 0;
+#pragma omp simd reduction(+ : temp)
+                for (size_t k = 0; k < _cols; ++k) {
+                    temp += this->at(i, k) * other.at(k, j);
+                }
+                result.at(i, j) = temp;
+            }
+        }
+        return result;
+    }
 
     // Debugging and printing
 
