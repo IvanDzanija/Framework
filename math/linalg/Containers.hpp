@@ -2,6 +2,7 @@
 #define CONTAINERS_H
 
 #pragma once
+#include <array>
 #include <cmath>
 #include <iomanip>
 #include <iostream>
@@ -14,7 +15,7 @@ const int OUT_OF_BOUNDS = -1;
 const int NOT_SQUARE = -2;
 
 template <typename T> constexpr T EPSILON = static_cast<T>(1e-6);
-template <typename T> inline bool is_close(T v1, T v2) {
+template <typename T> bool is_close(T v1, T v2) {
     return std::abs(v1 - v2) < EPSILON<T>;
 }
 
@@ -34,6 +35,12 @@ template <typename T> class Matrix {
             throw std::out_of_range("Index out of bounds.");
         }
         return row * _cols + col;
+    }
+
+    void _invert_sign() {
+        for (size_t i = 0; i < _size; ++i) {
+            _data[i] = -_data[i];
+        }
     }
 
   public:
@@ -57,10 +64,10 @@ template <typename T> class Matrix {
     Matrix(size_t rows, size_t cols, T *data) {
         if (rows == 0 || cols == 0) {
             throw std::invalid_argument(
-                "Matrix dimensions must be greater than zero.");
+                "Matrix dimensions must be greater than zero!");
         }
         if (data == nullptr) {
-            throw std::invalid_argument("Data pointer cannot be null.");
+            throw std::invalid_argument("Data pointer cannot be null!");
         }
         _rows = rows;
         _cols = cols;
@@ -287,7 +294,8 @@ template <typename T> class Matrix {
 #pragma omp parallel for
         for (size_t i = 0; i < _rows; ++i) {
             for (size_t j = i + 1; j < _cols; ++j) {
-                std::swap(this->at(i, j), this->at(j, i));
+                std::swap(const_cast<Matrix *>(this)->at(i, j),
+                          const_cast<Matrix *>(this)->at(j, i));
             }
         }
     }
@@ -297,7 +305,8 @@ template <typename T> class Matrix {
         T *result = new T[_size];
 #pragma omp parallel for
         for (size_t i = 0; i < _rows; ++i) {
-            for (size_t j = i + 1; j < _cols; ++j) {
+            result[_get_index(i, i)] = this->at(i, i);
+            for (size_t j = 0; j < _cols; ++j) {
                 result[_get_index(i, j)] = this->at(j, i);
                 result[_get_index(j, i)] = this->at(i, j);
             }
@@ -382,6 +391,7 @@ template <typename T> class Matrix {
                 result.at(i, j) = this->at(i, j) - other.at(i, j);
             }
         }
+        return result;
     }
 
     // Matrix - Scalar
@@ -454,7 +464,9 @@ Matrix<U> operator+(const U &scalar, const Matrix<U> &matrix) {
 }
 template <class U>
 Matrix<U> operator-(const U &scalar, const Matrix<U> &matrix) {
-    return matrix - scalar;
+    Matrix ret = matrix - scalar;
+    ret._invert_sign();
+    return ret;
 }
 
 template <class U>
