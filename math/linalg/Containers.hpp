@@ -7,6 +7,7 @@
 #include <iomanip>
 #include <iostream>
 #include <omp.h>
+#include <optional>
 #include <stdexcept>
 #include <type_traits>
 #include <vector>
@@ -26,6 +27,8 @@ template <typename T> class Matrix {
     size_t _cols;
     size_t _size;
     T *_data;
+
+    std::optional<bool> _is_singular;
 
     bool _is_valid_index(size_t row, size_t col) const {
         return row < _rows && col < _cols;
@@ -295,6 +298,21 @@ template <typename T> class Matrix {
                 "Matrix must be square to check diagonality.");
         }
         return is_upper_triangular() && is_lower_triangular();
+    }
+
+    bool is_singular() {
+        if (_is_singular.has_value()) {
+            return _is_singular.value();
+        }
+        if (!is_square()) {
+            throw std::invalid_argument(
+                "Non-square matrices are always singular.");
+        }
+        // Needs logic
+        // For now, we will assume the matrix is not singular
+
+        _is_singular = false; // Placeholder logic
+        return _is_singular.value();
     }
 
     // Methods
