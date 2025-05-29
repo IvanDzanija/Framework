@@ -14,9 +14,9 @@
 const int OUT_OF_BOUNDS = -1;
 const int NOT_SQUARE = -2;
 
-template <typename T> constexpr T EPSILON = static_cast<T>(1e-6);
-template <typename T> bool is_close(T v1, T v2) {
-    return std::abs(v1 - v2) < EPSILON<T>;
+const double EPSILON = 1e-6;
+template <typename T> bool is_close(T v1, T v2, double epsilon = EPSILON) {
+    return std::abs(v1 - v2) < epsilon;
 }
 
 namespace math {
@@ -173,7 +173,28 @@ template <typename T> class Matrix {
         _size = rows * cols;
         _data = new T[_size];
         for (size_t i = 0; i < _size; ++i) {
-            _data[i] = static_cast<T>(data[i]);
+            _data[i] = static_cast<T>(data.at(i));
+        }
+    }
+
+    template <typename U>
+    Matrix(size_t rows, size_t cols, const std::vector<std::vector<U>> &data) {
+        if (rows == 0 || cols == 0) {
+            throw std::invalid_argument(
+                "Matrix dimensions must be greater than zero.");
+        }
+        if (data.size() != rows || data.at(0).size() != cols) {
+            throw std::invalid_argument(
+                "Data size does not match matrix size.");
+        }
+        _rows = rows;
+        _cols = cols;
+        _size = rows * cols;
+        _data = new T[_size];
+        for (size_t i = 0; i < rows; ++i) {
+            for (size_t j = 0; j < cols; ++j) {
+                _data[_get_index(i, j)] = static_cast<T>(data.at(i).at(j));
+            }
         }
     }
 
@@ -192,7 +213,7 @@ template <typename T> class Matrix {
         _size = N;
         _data = new T[_size];
         for (size_t i = 0; i < _size; ++i) {
-            _data[i] = static_cast<T>(data[i]);
+            _data[i] = static_cast<T>(data.at(i));
         }
     }
 
@@ -238,7 +259,7 @@ template <typename T> class Matrix {
         }
         for (size_t i = 0; i < _rows; ++i) {
             for (size_t j = i + 1; j < _cols; ++j) {
-                if (std::abs(this->at(i, j) - this->at(j, i)) >= EPSILON<T>) {
+                if (!is_close(this->at(i, j), this->at(j, i))) {
                     return false;
                 }
             }
@@ -249,7 +270,7 @@ template <typename T> class Matrix {
     bool is_upper_triangular() const {
         for (size_t i = 1; i < _rows; ++i) {
             for (size_t j = 0; j < i; ++j) {
-                if (std::abs(this->at(i, j)) >= EPSILON<T>) {
+                if (!is_close(this->at(i, j), static_cast<T>(0))) {
                     return false;
                 }
             }
@@ -260,7 +281,7 @@ template <typename T> class Matrix {
     bool is_lower_triangular() const {
         for (size_t i = 0; i < _rows - 1; ++i) {
             for (size_t j = i + 1; j < _cols; ++j) {
-                if (std::abs(this->at(i, j)) >= EPSILON<T>) {
+                if (!is_close(this->at(i, j), static_cast<T>(0))) {
                     return false;
                 }
             }
