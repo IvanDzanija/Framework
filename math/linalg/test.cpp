@@ -493,6 +493,29 @@ int main(void) {
     assert(left_dist == right_dist);
     std::cout << "✓ Distributivity test passed" << std::endl;
 
+    // Matrix multiplication performance test
+    const int n = 1024;
+    math::Matrix<double> mat1(n, n);
+    for (int i = 0; i < n; ++i) {
+        for (int j = 0; j < n; ++j) {
+            mat1.at(i, j) = i + j + random() % 10;
+        }
+    }
+
+    math::Matrix<double> mat2(n, n);
+    for (int i = 0; i < n; ++i) {
+        for (int j = 0; j < n; ++j) {
+            mat2.at(i, j) = i + j + random() % 10;
+        }
+    }
+    start = std::chrono::high_resolution_clock::now();
+
+    math::Matrix<double> mat3 = mat1 * mat2;
+    end = std::chrono::high_resolution_clock::now();
+    duration =
+        std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+    std::cout << "Time taken: " << duration.count() << " ms" << std::endl;
+
     std::cout
         << "\n=== All matrix multiplication tests completed successfully! ==="
         << std::endl;

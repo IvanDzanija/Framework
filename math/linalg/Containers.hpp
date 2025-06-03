@@ -3,13 +3,13 @@
 
 #pragma once
 #include <array>
+#include <chrono>
 #include <cmath>
 #include <iomanip>
 #include <iostream>
 #include <omp.h>
 #include <optional>
 #include <stdexcept>
-#include <type_traits>
 #include <vector>
 
 const int OUT_OF_BOUNDS = -1;
@@ -30,17 +30,17 @@ template <typename T> class Matrix {
 
     std::optional<bool> _is_singular;
 
-    bool _is_valid_index(size_t row, size_t col) const {
+    inline bool _is_valid_index(size_t row, size_t col) const {
         return row < _rows && col < _cols;
     }
-    size_t _get_index(size_t row, size_t col) const {
+    inline size_t _get_index(size_t row, size_t col) const {
         if (!_is_valid_index(row, col)) {
             throw std::out_of_range("Index out of bounds.");
         }
         return row * _cols + col;
     }
 
-    void _invert_sign() {
+    inline void _invert_sign() {
         for (size_t i = 0; i < _size; ++i) {
             _data[i] = -_data[i];
         }
@@ -351,14 +351,12 @@ template <typename T> class Matrix {
     }
 
     // New transposed matrix
-    const Matrix transposed() {
+    const Matrix transposed() const {
         T *result = new T[_size];
-#pragma omp parallel for
+#pragma omp parallel for if (_size > 100 * 100)
         for (size_t i = 0; i < _rows; ++i) {
-            result[_get_index(i, i)] = this->at(i, i);
             for (size_t j = 0; j < _cols; ++j) {
-                result[_get_index(i, j)] = this->at(j, i);
-                result[_get_index(j, i)] = this->at(i, j);
+                result[j * _rows + i] = this->at(i, j);
             }
         }
         Matrix ret(_cols, _rows, result);
@@ -494,21 +492,46 @@ template <typename T> class Matrix {
 
     // Matrix * Matrix
     Matrix<T> operator*(const Matrix &other) const {
-        if (_cols != other.rowsSize()) {
+        if (_cols != other._rows) {
             throw std::invalid_argument("Matrix dimensions do not match!");
         }
 
-        Matrix<T> result(_rows, other.colsSize());
+        Matrix<T> result(_rows, other._cols);
+        const T *a_data = this->_data;
+        const T *b_data = other._data;
+        T *c_data = result._data;
 
-#pragma omp parallel for collapse(2) schedule(static)
-        for (size_t i = 0; i < _rows; ++i) {
-            for (size_t j = 0; j < other.colsSize(); ++j) {
-                T temp = 0;
-#pragma omp simd reduction(+ : temp)
-                for (size_t k = 0; k < _cols; ++k) {
-                    temp += this->at(i, k) * other.at(k, j);
+        const size_t a_rows = _rows;
+        const size_t b_cols = other._cols;
+        const size_t a_cols = _cols;
+        const size_t block_size = 64;
+
+        std::fill(c_data, c_data + a_rows * b_cols, T(0));
+
+#pragma omp parallel for collapse(2) if (a_rows * b_cols > 10000)
+        for (size_t ii = 0; ii < a_rows; ii += block_size) {
+            for (size_t jj = 0; jj < b_cols; jj += block_size) {
+                for (size_t kk = 0; kk < a_cols; kk += block_size) {
+
+                    // Process block
+                    const size_t i_end = std::min(ii + block_size, a_rows);
+                    const size_t j_end = std::min(jj + block_size, b_cols);
+                    const size_t k_end = std::min(kk + block_size, a_cols);
+
+                    for (size_t i = ii; i < i_end; ++i) {
+                        for (size_t k = kk; k < k_end; ++k) {
+                            const T a_ik = a_data[i * a_cols + k];
+                            const size_t b_row_offset = k * b_cols;
+                            const size_t c_row_offset = i * b_cols;
+
+#pragma omp simd
+                            for (size_t j = jj; j < j_end; ++j) {
+                                c_data[c_row_offset + j] +=
+                                    a_ik * b_data[b_row_offset + j];
+                            }
+                        }
+                    }
                 }
-                result.at(i, j) = temp;
             }
         }
         return result;
