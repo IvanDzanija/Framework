@@ -512,6 +512,9 @@ template <typename T> class Matrix {
                     for (size_t i = ii; i < i_end; ++i) {
                         for (size_t k = kk; k < k_end; ++k) {
                             const T a_ik = a_data[i * a_cols + k];
+                            if (is_close(a_ik, T(0))) {
+                                continue; // Skip zero elements
+                            }
                             const size_t b_offset = k * b_cols;
                             const size_t c_offset = i * b_cols;
 
