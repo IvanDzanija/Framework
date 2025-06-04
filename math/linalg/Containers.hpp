@@ -2,20 +2,10 @@
 #define CONTAINERS_H
 
 #pragma once
-#include <array>
-#include <chrono>
-#include <cmath>
-#include <iomanip>
-#include <iostream>
-#include <omp.h>
-#include <optional>
-#include <stdexcept>
-#include <vector>
 
-const int OUT_OF_BOUNDS = -1;
-const int NOT_SQUARE = -2;
+#include "../../main/GlobalHeader.hpp"
 
-const double EPSILON = 1e-6;
+constexpr double EPSILON = 1e-6;
 template <typename T> bool is_close(T v1, T v2, double epsilon = EPSILON) {
     return std::abs(v1 - v2) < epsilon;
 }
@@ -220,14 +210,14 @@ template <typename T> class Matrix {
         }
     }
 
-    T &at(int row, int col) {
+    T &at(size_t row, size_t col) {
         if (!_is_valid_index(row, col)) {
             throw std::out_of_range("Matrix index out of bounds");
         }
         return _data[_get_index(row, col)];
     }
 
-    const T &at(int row, int col) const {
+    const T &at(size_t row, size_t col) const {
         if (!_is_valid_index(row, col)) {
             throw std::out_of_range("Matrix index out of bounds");
         }
@@ -338,6 +328,7 @@ template <typename T> class Matrix {
     // Inplace transpose
     void transpose() {
         if (!is_square()) {
+            // Maybe change this?
             throw std::invalid_argument("Matrix must be square to transpose.");
         }
 
@@ -521,13 +512,13 @@ template <typename T> class Matrix {
                     for (size_t i = ii; i < i_end; ++i) {
                         for (size_t k = kk; k < k_end; ++k) {
                             const T a_ik = a_data[i * a_cols + k];
-                            const size_t b_row_offset = k * b_cols;
-                            const size_t c_row_offset = i * b_cols;
+                            const size_t b_offset = k * b_cols;
+                            const size_t c_offset = i * b_cols;
 
 #pragma omp simd
                             for (size_t j = jj; j < j_end; ++j) {
-                                c_data[c_row_offset + j] +=
-                                    a_ik * b_data[b_row_offset + j];
+                                c_data[c_offset + j] +=
+                                    a_ik * b_data[b_offset + j];
                             }
                         }
                     }
@@ -573,9 +564,85 @@ template <typename T> class Vector {
   private:
     enum Orientation { ROW, COLUMN };
     Orientation _orientation;
+    size_t _size;
     T *_data;
 
   public:
+    Vector() {
+        _size = 0;
+        _data = nullptr;
+    }
+
+    ~Vector() {
+        if (_data != nullptr) {
+            delete[] _data;
+        }
+    }
+
+    // Construct from raw data
+    Vector(size_t size, T *data, Orientation orientation = COLUMN) {
+        if (size == 0) {
+            throw std::invalid_argument(
+                "Vector size must be greater than zero!");
+        }
+        if (data == nullptr) {
+            throw std::invalid_argument("Data pointer cannot be null!");
+        }
+        //        if (orientation != ROW && orientation != COLUMN) {
+        //            throw std::invalid_argument(
+        //                "Orientation must be either ROW or COLUMN.");
+        //        }
+
+        _orientation = orientation;
+        _size = size;
+        _data = new T[_size];
+        for (size_t i = 0; i < _size; ++i) {
+            _data[i] = data[i];
+        }
+    }
+
+    // Construct empty of size size
+    Vector(size_t size, Orientation orientation = COLUMN) {
+        if (size == 0) {
+            throw std::invalid_argument(
+                "Vector size must be greater than zero.");
+        }
+        //        if (orientation != ROW && orientation != COLUMN) {
+        //        throw std::invalid_argument(
+        //        "Orientation must be either ROW or COLUMN.");
+        //        }
+
+        _orientation = orientation;
+        _size = size;
+        _data = new T[_size];
+
+        // Default initialization
+        for (size_t i = 0; i < size; ++i) {
+            _data[i] = T();
+        }
+    }
+
+    // Copy constructor
+    Vector(const Vector &other) {
+        _orientation = other._orientation;
+        _size = other._size;
+        _data = new T[_size];
+        for (size_t i = 0; i < _size; ++i) {
+            _data[i] = other._data[i];
+        }
+    }
+
+    // Move constructor
+    Vector(Vector &&other) noexcept {
+        _orientation = other._orientation;
+        _size = other._size;
+        _data = other._data;
+
+        // Reset the moved-from object
+        other._orientation = COLUMN; // Default orientation
+        other._size = 0;
+        other._data = nullptr;
+    }
 };
 } // namespace math
 
