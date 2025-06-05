@@ -60,7 +60,8 @@ int main(void) {
     std::cout << "Matrix m6 (moved from m5):" << std::endl;
     m6.print();
     std::cout << "Matrix m5 after move (should be empty): rows="
-              << m5.rowsSize() << ", cols=" << m5.colsSize() << std::endl;
+              << m5.rowsSize() << ", cols=" << m5.colsSize()
+              << ", size=" << m5.size() << std::endl;
     std::cout << std::endl;
 
     // Test element access

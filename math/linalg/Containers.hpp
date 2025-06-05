@@ -15,14 +15,14 @@ template <typename T> class Matrix {
   private:
     size_t _rows;
     size_t _cols;
-    size_t _size;
-    T *_data;
+    std::vector<T> _data;
 
     std::optional<bool> _is_singular;
 
     inline bool _is_valid_index(size_t row, size_t col) const {
         return row < _rows && col < _cols;
     }
+
     inline size_t _get_index(size_t row, size_t col) const {
         if (!_is_valid_index(row, col)) {
             throw std::out_of_range("Index out of bounds.");
@@ -31,8 +31,8 @@ template <typename T> class Matrix {
     }
 
     inline void _invert_sign() {
-        for (size_t i = 0; i < _size; ++i) {
-            _data[i] = -_data[i];
+        for (auto &element : _data) {
+            element = -element;
         }
     }
 
@@ -40,21 +40,10 @@ template <typename T> class Matrix {
     // Constructors and destructors
 
     // Default constructor
-    Matrix() {
-        _rows = 0;
-        _cols = 0;
-        _size = 0;
-        _data = nullptr;
-    }
-
-    ~Matrix() {
-        if (_data != nullptr) {
-            delete[] _data;
-        }
-    }
+    Matrix() : _rows(0), _cols(0) {}
 
     // Construct from raw data
-    Matrix(size_t rows, size_t cols, T *data) {
+    Matrix(size_t rows, size_t cols, T *data) : _rows(rows), _cols(cols) {
         if (rows == 0 || cols == 0) {
             throw std::invalid_argument(
                 "Matrix dimensions must be greater than zero!");
@@ -62,137 +51,61 @@ template <typename T> class Matrix {
         if (data == nullptr) {
             throw std::invalid_argument("Data pointer cannot be null!");
         }
-        _rows = rows;
-        _cols = cols;
-        _size = rows * cols;
-        _data = new T[_size];
-        for (size_t i = 0; i < _size; ++i) {
-            _data[i] = data[i];
-        }
+
+        _data.assign(data, data + (rows * cols));
     }
 
     // Construct empty of size rows x cols
-    Matrix(size_t rows, size_t cols) {
+    Matrix(size_t rows, size_t cols) : _rows(rows), _cols(cols) {
         if (rows == 0 || cols == 0) {
             throw std::invalid_argument(
                 "Matrix dimensions must be greater than zero.");
         }
-        _rows = rows;
-        _cols = cols;
-        _size = rows * cols;
-        _data = new T[_size];
 
-        // Default initialization
-        for (size_t i = 0; i < rows * cols; ++i) {
-            _data[i] = T();
-        }
-    }
-
-    // Copy constructor
-    Matrix(const Matrix &other) {
-        _rows = other._rows;
-        _cols = other._cols;
-        _size = other._size;
-        _data = new T[_size];
-        for (size_t i = 0; i < _size; ++i) {
-            _data[i] = other._data[i];
-        }
-    }
-
-    // Move constructor
-    Matrix(Matrix &&other) noexcept {
-        _rows = other._rows;
-        _cols = other._cols;
-        _size = other._size;
-        _data = other._data;
-
-        // Reset the moved-from object
-        other._rows = 0;
-        other._cols = 0;
-        other._size = 0;
-        other._data = nullptr;
-    }
-
-    // Assignment operator
-    Matrix &operator=(const Matrix &other) {
-        if (this != &other) {
-            if (_data != nullptr) {
-                delete[] _data;
-            }
-            _rows = other._rows;
-            _cols = other._cols;
-            _size = other._size;
-            _data = new T[_size];
-            for (size_t i = 0; i < _size; ++i) {
-                _data[i] = other._data[i];
-            }
-        }
-        return *this;
-    }
-
-    // Move assignment operator
-    Matrix &operator=(Matrix &&other) noexcept {
-        if (this != &other) {
-            if (_data != nullptr) {
-                delete[] _data;
-            }
-            _rows = other._rows;
-            _cols = other._cols;
-            _size = other._size;
-            _data = other._data;
-
-            // Reset the moved-from object
-            other._rows = 0;
-            other._cols = 0;
-            other._size = 0;
-            other._data = nullptr;
-        }
-        return *this;
+        _data.resize(rows * cols);
     }
 
     // Constructors for std::vector and std::array
     template <typename U>
-    Matrix(size_t rows, size_t cols, const std::vector<U> &data) {
+    Matrix(size_t rows, size_t cols, const std::vector<U> &data)
+        : _rows(rows), _cols(cols) {
         if (rows == 0 || cols == 0) {
             throw std::invalid_argument(
                 "Matrix dimensions must be greater than zero.");
         }
+
         if (data.size() != rows * cols) {
             throw std::invalid_argument(
                 "Data size does not match matrix size.");
         }
-        _rows = rows;
-        _cols = cols;
-        _size = rows * cols;
-        _data = new T[_size];
-        for (size_t i = 0; i < _size; ++i) {
-            _data[i] = static_cast<T>(data.at(i));
-        }
+
+        _data.assign(data.begin(), data.end());
     }
 
     template <typename U>
-    Matrix(size_t rows, size_t cols, const std::vector<std::vector<U>> &data) {
+    Matrix(size_t rows, size_t cols, const std::vector<std::vector<U>> &data)
+        : _rows(rows), _cols(cols) {
         if (rows == 0 || cols == 0) {
             throw std::invalid_argument(
                 "Matrix dimensions must be greater than zero.");
         }
+
         if (data.size() != rows || data.at(0).size() != cols) {
             throw std::invalid_argument(
                 "Data size does not match matrix size.");
         }
-        _rows = rows;
-        _cols = cols;
-        _size = rows * cols;
-        _data = new T[_size];
+
+        _data.resize(rows * cols);
         for (size_t i = 0; i < rows; ++i) {
             for (size_t j = 0; j < cols; ++j) {
-                _data[_get_index(i, j)] = static_cast<T>(data.at(i).at(j));
+                _data.at(_get_index(i, j)) = static_cast<T>(data.at(i).at(j));
             }
         }
     }
 
     template <typename U, size_t N>
-    Matrix(size_t rows, size_t cols, const std::array<U, N> &data) {
+    Matrix(size_t rows, size_t cols, const std::array<U, N> &data)
+        : _rows(rows), _cols(cols) {
         if (rows == 0 || cols == 0) {
             throw std::invalid_argument(
                 "Matrix dimensions must be greater than zero.");
@@ -201,48 +114,30 @@ template <typename T> class Matrix {
             throw std::invalid_argument(
                 "Data size does not match matrix size.");
         }
-        _rows = rows;
-        _cols = cols;
-        _size = N;
-        _data = new T[_size];
-        for (size_t i = 0; i < _size; ++i) {
-            _data[i] = static_cast<T>(data.at(i));
-        }
+
+        _data.assign(data.begin(), data.end());
     }
 
-    T &at(size_t row, size_t col) {
-        if (!_is_valid_index(row, col)) {
-            throw std::out_of_range("Matrix index out of bounds");
-        }
-        return _data[_get_index(row, col)];
-    }
+    T &at(size_t row, size_t col) { return _data.at(_get_index(row, col)); }
 
     const T &at(size_t row, size_t col) const {
-        if (!_is_valid_index(row, col)) {
-            throw std::out_of_range("Matrix index out of bounds");
-        }
-        return _data[_get_index(row, col)];
+        return _data.at(_get_index(row, col));
     }
 
     // Getters
     size_t rowsSize() const { return _rows; }
     size_t colsSize() const { return _cols; }
+    size_t size() const { return _data.size(); }
 
     // Equality operator
     bool operator==(const Matrix &other) const {
         if (_rows != other._rows || _cols != other._cols) {
             return false;
         }
-        for (size_t i = 0; i < _size; ++i) {
-            if (_data[i] != other._data[i]) {
-                return false;
-            }
-        }
-        return true;
+        return _data == other._data;
     }
 
     // Checkers
-
     bool is_square() const { return _rows == _cols; }
 
     bool is_symmetric() const {
@@ -300,7 +195,6 @@ template <typename T> class Matrix {
         }
         // Needs logic
         // For now, we will assume the matrix is not singular
-
         _is_singular = false; // Placeholder logic
         return _is_singular.value();
     }
@@ -308,20 +202,18 @@ template <typename T> class Matrix {
     // Methods
 
     // Inplace fill
-    void fill(T value) {
-        for (size_t i = 0; i < _size; ++i) {
-            _data[i] = value;
-        }
-    }
+    void fill(T value) { std::fill(_data.begin(), _data.end(), value); }
 
-    // Set to indentity
+    // Set to identity
     void make_identity() {
         if (!is_square()) {
             throw std::invalid_argument(
                 "Only square matrices can be set to identity!");
         }
+
+        fill(T(0));
         for (size_t i = 0; i < _rows; ++i) {
-            this->at(i, i) = 1;
+            this->at(i, i) = T(1);
         }
     }
 
@@ -335,24 +227,22 @@ template <typename T> class Matrix {
 #pragma omp parallel for
         for (size_t i = 0; i < _rows; ++i) {
             for (size_t j = i + 1; j < _cols; ++j) {
-                std::swap(const_cast<Matrix *>(this)->at(i, j),
-                          const_cast<Matrix *>(this)->at(j, i));
+                std::swap(this->at(i, j), this->at(j, i));
             }
         }
     }
 
     // New transposed matrix
     const Matrix transposed() const {
-        T *result = new T[_size];
-#pragma omp parallel for if (_size > 100 * 100)
+        Matrix result(_cols, _rows);
+
+#pragma omp parallel for if (_data.size() > 100 * 100)
         for (size_t i = 0; i < _rows; ++i) {
             for (size_t j = 0; j < _cols; ++j) {
-                result[j * _rows + i] = this->at(i, j);
+                result.at(j, i) = this->at(i, j);
             }
         }
-        Matrix ret(_cols, _rows, result);
-        delete[] result;
-        return ret;
+        return result;
     }
 
     // Operators
@@ -365,7 +255,7 @@ template <typename T> class Matrix {
         }
         Matrix<T> result(_rows, _cols);
 
-        if (_size < 100 * 100) {
+        if (_data.size() < 100 * 100) {
 #pragma omp parallel for collapse(2)
             for (size_t i = 0; i < _rows; ++i) {
                 for (size_t j = 0; j < _cols; ++j) {
@@ -374,7 +264,7 @@ template <typename T> class Matrix {
             }
         } else {
 #pragma omp parallel for schedule(static, 1024)
-            for (size_t idx = 0; idx < _size; ++idx) {
+            for (size_t idx = 0; idx < _data.size(); ++idx) {
                 size_t i = idx / _cols;
                 size_t j = idx % _cols;
                 result.at(i, j) = this->at(i, j) + other.at(i, j);
@@ -385,22 +275,11 @@ template <typename T> class Matrix {
 
     // Matrix + Scalar
     Matrix<T> operator+(const T &scalar) const {
-        T *result = new T[_size];
+        Matrix<T> result(_rows, _cols);
 
-        if (_size < 100 * 100) {
-            for (size_t i = 0; i < _size; ++i) {
-                result[i] = _data[i] + scalar;
-            }
-        } else {
-#pragma omp parallel for simd schedule(static, 1024)
-            for (size_t i = 0; i < _size; ++i) {
-                result[i] = _data[i] + scalar;
-            }
-        }
-
-        Matrix<T> ret(_rows, _cols, result);
-        delete[] result;
-        return ret;
+        std::transform(_data.begin(), _data.end(), result._data.begin(),
+                       [scalar](const T &value) { return value + scalar; });
+        return result;
     }
 
     // Scalar + Matrix
@@ -415,7 +294,7 @@ template <typename T> class Matrix {
         }
         Matrix<T> result(_rows, _cols);
 
-        if (_size < 100 * 100) {
+        if (_data.size() < 100 * 100) {
 #pragma omp parallel for collapse(2)
             for (size_t i = 0; i < _rows; ++i) {
                 for (size_t j = 0; j < _cols; ++j) {
@@ -424,7 +303,7 @@ template <typename T> class Matrix {
             }
         } else {
 #pragma omp parallel for schedule(static, 1024)
-            for (size_t idx = 0; idx < _size; ++idx) {
+            for (size_t idx = 0; idx < _data.size(); ++idx) {
                 size_t i = idx / _cols;
                 size_t j = idx % _cols;
                 result.at(i, j) = this->at(i, j) - other.at(i, j);
@@ -435,22 +314,11 @@ template <typename T> class Matrix {
 
     // Matrix - Scalar
     Matrix<T> operator-(const T &scalar) const {
-        T *result = new T[_size];
+        Matrix<T> result(_rows, _cols);
 
-        if (_size < 100 * 100) {
-            for (size_t i = 0; i < _size; ++i) {
-                result[i] = _data[i] - scalar;
-            }
-        } else {
-#pragma omp parallel for simd schedule(static, 1024)
-            for (size_t i = 0; i < _size; ++i) {
-                result[i] = _data[i] - scalar;
-            }
-        }
-
-        Matrix<T> ret(_rows, _cols, result);
-        delete[] result;
-        return ret;
+        std::transform(_data.begin(), _data.end(), result._data.begin(),
+                       [scalar](const T &value) { return value - scalar; });
+        return result;
     }
 
     // Scalar - Matrix
@@ -459,22 +327,11 @@ template <typename T> class Matrix {
 
     // Matrix * Scalar
     Matrix<T> operator*(const T &scalar) const {
-        T *result = new T[_size];
+        Matrix<T> result(_rows, _cols);
 
-        if (_size < 100 * 100) {
-            for (size_t i = 0; i < _size; ++i) {
-                result[i] = _data[i] * scalar;
-            }
-        } else {
-#pragma omp parallel for simd schedule(static, 1024)
-            for (size_t i = 0; i < _size; ++i) {
-                result[i] = _data[i] * scalar;
-            }
-        }
-
-        Matrix<T> ret(_rows, _cols, result);
-        delete[] result;
-        return ret;
+        std::transform(_data.begin(), _data.end(), result._data.begin(),
+                       [scalar](const T &value) { return value * scalar; });
+        return result;
     }
 
     // Scalar * Matrix
@@ -488,16 +345,18 @@ template <typename T> class Matrix {
         }
 
         Matrix<T> result(_rows, other._cols);
-        const T *a_data = this->_data;
-        const T *b_data = other._data;
-        T *c_data = result._data;
+
+        // CHANGE: Use vector data() method to get raw pointer for performance
+        const T *a_data = this->_data.data();
+        const T *b_data = other._data.data();
+        T *c_data = result._data.data();
 
         const size_t a_rows = _rows;
         const size_t b_cols = other._cols;
         const size_t a_cols = _cols;
         const size_t block_size = 64;
 
-        std::fill(c_data, c_data + a_rows * b_cols, T(0));
+        result.fill(T(0));
 
 #pragma omp parallel for collapse(2) if (a_rows * b_cols > 10000)
         for (size_t ii = 0; ii < a_rows; ii += block_size) {
@@ -532,7 +391,6 @@ template <typename T> class Matrix {
     }
 
     // Debugging and printing
-
     void print() const {
         if constexpr (std::is_floating_point_v<T>) {
             std::cout << std::setprecision(5);
@@ -551,6 +409,7 @@ template <class U>
 Matrix<U> operator+(const U &scalar, const Matrix<U> &matrix) {
     return matrix + scalar;
 }
+
 template <class U>
 Matrix<U> operator-(const U &scalar, const Matrix<U> &matrix) {
     Matrix ret = matrix - scalar;
@@ -567,23 +426,14 @@ template <typename T> class Vector {
   private:
     enum Orientation { ROW, COLUMN };
     Orientation _orientation;
-    size_t _size;
-    T *_data;
+    std::vector<T> _data;
 
   public:
-    Vector() {
-        _size = 0;
-        _data = nullptr;
-    }
-
-    ~Vector() {
-        if (_data != nullptr) {
-            delete[] _data;
-        }
-    }
+    Vector() : _orientation(COLUMN) {}
 
     // Construct from raw data
-    Vector(size_t size, T *data, Orientation orientation = COLUMN) {
+    Vector(size_t size, T *data, Orientation orientation = COLUMN)
+        : _orientation(orientation) {
         if (size == 0) {
             throw std::invalid_argument(
                 "Vector size must be greater than zero!");
@@ -591,62 +441,79 @@ template <typename T> class Vector {
         if (data == nullptr) {
             throw std::invalid_argument("Data pointer cannot be null!");
         }
-        //        if (orientation != ROW && orientation != COLUMN) {
-        //            throw std::invalid_argument(
-        //                "Orientation must be either ROW or COLUMN.");
-        //        }
 
-        _orientation = orientation;
-        _size = size;
-        _data = new T[_size];
-        for (size_t i = 0; i < _size; ++i) {
-            _data[i] = data[i];
-        }
+        _data.assign(data, data + size);
     }
 
     // Construct empty of size size
-    Vector(size_t size, Orientation orientation = COLUMN) {
+    Vector(size_t size, Orientation orientation = COLUMN)
+        : _orientation(orientation) {
         if (size == 0) {
             throw std::invalid_argument(
                 "Vector size must be greater than zero.");
         }
-        //        if (orientation != ROW && orientation != COLUMN) {
-        //        throw std::invalid_argument(
-        //        "Orientation must be either ROW or COLUMN.");
-        //        }
+        _data.resize(size);
+    }
 
-        _orientation = orientation;
-        _size = size;
-        _data = new T[_size];
-
-        // Default initialization
-        for (size_t i = 0; i < size; ++i) {
-            _data[i] = T();
+    // Construct from std::vector with copying
+    Vector(size_t size, const std::vector<T> &data,
+           Orientation orientation = COLUMN)
+        : _orientation(orientation) {
+        if (size == 0) {
+            throw std::invalid_argument(
+                "Vector size must be greater than zero.");
         }
-    }
-
-    // Copy constructor
-    Vector(const Vector &other) {
-        _orientation = other._orientation;
-        _size = other._size;
-        _data = new T[_size];
-        for (size_t i = 0; i < _size; ++i) {
-            _data[i] = other._data[i];
+        if (data.size() != size) {
+            throw std::invalid_argument(
+                "Data size does not match vector size.");
         }
+
+        _data = data;
     }
 
-    // Move constructor
-    Vector(Vector &&other) noexcept {
-        _orientation = other._orientation;
-        _size = other._size;
-        _data = other._data;
+    // Construct from std::vector with moving
+    Vector(size_t size, std::vector<T> &&data, Orientation orientation = COLUMN)
+        : _orientation(orientation) {
+        if (size == 0) {
+            throw std::invalid_argument(
+                "Vector size must be greater than zero.");
+        }
+        if (data.size() != size) {
+            throw std::invalid_argument(
+                "Data size does not match vector size.");
+        }
 
-        // Reset the moved-from object
-        other._orientation = COLUMN; // Default orientation
-        other._size = 0;
-        other._data = nullptr;
+        _data = std::move(data);
     }
+
+    // Constructor from std::array
+    template <typename U, size_t N>
+    Vector(size_t size, const std::array<U, N> &data,
+           Orientation orientation = COLUMN)
+        : _orientation(orientation) {
+        if (size == 0) {
+            throw std::invalid_argument(
+                "Vector size must be greater than zero.");
+        }
+        if (N != size) {
+            throw std::invalid_argument(
+                "Data size does not match vector size.");
+        }
+
+        _data.assign(data.begin(), data.end());
+    }
+
+    // Getters
+    size_t size() const { return _data.size(); }
+    Orientation orientation() const { return _orientation; }
+
+    T &at(size_t index) { return _data.at(index); }
+    const T &at(size_t index) const { return _data.at(index); }
+
+    T &operator[](size_t index) { return _data[index]; }
+    const T &operator[](size_t index) const { return _data[index]; }
 };
+
 } // namespace math
 
 #endif
