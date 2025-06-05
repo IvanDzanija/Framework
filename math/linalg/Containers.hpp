@@ -422,6 +422,22 @@ Matrix<U> operator*(const U &scalar, const Matrix<U> &matrix) {
     return matrix * scalar;
 }
 
+template <class U> inline Matrix<U> zeros(size_t rows, size_t cols) {
+    return Matrix<U>(rows, cols);
+}
+
+template <class U> inline Matrix<U> ones(size_t rows, size_t cols) {
+    Matrix<U> result(rows, cols);
+    result.fill(U(1));
+    return result;
+}
+
+template <class U> Matrix<U> inline identity(size_t size) {
+    Matrix<U> result(size, size);
+    result.make_identity();
+    return result;
+}
+
 template <typename T> class Vector {
   private:
     enum Orientation { ROW, COLUMN };
