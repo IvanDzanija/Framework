@@ -2,7 +2,7 @@
 #define CONTAINERS_H
 
 #pragma once
-
+#define BLOCK_SIZE 128
 #include "../../main/GlobalHeader.hpp"
 
 constexpr double EPSILON = 1e-6;
@@ -354,19 +354,18 @@ template <typename T> class Matrix {
         const size_t a_rows = _rows;
         const size_t b_cols = other._cols;
         const size_t a_cols = _cols;
-        const size_t block_size = 64;
 
         result.fill(T(0));
 
 #pragma omp parallel for collapse(2) if (a_rows * b_cols > 10000)
-        for (size_t ii = 0; ii < a_rows; ii += block_size) {
-            for (size_t jj = 0; jj < b_cols; jj += block_size) {
-                for (size_t kk = 0; kk < a_cols; kk += block_size) {
+        for (size_t ii = 0; ii < a_rows; ii += BLOCK_SIZE) {
+            for (size_t jj = 0; jj < b_cols; jj += BLOCK_SIZE) {
+                for (size_t kk = 0; kk < a_cols; kk += BLOCK_SIZE) {
 
                     // Process block
-                    const size_t i_end = std::min(ii + block_size, a_rows);
-                    const size_t j_end = std::min(jj + block_size, b_cols);
-                    const size_t k_end = std::min(kk + block_size, a_cols);
+                    const size_t i_end = std::min(ii + BLOCK_SIZE, a_rows);
+                    const size_t j_end = std::min(jj + BLOCK_SIZE, b_cols);
+                    const size_t k_end = std::min(kk + BLOCK_SIZE, a_cols);
 
                     for (size_t i = ii; i < i_end; ++i) {
                         for (size_t k = kk; k < k_end; ++k) {
