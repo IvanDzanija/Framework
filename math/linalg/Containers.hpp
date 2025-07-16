@@ -1,6 +1,9 @@
 #ifndef CONTAINERS_H
 #define CONTAINERS_H
 
+#include <iomanip>
+#include <stdexcept>
+#include <type_traits>
 #pragma once
 #define BLOCK_SIZE 128
 #include "../../main/GlobalHeader.hpp"
@@ -478,6 +481,7 @@ template <typename T> class Vector {
             throw std::invalid_argument(
                 "Vector size must be greater than zero.");
         }
+
         if (data.size() != size) {
             throw std::invalid_argument(
                 "Data size does not match vector size.");
@@ -493,6 +497,7 @@ template <typename T> class Vector {
             throw std::invalid_argument(
                 "Vector size must be greater than zero.");
         }
+
         if (data.size() != size) {
             throw std::invalid_argument(
                 "Data size does not match vector size.");
@@ -525,8 +530,72 @@ template <typename T> class Vector {
     T &at(size_t index) { return _data.at(index); }
     const T &at(size_t index) const { return _data.at(index); }
 
-    T &operator[](size_t index) { return _data[index]; }
-    const T &operator[](size_t index) const { return _data[index]; }
+    T &operator[](size_t index) { return _data.at(index); }
+    const T &operator[](size_t index) const { return _data.at(index); }
+
+    // Equality operator
+    bool operator==(const Vector &other) const {
+        if (_orientation != other._orientation) {
+            return false;
+        }
+        return _data == other._data;
+    }
+
+    // Checkers
+
+    // Null vector
+    bool is_null() {
+        for (const T &val : _data) {
+            if (!is_close(val, 0)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // Methods
+
+    // Vector norm
+    T norm() const {
+        T sum = 0.0;
+        for (const T &val : _data) {
+            sum += val * val;
+        }
+        return std::sqrt(sum);
+    }
+
+    // Normalize THIS vector
+    void normalize() {
+        // This will probably be faster by only calling norm() and checking if
+        // norm is close to 0 since it only loops through the vector once! But
+        // keeping this for clarity
+        if (this->is_null()) {
+            throw std::invalid_argument("Null vector can't be normalized!");
+        }
+
+        T norm = this->norm();
+        for (const T &val : _data) {
+            val /= norm;
+        }
+    }
+
+    // Printing and debugging
+    void print() const {
+        if constexpr (std::is_floating_point_v<T>) {
+            std::cout << std::setprecision(5);
+        }
+        if (_orientation == COLUMN) {
+            for (const T &val : _data) {
+                std::cout << val << std::endl;
+            }
+        } else {
+            for (const T &val : _data) {
+                std::cout << val << ' ';
+            }
+            std::cout << std::endl;
+        }
+        std::cout << std::fixed;
+    }
 };
 
 } // namespace math
