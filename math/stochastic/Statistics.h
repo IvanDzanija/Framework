@@ -3,6 +3,7 @@
 #pragma once
 #include "../linalg/Containers.hpp"
 
+// TODO: this needs to be adapted to the new Containers
 namespace math {
 template <typename T> double mean(const Vector<T> &data) {
     double sum = 0.0;

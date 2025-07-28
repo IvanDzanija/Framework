@@ -441,6 +441,7 @@ template <class U> Matrix<U> inline identity(size_t size) {
     return result;
 }
 
+// TODO: add operators
 template <typename T> class Vector {
   private:
     enum Orientation { ROW, COLUMN };

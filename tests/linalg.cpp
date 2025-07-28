@@ -1,5 +1,6 @@
 #include "../math/linalg/CholeskyDecomposition.hpp"
 #include "../math/linalg/Containers.hpp"
+#include "../math/stochastic/RandomVars.h"
 
 int main(void) {
     // Original test data
@@ -582,4 +583,143 @@ int main(void) {
 
     std::cout << "✓ All Cholesky decomposition tests passed" << std::endl;
     return 0;
+
+    // Test 13: Random Variables tests
+    std::cout << "\n--- Random Variables Tests ---" << std::endl;
+
+    {
+        // Prepare a lower-triangular matrix L (size 3x3) for correlated shocks
+        double L_data[] = {1.0, 0.0, 0.0, 0.5, 1.5, 0.0, 0.2, 0.3, 2.0};
+        math::Matrix<double> L(3, 3, L_data);
+
+        // Prepare a vector Z with independent standard normal samples
+        double Z_data[] = {1.0, 2.0, 3.0};
+        math::Vector<double> Z(3, Z_data);
+
+        // Expected result: simple multiplication L * Z
+        // Manually calculate expected:
+        // [1*1 + 0*2 + 0*3] = 1
+        // [0.5*1 + 1.5*2 + 0*3] = 0.5 + 3 = 3.5
+        // [0.2*1 + 0.3*2 + 2*3] = 0.2 + 0.6 + 6 = 6.8
+
+        auto correlated = math::correlated_shocks(L, Z);
+
+        std::cout << "Correlated shocks vector:" << std::endl;
+        correlated.print();
+
+        assert(correlated.size() == 3);
+        assert(std::abs(correlated.at(0) - 1.0) < 1e-10);
+        assert(std::abs(correlated.at(1) - 3.5) < 1e-10);
+        assert(std::abs(correlated.at(2) - 6.8) < 1e-10);
+
+        std::cout << "✓ correlated_shocks basic output test passed"
+                  << std::endl;
+    }
+
+    // Optional: Test with mismatched dimensions (if your implementation throws)
+    try {
+        math::Matrix<double> L_invalid(2, 3); // 2 rows, 3 cols
+        double Z_data2[] = {1.0, 2.0};        // size 2 vector (should be 3)
+        math::Vector<double> Z_invalid(2, Z_data2);
+
+        auto res = math::correlated_shocks(L_invalid, Z_invalid);
+        // If no exception, optionally check sizes and fail:
+        if (res.size() != 2) {
+            std::cerr << "Error: dimension mismatch did not raise exception."
+                      << std::endl;
+            assert(false);
+        }
+    } catch (const std::exception &e) {
+        std::cout << "✓ Caught expected dimension mismatch error: " << e.what()
+                  << std::endl;
+    }
+
+    // Test with float type
+    {
+        float Lf_data[] = {1.0f, 0.0f, 2.0f, 3.0f};
+        float Zf_data[] = {4.0f, 5.0f};
+        math::Matrix<float> Lf(2, 2, Lf_data);
+        math::Vector<float> Zf(2, Zf_data);
+
+        auto correlated_f = math::correlated_shocks(Lf, Zf);
+        correlated_f.print();
+
+        // Expected: [1*4 + 0*5, 2*4 + 3*5] = [4, 8 + 15] = [4, 23]
+        assert(correlated_f.size() == 2);
+        assert(std::abs(correlated_f.at(0) - 4.0f) < 1e-6);
+        assert(std::abs(correlated_f.at(1) - 23.0f) < 1e-6);
+        std::cout << "✓ correlated_shocks with float type test passed"
+                  << std::endl;
+    }
+
+    std::cout << "\n=== All correlated_shocks tests completed successfully! ==="
+              << std::endl;
+
+    {
+        // Prepare a lower-triangular matrix L (size 3x3) for correlated shocks
+        double L_data[] = {1.0, 0.0, 0.0, 0.5, 1.5, 0.0, 0.2, 0.3, 2.0};
+        math::Matrix<double> L(3, 3, L_data);
+
+        // Prepare a vector Z with independent standard normal samples
+        double Z_data[] = {1.0, 2.0, 3.0};
+        math::Vector<double> Z(3, Z_data);
+
+        // Expected result: simple multiplication L * Z
+        // Manually calculate expected:
+        // [1*1 + 0*2 + 0*3] = 1
+        // [0.5*1 + 1.5*2 + 0*3] = 0.5 + 3 = 3.5
+        // [0.2*1 + 0.3*2 + 2*3] = 0.2 + 0.6 + 6 = 6.8
+
+        auto correlated = math::correlated_shocks(L, Z);
+
+        std::cout << "Correlated shocks vector:" << std::endl;
+        correlated.print();
+
+        assert(correlated.size() == 3);
+        assert(std::abs(correlated.at(0) - 1.0) < 1e-10);
+        assert(std::abs(correlated.at(1) - 3.5) < 1e-10);
+        assert(std::abs(correlated.at(2) - 6.8) < 1e-10);
+
+        std::cout << "✓ correlated_shocks basic output test passed"
+                  << std::endl;
+    }
+
+    // Optional: Test with mismatched dimensions (if your implementation throws)
+    try {
+        math::Matrix<double> L_invalid(2, 3); // 2 rows, 3 cols
+        double Z_data2[] = {1.0, 2.0};        // size 2 vector (should be 3)
+        math::Vector<double> Z_invalid(2, Z_data2);
+
+        auto res = math::correlated_shocks(L_invalid, Z_invalid);
+        // If no exception, optionally check sizes and fail:
+        if (res.size() != 2) {
+            std::cerr << "Error: dimension mismatch did not raise exception."
+                      << std::endl;
+            assert(false);
+        }
+    } catch (const std::exception &e) {
+        std::cout << "✓ Caught expected dimension mismatch error: " << e.what()
+                  << std::endl;
+    }
+
+    // Test with float type
+    {
+        float Lf_data[] = {1.0f, 0.0f, 2.0f, 3.0f};
+        float Zf_data[] = {4.0f, 5.0f};
+        math::Matrix<float> Lf(2, 2, Lf_data);
+        math::Vector<float> Zf(2, Zf_data);
+
+        auto correlated_f = math::correlated_shocks(Lf, Zf);
+        correlated_f.print();
+
+        // Expected: [1*4 + 0*5, 2*4 + 3*5] = [4, 8 + 15] = [4, 23]
+        assert(correlated_f.size() == 2);
+        assert(std::abs(correlated_f.at(0) - 4.0f) < 1e-6);
+        assert(std::abs(correlated_f.at(1) - 23.0f) < 1e-6);
+        std::cout << "✓ correlated_shocks with float type test passed"
+                  << std::endl;
+    }
+
+    std::cout << "\n=== All correlated_shocks tests completed successfully! ==="
+              << std::endl;
 }
