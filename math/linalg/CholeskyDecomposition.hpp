@@ -13,7 +13,7 @@ template <typename T> Matrix<T> Matrix<T>::decompose_Cholesky() {
             "Matrix must be symmetric to try Cholesky decomposition!");
     }
 
-    size_t n = this->cols_size();
+    size_t n = this->row_count();
     Matrix L(n, n);
     for (size_t i = 0; i < n; ++i) {
         for (size_t j = 0; j <= i; ++j) {

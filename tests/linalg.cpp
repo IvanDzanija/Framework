@@ -34,8 +34,8 @@ int main(void) {
     // Test default constructor and empty matrix
     std::cout << "=== Default Constructor Test ===" << std::endl;
     math::Matrix<double> empty_matrix;
-    std::cout << "Empty matrix rows: " << empty_matrix.rowsSize()
-              << ", cols: " << empty_matrix.colsSize() << std::endl;
+    std::cout << "Empty matrix rows: " << empty_matrix.row_count()
+              << ", cols: " << empty_matrix.column_count() << std::endl;
 
     // Test size constructor with fill
     std::cout << "=== Size Constructor and Fill Test ===" << std::endl;
@@ -61,7 +61,7 @@ int main(void) {
     std::cout << "Matrix m6 (moved from m5):" << std::endl;
     m6.print();
     std::cout << "Matrix m5 after move (should be empty): rows="
-              << m5.rowsSize() << ", cols=" << m5.colsSize()
+              << m5.row_count() << ", cols=" << m5.column_count()
               << ", size=" << m5.size() << std::endl;
     std::cout << std::endl;
 
@@ -409,8 +409,8 @@ int main(void) {
     zero_result.print();
 
     // All elements should be zero
-    for (int i = 0; i < zero_result.rowsSize(); ++i) {
-        for (int j = 0; j < zero_result.colsSize(); ++j) {
+    for (int i = 0; i < zero_result.row_count(); ++i) {
+        for (int j = 0; j < zero_result.column_count(); ++j) {
             assert(zero_result.at(i, j) == 0.0);
         }
     }
@@ -535,7 +535,13 @@ int main(void) {
     std::cout << "Product L * Lᵗ:" << std::endl;
     LLT.print();
 
-    assert(is_close(LLT, chol_mat));
+    auto fin = LLT - chol_mat;
+    for (int i = 0; i < fin.row_count(); ++i) {
+        for (int j = 0; j < fin.column_count(); ++j) {
+            auto val = fin.at(i, j);
+            assert(is_close(0., val));
+        }
+    }
     std::cout << "✓ Positive definite symmetric matrix test passed"
               << std::endl;
 
@@ -568,7 +574,7 @@ int main(void) {
     try {
         auto fail_chol = sym_not_pd.decompose_Cholesky();
         assert(false); // should not reach here
-    } catch (const std::runtime_error &e) {
+    } catch (const std::invalid_argument &e) {
         std::cout
             << "✓ Caught expected error for non-positive-definite matrix: "
             << e.what() << std::endl;
