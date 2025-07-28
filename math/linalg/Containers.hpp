@@ -1,12 +1,10 @@
 #ifndef CONTAINERS_H
 #define CONTAINERS_H
 
-#include <iomanip>
-#include <stdexcept>
-#include <type_traits>
 #pragma once
-#define BLOCK_SIZE 128
 #include "../../main/GlobalHeader.hpp"
+
+#define BLOCK_SIZE 128
 
 constexpr double EPSILON = 1e-6;
 template <typename T> bool is_close(T v1, T v2, double epsilon = EPSILON) {
@@ -128,8 +126,8 @@ template <typename T> class Matrix {
     }
 
     // Getters
-    size_t rowsSize() const { return _rows; }
-    size_t colsSize() const { return _cols; }
+    size_t row_count() const { return _rows; }
+    size_t column_count() const { return _cols; }
     size_t size() const { return _data.size(); }
 
     // Equality operator
@@ -196,8 +194,9 @@ template <typename T> class Matrix {
             throw std::invalid_argument(
                 "Non-square matrices are always singular.");
         }
-        // Needs logic
-        // For now, we will assume the matrix is not singular
+        // TODO
+        //   Needs logic
+        //   For now, we will assume the matrix is not singular
         _is_singular = false; // Placeholder logic
         return _is_singular.value();
     }
@@ -252,7 +251,7 @@ template <typename T> class Matrix {
 
     // Matrix + Matrix
     Matrix<T> operator+(const Matrix &other) const {
-        if (_rows != other.rowsSize() || _cols != other.colsSize()) {
+        if (_rows != other.row_count() || _cols != other.column_count()) {
             throw std::invalid_argument(
                 "Matrices have to be of same dimensions!");
         }
@@ -291,7 +290,7 @@ template <typename T> class Matrix {
 
     // Matrix - Matrix
     Matrix<T> operator-(const Matrix &other) const {
-        if (_rows != other.rowsSize() || _cols != other.colsSize()) {
+        if (_rows != other.row_count() || _cols != other.column_count()) {
             throw std::invalid_argument(
                 "Matrices have to be of same dimensions!");
         }
@@ -393,7 +392,7 @@ template <typename T> class Matrix {
     }
 
     // Debugging and printing
-    void print() const {
+    void print(void) const {
         if constexpr (std::is_floating_point_v<T>) {
             std::cout << std::setprecision(5);
         }
@@ -405,6 +404,9 @@ template <typename T> class Matrix {
         }
         std::cout << std::fixed;
     }
+
+    // Additional computing methods
+    Matrix decompose_Cholesky(void);
 };
 
 template <class U>
@@ -564,7 +566,7 @@ template <typename T> class Vector {
         return std::sqrt(sum);
     }
 
-    // Normalize THIS vector
+    // Inplace normalization
     void normalize() {
         // This will probably be faster by only calling norm() and checking if
         // norm is close to 0 since it only loops through the vector once! But
@@ -577,6 +579,15 @@ template <typename T> class Vector {
         for (const T &val : _data) {
             val /= norm;
         }
+    }
+
+    // Inplace transpose
+    void transpose() { _orientation = (_orientation == COLUMN) ? ROW : COLUMN; }
+
+    // Create new transposed vector
+    Vector transposed() const {
+        Orientation new_orientation = (_orientation == COLUMN) ? ROW : COLUMN;
+        return ret(this->size(), _data, new_orientation);
     }
 
     // Printing and debugging

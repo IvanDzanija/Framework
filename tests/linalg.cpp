@@ -1,3 +1,4 @@
+#include "../math/linalg/CholeskyDecomposition.hpp"
 #include "../math/linalg/Containers.hpp"
 
 int main(void) {
@@ -516,5 +517,63 @@ int main(void) {
     std::cout
         << "\n=== All matrix multiplication tests completed successfully! ==="
         << std::endl;
+
+    // Test 12: Cholesky decomposition tests
+    std::cout << "\n--- Cholesky Decomposition Tests ---" << std::endl;
+
+    // Case 1: Positive definite symmetric matrix
+    std::vector<std::vector<double>> chol_data = {
+        {4, 2, 2}, {2, 6, 2}, {2, 2, 5}};
+    math::Matrix<double> chol_mat(3, 3, chol_data);
+    auto L = chol_mat.decompose_Cholesky();
+    auto LLT = L * L.transposed();
+
+    std::cout << "Original matrix A:" << std::endl;
+    chol_mat.print();
+    std::cout << "Cholesky factor L:" << std::endl;
+    L.print();
+    std::cout << "Product L * Lᵗ:" << std::endl;
+    LLT.print();
+
+    assert(is_close(LLT, chol_mat));
+    std::cout << "✓ Positive definite symmetric matrix test passed"
+              << std::endl;
+
+    // Case 2: Non-symmetric matrix
+    try {
+
+        std::vector<std::vector<double>> chol_data = {{1, 2}, {3, 4}};
+        math::Matrix<double> nonsym(2, 2, chol_data);
+        auto bad_chol = nonsym.decompose_Cholesky();
+        assert(false); // should not reach here
+    } catch (const std::invalid_argument &e) {
+        std::cout << "✓ Caught expected error for non-symmetric matrix: "
+                  << e.what() << std::endl;
+    }
+
+    // Case 3: Non-square matrix
+    try {
+        math::Matrix<double> nonsquare(2, 3);
+        nonsquare.at(0, 0) = 1.0;
+        auto fail_chol = nonsquare.decompose_Cholesky();
+        assert(false); // should not reach here
+    } catch (const std::invalid_argument &e) {
+        std::cout << "✓ Caught expected error for non-square matrix: "
+                  << e.what() << std::endl;
+    }
+
+    // Case 4: Symmetric but not positive definite
+    std::vector<std::vector<double>> not_pd = {{0, 0}, {0, -1}};
+    math::Matrix<double> sym_not_pd(2, 2, not_pd);
+    try {
+        auto fail_chol = sym_not_pd.decompose_Cholesky();
+        assert(false); // should not reach here
+    } catch (const std::runtime_error &e) {
+        std::cout
+            << "✓ Caught expected error for non-positive-definite matrix: "
+            << e.what() << std::endl;
+    }
+
+    std::cout << "✓ All Cholesky decomposition tests passed" << std::endl;
     return 0;
 }
