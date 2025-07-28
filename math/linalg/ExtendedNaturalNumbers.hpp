@@ -2,6 +2,8 @@
 #define EXTENDEDINTEGER
 
 #pragma once
+#include <limits.h>
+#include <stdexcept>
 #include <variant>
 
 /**
@@ -19,20 +21,96 @@ class ExtendedInt {
     enum class InfinityType { PosInf, NegInf };
 
     // Factory methods
-    static ExtendedInt posInf() { return ExtendedInt(InfinityType::PosInf); }
-    static ExtendedInt negInf() { return ExtendedInt(InfinityType::NegInf); }
+    static ExtendedInt pos_inf() { return ExtendedInt(InfinityType::PosInf); }
+    static ExtendedInt neg_inf() { return ExtendedInt(InfinityType::NegInf); }
 
     // Constructors
-
     ExtendedInt() : _value(0) {} // Default constructor initilizes value to 0
     ExtendedInt(int value) : _value(value) {}
     ExtendedInt(InfinityType value) : _value(value) {}
 
-    bool isInf() const { return std::holds_alternative<InfinityType>(_value); }
-  bool isPositiveInf
+    // Type checking
+    bool is_inf() const { return std::holds_alternative<InfinityType>(_value); }
+    bool is_finite() const { return std::holds_alternative<int>(_value); }
 
-      private : std::variant<int, InfinityType>
-                    _value;
+    bool is_pos_inf() const {
+        return is_inf() &&
+               std::get<InfinityType>(_value) == InfinityType::PosInf;
+    }
+    bool is_neg_inf() const {
+        return is_inf() &&
+               std::get<InfinityType>(_value) == InfinityType::NegInf;
+    }
+
+    // Getters and setters
+    int get_value() const {
+        if (is_inf()) {
+            throw std::out_of_range("Value is infinity!");
+        }
+        return std::get<int>(_value);
+    }
+
+    ExtendedInt operator+(const ExtendedInt &other) const {
+        // finite + finite
+        if (is_finite() && other.is_finite()) {
+            int a = get_value(), b = other.get_value();
+
+            // Overflow checking
+            if ((b > 0 && a > INT_MAX - b) || (b < 0 && a < INT_MIN - b)) {
+                return b > 0 ? pos_inf() : neg_inf();
+            }
+            return ExtendedInt(a + b);
+        }
+
+        else if (is_inf() && other.is_finite()) {
+            return ExtendedInt(get_value());
+        } else if (is_finite() && other.is_inf()) {
+            return ExtendedInt(other.get_value());
+        }
+
+        // Mixing infinties is not allowed!
+        else if ((is_pos_inf() && other.is_neg_inf()) ||
+                 (is_neg_inf() && other.is_pos_inf())) {
+            throw std::runtime_error("Mixing infinities is not allowed!");
+        } else {
+            // Positive infinity + positive infinity
+            return ExtendedInt(get_value());
+        }
+    }
+
+    ExtendedInt operator-(const ExtendedInt &other) const {
+        // finite + finite
+        if (is_finite() && other.is_finite()) {
+            int a = get_value(), b = other.get_value();
+
+            // Overflow checking
+            if ((b > 0 && a < INT_MIN + b) || (b < 0 && a > INT_MAX + b)) {
+                return b < 0 ? pos_inf() : neg_inf();
+            }
+            return ExtendedInt(a - b);
+        }
+
+        else if (is_inf() && other.is_finite()) {
+            return ExtendedInt(get_value());
+        } else if (is_finite() && other.is_inf()) {
+            return ExtendedInt(other.get_value());
+        }
+
+        // Same infinities are not allowed!
+        else if ((is_pos_inf() && other.is_pos_inf()) ||
+                 (is_neg_inf() && other.is_neg_inf())) {
+            throw std::runtime_error("Mixing infinities is not allowed!");
+        } else {
+            // Positive infinity - negative infinity
+            return ExtendedInt(get_value());
+        }
+    }
+    bool operator==(const ExtendedInt &other) const {
+        return _value == other._value;
+    }
+
+  private:
+    std::variant<int, InfinityType> _value;
 };
 
 #endif

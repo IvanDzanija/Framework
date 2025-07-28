@@ -194,7 +194,6 @@ template <typename T> class Matrix {
             throw std::invalid_argument(
                 "Non-square matrices are always singular.");
         }
-        // TODO
         //   Needs logic
         //   For now, we will assume the matrix is not singular
         _is_singular = false; // Placeholder logic
