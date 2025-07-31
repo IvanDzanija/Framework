@@ -1,6 +1,7 @@
 #ifndef CONTAINERS_H
 #define CONTAINERS_H
 
+#include <stdexcept>
 #pragma once
 #include "../../main/GlobalHeader.hpp"
 
@@ -347,7 +348,6 @@ template <typename T> class Matrix {
 
         Matrix<T> result(_rows, other._cols);
 
-        // CHANGE: Use vector data() method to get raw pointer for performance
         const T *a_data = this->_data.data();
         const T *b_data = other._data.data();
         T *c_data = result._data.data();
@@ -371,9 +371,9 @@ template <typename T> class Matrix {
                     for (size_t i = ii; i < i_end; ++i) {
                         for (size_t k = kk; k < k_end; ++k) {
                             const T a_ik = a_data[i * a_cols + k];
-                            if (is_close(a_ik, T(0))) {
-                                continue; // Skip zero elements
-                            }
+                            //                    if (is_close(a_ik, T(0))) {
+                            // continue; // Skip zero elements
+                            //                   }
                             const size_t b_offset = k * b_cols;
                             const size_t c_offset = i * b_cols;
 
@@ -447,6 +447,12 @@ template <typename T> class Vector {
     enum Orientation { ROW, COLUMN };
     Orientation _orientation;
     std::vector<T> _data;
+
+    inline void _invert_sign() {
+        for (auto &element : _data) {
+            element = -element;
+        }
+    }
 
   public:
     Vector() : _orientation(COLUMN) {}
@@ -536,6 +542,8 @@ template <typename T> class Vector {
     const T &operator[](size_t index) const { return _data.at(index); }
 
     // Equality operator
+    //
+    // TRY SPACESHIP OPERATOR
     bool operator==(const Vector &other) const {
         if (_orientation != other._orientation) {
             return false;
@@ -549,11 +557,67 @@ template <typename T> class Vector {
     bool is_null() {
         for (const T &val : _data) {
             if (!is_close(val, 0)) {
-                return true;
+                return false;
             }
         }
-        return false;
+        return true;
     }
+
+    // Operators
+
+    // Vector + Vector
+    Vector<T> operator+(const Vector &other) const {
+        if (_orientation != other._orientation ||
+            _data.size() != other._data.size()) {
+            throw std::invalid_argument(
+                "Vectors must be same orientation and size!");
+        }
+        size_t n = _data.size();
+        Vector<T> result(n);
+        for (size_t i = 0; i < n; ++i) {
+            result.at(i) = _data.at(i) + other._data.at(i);
+        }
+        return result;
+    }
+
+    // Vector + Scalar
+    Vector<T> operator+(const T &scalar) {
+        Vector<T> result(_data.size());
+        std::transform(_data.begin(), _data.end(), result._data.begin(),
+                       [scalar](const T &value) { return value + scalar; });
+        return result;
+    }
+
+    // Scalar + Vector
+    template <class U>
+    friend Vector<T> operator+(const U &scalar, const Vector<U> &vec);
+
+    // Vector - Vector
+    Vector<T> operator-(const Vector &other) const {
+        if (_orientation != other._orientation ||
+            _data.size() != other._data.size()) {
+            throw std::invalid_argument(
+                "Vectors must be same orientation and size!");
+        }
+        size_t n = _data.size();
+        Vector<T> result(n);
+        for (size_t i = 0; i < n; ++i) {
+            result.at(i) = _data.at(i) - other._data.at(i);
+        }
+        return result;
+    }
+
+    // Vector + Scalar
+    Vector<T> operator-(const T &scalar) {
+        Vector<T> result(_data.size());
+        std::transform(_data.begin(), _data.end(), result._data.begin(),
+                       [scalar](const T &value) { return value - scalar; });
+        return result;
+    }
+
+    // Scalar + Vector
+    template <class U>
+    friend Vector<T> operator-(const U &scalar, const Vector<U> &vec);
 
     // Methods
 
@@ -608,6 +672,14 @@ template <typename T> class Vector {
         std::cout << std::fixed;
     }
 };
+
+template <class U> Vector<U> operator+(const U &scalar, const Vector<U> &vec) {
+    return vec + scalar;
+}
+
+template <class U> Vector<U> operator-(const U &scalar, const Vector<U> &vec) {
+    return (vec - scalar).invert_sign();
+}
 
 } // namespace math
 
