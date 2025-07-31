@@ -1,7 +1,6 @@
 #ifndef CONTAINERS_H
 #define CONTAINERS_H
 
-#include <stdexcept>
 #pragma once
 #include "../../main/GlobalHeader.hpp"
 
@@ -11,6 +10,9 @@ constexpr double EPSILON = 1e-6;
 template <typename T> bool is_close(T v1, T v2, double epsilon = EPSILON) {
     return std::abs(v1 - v2) < epsilon;
 }
+
+template <typename T> class Matrix;
+template <typename T> class Vector;
 
 namespace math {
 template <typename T> class Matrix {
@@ -340,6 +342,10 @@ template <typename T> class Matrix {
     template <class U>
     friend Matrix<U> operator*(const U &scalar, const Matrix<U> &matrix);
 
+    // Matrix * Vector
+
+    template <class U> friend Vector<T> operator*(const Vector<T> &other);
+
     // Matrix * Matrix
     Matrix<T> operator*(const Matrix &other) const {
         if (_cols != other._rows) {
@@ -452,6 +458,116 @@ template <typename T> class Vector {
         for (auto &element : _data) {
             element = -element;
         }
+    }
+
+    Matrix<T> _column_vec_matrix_mul(const Matrix<T> &other) {
+        size_t _cols = 1, _rows = _data.size();
+        if (_cols != other._rows) {
+            throw std::invalid_argument("Matrix dimensions do not match!");
+        }
+
+        std::cerr << "Input matrix dimenstion is: 1 x m, probably should be a "
+                     "vector!"
+                  << std::endl;
+
+        // Rest of logic is wrong
+        Matrix<T> result(_rows, other._cols);
+
+        const T *a_data = this->_data.data();
+        const T *b_data = other._data.data();
+        T *c_data = result._data.data();
+
+        const size_t a_rows = _rows;
+        const size_t b_cols = other._cols;
+        const size_t a_cols = _cols;
+
+        result.fill(T(0));
+
+#pragma omp parallel for collapse(2) if (a_rows * b_cols > 10000)
+        for (size_t ii = 0; ii < a_rows; ii += BLOCK_SIZE) {
+            for (size_t jj = 0; jj < b_cols; jj += BLOCK_SIZE) {
+                for (size_t kk = 0; kk < a_cols; kk += BLOCK_SIZE) {
+
+                    // Process block
+                    const size_t i_end = std::min(ii + BLOCK_SIZE, a_rows);
+                    const size_t j_end = std::min(jj + BLOCK_SIZE, b_cols);
+                    const size_t k_end = std::min(kk + BLOCK_SIZE, a_cols);
+
+                    for (size_t i = ii; i < i_end; ++i) {
+                        for (size_t k = kk; k < k_end; ++k) {
+                            const T a_ik = a_data[i * a_cols + k];
+                            //                    if (is_close(a_ik, T(0))) {
+                            // continue; // Skip zero elements
+                            //                   }
+                            const size_t b_offset = k * b_cols;
+                            const size_t c_offset = i * b_cols;
+
+#pragma omp simd
+                            for (size_t j = jj; j < j_end; ++j) {
+                                c_data[c_offset + j] +=
+                                    a_ik * b_data[b_offset + j];
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return result;
+    }
+
+    Vector<T> _row_vec_matrix_mul(const Matrix<T> &other) {
+        size_t _cols = _data.size(), _rows = 1;
+
+        if (_cols != other._rows) {
+            throw std::invalid_argument("Matrix dimensions do not match!");
+        }
+
+        if (_cols == 1) {
+            std::cerr << "Vector dimension is 1 x 1!" << std::endl;
+        }
+
+        Matrix<T> result(_rows, other._cols);
+
+        const T *a_data = this->_data.data();
+        const T *b_data = other._data.data();
+        T *c_data = result._data.data();
+
+        const size_t a_rows = _rows;
+        const size_t b_cols = other._cols;
+        const size_t a_cols = _cols;
+
+        result.fill(T(0));
+
+#pragma omp parallel for collapse(2) if (a_rows * b_cols > 10000)
+        for (size_t ii = 0; ii < a_rows; ii += BLOCK_SIZE) {
+            for (size_t jj = 0; jj < b_cols; jj += BLOCK_SIZE) {
+                for (size_t kk = 0; kk < a_cols; kk += BLOCK_SIZE) {
+
+                    // Process block
+                    const size_t i_end = std::min(ii + BLOCK_SIZE, a_rows);
+                    const size_t j_end = std::min(jj + BLOCK_SIZE, b_cols);
+                    const size_t k_end = std::min(kk + BLOCK_SIZE, a_cols);
+
+                    for (size_t i = ii; i < i_end; ++i) {
+                        for (size_t k = kk; k < k_end; ++k) {
+                            const T a_ik = a_data[i * a_cols + k];
+                            //                    if (is_close(a_ik, T(0))) {
+                            // continue; // Skip zero elements
+                            //                   }
+                            const size_t b_offset = k * b_cols;
+                            const size_t c_offset = i * b_cols;
+
+#pragma omp simd
+                            for (size_t j = jj; j < j_end; ++j) {
+                                c_data[c_offset + j] +=
+                                    a_ik * b_data[b_offset + j];
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return result;
     }
 
   public:
@@ -590,7 +706,7 @@ template <typename T> class Vector {
 
     // Scalar + Vector
     template <class U>
-    friend Vector<T> operator+(const U &scalar, const Vector<U> &vec);
+    friend Vector<U> operator+(const U &scalar, const Vector<U> &vec);
 
     // Vector - Vector
     Vector<T> operator-(const Vector &other) const {
@@ -607,7 +723,7 @@ template <typename T> class Vector {
         return result;
     }
 
-    // Vector + Scalar
+    // Vector - Scalar
     Vector<T> operator-(const T &scalar) {
         Vector<T> result(_data.size());
         std::transform(_data.begin(), _data.end(), result._data.begin(),
@@ -615,11 +731,38 @@ template <typename T> class Vector {
         return result;
     }
 
-    // Scalar + Vector
+    // Scalar - Vector
     template <class U>
-    friend Vector<T> operator-(const U &scalar, const Vector<U> &vec);
+    friend Vector<U> operator-(const U &scalar, const Vector<U> &vec);
+
+    // Vector * Scalar
+    Vector<T> operator*(const T &scalar) const {
+        Vector<T> result(_data.size());
+
+        std::transform(_data.begin(), _data.end(), result._data.begin(),
+                       [scalar](const T &value) { return value * scalar; });
+        return result;
+    }
+
+    // Scalar * Vector
+    template <class U>
+    friend Vector<U> operator*(const U &scalar, const Vector<U> &vec);
+
+    // Vector * Matrix
+    Vector<T> operator*(const Matrix<T> &other) const {
+        switch (_orientation) {
+        case COLUMN:
+            return _column_vec_matrix_mul(other);
+            break;
+        default:
+            return row_vec_matrix_mul(other);
+        }
+    }
 
     // Methods
+
+    // Inplace fill
+    void fill(T value) { std::fill(_data.begin(), _data.end(), value); }
 
     // Vector norm
     T norm() const {
@@ -679,6 +822,21 @@ template <class U> Vector<U> operator+(const U &scalar, const Vector<U> &vec) {
 
 template <class U> Vector<U> operator-(const U &scalar, const Vector<U> &vec) {
     return (vec - scalar).invert_sign();
+}
+
+template <class U> Vector<U> operator*(const U &scalar, const Vector<U> &vec) {
+    return vec * scalar;
+}
+
+template <class U>
+Vector<U> operator*(const Matrix<U> &lhs, const Vector<U> &rhs) {
+    switch (rhs._orientation) {
+    case Vector<U>::COLUMN:
+        // Implement logic
+        break;
+    default:
+        // Implement logic
+    }
 }
 
 } // namespace math
