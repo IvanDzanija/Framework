@@ -1,0 +1,66 @@
+{
+    "version": 3,
+    "configurePresets": [
+        {
+            "name": "clang-debug",
+            "displayName": "Clang Debug",
+            "description": "Debug build using Clang",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build/clang-debug",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug",
+                "CMAKE_CXX_COMPILER": "clang++",
+                "CMAKE_C_COMPILER": "clang",
+                "BUILD_EXAMPLES": "ON",
+                "BUILD_TESTS": "ON"
+            },
+            "environment": {
+                "CC": "clang",
+                "CXX": "clang++"
+            }
+        },
+        {
+            "name": "clang-release",
+            "displayName": "Clang Release",
+            "description": "Release build using Clang",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build/clang-release",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release",
+                "CMAKE_CXX_COMPILER": "clang++",
+                "CMAKE_C_COMPILER": "clang",
+                "CMAKE_CXX_FLAGS_RELEASE": "-O2 -ffast-math -march=native -DNDEBUG",
+                "BUILD_EXAMPLES": "ON",
+                "BUILD_TESTS": "ON"
+            },
+            "environment": {
+                "CC": "clang",
+                "CXX": "clang++"
+            }
+        },
+        {
+            "name": "clang-sanitizers",
+            "displayName": "Clang with Sanitizers",
+            "description": "Debug build with AddressSanitizer and UBSan",
+            "inherits": "clang-debug",
+            "binaryDir": "${sourceDir}/build/clang-sanitizers",
+            "cacheVariables": {
+                "CMAKE_CXX_FLAGS": "-fsanitize=address -fsanitize=undefined -fno-omit-frame-pointer"
+            }
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "clang-debug",
+            "configurePreset": "clang-debug"
+        },
+        {
+            "name": "clang-release",
+            "configurePreset": "clang-release"
+        },
+        {
+            "name": "clang-sanitizers",
+            "configurePreset": "clang-sanitizers"
+        }
+    ]
+}
