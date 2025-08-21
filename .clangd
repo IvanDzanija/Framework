@@ -1,5 +1,27 @@
 CompileFlags:
+  # Path to CMake's compile_commands.json
+  CompilationDatabase: build/clang-debug
+
+  # Extra flags to inject
   Add:
-    - -fopenmp
-  Compiler: clang++
-  CompilationDatabase: build
+    - -std=c++20
+    - -Wall
+    - -Wextra
+    - -Wpedantic
+    - -I${project_root}/include
+
+  # Flags to remove if they show up
+  Remove:
+    - -Werror
+
+Index:
+  Background: Skip
+
+Diagnostics:
+  ClangTidy:
+    Add:
+      - modernize-*
+      - performance-*
+      - readability-*
+    Remove:
+      - modernize-use-trailing-return-type

@@ -23,18 +23,18 @@ template <typename T> class Matrix {
 
     std::optional<bool> _is_singular;
 
-    inline bool _is_valid_index(size_t row, size_t col) const {
+    bool _is_valid_index(size_t row, size_t col) const {
         return row < _rows && col < _cols;
     }
 
-    inline size_t _get_index(size_t row, size_t col) const {
+    size_t _get_index(size_t row, size_t col) const {
         if (!_is_valid_index(row, col)) {
             throw std::out_of_range("Index out of bounds.");
         }
         return row * _cols + col;
     }
 
-    inline void _invert_sign() {
+    void _invert_sign() {
         for (auto &element : _data) {
             element = -element;
         }
@@ -648,7 +648,7 @@ template <typename T> class Vector {
     }
 
     // Getters
-    size_t size() const { return _data.size(); }
+    [[nodiscard]] size_t size() const { return _data.size(); }
     Orientation orientation() const { return _orientation; }
 
     T &at(size_t index) { return _data.at(index); }

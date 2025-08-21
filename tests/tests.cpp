@@ -1,6 +1,6 @@
-#include "../math/linalg/CholeskyDecomposition.hpp"
-#include "../math/linalg/Containers.hpp"
-#include "../math/stochastic/RandomVars.h"
+#include "MafLib/math/linalg/CholeskyDecomposition.hpp"
+#include "MafLib/math/linalg/Containers.hpp"
+#include "MafLib/math/stochastic/RandomVars.h"
 
 int main(void) {
     // Original test data
