@@ -11,10 +11,7 @@ template <typename T> bool is_close(T v1, T v2, double epsilon = EPSILON) {
     return std::abs(v1 - v2) < epsilon;
 }
 
-template <typename T> class Matrix;
-template <typename T> class Vector;
-
-namespace math {
+namespace maf {
 template <typename T> class Matrix {
   private:
     size_t _rows;
@@ -23,15 +20,15 @@ template <typename T> class Matrix {
 
     std::optional<bool> _is_singular;
 
-    bool _is_valid_index(size_t row, size_t col) const {
+    [[nodiscard]] bool _is_valid_index(size_t row, size_t col) const {
         return row < _rows && col < _cols;
     }
 
-    size_t _get_index(size_t row, size_t col) const {
+    [[nodiscard]] size_t _get_index(size_t row, size_t col) const {
         if (!_is_valid_index(row, col)) {
             throw std::out_of_range("Index out of bounds.");
         }
-        return row * _cols + col;
+        return (row * _cols) + col;
     }
 
     void _invert_sign() {
@@ -129,9 +126,9 @@ template <typename T> class Matrix {
     }
 
     // Getters
-    size_t row_count() const { return _rows; }
-    size_t column_count() const { return _cols; }
-    size_t size() const { return _data.size(); }
+    [[nodiscard]] size_t row_count() const { return _rows; }
+    [[nodiscard]] size_t column_count() const { return _cols; }
+    [[nodiscard]] size_t size() const { return _data.size(); }
 
     // Equality operator
     bool operator==(const Matrix &other) const {
@@ -142,9 +139,9 @@ template <typename T> class Matrix {
     }
 
     // Checkers
-    bool is_square() const { return _rows == _cols; }
+    [[nodiscard]] bool is_square() const { return _rows == _cols; }
 
-    bool is_symmetric() const {
+    [[nodiscard]] bool is_symmetric() const {
         if (!is_square()) {
             throw std::invalid_argument(
                 "Matrix must be square to check symmetry.");
@@ -159,7 +156,7 @@ template <typename T> class Matrix {
         return true;
     }
 
-    bool is_upper_triangular() const {
+    [[nodiscard]] bool is_upper_triangular() const {
         for (size_t i = 1; i < _rows; ++i) {
             for (size_t j = 0; j < i; ++j) {
                 if (!is_close(this->at(i, j), static_cast<T>(0))) {
@@ -170,7 +167,7 @@ template <typename T> class Matrix {
         return true;
     }
 
-    bool is_lower_triangular() const {
+    [[nodiscard]] bool is_lower_triangular() const {
         for (size_t i = 0; i < _rows - 1; ++i) {
             for (size_t j = i + 1; j < _cols; ++j) {
                 if (!is_close(this->at(i, j), static_cast<T>(0))) {
@@ -181,7 +178,7 @@ template <typename T> class Matrix {
         return true;
     }
 
-    bool is_diagonal() const {
+    [[nodiscard]] bool is_diagonal() const {
         if (!is_square()) {
             throw std::invalid_argument(
                 "Matrix must be square to check diagonality.");
@@ -189,7 +186,7 @@ template <typename T> class Matrix {
         return is_upper_triangular() && is_lower_triangular();
     }
 
-    bool is_singular() {
+    [[nodiscard]] bool is_singular() {
         if (_is_singular.has_value()) {
             return _is_singular.value();
         }
@@ -197,6 +194,7 @@ template <typename T> class Matrix {
             throw std::invalid_argument(
                 "Non-square matrices are always singular.");
         }
+        //  Todo:
         //   Needs logic
         //   For now, we will assume the matrix is not singular
         _is_singular = false; // Placeholder logic
@@ -237,7 +235,7 @@ template <typename T> class Matrix {
     }
 
     // New transposed matrix
-    const Matrix transposed() const {
+    Matrix transposed() const {
         Matrix result(_cols, _rows);
 
 #pragma omp parallel for if (_data.size() > 100 * 100)
@@ -344,8 +342,6 @@ template <typename T> class Matrix {
 
     // Matrix * Vector
 
-    template <class U> friend Vector<T> operator*(const Vector<T> &other);
-
     // Matrix * Matrix
     Matrix<T> operator*(const Matrix &other) const {
         if (_cols != other._rows) {
@@ -397,7 +393,7 @@ template <typename T> class Matrix {
     }
 
     // Debugging and printing
-    void print(void) const {
+    void print() const {
         if constexpr (std::is_floating_point_v<T>) {
             std::cout << std::setprecision(5);
         }
@@ -447,127 +443,16 @@ template <class U> Matrix<U> inline identity(size_t size) {
     return result;
 }
 
-// TODO: add operators
 template <typename T> class Vector {
   private:
     enum Orientation { ROW, COLUMN };
     Orientation _orientation;
     std::vector<T> _data;
 
-    inline void _invert_sign() {
+    void _invert_sign() {
         for (auto &element : _data) {
             element = -element;
         }
-    }
-
-    Matrix<T> _column_vec_matrix_mul(const Matrix<T> &other) {
-        size_t _cols = 1, _rows = _data.size();
-        if (_cols != other._rows) {
-            throw std::invalid_argument("Matrix dimensions do not match!");
-        }
-
-        std::cerr << "Input matrix dimenstion is: 1 x m, probably should be a "
-                     "vector!"
-                  << std::endl;
-
-        // Rest of logic is wrong
-        Matrix<T> result(_rows, other._cols);
-
-        const T *a_data = this->_data.data();
-        const T *b_data = other._data.data();
-        T *c_data = result._data.data();
-
-        const size_t a_rows = _rows;
-        const size_t b_cols = other._cols;
-        const size_t a_cols = _cols;
-
-        result.fill(T(0));
-
-#pragma omp parallel for collapse(2) if (a_rows * b_cols > 10000)
-        for (size_t ii = 0; ii < a_rows; ii += BLOCK_SIZE) {
-            for (size_t jj = 0; jj < b_cols; jj += BLOCK_SIZE) {
-                for (size_t kk = 0; kk < a_cols; kk += BLOCK_SIZE) {
-
-                    // Process block
-                    const size_t i_end = std::min(ii + BLOCK_SIZE, a_rows);
-                    const size_t j_end = std::min(jj + BLOCK_SIZE, b_cols);
-                    const size_t k_end = std::min(kk + BLOCK_SIZE, a_cols);
-
-                    for (size_t i = ii; i < i_end; ++i) {
-                        for (size_t k = kk; k < k_end; ++k) {
-                            const T a_ik = a_data[i * a_cols + k];
-                            //                    if (is_close(a_ik, T(0))) {
-                            // continue; // Skip zero elements
-                            //                   }
-                            const size_t b_offset = k * b_cols;
-                            const size_t c_offset = i * b_cols;
-
-#pragma omp simd
-                            for (size_t j = jj; j < j_end; ++j) {
-                                c_data[c_offset + j] +=
-                                    a_ik * b_data[b_offset + j];
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        return result;
-    }
-
-    Vector<T> _row_vec_matrix_mul(const Matrix<T> &other) {
-        size_t _cols = _data.size(), _rows = 1;
-
-        if (_cols != other._rows) {
-            throw std::invalid_argument("Matrix dimensions do not match!");
-        }
-
-        if (_cols == 1) {
-            std::cerr << "Vector dimension is 1 x 1!" << std::endl;
-        }
-
-        Matrix<T> result(_rows, other._cols);
-
-        const T *a_data = this->_data.data();
-        const T *b_data = other._data.data();
-        T *c_data = result._data.data();
-
-        const size_t a_rows = _rows;
-        const size_t b_cols = other._cols;
-        const size_t a_cols = _cols;
-
-        result.fill(T(0));
-
-#pragma omp parallel for collapse(2) if (a_rows * b_cols > 10000)
-        for (size_t ii = 0; ii < a_rows; ii += BLOCK_SIZE) {
-            for (size_t jj = 0; jj < b_cols; jj += BLOCK_SIZE) {
-                for (size_t kk = 0; kk < a_cols; kk += BLOCK_SIZE) {
-
-                    // Process block
-                    const size_t i_end = std::min(ii + BLOCK_SIZE, a_rows);
-                    const size_t j_end = std::min(jj + BLOCK_SIZE, b_cols);
-                    const size_t k_end = std::min(kk + BLOCK_SIZE, a_cols);
-
-                    for (size_t i = ii; i < i_end; ++i) {
-                        for (size_t k = kk; k < k_end; ++k) {
-                            const T a_ik = a_data[i * a_cols + k];
-                            //                    if (is_close(a_ik, T(0))) {
-                            // continue; // Skip zero elements
-                            //                   }
-                            const size_t b_offset = k * b_cols;
-                            const size_t c_offset = i * b_cols;
-
-#pragma omp simd
-                            for (size_t j = jj; j < j_end; ++j) {
-                                c_data[c_offset + j] +=
-                                    a_ik * b_data[b_offset + j];
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        return result;
     }
 
   public:
@@ -614,7 +499,7 @@ template <typename T> class Vector {
         _data = data;
     }
 
-    // Construct from std::vector with moving
+    // Construct from std::vector with move semantics
     Vector(size_t size, std::vector<T> &&data, Orientation orientation = COLUMN)
         : _orientation(orientation) {
         if (size == 0) {
@@ -652,24 +537,29 @@ template <typename T> class Vector {
     Orientation orientation() const { return _orientation; }
 
     T &at(size_t index) { return _data.at(index); }
-    const T &at(size_t index) const { return _data.at(index); }
+    const T &at(size_t index) const { return this->_data.at(index); }
 
-    T &operator[](size_t index) { return _data.at(index); }
-    const T &operator[](size_t index) const { return _data.at(index); }
+    T &operator[](size_t index) { return this->_data.at(index); }
+    const T &operator[](size_t index) const { return this->_data.at(index); }
 
-    // Equality operator
-    //
-    // TRY SPACESHIP OPERATOR
+    /// Equality operator
     bool operator==(const Vector &other) const {
-        if (_orientation != other._orientation) {
+        if (this->_orientation != other._orientation ||
+            this->size() != other.size()) {
             return false;
         }
-        return _data == other._data;
+        for (size_t i = 0; i < this->size(); ++i) {
+            if (!is_close(this->at(i), other.at(i))) {
+                return false;
+            }
+        }
+        return true;
     }
 
     // Checkers
 
-    // Null vector
+    /// Null vector
+    /// @return true if all values of the vector are/close to 0, false otherwise
     bool is_null() {
         for (const T &val : _data) {
             if (!is_close(val, 0)) {
@@ -681,7 +571,8 @@ template <typename T> class Vector {
 
     // Operators
 
-    // Vector + Vector
+    /// Vector + Vector
+    /// @return Resultant vector using standard algebraic addition method
     Vector<T> operator+(const Vector &other) const {
         if (_orientation != other._orientation ||
             _data.size() != other._data.size()) {
@@ -696,37 +587,42 @@ template <typename T> class Vector {
         return result;
     }
 
-    // Vector + Scalar
+    /// Vector + Scalar
+    /// @return Extended vector
     Vector<T> operator+(const T &scalar) {
-        Vector<T> result(_data.size());
-        std::transform(_data.begin(), _data.end(), result._data.begin(),
+        Vector<T> result(this->_data.size());
+        std::transform(this->_data.begin(), this->_data.end(),
+                       result._data.begin(),
                        [scalar](const T &value) { return value + scalar; });
         return result;
     }
 
-    // Scalar + Vector
+    /// Scalar + Vector
+    /// It's recommended to use Vector + Scalar instead
+    /// @return Extended vector
     template <class U>
     friend Vector<U> operator+(const U &scalar, const Vector<U> &vec);
 
     // Vector - Vector
     Vector<T> operator-(const Vector &other) const {
-        if (_orientation != other._orientation ||
-            _data.size() != other._data.size()) {
+        if (this->_orientation != other._orientation ||
+            this->_data.size() != other._data.size()) {
             throw std::invalid_argument(
                 "Vectors must be same orientation and size!");
         }
-        size_t n = _data.size();
+        size_t n = this->_data.size();
         Vector<T> result(n);
         for (size_t i = 0; i < n; ++i) {
-            result.at(i) = _data.at(i) - other._data.at(i);
+            result.at(i) = this->_data.at(i) - other._data.at(i);
         }
         return result;
     }
 
     // Vector - Scalar
     Vector<T> operator-(const T &scalar) {
-        Vector<T> result(_data.size());
-        std::transform(_data.begin(), _data.end(), result._data.begin(),
+        Vector<T> result(this->_data.size());
+        std::transform(this->_data.begin(), this->_data.end(),
+                       result._data.begin(),
                        [scalar](const T &value) { return value - scalar; });
         return result;
     }
@@ -737,9 +633,10 @@ template <typename T> class Vector {
 
     // Vector * Scalar
     Vector<T> operator*(const T &scalar) const {
-        Vector<T> result(_data.size());
+        Vector<T> result(this->_data.size());
 
-        std::transform(_data.begin(), _data.end(), result._data.begin(),
+        std::transform(this->_data.begin(), this->_data.end(),
+                       result._data.begin(),
                        [scalar](const T &value) { return value * scalar; });
         return result;
     }
@@ -748,14 +645,42 @@ template <typename T> class Vector {
     template <class U>
     friend Vector<U> operator*(const U &scalar, const Vector<U> &vec);
 
-    // Vector * Matrix
-    Vector<T> operator*(const Matrix<T> &other) const {
-        switch (_orientation) {
-        case COLUMN:
-            return _column_vec_matrix_mul(other);
-            break;
+    // Vector * Vector -> Matrix
+    Matrix<T> operator*(const Vector<T> &other) const {
+        size_t n = this->size();
+        size_t m = other.size();
+        if (_orientation == other._orientation) {
+            // 1x1 x 1x1 vector multiplication
+            if (n == 1 && m == 1) {
+                return Matrix(1, 1, {this->_data.at(0) * other._data.at(0)});
+            }
+            throw std::invalid_argument(
+                "Vector dimensions do not match! Maybe you are looking for "
+                "vector dot product.");
+        }
+        switch (this->_orientation) {
+        case Vector<T>::COLUMN: {
+            Matrix<T> result(n, m);
+            for (size_t i = 0; i < n; ++i) {
+                for (size_t j = 0; j < m; ++j) {
+                    result.at(i, j) = this->at(i) * other.at(j);
+                }
+            }
+            return result;
+        }
+
         default:
-            return row_vec_matrix_mul(other);
+            std::cout << "This results in a 1x1 matrix. Consider using vector "
+                         "dot product."
+                      << std::endl;
+
+            T result = 0;
+            for (size_t i = 0; i < n; ++i) {
+                for (size_t j = 0; j < m; ++j) {
+                    result += this->at(i) * other.at(j);
+                }
+            }
+            return Matrix<T>(1, 1, {result});
         }
     }
 
@@ -797,6 +722,15 @@ template <typename T> class Vector {
         return ret(this->size(), _data, new_orientation);
     }
 
+    T dot_product(const Vector<T> &other) const {
+        T result = 0;
+        for (size_t i = 0; i < this->size(); ++i) {
+            for (size_t j = 0; j < other.size(); ++j) {
+                result += this->at(i) * other.at(j);
+            }
+        }
+    }
+
     // Printing and debugging
     void print() const {
         if constexpr (std::is_floating_point_v<T>) {
@@ -829,7 +763,7 @@ template <class U> Vector<U> operator*(const U &scalar, const Vector<U> &vec) {
 }
 
 template <class U>
-Vector<U> operator*(const Matrix<U> &lhs, const Vector<U> &rhs) {
+Matrix<U> operator*(const Matrix<U> &lhs, const Vector<U> &rhs) {
     switch (rhs._orientation) {
     case Vector<U>::COLUMN:
         // Implement logic
@@ -839,6 +773,6 @@ Vector<U> operator*(const Matrix<U> &lhs, const Vector<U> &rhs) {
     }
 }
 
-} // namespace math
+} // namespace maf
 
 #endif

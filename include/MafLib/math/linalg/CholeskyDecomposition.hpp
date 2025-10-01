@@ -3,7 +3,7 @@
 
 #pragma once
 #include "Containers.hpp"
-namespace math {
+namespace maf::math {
 
 template <typename T> Matrix<T> Matrix<T>::decompose_Cholesky() {
     // O(n^3 / 3)
@@ -35,6 +35,6 @@ template <typename T> Matrix<T> Matrix<T>::decompose_Cholesky() {
     return L;
 }
 
-} // namespace math
+} // namespace maf::math
 
 #endif // !CHOLESKYDECOMPOSITION_H
