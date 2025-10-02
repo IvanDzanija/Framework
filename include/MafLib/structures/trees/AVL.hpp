@@ -8,14 +8,8 @@ template <typename T> class AVLTree {
         int32 height;
 
         int32 balance_factor() {
-            int32 lsd = 0;
-            int32 rsd = 0;
-            if (this->left != nullptr) {
-                lsd = this->left->height;
-            }
-            if (this->right != nullptr) {
-                rsd = this->right.height;
-            }
+            int32 lsd = (this->left != nullptr) ? this->left->height : 0;
+            int32 rsd = (this->right != nullptr) ? this->right.height : 0;
             return rsd - lsd;
         }
     };
