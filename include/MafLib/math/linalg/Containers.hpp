@@ -2,7 +2,7 @@
 #define CONTAINERS_H
 
 #pragma once
-#include "../../main/GlobalHeader.hpp"
+#include "MafLib/main/GlobalHeader.hpp"
 
 #define BLOCK_SIZE 128
 
@@ -219,7 +219,9 @@ template <typename T> class Matrix {
         }
     }
 
-    // Inplace transpose
+    /// Inplace transpose of matrix
+    /// Currently works only for square matrices
+    /// but should be updated
     void transpose() {
         if (!is_square()) {
             // Maybe change this?
@@ -234,8 +236,9 @@ template <typename T> class Matrix {
         }
     }
 
-    // New transposed matrix
-    Matrix transposed() const {
+    /// Creates new transposed matrix
+    /// @return Transposed matrix
+    [[nodiscard]] Matrix transposed() const {
         Matrix result(_cols, _rows);
 
 #pragma omp parallel for if (_data.size() > 100 * 100)
