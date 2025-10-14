@@ -209,57 +209,27 @@ template <typename T> class Vector {
     friend Vector<U> operator*(const U &scalar, const Vector<U> &vec);
 
     // Vector * Vector -> Matrix
-    template <typename U> auto operator*(const Vector<U> &other) const;
+    template <typename U>
+    [[nodiscard]] auto operator*(const Vector<U> &other) const;
 
-    Matrix<T> operator*(const Matrix<T> &other) const {
-        size_t n = this->size();
-        size_t m = other.row_count();
-        switch (this->_orientation) {
-        case Vector<T>::COLUMN: {
-            switch (m) {
-            case 1:
-            default:
-                throw std::invalid_argument(
-                    "Vector dimensions do not match! Maybe you are looking for "
-                    "vector dot product.");
-            }
-            Matrix<T> result(n, m);
-            for (size_t i = 0; i < n; ++i) {
-                for (size_t j = 0; j < m; ++j) {
-                    result.at(i, j) = this->at(i) * other.at(j);
-                }
-            }
-            return result;
-        }
+    // Vector * Matrix -> Vector
+    template <typename U>
+    [[nodiscard]] auto operator*(const Matrix<U> &other) const;
 
-        default:
-            std::cout << "This results in a 1x1 matrix. Consider using vector "
-                         "dot product."
-                      << std::endl;
-
-            T result = 0;
-            for (size_t i = 0; i < n; ++i) {
-                for (size_t j = 0; j < m; ++j) {
-                    result += this->at(i) * other.at(j);
-                }
-            }
-            return Matrix<T>(1, 1, {result});
-        }
-    }
+    // Vector * Vector -> Scalar (Dot product)
+    /// Vector * Vector dot product
+    /// @return Scalar of common promoted type
+    template <typename U>
+    [[nodiscard]] auto dot_product(const Vector<U> &other) const;
 
     // Methods
 
     // Inplace fill
-    void fill(T value) { std::fill(_data.begin(), _data.end(), value); }
+    void fill(T value) noexcept;
 
     // Vector norm
-    T norm() const {
-        T sum = 0.0;
-        for (const T &val : _data) {
-            sum += val * val;
-        }
-        return std::sqrt(sum);
-    }
+    /// L2 vector norm
+    T norm() const;
 
     // Inplace normalization
     void normalize() {
@@ -281,15 +251,6 @@ template <typename T> class Vector {
 
     // Create new transposed vector
     Vector<T> transposed() const noexcept;
-
-    T dot_product(const Vector<T> &other) const {
-        T result = 0;
-        for (size_t i = 0; i < this->size(); ++i) {
-            for (size_t j = 0; j < other.size(); ++j) {
-                result += this->at(i) * other.at(j);
-            }
-        }
-    }
 
     // Printing and debugging
     void print() const {
