@@ -2,9 +2,9 @@
 #include <stdexcept>
 #include <type_traits>
 
-/// Equality operator
 namespace maf {
 
+// Equality operator
 template <typename T> bool Vector<T>::operator==(const Vector &other) const {
     if (this->_orientation != other._orientation ||
         this->size() != other.size()) {
@@ -17,27 +17,33 @@ template <typename T> bool Vector<T>::operator==(const Vector &other) const {
     }
     return true;
 }
+
+// Vector * Matrix -> Vector
 template <typename T>
 template <typename U>
 auto Vector<T>::operator*(const Matrix<U> &other) const {
+    using R = std::common_type_t<T, U>;
+
     size_t n = this->size();
     size_t m = other.row_count();
-    switch (_orientation) {
-    case Vector<T>::COLUMN: {
-        if (m == 1) {
-            throw std::invalid_argument(
-                "You are multiplying vector(Nx1) * matrix(1*M) which is "
-                "supposed "
-                "to be a vector by vector multiplication!");
+    size_t r = other.column_count();
+
+    if (_orientation == COLUMN) {
+        throw std::invalid_argument(
+            "Invalid multiplication: column Vector * Matrix. "
+            "Did you mean Matrix * Vector?");
+    }
+    if (n != m) {
+        throw std::invalid_argument("Dimensions do not match!");
+    }
+
+    Vector<R> result(r, std::vector<R>(r), Vector<T>::ROW);
+    for (size_t i = 0; i < r; ++i) {
+        for (size_t j = 0; j < n; ++j) {
+            result.at(i) += this->at(j) * other.at(j, i);
         }
-        throw std::invalid_argument("Dimension do not match: " + size() +
-                                    "x1 * " + other.row_count() + "x" +
-                                    other.column_count());
     }
-    default:
-        Vector<std::common_type_t<T, U>> result(m, Vector<T>::ROW);
-        // TODO: Finish this
-    }
+    return result;
 }
 
 // Vector * Vector -> Matrix
@@ -45,6 +51,8 @@ template <typename T>
 template <typename U>
 auto Vector<T>::operator*(const Vector<U> &other) const {
     std::cout << "THIS IS AN OUTER PRODUCT OPERATOR!" << std::endl;
+
+    using R = std::common_type_t<T, U>;
     size_t n = _data.size();
     size_t m = other.size();
     if (_orientation == other._orientation) {
@@ -58,7 +66,7 @@ auto Vector<T>::operator*(const Vector<U> &other) const {
     }
     switch (_orientation) {
     case Vector<T>::COLUMN: {
-        Matrix<std::common_type_t<T, U>> result(n, m);
+        Matrix<R> result(n, m);
         for (size_t i = 0; i < n; ++i) {
             for (size_t j = 0; j < m; ++j) {
                 result.at(i, j) = this->at(i) * other.at(j);
@@ -72,13 +80,13 @@ auto Vector<T>::operator*(const Vector<U> &other) const {
                      "dot product."
                   << std::endl;
 
-        std::common_type_t<T, U> result = 0;
+        R result = 0;
         for (size_t i = 0; i < n; ++i) {
             for (size_t j = 0; j < m; ++j) {
                 result += this->at(i) * other.at(j);
             }
         }
-        return Matrix<std::common_type_t<T, U>>(1, 1, {result});
+        return Matrix<R>(1, 1, {result});
     }
 }
 

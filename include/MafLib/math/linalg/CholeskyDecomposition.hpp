@@ -2,8 +2,8 @@
 #define CHOLESKYDECOMPOSITION_H
 
 #pragma once
-#include "Containers.hpp"
-namespace maf::math {
+#include "Matrix.hpp"
+namespace maf {
 
 template <typename T> Matrix<T> Matrix<T>::decompose_Cholesky() {
     // O(n^3 / 3)
@@ -13,8 +13,8 @@ template <typename T> Matrix<T> Matrix<T>::decompose_Cholesky() {
             "Matrix must be symmetric to try Cholesky decomposition!");
     }
 
-    size_t n = this->row_count();
-    Matrix L(n, n);
+    size_t n = _rows;
+    Matrix<T> L(n, n);
     for (size_t i = 0; i < n; ++i) {
         for (size_t j = 0; j <= i; ++j) {
             T sum = 0;
@@ -35,6 +35,6 @@ template <typename T> Matrix<T> Matrix<T>::decompose_Cholesky() {
     return L;
 }
 
-} // namespace maf::math
+} // namespace maf
 
-#endif // !CHOLESKYDECOMPOSITION_H
+#endif

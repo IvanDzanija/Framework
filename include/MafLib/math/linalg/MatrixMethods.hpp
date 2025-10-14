@@ -38,7 +38,7 @@ template <typename T> void Matrix<T>::transpose() {
 
 // Creates new transposed matrix
 template <typename T> Matrix<T> Matrix<T>::transposed() const {
-    Matrix result(_cols, _rows);
+    Matrix<T> result(_cols, _rows);
 
 #pragma omp parallel for if (_data.size() > 100 * 100)
     for (size_t i = 0; i < _rows; ++i) {

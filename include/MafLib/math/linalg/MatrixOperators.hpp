@@ -15,10 +15,12 @@ template <typename T> bool Matrix<T>::operator==(const Matrix &other) const {
 template <typename T>
 template <typename U>
 auto Matrix<T>::operator+(const Matrix<U> &other) const {
+    using R = std::common_type_t<T, U>;
+
     if (_rows != other.row_count() || _cols != other.column_count()) {
         throw std::invalid_argument("Matrices have to be of same dimensions!");
     }
-    Matrix<std::common_type_t<T, U>> result(_rows, _cols);
+    Matrix<R> result(_rows, _cols);
 
     if (_data.size() < 100 * 100) {
 #pragma omp parallel for collapse(2)
@@ -42,7 +44,9 @@ auto Matrix<T>::operator+(const Matrix<U> &other) const {
 template <typename T>
 template <typename U>
 auto Matrix<T>::operator+(const U &scalar) const {
-    Matrix<std::common_type_t<T, U>> result(_rows, _cols);
+    using R = std::common_type_t<T, U>;
+
+    Matrix<R> result(_rows, _cols);
 
     std::transform(_data.begin(), _data.end(), result._data.begin(),
                    [scalar](const T &value) { return value + scalar; });
@@ -62,7 +66,9 @@ auto Matrix<T>::operator-(const Matrix<U> &other) const {
     if (_rows != other.row_count() || _cols != other.column_count()) {
         throw std::invalid_argument("Matrices have to be of same dimensions!");
     }
-    Matrix<std::common_type_t<T, U>> result(_rows, _cols);
+
+    using R = std::common_type_t<T, U>;
+    Matrix<R> result(_rows, _cols);
 
     if (_data.size() < 100 * 100) {
 #pragma omp parallel for collapse(2)
@@ -86,7 +92,9 @@ auto Matrix<T>::operator-(const Matrix<U> &other) const {
 template <typename T>
 template <typename U>
 auto Matrix<T>::operator-(const U &scalar) const {
-    Matrix<std::common_type_t<T, U>> result(_rows, _cols);
+    using R = std::common_type_t<T, U>;
+
+    Matrix<R> result(_rows, _cols);
     std::transform(_data.begin(), _data.end(), result._data.begin(),
                    [scalar](const T &value) { return value - scalar; });
     return result;
@@ -118,8 +126,37 @@ template <typename T, typename U>
     return matrix * scalar;
 }
 
-// Matrix * Vector
-// template <class U> friend Matrix<T> operator*(const Vector<U> &other);
+// Matrix * Vector -> Vector
+template <typename T>
+template <typename U>
+auto Matrix<T>::operator*(const Vector<U> &other) const {
+    using R = std::common_type_t<T, U>;
+
+    const size_t n = this->row_count();
+    const size_t m = this->column_count();
+
+    if (other.orientation() == Vector<U>::ROW) {
+        throw std::invalid_argument(
+            "Invalid multiplication: matrix * row vector. "
+            "Did you mean Vector * Matrix?");
+    }
+
+    if (other.size() != m) {
+        throw std::invalid_argument(
+            "Dimension mismatch in Matrix * Vector multiplication.");
+    }
+
+    Vector<R> result(n, std::vector<R>(n, R(0)), Vector<R>::COLUMN);
+
+    for (size_t i = 0; i < n; ++i) {
+        for (size_t j = 0; j < m; ++j) {
+            result.at(i) +=
+                static_cast<R>(this->at(i, j)) * static_cast<R>(other.at(j));
+        }
+    }
+
+    return result;
+}
 
 // Matrix * Matrix
 template <typename T>
