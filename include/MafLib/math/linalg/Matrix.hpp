@@ -189,48 +189,19 @@ template <typename T> class Matrix {
 
     // Operators
 
-    // Equality operator
-    bool operator==(const Matrix &other) const {
-        if (_rows != other._rows || _cols != other._cols) {
-            return false;
-        }
-        return _data == other._data;
-    }
+    /// Checks if 2 matrices are exactly same,
+    /// use loosely_equal if working with floats.
+    [[nodiscard]] bool operator==(const Matrix &other) const;
 
-    // Matrix + Matrix
-    Matrix<T> operator+(const Matrix &other) const {
-        if (_rows != other.row_count() || _cols != other.column_count()) {
-            throw std::invalid_argument(
-                "Matrices have to be of same dimensions!");
-        }
-        Matrix<T> result(_rows, _cols);
+    /// Add 2 matrices elementwise
+    /// @return Matrix of common promoted type
 
-        if (_data.size() < 100 * 100) {
-#pragma omp parallel for collapse(2)
-            for (size_t i = 0; i < _rows; ++i) {
-                for (size_t j = 0; j < _cols; ++j) {
-                    result.at(i, j) = this->at(i, j) + other.at(i, j);
-                }
-            }
-        } else {
-#pragma omp parallel for schedule(static, 1024)
-            for (size_t idx = 0; idx < _data.size(); ++idx) {
-                size_t i = idx / _cols;
-                size_t j = idx % _cols;
-                result.at(i, j) = this->at(i, j) + other.at(i, j);
-            }
-        }
-        return result;
-    }
+    template <typename U>
+    [[nodiscard]] auto operator+(const Matrix<U> &other) const;
 
-    // Matrix + Scalar
-    Matrix<T> operator+(const T &scalar) const {
-        Matrix<T> result(_rows, _cols);
-
-        std::transform(_data.begin(), _data.end(), result._data.begin(),
-                       [scalar](const T &value) { return value + scalar; });
-        return result;
-    }
+    /// Add a scalar to each element of matrix.
+    /// @return Matrix of common promoted type
+    template <typename U> [[nodiscard]] auto operator+(const U &scalar) const;
 
     // Scalar + Matrix
     template <class U>
@@ -393,6 +364,7 @@ template <class U> Matrix<U> inline identity(size_t size) {
     return result;
 }
 } // namespace maf
+
 #include "MatrixCheckers.hpp"
 #include "MatrixMethods.hpp"
 #include "MatrixOperators.hpp"
