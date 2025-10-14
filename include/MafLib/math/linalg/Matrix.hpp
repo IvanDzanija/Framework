@@ -139,9 +139,11 @@ template <typename T> class Matrix {
 
     // Getters and setters
 
-    [[nodiscard]] size_t row_count() const { return _rows; }
-    [[nodiscard]] size_t column_count() const { return _cols; }
-    [[nodiscard]] size_t size() const { return _data.size(); }
+    // [[nodiscard]] std::vector<T> &data() noexcept { return _data; }
+    [[nodiscard]] const std::vector<T> &data() const noexcept { return _data; }
+    [[nodiscard]] size_t row_count() const noexcept { return _rows; }
+    [[nodiscard]] size_t column_count() const noexcept { return _cols; }
+    [[nodiscard]] size_t size() const noexcept { return _data.size(); }
 
     T &at(size_t row, size_t col) { return _data.at(_get_index(row, col)); }
 
@@ -193,67 +195,45 @@ template <typename T> class Matrix {
     /// use loosely_equal if working with floats.
     [[nodiscard]] bool operator==(const Matrix &other) const;
 
+    // Matrix + Matrix
     /// Add 2 matrices elementwise
     /// @return Matrix of common promoted type
-
     template <typename U>
     [[nodiscard]] auto operator+(const Matrix<U> &other) const;
 
+    // Matrix + Scalar
     /// Add a scalar to each element of matrix.
     /// @return Matrix of common promoted type
     template <typename U> [[nodiscard]] auto operator+(const U &scalar) const;
 
     // Scalar + Matrix
-    template <class U>
-    friend Matrix<U> operator+(const U &scalar, const Matrix<U> &matrix);
+    /// Add a scalar to each element of matrix.
+    /// @return Matrix of common promoted type
+    template <typename U>
+    friend auto operator+(const U &scalar, const Matrix<T> &matrix);
 
     // Matrix - Matrix
-    Matrix<T> operator-(const Matrix &other) const {
-        if (_rows != other.row_count() || _cols != other.column_count()) {
-            throw std::invalid_argument(
-                "Matrices have to be of same dimensions!");
-        }
-        Matrix<T> result(_rows, _cols);
-
-        if (_data.size() < 100 * 100) {
-#pragma omp parallel for collapse(2)
-            for (size_t i = 0; i < _rows; ++i) {
-                for (size_t j = 0; j < _cols; ++j) {
-                    result.at(i, j) = this->at(i, j) - other.at(i, j);
-                }
-            }
-        } else {
-#pragma omp parallel for schedule(static, 1024)
-            for (size_t idx = 0; idx < _data.size(); ++idx) {
-                size_t i = idx / _cols;
-                size_t j = idx % _cols;
-                result.at(i, j) = this->at(i, j) - other.at(i, j);
-            }
-        }
-        return result;
-    }
+    /// Subtract 2 matrices elementwise.
+    /// Elements of first matrix - elements of second matrix
+    /// @return Matrix of common promoted type
+    template <typename U>
+    [[nodiscard]] auto operator-(const Matrix<U> &other) const;
 
     // Matrix - Scalar
-    Matrix<T> operator-(const T &scalar) const {
-        Matrix<T> result(_rows, _cols);
-
-        std::transform(_data.begin(), _data.end(), result._data.begin(),
-                       [scalar](const T &value) { return value - scalar; });
-        return result;
-    }
+    /// Subtract a scalar from each element of matrix.
+    /// @return Matrix of common promoted type
+    template <typename U> [[nodiscard]] auto operator-(const U &scalar) const;
 
     // Scalar - Matrix
-    template <class U>
-    friend Matrix<U> operator-(const U &scalar, const Matrix<U> &matrix);
+    /// Subtract each element of matrix from a scalar.
+    /// @return Matrix of common promoted type
+    template <typename U>
+    friend auto operator-(const U &scalar, const Matrix<T> &matrix);
 
     // Matrix * Scalar
-    Matrix<T> operator*(const T &scalar) const {
-        Matrix<T> result(_rows, _cols);
-
-        std::transform(_data.begin(), _data.end(), result._data.begin(),
-                       [scalar](const T &value) { return value * scalar; });
-        return result;
-    }
+    /// Multiply each element of matrix by a scalar.
+    /// @return Matrix of common promoted type
+    template <typename U> auto operator*(const U &scalar) const;
 
     // Scalar * Matrix
     template <class U>
@@ -330,18 +310,6 @@ template <typename T> class Matrix {
     // Additional computing methods
     Matrix decompose_Cholesky();
 };
-
-template <class U>
-Matrix<U> operator+(const U &scalar, const Matrix<U> &matrix) {
-    return matrix + scalar;
-}
-
-template <class U>
-Matrix<U> operator-(const U &scalar, const Matrix<U> &matrix) {
-    Matrix ret = matrix - scalar;
-    ret._invert_sign();
-    return ret;
-}
 
 template <class U>
 Matrix<U> operator*(const U &scalar, const Matrix<U> &matrix) {

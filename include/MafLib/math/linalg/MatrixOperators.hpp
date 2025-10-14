@@ -50,15 +50,19 @@ auto Matrix<T>::operator+(const U &scalar) const {
 }
 
 // Scalar + Matrix
-template <class U>
-friend Matrix<U> operator+(const U &scalar, const Matrix<U> &matrix);
+template <typename T, typename U>
+[[nodiscard]] auto operator+(const U &scalar, const Matrix<T> &matrix) {
+    return matrix + scalar;
+}
 
 // Matrix - Matrix
-Matrix<T> operator-(const Matrix &other) const {
+template <typename T>
+template <typename U>
+auto Matrix<T>::operator-(const Matrix<U> &other) const {
     if (_rows != other.row_count() || _cols != other.column_count()) {
         throw std::invalid_argument("Matrices have to be of same dimensions!");
     }
-    Matrix<T> result(_rows, _cols);
+    Matrix<std::common_type_t<T, U>> result(_rows, _cols);
 
     if (_data.size() < 100 * 100) {
 #pragma omp parallel for collapse(2)
@@ -79,18 +83,25 @@ Matrix<T> operator-(const Matrix &other) const {
 }
 
 // Matrix - Scalar
-Matrix<T> operator-(const T &scalar) const {
-    Matrix<T> result(_rows, _cols);
-
+template <typename T>
+template <typename U>
+auto Matrix<T>::operator-(const U &scalar) const {
+    Matrix<std::common_type_t<T, U>> result(_rows, _cols);
     std::transform(_data.begin(), _data.end(), result._data.begin(),
                    [scalar](const T &value) { return value - scalar; });
     return result;
 }
 
 // Scalar - Matrix
-template <class U>
-friend Matrix<U> operator-(const U &scalar, const Matrix<U> &matrix);
-
+template <typename T, typename U>
+[[nodiscard]] auto operator-(const U &scalar, const Matrix<T> &matrix) {
+    Matrix<T> result(matrix._rows, matrix._cols);
+    std::transform(matrix._data().begin(), matrix._data().end(),
+                   result._data.begin(),
+                   [scalar](const T &value) { return scalar - value; });
+    return result;
+}
+/*
 // Matrix * Scalar
 Matrix<T> operator*(const T &scalar) const {
     Matrix<T> result(_rows, _cols);
@@ -155,5 +166,5 @@ Matrix<T> operator*(const Matrix &other) const {
         }
     }
     return result;
-}
+}*/
 } // namespace maf
