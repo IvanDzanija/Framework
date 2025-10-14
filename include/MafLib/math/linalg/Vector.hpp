@@ -159,8 +159,10 @@ template <typename T> class Vector {
     template <typename U> [[nodiscard]] auto operator-(const U &scalar) const;
 
     // Scalar - Vector
-    template <class U>
-    friend Vector<U> operator-(const U &scalar, const Vector<U> &vec);
+    /// Subtract each element of vector from a scalar.
+    /// @return Vector of common promoted type
+    template <typename U>
+    friend auto operator-(const U &scalar, const Vector<T> &vec);
 
     // Vector * Scalar
     [[nodiscard]] Vector<T> operator*(const T &scalar) const {
@@ -238,10 +240,6 @@ template <typename T> class Vector {
         std::cout << std::fixed;
     }
 };
-
-template <class U> Vector<U> operator-(const U &scalar, const Vector<U> &vec) {
-    return (vec - scalar).invert_sign();
-}
 
 template <class U> Vector<U> operator*(const U &scalar, const Vector<U> &vec) {
     return vec * scalar;

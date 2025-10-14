@@ -81,6 +81,16 @@ template <typename U>
     return result;
 }
 
+template <typename T, typename U>
+[[nodiscard]] auto operator-(const U &scalar, const Vector<U> &vec) {
+    using R = std::common_type_t<T, U>;
+
+    Vector<R> result(vec.size());
+    std::transform(vec._data.begin(), vec._data.end(), result._data.begin(),
+                   [scalar](const T &value) { return scalar - value; });
+    return result;
+}
+
 // Vector * Matrix -> Vector
 template <typename T>
 template <typename U>
