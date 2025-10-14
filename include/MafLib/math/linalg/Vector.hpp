@@ -142,9 +142,9 @@ template <typename T> class Vector {
 
     // Scalar + Vector
     /// It's recommended to use Vector + Scalar instead.
-    /// @return Extended vector
-    template <class U>
-    friend Vector<U> operator+(const U &scalar, const Vector<U> &vec);
+    /// @return Vector of common promoted type.
+    template <typename U>
+    friend auto operator+(const U &scalar, const Vector<T> &vec);
 
     // Vector - Vector
     /// Subtract 2 vectors elementwise.

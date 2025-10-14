@@ -32,15 +32,22 @@ template <typename U>
     return result;
 }
 
+// Vector + Scalar
 template <typename T>
 template <typename U>
-[[nodiscard]] auto Vector<T>::operator+(const U &scalar) {
+[[nodiscard]] auto Vector<T>::operator+(const U &scalar) const {
     using R = std::common_type_t<T, U>;
 
     Vector<R> result(this->_data.size());
     std::transform(this->_data.begin(), this->_data.end(), result._data.begin(),
                    [scalar](const T &value) { return value + scalar; });
     return result;
+}
+
+// Scalar + Vector
+template <typename T, typename U>
+auto operator+(const U &scalar, const Vector<T> &vec) {
+    return vec + scalar;
 }
 
 // Vector - Vector
