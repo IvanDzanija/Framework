@@ -10,12 +10,37 @@ template <typename T> bool Vector<T>::operator==(const Vector &other) const {
         this->size() != other.size()) {
         return false;
     }
-    for (size_t i = 0; i < this->size(); ++i) {
-        if (!is_close(this->at(i), other.at(i))) {
-            return false;
-        }
+    return _data == other._data;
+}
+
+// Vector + Vector
+template <typename T>
+template <typename U>
+[[nodiscard]] auto Vector<T>::operator+(const Vector<U> &other) const {
+    using R = std::common_type_t<T, U>;
+
+    if (_orientation != other._orientation ||
+        _data.size() != other._data.size()) {
+        throw std::invalid_argument(
+            "Vectors must be same orientation and size!");
     }
-    return true;
+    size_t n = _data.size();
+    Vector<R> result(n);
+    for (size_t i = 0; i < n; ++i) {
+        result.at(i) = _data.at(i) + other._data.at(i);
+    }
+    return result;
+}
+
+template <typename T>
+template <typename U>
+[[nodiscard]] auto Vector<T>::operator+(const U &scalar) {
+    using R = std::common_type_t<T, U>;
+
+    Vector<R> result(this->_data.size());
+    std::transform(this->_data.begin(), this->_data.end(), result._data.begin(),
+                   [scalar](const T &value) { return value + scalar; });
+    return result;
 }
 
 // Vector - Vector

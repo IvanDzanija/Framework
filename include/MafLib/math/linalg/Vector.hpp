@@ -125,33 +125,20 @@ template <typename T> class Vector {
 
     // Operators
 
-    bool operator==(const Vector &other) const;
+    /// Checks if 2 matrices are exactly same,
+    /// use loosely_equal if working with floats.
+    [[nodiscard]] bool operator==(const Vector &other) const;
 
-    /// Vector + Vector
-    /// @return Resultant vector using standard algebraic addition method
-    Vector<T> operator+(const Vector &other) const {
-        if (_orientation != other._orientation ||
-            _data.size() != other._data.size()) {
-            throw std::invalid_argument(
-                "Vectors must be same orientation and size!");
-        }
-        size_t n = _data.size();
-        Vector<T> result(n);
-        for (size_t i = 0; i < n; ++i) {
-            result.at(i) = _data.at(i) + other._data.at(i);
-        }
-        return result;
-    }
+    // Vector + Vector
+    /// Add 2 vectors elementwise.
+    /// @return Vector of common promoted type.
+    template <typename U>
+    [[nodiscard]] auto operator+(const Vector<U> &other) const;
 
-    /// Vector + Scalar
-    /// @return Extended vector
-    Vector<T> operator+(const T &scalar) {
-        Vector<T> result(this->_data.size());
-        std::transform(this->_data.begin(), this->_data.end(),
-                       result._data.begin(),
-                       [scalar](const T &value) { return value + scalar; });
-        return result;
-    }
+    // Vector + Scalar
+    /// Add a scalar to each element of vector.
+    /// @return Vector of common promoted type
+    template <typename U> [[nodiscard]] auto operator+(const U &scalar) const;
 
     // Scalar + Vector
     /// It's recommended to use Vector + Scalar instead.
@@ -235,7 +222,7 @@ template <typename T> class Vector {
     void transpose() { _orientation = (_orientation == COLUMN) ? ROW : COLUMN; }
 
     // Create new transposed vector
-    Vector<T> transposed() const noexcept;
+    [[nodiscard]] Vector<T> transposed() const noexcept;
 
     // Printing and debugging
     void print() const {
@@ -266,17 +253,6 @@ template <class U> Vector<U> operator-(const U &scalar, const Vector<U> &vec) {
 
 template <class U> Vector<U> operator*(const U &scalar, const Vector<U> &vec) {
     return vec * scalar;
-}
-
-template <class U>
-Matrix<U> operator*(const Matrix<U> &lhs, const Vector<U> &rhs) {
-    switch (rhs._orientation) {
-    case Vector<U>::COLUMN:
-        // Implement logic
-        break;
-    default:
-        // Implement logic
-    }
 }
 
 } // namespace maf

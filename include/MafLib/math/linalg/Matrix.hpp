@@ -64,8 +64,7 @@ template <typename T> class Matrix {
 
     /// Constructor from std::vector
     /// Matrix gets filled by rows.
-    template <typename U>
-    Matrix(size_t rows, size_t cols, const std::vector<U> &data)
+    Matrix(size_t rows, size_t cols, const std::vector<T> &data)
         : _rows(rows), _cols(cols) {
         if (rows == 0 || cols == 0) {
             throw std::invalid_argument(
@@ -82,8 +81,7 @@ template <typename T> class Matrix {
 
     /// Matrix constructor from std::vector<std::vector>>
     /// Matrix indices correspond to indices in std::vector<std::vector>>
-    template <typename U>
-    Matrix(size_t rows, size_t cols, const std::vector<std::vector<U>> &data)
+    Matrix(size_t rows, size_t cols, const std::vector<std::vector<T>> &data)
         : _rows(rows), _cols(cols) {
         if (rows == 0 || cols == 0) {
             throw std::invalid_argument(
@@ -119,6 +117,7 @@ template <typename T> class Matrix {
 
         _data.assign(data.begin(), data.end());
     }
+
     /// Matrix constructor from std::initializer_list
     /// Matrix gets filled by rows.
     template <typename U>
@@ -263,21 +262,6 @@ template <typename T> class Matrix {
     Matrix decompose_Cholesky();
 };
 
-template <class U> inline Matrix<U> zeros(size_t rows, size_t cols) {
-    return Matrix<U>(rows, cols);
-}
-
-template <class U> inline Matrix<U> ones(size_t rows, size_t cols) {
-    Matrix<U> result(rows, cols);
-    result.fill(U(1));
-    return result;
-}
-
-template <class U> Matrix<U> inline identity(size_t size) {
-    Matrix<U> result(size, size);
-    result.make_identity();
-    return result;
-}
 } // namespace maf
 
 #include "MatrixCheckers.hpp"
