@@ -95,16 +95,17 @@ auto Matrix<T>::operator-(const U &scalar) const {
 // Scalar - Matrix
 template <typename T, typename U>
 [[nodiscard]] auto operator-(const U &scalar, const Matrix<T> &matrix) {
-    Matrix<T> result(matrix._rows, matrix._cols);
-    std::transform(matrix._data().begin(), matrix._data().end(),
+    Matrix<std::common_type_t<T, U>> result(matrix._rows, matrix._cols);
+    std::transform(matrix._data.begin(), matrix._data.end(),
                    result._data.begin(),
                    [scalar](const T &value) { return scalar - value; });
     return result;
 }
-/*
 // Matrix * Scalar
-Matrix<T> operator*(const T &scalar) const {
-    Matrix<T> result(_rows, _cols);
+template <typename T>
+template <typename U>
+auto Matrix<T>::operator*(const U &scalar) const {
+    Matrix<std::common_type_t<T, U>> result(_rows, _cols);
 
     std::transform(_data.begin(), _data.end(), result._data.begin(),
                    [scalar](const T &value) { return value * scalar; });
@@ -112,19 +113,23 @@ Matrix<T> operator*(const T &scalar) const {
 }
 
 // Scalar * Matrix
-template <class U>
-friend Matrix<U> operator*(const U &scalar, const Matrix<T> &matrix);
+template <typename T, typename U>
+[[nodiscard]] auto operator*(const U &scalar, const Matrix<T> &matrix) {
+    return matrix * scalar;
+}
 
 // Matrix * Vector
-template <class U> friend Matrix<T> operator*(const Vector<U> &other);
+// template <class U> friend Matrix<T> operator*(const Vector<U> &other);
 
 // Matrix * Matrix
-Matrix<T> operator*(const Matrix &other) const {
+template <typename T>
+template <typename U>
+auto Matrix<T>::operator*(const Matrix<U> &other) const {
     if (_cols != other._rows) {
         throw std::invalid_argument("Matrix dimensions do not match!");
     }
 
-    Matrix<T> result(_rows, other._cols);
+    Matrix<std::common_type_t<T, U>> result(_rows, other._cols);
 
     const T *a_data = this->_data.data();
     const T *b_data = other._data.data();
@@ -166,5 +171,5 @@ Matrix<T> operator*(const Matrix &other) const {
         }
     }
     return result;
-}*/
+}
 } // namespace maf

@@ -6,9 +6,7 @@
 #define BLOCK_SIZE 128
 
 namespace maf {
-
 template <typename T> class Vector;
-template <typename T> class Matrix;
 
 template <typename T> class Matrix {
   private:
@@ -236,62 +234,16 @@ template <typename T> class Matrix {
     template <typename U> auto operator*(const U &scalar) const;
 
     // Scalar * Matrix
-    template <class U>
-    friend Matrix<U> operator*(const U &scalar, const Matrix<T> &matrix);
+    /// Multiply each element of matrix by a scalar.
+    /// @return Matrix of common promoted type
+    template <typename U>
+    friend auto operator*(const U &scalar, const Matrix<T> &matrix);
 
     // Matrix * Vector
-    template <class U> friend Matrix<T> operator*(const Vector<U> &other);
+    template <class U> auto operator*(const Vector<U> &other);
 
     // Matrix * Matrix
-    Matrix<T> operator*(const Matrix &other) const {
-        if (_cols != other._rows) {
-            throw std::invalid_argument("Matrix dimensions do not match!");
-        }
-
-        Matrix<T> result(_rows, other._cols);
-
-        const T *a_data = this->_data.data();
-        const T *b_data = other._data.data();
-        T *c_data = result._data.data();
-
-        const size_t a_rows = _rows;
-        const size_t b_cols = other._cols;
-        const size_t a_cols = _cols;
-
-        result.fill(T(0));
-
-#pragma omp parallel for collapse(2) if (a_rows * b_cols > 10000)
-        for (size_t ii = 0; ii < a_rows; ii += BLOCK_SIZE) {
-            for (size_t jj = 0; jj < b_cols; jj += BLOCK_SIZE) {
-                for (size_t kk = 0; kk < a_cols; kk += BLOCK_SIZE) {
-
-                    // Process block
-                    const size_t i_end = std::min(ii + BLOCK_SIZE, a_rows);
-                    const size_t j_end = std::min(jj + BLOCK_SIZE, b_cols);
-                    const size_t k_end = std::min(kk + BLOCK_SIZE, a_cols);
-
-                    for (size_t i = ii; i < i_end; ++i) {
-                        for (size_t k = kk; k < k_end; ++k) {
-                            const T a_ik = a_data[i * a_cols + k];
-                            //                    if (is_close(a_ik, T(0)))
-                            //                    {
-                            // continue; // Skip zero elements
-                            //                   }
-                            const size_t b_offset = k * b_cols;
-                            const size_t c_offset = i * b_cols;
-
-#pragma omp simd
-                            for (size_t j = jj; j < j_end; ++j) {
-                                c_data[c_offset + j] +=
-                                    a_ik * b_data[b_offset + j];
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        return result;
-    }
+    template <typename U> auto operator*(const Matrix<U> &other) const;
 
     // Debugging and printing
     void print() const {
@@ -310,11 +262,6 @@ template <typename T> class Matrix {
     // Additional computing methods
     Matrix decompose_Cholesky();
 };
-
-template <class U>
-Matrix<U> operator*(const U &scalar, const Matrix<U> &matrix) {
-    return matrix * scalar;
-}
 
 template <class U> inline Matrix<U> zeros(size_t rows, size_t cols) {
     return Matrix<U>(rows, cols);

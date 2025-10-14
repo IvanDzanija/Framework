@@ -24,6 +24,8 @@ template <typename T> class Vector {
     Vector() : _orientation(COLUMN) {}
 
     // Construct from raw data
+    /// Constructor from data pointed to.
+    /// Elements are copied over from pointer to pointer + size
     Vector(size_t size, T *data, Orientation orientation = COLUMN)
         : _orientation(orientation) {
         if (size == 0) {
@@ -38,6 +40,7 @@ template <typename T> class Vector {
     }
 
     // Construct empty of size size
+    /// Construct emptpy vector with given size
     Vector(size_t size, Orientation orientation = COLUMN)
         : _orientation(orientation) {
         if (size == 0) {
@@ -48,6 +51,8 @@ template <typename T> class Vector {
     }
 
     // Construct from std::vector with copying
+    /// Constructor from std::vector
+    /// Elements of std::vector are copied over
     Vector(size_t size, const std::vector<T> &data,
            Orientation orientation = COLUMN)
         : _orientation(orientation) {
@@ -60,11 +65,12 @@ template <typename T> class Vector {
             throw std::invalid_argument(
                 "Data size does not match vector size.");
         }
-
         _data = data;
     }
 
     // Construct from std::vector with move semantics
+    /// Constructor from std::vector.
+    /// Elements of std::vector are moved over.
     Vector(size_t size, std::vector<T> &&data, Orientation orientation = COLUMN)
         : _orientation(orientation) {
         if (size == 0) {
@@ -81,6 +87,8 @@ template <typename T> class Vector {
     }
 
     // Constructor from std::array
+    /// Constructor from std::array.
+    /// Elements of std::array are copied over.
     template <typename U, size_t N>
     Vector(size_t size, const std::array<U, N> &data,
            Orientation orientation = COLUMN)
@@ -98,28 +106,16 @@ template <typename T> class Vector {
     }
 
     // Getters
-    [[nodiscard]] size_t size() const { return _data.size(); }
-    Orientation orientation() const { return _orientation; }
+    [[nodiscard]] size_t size() const noexcept { return _data.size(); }
+    [[nodiscard]] Orientation orientation() const noexcept {
+        return _orientation;
+    }
 
     T &at(size_t index) { return _data.at(index); }
     const T &at(size_t index) const { return this->_data.at(index); }
 
     T &operator[](size_t index) { return this->_data.at(index); }
     const T &operator[](size_t index) const { return this->_data.at(index); }
-
-    /// Equality operator
-    bool operator==(const Vector &other) const {
-        if (this->_orientation != other._orientation ||
-            this->size() != other.size()) {
-            return false;
-        }
-        for (size_t i = 0; i < this->size(); ++i) {
-            if (!is_close(this->at(i), other.at(i))) {
-                return false;
-            }
-        }
-        return true;
-    }
 
     // Checkers
 
@@ -135,6 +131,8 @@ template <typename T> class Vector {
     }
 
     // Operators
+
+    bool operator==(const Vector &other) const;
 
     /// Vector + Vector
     /// @return Resultant vector using standard algebraic addition method
@@ -211,43 +209,7 @@ template <typename T> class Vector {
     friend Vector<U> operator*(const U &scalar, const Vector<U> &vec);
 
     // Vector * Vector -> Matrix
-    Matrix<T> operator*(const Vector<T> &other) const {
-        size_t n = this->size();
-        size_t m = other.size();
-        if (_orientation == other._orientation) {
-            // 1x1 x 1x1 vector multiplication
-            if (n == 1 && m == 1) {
-                return Matrix(1, 1, {this->_data.at(0) * other._data.at(0)});
-            }
-            throw std::invalid_argument(
-                "Vector dimensions do not match! Maybe you are looking for "
-                "vector dot product.");
-        }
-        switch (this->_orientation) {
-        case Vector<T>::COLUMN: {
-            Matrix<T> result(n, m);
-            for (size_t i = 0; i < n; ++i) {
-                for (size_t j = 0; j < m; ++j) {
-                    result.at(i, j) = this->at(i) * other.at(j);
-                }
-            }
-            return result;
-        }
-
-        default:
-            std::cout << "This results in a 1x1 matrix. Consider using vector "
-                         "dot product."
-                      << std::endl;
-
-            T result = 0;
-            for (size_t i = 0; i < n; ++i) {
-                for (size_t j = 0; j < m; ++j) {
-                    result += this->at(i) * other.at(j);
-                }
-            }
-            return Matrix<T>(1, 1, {result});
-        }
-    }
+    template <typename U> auto operator*(const Vector<U> &other) const;
 
     Matrix<T> operator*(const Matrix<T> &other) const {
         size_t n = this->size();
@@ -318,10 +280,7 @@ template <typename T> class Vector {
     void transpose() { _orientation = (_orientation == COLUMN) ? ROW : COLUMN; }
 
     // Create new transposed vector
-    Vector<T> transposed() const {
-        Orientation new_orientation = (_orientation == COLUMN) ? ROW : COLUMN;
-        return ret(this->size(), _data, new_orientation);
-    }
+    Vector<T> transposed() const noexcept;
 
     T dot_product(const Vector<T> &other) const {
         T result = 0;

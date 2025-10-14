@@ -13,6 +13,7 @@
 #include <optional>
 #include <random>
 #include <stdexcept>
+#include <type_traits>
 #include <vector>
 
 using int8 = int8_t;
@@ -26,5 +27,10 @@ using uint64 = uint64_t;
 
 inline constexpr int8_t OUT_OF_BOUNDS = -1;
 inline constexpr int8_t NOT_SQUARE = -2;
+inline constexpr double EPSILON = 1e-6;
+
+template <typename T> bool is_close(T v1, T v2, double epsilon = EPSILON) {
+    return std::abs(v1 - v2) < epsilon;
+}
 
 #endif // GLOBALHEADER_HPP
