@@ -46,14 +46,14 @@ template <typename U>
 
 // Scalar + Vector
 template <typename T, typename U>
-auto operator+(const U &scalar, const Vector<T> &vec) {
+[[nodiscard]] auto operator+(const U &scalar, const Vector<T> &vec) {
     return vec + scalar;
 }
 
 // Vector - Vector
 template <typename T>
 template <typename U>
-auto Vector<T>::operator-(const Vector<U> &other) const {
+[[nodiscard]] auto Vector<T>::operator-(const Vector<U> &other) const {
     using R = std::common_type_t<T, U>;
 
     if (this->_orientation != other._orientation ||
@@ -69,10 +69,22 @@ auto Vector<T>::operator-(const Vector<U> &other) const {
     return result;
 }
 
+// Vector - Scalar
+template <typename T>
+template <typename U>
+[[nodiscard]] auto Vector<T>::operator-(const U &scalar) const {
+    using R = std::common_type_t<T, U>;
+
+    Vector<R> result(this->_data.size());
+    std::transform(this->_data.begin(), this->_data.end(), result._data.begin(),
+                   [scalar](const T &value) { return value - scalar; });
+    return result;
+}
+
 // Vector * Matrix -> Vector
 template <typename T>
 template <typename U>
-auto Vector<T>::operator*(const Matrix<U> &other) const {
+[[nodiscard]] auto Vector<T>::operator*(const Matrix<U> &other) const {
     using R = std::common_type_t<T, U>;
 
     size_t n = this->size();
