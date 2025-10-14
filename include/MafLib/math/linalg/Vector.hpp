@@ -121,14 +121,7 @@ template <typename T> class Vector {
 
     /// Null vector
     /// @return true if all values of the vector are/close to 0, false otherwise
-    bool is_null() {
-        for (const T &val : _data) {
-            if (!is_close(val, 0)) {
-                return false;
-            }
-        }
-        return true;
-    }
+    [[nodiscard]] bool is_null() const noexcept;
 
     // Operators
 
@@ -160,29 +153,21 @@ template <typename T> class Vector {
         return result;
     }
 
-    /// Scalar + Vector
+    // Scalar + Vector
     /// It's recommended to use Vector + Scalar instead.
     /// @return Extended vector
     template <class U>
     friend Vector<U> operator+(const U &scalar, const Vector<U> &vec);
 
     // Vector - Vector
-    Vector<T> operator-(const Vector &other) const {
-        if (this->_orientation != other._orientation ||
-            this->_data.size() != other._data.size()) {
-            throw std::invalid_argument(
-                "Vectors must be same orientation and size!");
-        }
-        size_t n = this->_data.size();
-        Vector<T> result(n);
-        for (size_t i = 0; i < n; ++i) {
-            result.at(i) = this->_data.at(i) - other._data.at(i);
-        }
-        return result;
-    }
+    /// Subtract 2 vectors elementwise.
+    /// Elements of first vector - elements of second vector
+    /// @return Vector of common promoted type
+    template <typename U>
+    [[nodiscard]] auto operator-(const Vector<U> &other) const;
 
     // Vector - Scalar
-    Vector<T> operator-(const T &scalar) {
+    [[nodiscard]] Vector<T> operator-(const T &scalar) {
         Vector<T> result(this->_data.size());
         std::transform(this->_data.begin(), this->_data.end(),
                        result._data.begin(),
@@ -195,7 +180,7 @@ template <typename T> class Vector {
     friend Vector<U> operator-(const U &scalar, const Vector<U> &vec);
 
     // Vector * Scalar
-    Vector<T> operator*(const T &scalar) const {
+    [[nodiscard]] Vector<T> operator*(const T &scalar) const {
         Vector<T> result(this->_data.size());
 
         std::transform(this->_data.begin(), this->_data.end(),

@@ -18,6 +18,25 @@ template <typename T> bool Vector<T>::operator==(const Vector &other) const {
     return true;
 }
 
+// Vector - Vector
+template <typename T>
+template <typename U>
+auto Vector<T>::operator-(const Vector<U> &other) const {
+    using R = std::common_type_t<T, U>;
+
+    if (this->_orientation != other._orientation ||
+        this->_data.size() != other._data.size()) {
+        throw std::invalid_argument(
+            "Vectors must be same orientation and size!");
+    }
+    size_t n = size();
+    Vector<R> result(n);
+    for (size_t i = 0; i < n; ++i) {
+        result.at(i) = this->_data.at(i) - other._data.at(i);
+    }
+    return result;
+}
+
 // Vector * Matrix -> Vector
 template <typename T>
 template <typename U>
