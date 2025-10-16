@@ -32,13 +32,10 @@ void should_return_true_for_multiple_inserted_words() {
 void should_not_crash_or_throw_if_inserting_empty_string() {
     maf::Trie<char> trie;
     trie.insert("");
-    // Depending on design, empty string may or may not exist
-    // We simply assert that search doesn't crash and returns false
     assert(trie.search("") == false);
 }
 
-// Remove behavior
-void should_remove_existing_word_and_return_true() {
+void should_remove_existing_word_and_return_true_if_word_exists() {
     maf::Trie<char> trie;
     trie.insert("data");
     assert(trie.search("data") == true);
@@ -120,34 +117,21 @@ void should_allow_reinsertion_after_removal() {
 int main() {
     std::cout << "=== Running maf::Trie Tests ===" << std::endl;
 
-    run_test("should_return_true_if_inserted_word_exists",
-             should_return_true_if_inserted_word_exists);
-    run_test("should_return_false_if_no_word_exists",
-             should_return_false_if_no_word_exists);
-    run_test("should_return_false_if_prefix_inserted_but_not_full_word",
-             should_return_false_if_prefix_inserted_but_not_full_word);
-    run_test("should_return_true_for_multiple_inserted_words",
-             should_return_true_for_multiple_inserted_words);
-    run_test("should_not_crash_or_throw_if_inserting_empty_string",
-             should_not_crash_or_throw_if_inserting_empty_string);
+    should_return_true_if_inserted_word_exists();
+    should_return_false_if_no_word_exists();
+    should_return_false_if_prefix_inserted_but_not_full_word();
+    should_return_true_for_multiple_inserted_words();
+    should_not_crash_or_throw_if_inserting_empty_string();
 
-    run_test("should_remove_existing_word_and_return_true",
-             should_remove_existing_word_and_return_true);
-    run_test("should_return_false_if_removing_nonexistent_word",
-             should_return_false_if_removing_nonexistent_word);
-    run_test("should_not_affect_other_words_when_removing_one",
-             should_not_affect_other_words_when_removing_one);
-    run_test("should_handle_removal_until_trie_becomes_empty",
-             should_handle_removal_until_trie_becomes_empty);
+    should_remove_existing_word_and_return_true_if_word_exists();
+    should_return_false_if_removing_nonexistent_word();
+    should_not_affect_other_words_when_removing_one();
+    should_handle_removal_until_trie_becomes_empty();
 
-    run_test("should_support_long_word_insertion_and_search",
-             should_support_long_word_insertion_and_search);
-    run_test("should_support_words_with_special_characters",
-             should_support_words_with_special_characters);
-    run_test("should_return_false_if_word_removed_and_reinserted_partially",
-             should_return_false_if_word_removed_and_reinserted_partially);
-    run_test("should_allow_reinsertion_after_removal",
-             should_allow_reinsertion_after_removal);
+    should_support_long_word_insertion_and_search();
+    should_support_words_with_special_characters();
+    should_return_false_if_word_removed_and_reinserted_partially();
+    should_allow_reinsertion_after_removal();
 
     std::cout << "=== All tests passed ===" << std::endl;
     return 0;

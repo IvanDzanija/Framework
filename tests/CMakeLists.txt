@@ -1,2 +1,9 @@
-add_executable(tests tests.cpp)
-target_link_libraries(tests PRIVATE ${PROJECT_NAME}::${PROJECT_NAME})
+# tests/CMakeLists.txt
+cmake_minimum_required(VERSION 3.16)
+
+message(STATUS "Building tests for MafLib")
+
+# Add subfolders for categories
+#add_subdirectory(math)
+# add_subdirectory(algos)
+add_subdirectory(structs)
