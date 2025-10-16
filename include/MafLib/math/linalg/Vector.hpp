@@ -105,6 +105,25 @@ template <typename T> class Vector {
         _data.assign(data.begin(), data.end());
     }
 
+    // Iterators
+    [[nodiscard]] auto begin() noexcept { return _data.begin(); }
+    [[nodiscard]] auto end() noexcept { return _data.end(); }
+
+    [[nodiscard]] auto begin() const noexcept { return _data.begin(); }
+    [[nodiscard]] auto end() const noexcept { return _data.end(); }
+
+    [[nodiscard]] auto cbegin() const noexcept { return _data.cbegin(); }
+    [[nodiscard]] auto cend() const noexcept { return _data.cend(); }
+
+    [[nodiscard]] auto rbegin() noexcept { return _data.rbegin(); }
+    [[nodiscard]] auto rend() noexcept { return _data.rend(); }
+
+    [[nodiscard]] auto rbegin() const noexcept { return _data.rbegin(); }
+    [[nodiscard]] auto rend() const noexcept { return _data.rend(); }
+
+    [[nodiscard]] auto crbegin() const noexcept { return _data.crbegin(); }
+    [[nodiscard]] auto crend() const noexcept { return _data.crend(); }
+
     // Getters
     [[nodiscard]] size_t size() const noexcept { return _data.size(); }
     [[nodiscard]] Orientation orientation() const noexcept {
@@ -235,4 +254,7 @@ template <typename T> class Vector {
 
 } // namespace maf
 
+#include "VectorCheckers.hpp"
+#include "VectorMethods.hpp"
+#include "VectorOperators.hpp"
 #endif
