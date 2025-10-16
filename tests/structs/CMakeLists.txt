@@ -1,7 +1,7 @@
 # tests/structs/CMakeLists.txt
 cmake_minimum_required(VERSION 3.16)
 
-set(TEST_NAME trie_tests)
+set(TEST_NAME TrieTests)
 
 add_executable(${TEST_NAME}
     TrieTest.cpp
