@@ -160,29 +160,33 @@ template <typename T> class Vector {
 
     // Scalar - Vector
     /// Subtract each element of vector from a scalar.
-    /// @return Vector of common promoted type
+    /// @return Vector of common promoted type.
     template <typename U>
     friend auto operator-(const U &scalar, const Vector<T> &vec);
 
     // Vector * Scalar
-    [[nodiscard]] Vector<T> operator*(const T &scalar) const {
-        Vector<T> result(this->_data.size());
-
-        std::transform(this->_data.begin(), this->_data.end(),
-                       result._data.begin(),
-                       [scalar](const T &value) { return value * scalar; });
-        return result;
-    }
+    /// Multiply each element of vector by a scalar.
+    /// @return Vector of common promoted type.
+    template <typename U> [[nodiscard]] auto operator*(const U &scalar) const;
 
     // Scalar * Vector
-    template <class U>
-    friend Vector<U> operator*(const U &scalar, const Vector<U> &vec);
+    /// It's recommended to use Vector * Scalar instead.
+    /// @return Vector of common promoted type.
+    template <typename U>
+    friend auto operator*(const U &scalar, const Vector<T> &vec);
 
     // Vector * Vector -> Matrix
+    /// Outer product of 2 vectors.
+    /// First vector has to be a column vector.
+    /// Second vector has to be a row vector.
+    /// @return Matrix of common promoted type.
     template <typename U>
     [[nodiscard]] auto operator*(const Vector<U> &other) const;
 
     // Vector * Matrix -> Vector
+    /// Vector transformation by matrix from the right.
+    /// First element has to be a row vector.
+    /// @return Vector of common promoted type.
     template <typename U>
     [[nodiscard]] auto operator*(const Matrix<U> &other) const;
 
@@ -199,22 +203,10 @@ template <typename T> class Vector {
 
     // Vector norm
     /// L2 vector norm
-    T norm() const;
+    [[nodiscard]] T norm() const;
 
     // Inplace normalization
-    void normalize() {
-        // This will probably be faster by only calling norm() and checking if
-        // norm is close to 0 since it only loops through the vector once! But
-        // keeping this for clarity
-        if (this->is_null()) {
-            throw std::invalid_argument("Null vector can't be normalized!");
-        }
-
-        T norm = this->norm();
-        for (T &val : _data) {
-            val /= norm;
-        }
-    }
+    void normalize();
 
     // Inplace transpose
     void transpose() { _orientation = (_orientation == COLUMN) ? ROW : COLUMN; }
@@ -240,10 +232,6 @@ template <typename T> class Vector {
         std::cout << std::fixed;
     }
 };
-
-template <class U> Vector<U> operator*(const U &scalar, const Vector<U> &vec) {
-    return vec * scalar;
-}
 
 } // namespace maf
 

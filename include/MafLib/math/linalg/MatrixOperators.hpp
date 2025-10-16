@@ -55,7 +55,7 @@ auto Matrix<T>::operator+(const U &scalar) const {
 
 // Scalar + Matrix
 template <typename T, typename U>
-[[nodiscard]] auto operator+(const U &scalar, const Matrix<T> &matrix) {
+auto operator+(const U &scalar, const Matrix<T> &matrix) {
     return matrix + scalar;
 }
 
@@ -102,7 +102,7 @@ auto Matrix<T>::operator-(const U &scalar) const {
 
 // Scalar - Matrix
 template <typename T, typename U>
-[[nodiscard]] auto operator-(const U &scalar, const Matrix<T> &matrix) {
+auto operator-(const U &scalar, const Matrix<T> &matrix) {
     Matrix<std::common_type_t<T, U>> result(matrix._rows, matrix._cols);
     std::transform(matrix._data.begin(), matrix._data.end(),
                    result._data.begin(),
@@ -122,7 +122,7 @@ auto Matrix<T>::operator*(const U &scalar) const {
 
 // Scalar * Matrix
 template <typename T, typename U>
-[[nodiscard]] auto operator*(const U &scalar, const Matrix<T> &matrix) {
+auto operator*(const U &scalar, const Matrix<T> &matrix) {
     return matrix * scalar;
 }
 
@@ -209,4 +209,5 @@ auto Matrix<T>::operator*(const Matrix<U> &other) const {
     }
     return result;
 }
+
 } // namespace maf

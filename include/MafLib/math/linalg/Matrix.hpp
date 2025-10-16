@@ -230,7 +230,7 @@ template <typename T> class Matrix {
     // Matrix * Scalar
     /// Multiply each element of matrix by a scalar.
     /// @return Matrix of common promoted type
-    template <typename U> auto operator*(const U &scalar) const;
+    template <typename U> [[nodiscard]] auto operator*(const U &scalar) const;
 
     // Scalar * Matrix
     /// Multiply each element of matrix by a scalar.
@@ -239,10 +239,12 @@ template <typename T> class Matrix {
     friend auto operator*(const U &scalar, const Matrix<T> &matrix);
 
     // Matrix * Vector
-    template <typename U> auto operator*(const Vector<U> &other) const;
+    template <typename U>
+    [[nodiscard]] auto operator*(const Vector<U> &other) const;
 
     // Matrix * Matrix
-    template <typename U> auto operator*(const Matrix<U> &other) const;
+    template <typename U>
+    [[nodiscard]] auto operator*(const Matrix<U> &other) const;
 
     // Debugging and printing
     void print() const {

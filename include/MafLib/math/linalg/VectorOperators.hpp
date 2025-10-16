@@ -16,7 +16,7 @@ template <typename T> bool Vector<T>::operator==(const Vector &other) const {
 // Vector + Vector
 template <typename T>
 template <typename U>
-[[nodiscard]] auto Vector<T>::operator+(const Vector<U> &other) const {
+auto Vector<T>::operator+(const Vector<U> &other) const {
     using R = std::common_type_t<T, U>;
 
     if (_orientation != other._orientation ||
@@ -35,7 +35,7 @@ template <typename U>
 // Vector + Scalar
 template <typename T>
 template <typename U>
-[[nodiscard]] auto Vector<T>::operator+(const U &scalar) const {
+auto Vector<T>::operator+(const U &scalar) const {
     using R = std::common_type_t<T, U>;
 
     Vector<R> result(this->_data.size());
@@ -46,14 +46,14 @@ template <typename U>
 
 // Scalar + Vector
 template <typename T, typename U>
-[[nodiscard]] auto operator+(const U &scalar, const Vector<T> &vec) {
+auto operator+(const U &scalar, const Vector<T> &vec) {
     return vec + scalar;
 }
 
 // Vector - Vector
 template <typename T>
 template <typename U>
-[[nodiscard]] auto Vector<T>::operator-(const Vector<U> &other) const {
+auto Vector<T>::operator-(const Vector<U> &other) const {
     using R = std::common_type_t<T, U>;
 
     if (this->_orientation != other._orientation ||
@@ -72,7 +72,7 @@ template <typename U>
 // Vector - Scalar
 template <typename T>
 template <typename U>
-[[nodiscard]] auto Vector<T>::operator-(const U &scalar) const {
+auto Vector<T>::operator-(const U &scalar) const {
     using R = std::common_type_t<T, U>;
 
     Vector<R> result(this->_data.size());
@@ -81,8 +81,9 @@ template <typename U>
     return result;
 }
 
+// Scalar - Vector
 template <typename T, typename U>
-[[nodiscard]] auto operator-(const U &scalar, const Vector<U> &vec) {
+auto operator-(const U &scalar, const Vector<T> &vec) {
     using R = std::common_type_t<T, U>;
 
     Vector<R> result(vec.size());
@@ -91,10 +92,28 @@ template <typename T, typename U>
     return result;
 }
 
+// Vector * Scalar
+template <typename T>
+template <typename U>
+auto Vector<T>::operator*(const U &scalar) const {
+    using R = std::common_type_t<T, U>;
+
+    Vector<R> result(this->_data.size());
+    std::transform(this->_data.begin(), this->_data.end(), result._data.begin(),
+                   [scalar](const T &value) { return value * scalar; });
+    return result;
+}
+
+// Scalar * Vector
+template <typename T, typename U>
+auto operator*(const U &scalar, const Vector<U> &vec) {
+    return vec * scalar;
+}
+
 // Vector * Matrix -> Vector
 template <typename T>
 template <typename U>
-[[nodiscard]] auto Vector<T>::operator*(const Matrix<U> &other) const {
+auto Vector<T>::operator*(const Matrix<U> &other) const {
     using R = std::common_type_t<T, U>;
 
     size_t n = this->size();
