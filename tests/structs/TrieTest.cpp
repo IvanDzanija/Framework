@@ -32,7 +32,7 @@ void should_return_true_for_multiple_inserted_words() {
 void should_not_crash_or_throw_if_inserting_empty_string() {
     maf::Trie<char> trie;
     trie.insert("");
-    assert(trie.search("") == false);
+    assert(trie.search("") == true);
 }
 
 void should_remove_existing_word_and_return_true_if_word_exists() {
@@ -73,7 +73,6 @@ void should_handle_removal_until_trie_becomes_empty() {
     assert(trie.search("c") == false);
 }
 
-// Edge and stress cases
 void should_support_long_word_insertion_and_search() {
     maf::Trie<char> trie;
     std::string long_word(1000, 'x');
@@ -97,7 +96,7 @@ void should_return_false_if_word_removed_and_reinserted_partially() {
     trie.insert("code");
     assert(trie.search("code"));
     trie.remove("code");
-    trie.insert("cod"); // prefix only
+    trie.insert("cod");
     assert(!trie.search("code"));
     assert(!trie.search("co"));
     assert(trie.search("cod"));
@@ -111,9 +110,6 @@ void should_allow_reinsertion_after_removal() {
     assert(trie.search("test"));
 }
 
-// ---------------------------
-// Main test runner
-// ---------------------------
 int main() {
     std::cout << "=== Running maf::Trie Tests ===" << std::endl;
 

@@ -61,6 +61,11 @@ target_compile_options(${PROJECT_NAME}
         $<$<CONFIG:Release>:-O2 -ffast-math -march=native -DNDEBUG>
 )
 
+target_link_options(${PROJECT_NAME}
+    INTERFACE
+        $<$<CONFIG:Debug>:-fsanitize=address -fsanitize=undefined>
+)
+
 include(GNUInstallDirs)
 
 install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})

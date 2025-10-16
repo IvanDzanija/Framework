@@ -1,4 +1,5 @@
 #include "MafLib/main/GlobalHeader.hpp"
+#include <queue>
 
 namespace maf {
 
@@ -8,7 +9,7 @@ template <typename T> class Trie {
         // Definition of sigma -> 256 ascii chars
         std::array<TrieNode *, 256> children;
         TrieNode *parent;
-        uint8 child_count = 0;
+        uint16 child_count = 0;
 
         TrieNode(TrieNode *parent = nullptr) : parent(parent) {
             children.fill(nullptr);
@@ -37,9 +38,10 @@ template <typename T> class Trie {
         TrieNode *insert(char value) {
             TrieNode *node = transition(value);
             if (node == nullptr) {
-                auto *node = new TrieNode(this);
-                children.at(static_cast<uint8>(value)) = node;
+                auto *new_node = new TrieNode(this);
+                children.at(static_cast<uint8>(value)) = new_node;
                 ++child_count;
+                return new_node;
             }
             return node;
         }
@@ -58,7 +60,7 @@ template <typename T> class Trie {
 
         [[nodiscard]] std::string toString() const noexcept {
             std::string s = "Children(" + std::to_string(child_count) + "):\n";
-            for (uint8 i = 0; i < 256; ++i) {
+            for (uint16 i = 0; i < 256; ++i) {
                 if (children.at(i) != nullptr) {
                     s += ' ';
                     s += static_cast<char>(i);
@@ -66,17 +68,14 @@ template <typename T> class Trie {
             }
             return s;
         }
-
-        void print() const noexcept { std::cout << toString() << std::endl; }
     };
 
     TrieNode *_root = new TrieNode(nullptr);
 
-    TrieNode *_search(std::string word) {
+    TrieNode *_search(const std::string &word) {
         TrieNode *current_node = _root;
-        word += "\0";
         for (char c : word) {
-            TrieNode *current_node = current_node->transition(c);
+            current_node = current_node->transition(c);
             if (current_node == nullptr) {
                 return nullptr;
             }
@@ -94,10 +93,10 @@ template <typename T> class Trie {
 
     /// Inserts given word into existant trie.
     void insert(const std::string &word) {
+        TrieNode *node = _root;
         for (char c : word) {
-            _root->insert(c);
+            node = node->insert(c);
         }
-        _root->insert('\0');
     }
 
     [[nodiscard]] bool search(const std::string &word) {
@@ -108,8 +107,7 @@ template <typename T> class Trie {
         TrieNode *node = _search(word);
 
         if (node != nullptr) {
-            std::string rev_word =
-                "\0" + std::string(word.rbegin(), word.rend());
+            auto rev_word = std::string(word.rbegin(), word.rend());
 
             TrieNode *current_node = node->parent;
             for (const char c : rev_word) {
@@ -126,6 +124,22 @@ template <typename T> class Trie {
         }
 
         return false;
+    }
+    void print() const noexcept {
+        std::queue<TrieNode *> q;
+        q.push(_root);
+
+        while (!q.empty()) {
+            TrieNode *current = q.front();
+            q.pop();
+            std::cout << current->toString() << std::endl;
+            for (size_t i = 0; i < 256; ++i) {
+                TrieNode *next = current->children.at(i);
+                if (next != nullptr) {
+                    q.push(next);
+                }
+            }
+        }
     }
 };
 
