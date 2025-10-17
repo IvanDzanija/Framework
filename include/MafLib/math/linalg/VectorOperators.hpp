@@ -1,6 +1,4 @@
 #include "Vector.hpp"
-#include <stdexcept>
-#include <type_traits>
 
 namespace maf {
 

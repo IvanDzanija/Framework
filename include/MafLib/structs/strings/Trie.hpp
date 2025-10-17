@@ -125,6 +125,7 @@ template <typename T> class Trie {
 
         return false;
     }
+
     void print() const noexcept {
         std::queue<TrieNode *> q;
         q.push(_root);

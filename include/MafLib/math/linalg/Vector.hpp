@@ -2,7 +2,6 @@
 #define VECTOR_H
 
 #pragma once
-#include "MafLib/main/GlobalHeader.hpp"
 #include "MafLib/math/linalg/Matrix.hpp"
 
 #define BLOCK_SIZE 128

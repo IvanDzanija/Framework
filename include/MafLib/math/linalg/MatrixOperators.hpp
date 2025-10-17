@@ -4,7 +4,8 @@
 
 namespace maf {
 
-template <typename T> bool Matrix<T>::operator==(const Matrix &other) const {
+template <typename T>
+[[nodiscard]] constexpr bool Matrix<T>::operator==(const Matrix &other) const {
     if (_rows != other._rows || _cols != other._cols) {
         return false;
     }

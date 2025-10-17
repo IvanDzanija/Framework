@@ -14,11 +14,11 @@ template <typename T> class Matrix {
     size_t _cols;
     std::vector<T> _data;
 
-    [[nodiscard]] bool _is_valid_index(size_t row, size_t col) const {
+    [[nodiscard]] constexpr bool _is_valid_index(size_t row, size_t col) const {
         return row < _rows && col < _cols;
     }
 
-    [[nodiscard]] size_t _get_index(size_t row, size_t col) const {
+    [[nodiscard]] constexpr size_t _get_index(size_t row, size_t col) const {
         if (!_is_valid_index(row, col)) {
             throw std::out_of_range("Index out of bounds.");
         }
@@ -150,26 +150,26 @@ template <typename T> class Matrix {
 
     // Checkers
     /// Checks if the matrix is square.
-    [[nodiscard]] bool is_square() const;
+    [[nodiscard]] constexpr bool is_square() const;
 
     /// Checkes if the matrix is symmetric.
-    [[nodiscard]] bool is_symmetric() const;
+    [[nodiscard]] constexpr bool is_symmetric() const;
 
     /// Checks if the matrix is upper triangular.
-    [[nodiscard]] bool is_upper_triangular() const;
+    [[nodiscard]] constexpr bool is_upper_triangular() const;
 
     /// Checks if the matrix is lower triangular.
-    [[nodiscard]] bool is_lower_triangular() const;
+    [[nodiscard]] constexpr bool is_lower_triangular() const;
 
     /// Checks if the matrix is diagonal.
-    [[nodiscard]] bool is_diagonal() const;
+    [[nodiscard]] constexpr bool is_diagonal() const;
 
     /// Checks if the matrix is singular.
     /// This is equivalent to:
     /// 1) Matrix A doesn't have an inverse.
     /// 2) Rank (A) < n
     /// 3) Determinant(A) = 0
-    [[nodiscard]] bool is_singular() const;
+    [[nodiscard]] constexpr bool is_singular() const;
 
     // Methods
     /// Fills the current matrix with $value.
@@ -190,7 +190,7 @@ template <typename T> class Matrix {
 
     /// Checks if 2 matrices are exactly same,
     /// use loosely_equal if working with floats.
-    [[nodiscard]] bool operator==(const Matrix &other) const;
+    [[nodiscard]] constexpr bool operator==(const Matrix &other) const;
 
     // Matrix + Matrix
     /// Add 2 matrices elementwise
@@ -261,7 +261,7 @@ template <typename T> class Matrix {
     }
 
     // Additional computing methods
-    Matrix decompose_Cholesky();
+    [[nodiscard]] Matrix decompose_Cholesky();
 };
 
 } // namespace maf
