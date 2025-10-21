@@ -152,6 +152,20 @@ void should_return_true_for_triangular_matrix() {
     assert(m4.is_lower_triangular() && m4.is_upper_triangular());
 }
 
+void should_return_true_for_diagonal_matrix() {
+    std::array<float, 9> data1 = {1.1, 0, 0, 0, 2.2, 0, 0.0, 1e-9, 3.3};
+    std::array<float, 9> data2 = {1.1, 0.0, 0.0, 1, 2.2, 0.0, 0.0, 0, 3.3};
+    std::array<float, 9> data3 = {1.1, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 3.3};
+    Matrix<float> m1(3, 3, data1);
+    Matrix<float> m2(3, 3, data2);
+    Matrix<float> m3(3, 3, data3);
+    Matrix<float> m4 = identity<float>(3);
+    assert(m1.is_diagonal());
+    assert(!m2.is_diagonal());
+    assert(m3.is_diagonal());
+    assert(m4.is_diagonal());
+}
+
 void should_fill_matrix_with_value() {
     Matrix<int> m(2, 3);
     m.fill(9);
@@ -161,14 +175,14 @@ void should_fill_matrix_with_value() {
 }
 
 void should_make_identity_matrix() {
-    Matrix<int> m(3, 3);
-    m.make_identity();
+    Matrix<int> m1(3, 3);
+    m1.make_identity();
     for (size_t i = 0; i < 3; ++i) {
         for (size_t j = 0; j < 3; ++j) {
             if (i == j)
-                assert(m.at(i, j) == 1);
+                assert(m1.at(i, j) == 1);
             else
-                assert(m.at(i, j) == 0);
+                assert(m1.at(i, j) == 0);
         }
     }
 }
@@ -271,6 +285,7 @@ int main() {
     should_return_true_for_square_matrix();
     should_return_true_for_symmetric_matrix();
     should_return_true_for_triangular_matrix();
+    should_return_true_for_diagonal_matrix();
 
     should_fill_matrix_with_value();
     should_make_identity_matrix();
