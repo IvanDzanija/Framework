@@ -166,6 +166,15 @@ void should_return_true_for_diagonal_matrix() {
     assert(m4.is_diagonal());
 }
 
+void should_return_true_for_positive_definite_matrix() {
+    Matrix<int> m1(3, 3, {1, 2, 1, 2, 5, 2, 1, 2, 10});
+    Matrix<int> m2(3, 3, {1, 2, 1, 2, -5, 2, 1, 2, 10});
+    assert(m1.is_positive_definite());
+    assert(!m2.is_positive_definite());
+}
+
+// Methods tests
+
 void should_fill_matrix_with_value() {
     Matrix<int> m(2, 3);
     m.fill(9);
@@ -197,6 +206,8 @@ void should_transpose_square_matrix_in_place() {
 void should_return_transposed_copy_for_non_square_matrix() {
     Matrix<int> m(2, 3, {1, 2, 3, 4, 5, 6});
     Matrix<int> t = m.transposed();
+    assert(m.row_count() == 2);
+    assert(m.column_count() == 3);
     assert(t.row_count() == 3);
     assert(t.column_count() == 2);
     assert(t.at(1, 0) == 2);
@@ -215,36 +226,44 @@ void should_not_be_equal_if_any_element_differs() {
     assert(!(a == b));
 }
 
-// void should_add_two_matrices_of_same_size() {
-//     Matrix<int> a(2, 2, {1, 2, 3, 4});
-//     Matrix<int> b(2, 2, {10, 20, 30, 40});
-//     auto c = a + b;
-//     assert(c.at(0, 0) == 11);
-//     assert(c.at(1, 1) == 44);
-// }
-//
-// void should_add_scalar_to_matrix() {
-//     Matrix<int> a(2, 2, {1, 2, 3, 4});
-//     auto c = a + 10;
-//     assert(c.at(0, 1) == 12);
-//     assert(c.at(1, 0) == 13);
-// }
-//
-// void should_multiply_matrix_by_scalar() {
-//     Matrix<double> a(2, 2, {1.5, 2.0, -3.0, 4.0});
-//     auto b = a * 2.0;
-//     assert(fabs(b.at(0, 0) - 3.0) < 1e-6);
-//     assert(fabs(b.at(1, 0) + 6.0) < 1e-6);
-// }
-//
-// void should_handle_mixed_type_addition() {
-//     Matrix<int> a(2, 2, {1, 2, 3, 4});
-//     Matrix<double> b(2, 2, {0.5, 1.5, 2.5, 3.5});
-//     auto c = a + b;
-//     assert(fabs(c.at(0, 1) - 3.5) < 1e-6);
-//     assert(fabs(c.at(1, 0) - 5.5) < 1e-6);
-// }
-//
+void should_add_two_matrices_of_same_size() {
+    Matrix<int> a(2, 2, {1, 2, 3, 4});
+    Matrix<int> b(2, 2, {10, 20, 30, 40});
+    Matrix<float> c(2, 2, {1.5, 2.5, 3.5, 4.5});
+    auto d = a + b;
+    auto e = d + c;
+    assert(d.at(0, 0) == 11);
+    assert(d.at(1, 1) == 44);
+    assert(e.at(0, 0) == 12.5);
+    assert(e.at(0, 1) == 24.5);
+    assert(e.at(1, 0) == 36.5);
+    assert(e.at(1, 1) == 48.5);
+}
+
+void should_add_scalar_to_matrix() {
+    Matrix<int> a(2, 2, {1, 2, 3, 4});
+    auto c = a + 10;
+    auto d = a + 4.5;
+    assert(c.at(0, 0) == 11);
+    assert(c.at(0, 1) == 12);
+    assert(c.at(1, 0) == 13);
+    assert(c.at(1, 1) == 14);
+    assert(d.at(0, 0) == 5.5);
+    assert(d.at(0, 1) == 6.5);
+    assert(d.at(1, 0) == 7.5);
+    assert(d.at(1, 1) == 8.5);
+}
+
+void should_multiply_matrix_by_scalar() {
+    Matrix<double> a(2, 2, {1.5, 2.0, -3.0, 4.0});
+    auto b = a * 2.0;
+    assert(fabs(b.at(0, 0) - 3.0) < 1e-6);
+    assert(fabs(b.at(0, 1) - 4.0) < 1e-6);
+    assert(fabs(b.at(1, 0) + 6.0) < 1e-6);
+    assert(fabs(b.at(1, 1) - 8.0) < 1e-6);
+    b.print();
+}
+
 // void should_invert_sign_with_private_invert_sign_called_indirectly() {
 //     // Not directly testable since private; simulate via subtraction
 //     Matrix<int> a(2, 2, {1, -2, 3, -4});
@@ -286,6 +305,7 @@ int main() {
     should_return_true_for_symmetric_matrix();
     should_return_true_for_triangular_matrix();
     should_return_true_for_diagonal_matrix();
+    should_return_true_for_positive_definite_matrix();
 
     should_fill_matrix_with_value();
     should_make_identity_matrix();
@@ -294,11 +314,9 @@ int main() {
 
     should_check_equality_between_identical_matrices();
     should_not_be_equal_if_any_element_differs();
-
-    // should_add_two_matrices_of_same_size();
-    // should_add_scalar_to_matrix();
-    // should_multiply_matrix_by_scalar();
-    // should_handle_mixed_type_addition();
+    should_add_two_matrices_of_same_size();
+    should_add_scalar_to_matrix();
+    should_multiply_matrix_by_scalar();
     // should_invert_sign_with_private_invert_sign_called_indirectly();
 
     // should_check_is_square_and_symmetric_and_diagonal();

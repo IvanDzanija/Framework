@@ -75,7 +75,7 @@ template <typename T>
 template <typename T>
 [[nodiscard]] bool Matrix<T>::is_positive_definite() const {
     try {
-        cholesky(this);
+        cholesky(*this);
         return true;
     } catch (std::exception e) {
         return false;

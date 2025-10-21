@@ -136,7 +136,7 @@ template <typename T> class Matrix {
 
     // Getters and setters
 
-    // [[nodiscard]] std::vector<T> &data() noexcept { return _data; }
+    [[nodiscard]] std::vector<T> &data() noexcept { return _data; }
     [[nodiscard]] const std::vector<T> &data() const noexcept { return _data; }
     [[nodiscard]] size_t row_count() const noexcept { return _rows; }
     [[nodiscard]] size_t column_count() const noexcept { return _cols; }
@@ -184,8 +184,9 @@ template <typename T> class Matrix {
     /// Converts the matrix to indentity matrix.
     void make_identity();
 
-    /// Inplace transpose of matrix
-    /// Currently works only for square matrices
+    /// Inplace transpose of matrix for square matrices only.
+    /// For transposing non square matrices use .transposed() that creates a new
+    /// Matrix object and returns it.
     void transpose();
 
     /// Creates new transposed matrix
@@ -207,12 +208,15 @@ template <typename T> class Matrix {
     // Matrix + Scalar
     /// Add a scalar to each element of matrix.
     /// @return Matrix of common promoted type
-    template <typename U> [[nodiscard]] auto operator+(const U &scalar) const;
+    template <typename U>
+        requires(std::is_arithmetic_v<U>)
+    [[nodiscard]] auto operator+(const U &scalar) const;
 
     // Scalar + Matrix
     /// Add a scalar to each element of matrix.
     /// @return Matrix of common promoted type
     template <typename U>
+        requires(std::is_arithmetic_v<U>)
     friend auto operator+(const U &scalar, const Matrix<T> &matrix);
 
     // Matrix - Matrix

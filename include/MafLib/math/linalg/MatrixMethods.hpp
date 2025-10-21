@@ -24,7 +24,6 @@ template <typename T> void Matrix<T>::make_identity() {
 // Inplace transpose of matrix
 template <typename T> void Matrix<T>::transpose() {
     if (!is_square()) {
-        // Maybe change this?
         throw std::invalid_argument("Matrix must be square to transpose.");
     }
 

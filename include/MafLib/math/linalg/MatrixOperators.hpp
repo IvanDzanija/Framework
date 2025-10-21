@@ -1,6 +1,5 @@
 #pragma once
 #include "Matrix.hpp"
-#include <type_traits>
 
 namespace maf {
 
@@ -44,18 +43,20 @@ auto Matrix<T>::operator+(const Matrix<U> &other) const {
 // Matrix + Scalar
 template <typename T>
 template <typename U>
+    requires(std::is_arithmetic_v<U>)
 auto Matrix<T>::operator+(const U &scalar) const {
     using R = std::common_type_t<T, U>;
 
     Matrix<R> result(_rows, _cols);
 
-    std::transform(_data.begin(), _data.end(), result._data.begin(),
+    std::transform(_data.begin(), _data.end(), result.data().begin(),
                    [scalar](const T &value) { return value + scalar; });
     return result;
 }
 
 // Scalar + Matrix
 template <typename T, typename U>
+    requires(std::is_arithmetic_v<U>)
 auto operator+(const U &scalar, const Matrix<T> &matrix) {
     return matrix + scalar;
 }
