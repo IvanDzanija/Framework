@@ -5,15 +5,18 @@
 #include "Matrix.hpp"
 namespace maf {
 
-template <typename T> Matrix<T> Matrix<T>::decompose_Cholesky() {
+/// Cholesky factorization of symmetric positive definite matrix.
+/// Symmetric positive definite matrix <=> has Cholesky factorization.
+template <typename T>
+[[nodiscard]] Matrix<T> cholesky(const Matrix<T> &matrix) {
     // O(n^3 / 3)
     // Works only for symmetric positive-definite matrices
-    if (!this->is_symmetric()) {
+    if (!matrix.is_symmetric()) {
         throw std::invalid_argument(
             "Matrix must be symmetric to try Cholesky decomposition!");
     }
 
-    size_t n = _rows;
+    size_t n = matrix.row_count();
     Matrix<T> L(n, n);
     for (size_t i = 0; i < n; ++i) {
         for (size_t j = 0; j <= i; ++j) {
@@ -22,13 +25,13 @@ template <typename T> Matrix<T> Matrix<T>::decompose_Cholesky() {
                 sum += L.at(i, k) * L.at(j, k);
             }
             if (i == j) {
-                if (this->at(i, i) - sum <= 0) {
+                if (matrix.at(i, i) - sum <= 0) {
                     throw std::invalid_argument(
                         "Matrix is not positive definite!");
                 }
-                L.at(i, j) = std::sqrt(this->at(i, i) - sum);
+                L.at(i, j) = std::sqrt(matrix.at(i, i) - sum);
             } else {
-                L.at(i, j) = (this->at(i, j) - sum) / L.at(j, j);
+                L.at(i, j) = (matrix.at(i, j) - sum) / L.at(j, j);
             }
         }
     }

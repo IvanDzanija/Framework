@@ -1,5 +1,7 @@
 #pragma once
+#include "MafLib/math/linalg/CholeskyDecomposition.hpp"
 #include "Matrix.hpp"
+#include <exception>
 
 namespace maf {
 
@@ -69,4 +71,15 @@ template <typename T>
     //   For now, we will assume the matrix is not singular
     return false;
 }
+
+template <typename T>
+[[nodiscard]] bool Matrix<T>::is_positive_definite() const {
+    try {
+        cholesky(this);
+        return true;
+    } catch (std::exception e) {
+        return false;
+    }
+}
+
 } // namespace maf

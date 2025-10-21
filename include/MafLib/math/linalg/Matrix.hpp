@@ -164,11 +164,17 @@ template <typename T> class Matrix {
     /// Checks if the matrix is diagonal.
     [[nodiscard]] constexpr bool is_diagonal() const;
 
+    /// Checks if matrix is positive definite.
+    /// If matrix is symmetric it is sufficient to have Cholesky decomposition.
+    /// TODO: If matrix isn't symmetric
+    [[nodiscard]] bool is_positive_definite() const;
+
     /// Checks if the matrix is singular.
     /// This is equivalent to:
     /// 1) Matrix A doesn't have an inverse.
     /// 2) Rank (A) < n
     /// 3) Determinant(A) = 0
+    /// 4) Eigen value(A) = 0
     [[nodiscard]] constexpr bool is_singular() const;
 
     // Methods
@@ -259,13 +265,11 @@ template <typename T> class Matrix {
         }
         std::cout << std::fixed;
     }
-
-    // Additional computing methods
-    [[nodiscard]] Matrix decompose_Cholesky();
 };
 
 } // namespace maf
 
+#include "CholeskyDecomposition.hpp"
 #include "MatrixCheckers.hpp"
 #include "MatrixMethods.hpp"
 #include "MatrixOperators.hpp"
