@@ -244,6 +244,7 @@ void should_add_scalar_to_matrix() {
     Matrix<int> a(2, 2, {1, 2, 3, 4});
     auto c = a + 10;
     auto d = a + 4.5;
+    auto e = 4.5 + a;
     assert(c.at(0, 0) == 11);
     assert(c.at(0, 1) == 12);
     assert(c.at(1, 0) == 13);
@@ -252,6 +253,7 @@ void should_add_scalar_to_matrix() {
     assert(d.at(0, 1) == 6.5);
     assert(d.at(1, 0) == 7.5);
     assert(d.at(1, 1) == 8.5);
+    assert(e == d);
 }
 
 void should_multiply_matrix_by_scalar() {
@@ -261,17 +263,8 @@ void should_multiply_matrix_by_scalar() {
     assert(fabs(b.at(0, 1) - 4.0) < 1e-6);
     assert(fabs(b.at(1, 0) + 6.0) < 1e-6);
     assert(fabs(b.at(1, 1) - 8.0) < 1e-6);
-    b.print();
 }
 
-// void should_invert_sign_with_private_invert_sign_called_indirectly() {
-//     // Not directly testable since private; simulate via subtraction
-//     Matrix<int> a(2, 2, {1, -2, 3, -4});
-//     auto b = 0 - a;
-//     assert(b.at(0, 0) == -1);
-//     assert(b.at(0, 1) == 2);
-// }
-//
 // void should_check_is_square_and_symmetric_and_diagonal() {
 //     Matrix<int> a(3, 3, {1, 0, 0, 0, 2, 0, 0, 0, 3});
 //     assert(a.is_square());

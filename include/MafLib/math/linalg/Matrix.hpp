@@ -195,66 +195,235 @@ template <typename T> class Matrix {
 
     // Operators
 
+    // Matrix == Matrix
     /// Checks if 2 matrices are exactly same,
     /// use loosely_equal if working with floats.
-    [[nodiscard]] constexpr bool operator==(const Matrix &other) const;
+    [[nodiscard]] constexpr bool operator==(const Matrix &other) const {
+        if (_rows != other._rows || _cols != other._cols) {
+            return false;
+        }
+        return _data == other._data;
+    }
 
     // Matrix + Matrix
     /// Add 2 matrices elementwise
     /// @return Matrix of common promoted type
-    template <typename U>
-    [[nodiscard]] auto operator+(const Matrix<U> &other) const;
+    template <typename U> auto operator+(const Matrix<U> &other) const {
+        using R = std::common_type_t<T, U>;
+
+        if (_rows != other.row_count() || _cols != other.column_count()) {
+            throw std::invalid_argument(
+                "Matrices have to be of same dimensions!");
+        }
+        Matrix<R> result(_rows, _cols);
+
+        if (_data.size() < 100 * 100) {
+#pragma omp parallel for collapse(2)
+            for (size_t i = 0; i < _rows; ++i) {
+                for (size_t j = 0; j < _cols; ++j) {
+                    result.at(i, j) = this->at(i, j) + other.at(i, j);
+                }
+            }
+        } else {
+#pragma omp parallel for schedule(static, 1024)
+            for (size_t idx = 0; idx < _data.size(); ++idx) {
+                size_t i = idx / _cols;
+                size_t j = idx % _cols;
+                result.at(i, j) = this->at(i, j) + other.at(i, j);
+            }
+        }
+        return result;
+    }
 
     // Matrix + Scalar
     /// Add a scalar to each element of matrix.
     /// @return Matrix of common promoted type
     template <typename U>
         requires(std::is_arithmetic_v<U>)
-    [[nodiscard]] auto operator+(const U &scalar) const;
+    [[nodiscard]] auto operator+(const U &scalar) const {
+        using R = std::common_type_t<T, U>;
+
+        Matrix<R> result(_rows, _cols);
+
+        std::transform(_data.begin(), _data.end(), result.data().begin(),
+                       [scalar](const T &value) { return value + scalar; });
+        return result;
+    }
 
     // Scalar + Matrix
     /// Add a scalar to each element of matrix.
     /// @return Matrix of common promoted type
     template <typename U>
         requires(std::is_arithmetic_v<U>)
-    friend auto operator+(const U &scalar, const Matrix<T> &matrix);
+    [[nodiscard]] friend auto operator+(const U &scalar,
+                                        const Matrix<T> &matrix) {
+        return matrix + scalar;
+    }
 
     // Matrix - Matrix
     /// Subtract 2 matrices elementwise.
     /// Elements of first matrix - elements of second matrix
     /// @return Matrix of common promoted type
     template <typename U>
-    [[nodiscard]] auto operator-(const Matrix<U> &other) const;
+    [[nodiscard]] auto operator-(const Matrix<U> &other) const {
+        if (_rows != other.row_count() || _cols != other.column_count()) {
+            throw std::invalid_argument(
+                "Matrices have to be of same dimensions!");
+        }
+
+        using R = std::common_type_t<T, U>;
+        Matrix<R> result(_rows, _cols);
+
+        if (_data.size() < 100 * 100) {
+#pragma omp parallel for collapse(2)
+            for (size_t i = 0; i < _rows; ++i) {
+                for (size_t j = 0; j < _cols; ++j) {
+                    result.at(i, j) = this->at(i, j) - other.at(i, j);
+                }
+            }
+        } else {
+#pragma omp parallel for schedule(static, 1024)
+            for (size_t idx = 0; idx < _data.size(); ++idx) {
+                size_t i = idx / _cols;
+                size_t j = idx % _cols;
+                result.at(i, j) = this->at(i, j) - other.at(i, j);
+            }
+        }
+        return result;
+    }
 
     // Matrix - Scalar
     /// Subtract a scalar from each element of matrix.
     /// @return Matrix of common promoted type
-    template <typename U> [[nodiscard]] auto operator-(const U &scalar) const;
+    template <typename U> [[nodiscard]] auto operator-(const U &scalar) const {
+        using R = std::common_type_t<T, U>;
+
+        Matrix<R> result(_rows, _cols);
+        std::transform(_data.begin(), _data.end(), result._data.begin(),
+                       [scalar](const T &value) { return value - scalar; });
+        return result;
+    }
 
     // Scalar - Matrix
     /// Subtract each element of matrix from a scalar.
     /// @return Matrix of common promoted type
     template <typename U>
-    friend auto operator-(const U &scalar, const Matrix<T> &matrix);
+    [[nodiscard]] friend auto operator-(const U &scalar,
+                                        const Matrix<T> &matrix) {
+        using R = std::common_type_t<T, U>;
+
+        Matrix<R> result(matrix._rows, matrix._cols);
+        std::transform(matrix._data.begin(), matrix._data.end(),
+                       result._data.begin(),
+                       [scalar](const T &value) { return scalar - value; });
+        return result;
+    }
+
+    // Matrix * Matrix
+    /// Standard algebraic matrix multiplication.
+    /// @return Matrix of common promoted type
+    template <typename U>
+    [[nodiscard]] auto operator*(const Matrix<U> &other) const {
+        if (_cols != other._rows) {
+            throw std::invalid_argument("Matrix dimensions do not match!");
+        }
+        using R = std::common_type_t<T, U>;
+
+        Matrix<R> result(_rows, other._cols);
+
+        const T *a_data = this->_data.data();
+        const T *b_data = other._data.data();
+        T *c_data = result._data.data();
+
+        const size_t a_rows = _rows;
+        const size_t b_cols = other._cols;
+        const size_t a_cols = _cols;
+
+        result.fill(T(0));
+
+#pragma omp parallel for collapse(2) if (a_rows * b_cols > 10000)
+        for (size_t ii = 0; ii < a_rows; ii += BLOCK_SIZE) {
+            for (size_t jj = 0; jj < b_cols; jj += BLOCK_SIZE) {
+                for (size_t kk = 0; kk < a_cols; kk += BLOCK_SIZE) {
+
+                    // Process block
+                    const size_t i_end = std::min(ii + BLOCK_SIZE, a_rows);
+                    const size_t j_end = std::min(jj + BLOCK_SIZE, b_cols);
+                    const size_t k_end = std::min(kk + BLOCK_SIZE, a_cols);
+
+                    for (size_t i = ii; i < i_end; ++i) {
+                        for (size_t k = kk; k < k_end; ++k) {
+                            const T a_ik = a_data[i * a_cols + k];
+                            //                    if (is_close(a_ik, T(0)))
+                            //                    {
+                            // continue; // Skip zero elements
+                            //                   }
+                            const size_t b_offset = k * b_cols;
+                            const size_t c_offset = i * b_cols;
+
+#pragma omp simd
+                            for (size_t j = jj; j < j_end; ++j) {
+                                c_data[c_offset + j] +=
+                                    a_ik * b_data[b_offset + j];
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return result;
+    }
 
     // Matrix * Scalar
     /// Multiply each element of matrix by a scalar.
     /// @return Matrix of common promoted type
-    template <typename U> [[nodiscard]] auto operator*(const U &scalar) const;
+    template <typename U> [[nodiscard]] auto operator*(const U &scalar) const {
+        Matrix<std::common_type_t<T, U>> result(_rows, _cols);
+
+        std::transform(_data.begin(), _data.end(), result._data.begin(),
+                       [scalar](const T &value) { return value * scalar; });
+        return result;
+    }
 
     // Scalar * Matrix
     /// Multiply each element of matrix by a scalar.
     /// @return Matrix of common promoted type
     template <typename U>
-    friend auto operator*(const U &scalar, const Matrix<T> &matrix);
+    [[nodiscard]] friend auto operator*(const U &scalar,
+                                        const Matrix<T> &matrix) {
+        return matrix * scalar;
+    }
 
-    // Matrix * Vector
+    // Matrix * Vector -> Vector
     template <typename U>
-    [[nodiscard]] auto operator*(const Vector<U> &other) const;
+    [[nodiscard]] auto operator*(const Vector<U> &other) const {
+        using R = std::common_type_t<T, U>;
 
-    // Matrix * Matrix
-    template <typename U>
-    [[nodiscard]] auto operator*(const Matrix<U> &other) const;
+        const size_t n = this->row_count();
+        const size_t m = this->column_count();
+
+        if (other.orientation() == Vector<U>::ROW) {
+            throw std::invalid_argument(
+                "Invalid multiplication: matrix * row vector.\n"
+                "Did you mean Vector * Matrix?");
+        }
+
+        if (other.size() != m) {
+            throw std::invalid_argument(
+                "Dimension mismatch in Matrix * Vector multiplication.");
+        }
+
+        Vector<R> result(n, std::vector<R>(n, R(0)), Vector<R>::COLUMN);
+
+        for (size_t i = 0; i < n; ++i) {
+            for (size_t j = 0; j < m; ++j) {
+                result.at(i) += static_cast<R>(this->at(i, j)) *
+                                static_cast<R>(other.at(j));
+            }
+        }
+
+        return result;
+    }
 
     // Debugging and printing
     void print() const {
@@ -276,5 +445,5 @@ template <typename T> class Matrix {
 #include "CholeskyDecomposition.hpp"
 #include "MatrixCheckers.hpp"
 #include "MatrixMethods.hpp"
-#include "MatrixOperators.hpp"
+
 #endif
