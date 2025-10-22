@@ -214,6 +214,12 @@ void should_return_transposed_copy_for_non_square_matrix() {
     assert(t.at(0, 1) == 4);
 }
 
+void should_correctly_perform_unary_minus() {
+    Matrix<int> m1(2, 3, {1, 2, 3, 4, 5, 6});
+    Matrix<int> m2(2, 3, {-1, -2, -3, -4, -5, -6});
+    assert(-m1 == m2);
+}
+
 void should_check_equality_between_identical_matrices() {
     Matrix<int> a(2, 2, {1, 2, 3, 4});
     Matrix<int> b(2, 2, {1, 2, 3, 4});
@@ -240,7 +246,7 @@ void should_add_two_matrices_of_same_size() {
     assert(e.at(1, 1) == 48.5);
 }
 
-void should_add_scalar_to_matrix() {
+void should_add_scalar_and_matrix() {
     Matrix<int> a(2, 2, {1, 2, 3, 4});
     auto c = a + 10;
     auto d = a + 4.5;
@@ -256,26 +262,80 @@ void should_add_scalar_to_matrix() {
     assert(e == d);
 }
 
-void should_multiply_matrix_by_scalar() {
+void should_subtract_two_matrices_of_same_size() {
+    Matrix<int> a(2, 2, {1, 2, 3, 4});
+    Matrix<int> b(2, 2, {10, 20, 30, 40});
+    Matrix<float> c(2, 2, {1.5, 2.5, 3.5, 4.5});
+    auto d = b - a;
+    auto e = b - c;
+    assert(d.at(0, 0) == 9);
+    assert(d.at(1, 1) == 36);
+    assert(e.at(0, 0) == 8.5);
+    assert(e.at(0, 1) == 17.5);
+    assert(e.at(1, 0) == 26.5);
+    assert(e.at(1, 1) == 35.5);
+}
+
+void should_subtract_scalar_and_matrix() {
+    Matrix<int> a(2, 2, {1, 2, 3, 4});
+    auto c = a - 10;
+    auto d = a - 4.5;
+    auto e = 4.5 - a;
+    assert(c.at(0, 0) == -9);
+    assert(c.at(0, 1) == -8);
+    assert(c.at(1, 0) == -7);
+    assert(c.at(1, 1) == -6);
+    assert(d.at(0, 0) == -3.5);
+    assert(d.at(0, 1) == -2.5);
+    assert(d.at(1, 0) == -1.5);
+    assert(d.at(1, 1) == -0.5);
+    assert(e.at(0, 0) == 3.5);
+    assert(e.at(1, 1) == 0.5);
+}
+
+void should_multiply_matrix_and_scalar() {
     Matrix<double> a(2, 2, {1.5, 2.0, -3.0, 4.0});
     auto b = a * 2.0;
+    auto c = 2 * a;
     assert(fabs(b.at(0, 0) - 3.0) < 1e-6);
     assert(fabs(b.at(0, 1) - 4.0) < 1e-6);
     assert(fabs(b.at(1, 0) + 6.0) < 1e-6);
     assert(fabs(b.at(1, 1) - 8.0) < 1e-6);
+    assert(b == c);
 }
 
-// void should_check_is_square_and_symmetric_and_diagonal() {
-//     Matrix<int> a(3, 3, {1, 0, 0, 0, 2, 0, 0, 0, 3});
-//     assert(a.is_square());
-//     assert(a.is_diagonal());
-//     assert(a.is_symmetric());
-// }
-//
-// void should_check_non_square_matrix_returns_false_for_square() {
-//     Matrix<int> a(2, 3);
-//     assert(!a.is_square());
-// }
+void should_multiply_matrices() {
+    Matrix<int> a(2, 3, {1, 2, 3, 4, 5, 6});
+    Matrix<double> b(3, 2, {0.5, 1.5, -1.0, 2.0, 0.0, 1.0});
+
+    Matrix<double> expected(
+        2, 2,
+        {1 * 0.5 + 2 * (-1.0) + 3 * 0.0, 1 * 1.5 + 2 * 2.0 + 3 * 1.0,
+         4 * 0.5 + 5 * (-1.0) + 6 * 0.0, 4 * 1.5 + 5 * 2.0 + 6 * 1.0});
+
+    auto result = a * b;
+    assert(result.row_count() == 2 && result.column_count() == 2);
+    for (size_t i = 0; i < 2; ++i) {
+        for (size_t j = 0; j < 2; ++j) {
+            assert(is_close(result.at(i, j), expected.at(i, j)));
+        }
+    }
+}
+
+void should_multiply_matrix_and_vector() {
+    Matrix<float> m(2, 3, {1.0, 0.5, -2.0, 4.0, 1.0, 3.0});
+    Vector<int> v(3, std::vector<int>{2, 4, 6}, maf::Vector<int>::COLUMN);
+
+    Vector<float> expected(2,
+                           std::vector<float>{1.0 * 2 + 0.5 * 4 + (-2.0) * 6,
+                                              4.0 * 2 + 1.0 * 4 + 3.0 * 6},
+                           maf::Vector<float>::COLUMN);
+
+    auto result = m * v;
+    assert(result.size() == 2);
+    for (size_t i = 0; i < 2; ++i)
+        assert(is_close(result.at(i), expected.at(i)));
+}
 
 int main() {
     std::cout << "=== Running maf::Matrix Tests ===" << std::endl;
@@ -305,15 +365,16 @@ int main() {
     should_transpose_square_matrix_in_place();
     should_return_transposed_copy_for_non_square_matrix();
 
+    should_correctly_perform_unary_minus();
     should_check_equality_between_identical_matrices();
     should_not_be_equal_if_any_element_differs();
     should_add_two_matrices_of_same_size();
-    should_add_scalar_to_matrix();
-    should_multiply_matrix_by_scalar();
-    // should_invert_sign_with_private_invert_sign_called_indirectly();
-
-    // should_check_is_square_and_symmetric_and_diagonal();
-    // should_check_non_square_matrix_returns_false_for_square();
+    should_add_scalar_and_matrix();
+    should_subtract_two_matrices_of_same_size();
+    should_subtract_scalar_and_matrix();
+    should_multiply_matrix_and_scalar();
+    should_multiply_matrices();
+    should_multiply_matrix_and_vector();
 
     std::cout << "=== All maf::Matrix tests passed ===" << std::endl;
     return 0;

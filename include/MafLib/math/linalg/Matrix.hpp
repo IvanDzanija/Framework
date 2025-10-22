@@ -205,10 +205,20 @@ template <typename T> class Matrix {
         return _data == other._data;
     }
 
+    // Unary operator -
+    /// Inverts the sign of all elements in matrix.
+    /// @return Matrix of same input type.
+    [[nodiscard]] auto operator-() const {
+        Matrix<T> result = *this;
+        result._invert_sign();
+        return result;
+    }
+
     // Matrix + Matrix
     /// Add 2 matrices elementwise
     /// @return Matrix of common promoted type
-    template <typename U> auto operator+(const Matrix<U> &other) const {
+    template <typename U>
+    [[nodiscard]] auto operator+(const Matrix<U> &other) const {
         using R = std::common_type_t<T, U>;
 
         if (_rows != other.row_count() || _cols != other.column_count()) {
@@ -295,11 +305,13 @@ template <typename T> class Matrix {
     // Matrix - Scalar
     /// Subtract a scalar from each element of matrix.
     /// @return Matrix of common promoted type
-    template <typename U> [[nodiscard]] auto operator-(const U &scalar) const {
+    template <typename U>
+        requires(std::is_arithmetic_v<U>)
+    [[nodiscard]] auto operator-(const U &scalar) const {
         using R = std::common_type_t<T, U>;
 
         Matrix<R> result(_rows, _cols);
-        std::transform(_data.begin(), _data.end(), result._data.begin(),
+        std::transform(_data.begin(), _data.end(), result.data().begin(),
                        [scalar](const T &value) { return value - scalar; });
         return result;
     }
@@ -308,13 +320,14 @@ template <typename T> class Matrix {
     /// Subtract each element of matrix from a scalar.
     /// @return Matrix of common promoted type
     template <typename U>
+        requires(std::is_arithmetic_v<U>)
     [[nodiscard]] friend auto operator-(const U &scalar,
                                         const Matrix<T> &matrix) {
         using R = std::common_type_t<T, U>;
 
         Matrix<R> result(matrix._rows, matrix._cols);
         std::transform(matrix._data.begin(), matrix._data.end(),
-                       result._data.begin(),
+                       result.data().begin(),
                        [scalar](const T &value) { return scalar - value; });
         return result;
     }
@@ -324,20 +337,19 @@ template <typename T> class Matrix {
     /// @return Matrix of common promoted type
     template <typename U>
     [[nodiscard]] auto operator*(const Matrix<U> &other) const {
-        if (_cols != other._rows) {
+        if (_cols != other.row_count()) {
             throw std::invalid_argument("Matrix dimensions do not match!");
         }
         using R = std::common_type_t<T, U>;
 
-        Matrix<R> result(_rows, other._cols);
+        const size_t a_rows = _rows;
+        const size_t b_cols = other.column_count();
+        const size_t a_cols = _cols;
+        Matrix<R> result(_rows, b_cols);
 
         const T *a_data = this->_data.data();
-        const T *b_data = other._data.data();
-        T *c_data = result._data.data();
-
-        const size_t a_rows = _rows;
-        const size_t b_cols = other._cols;
-        const size_t a_cols = _cols;
+        const U *b_data = other.data().data();
+        R *c_data = result.data().data();
 
         result.fill(T(0));
 
@@ -353,11 +365,7 @@ template <typename T> class Matrix {
 
                     for (size_t i = ii; i < i_end; ++i) {
                         for (size_t k = kk; k < k_end; ++k) {
-                            const T a_ik = a_data[i * a_cols + k];
-                            //                    if (is_close(a_ik, T(0)))
-                            //                    {
-                            // continue; // Skip zero elements
-                            //                   }
+                            const T a_ik = a_data[(i * a_cols) + k];
                             const size_t b_offset = k * b_cols;
                             const size_t c_offset = i * b_cols;
 
@@ -377,7 +385,9 @@ template <typename T> class Matrix {
     // Matrix * Scalar
     /// Multiply each element of matrix by a scalar.
     /// @return Matrix of common promoted type
-    template <typename U> [[nodiscard]] auto operator*(const U &scalar) const {
+    template <typename U>
+        requires(std::is_arithmetic_v<U>)
+    [[nodiscard]] auto operator*(const U &scalar) const {
         Matrix<std::common_type_t<T, U>> result(_rows, _cols);
 
         std::transform(_data.begin(), _data.end(), result._data.begin(),
@@ -389,6 +399,7 @@ template <typename T> class Matrix {
     /// Multiply each element of matrix by a scalar.
     /// @return Matrix of common promoted type
     template <typename U>
+        requires(std::is_arithmetic_v<U>)
     [[nodiscard]] friend auto operator*(const U &scalar,
                                         const Matrix<T> &matrix) {
         return matrix * scalar;

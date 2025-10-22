@@ -1,4 +1,5 @@
 #include "Vector.hpp"
+#include <type_traits>
 
 namespace maf {
 
@@ -14,6 +15,7 @@ template <typename T> bool Vector<T>::operator==(const Vector &other) const {
 // Vector + Vector
 template <typename T>
 template <typename U>
+
 auto Vector<T>::operator+(const Vector<U> &other) const {
     using R = std::common_type_t<T, U>;
 
@@ -33,6 +35,7 @@ auto Vector<T>::operator+(const Vector<U> &other) const {
 // Vector + Scalar
 template <typename T>
 template <typename U>
+
 auto Vector<T>::operator+(const U &scalar) const {
     using R = std::common_type_t<T, U>;
 
@@ -88,24 +91,6 @@ auto operator-(const U &scalar, const Vector<T> &vec) {
     std::transform(vec._data.begin(), vec._data.end(), result._data.begin(),
                    [scalar](const T &value) { return scalar - value; });
     return result;
-}
-
-// Vector * Scalar
-template <typename T>
-template <typename U>
-auto Vector<T>::operator*(const U &scalar) const {
-    using R = std::common_type_t<T, U>;
-
-    Vector<R> result(this->_data.size());
-    std::transform(this->_data.begin(), this->_data.end(), result._data.begin(),
-                   [scalar](const T &value) { return value * scalar; });
-    return result;
-}
-
-// Scalar * Vector
-template <typename T, typename U>
-auto operator*(const U &scalar, const Vector<U> &vec) {
-    return vec * scalar;
 }
 
 // Vector * Matrix -> Vector

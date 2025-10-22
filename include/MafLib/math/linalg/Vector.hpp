@@ -8,8 +8,10 @@
 
 namespace maf {
 template <typename T> class Vector {
-  private:
+  public:
     enum Orientation { ROW, COLUMN };
+
+  private:
     Orientation _orientation;
     std::vector<T> _data;
 
@@ -185,13 +187,25 @@ template <typename T> class Vector {
     // Vector * Scalar
     /// Multiply each element of vector by a scalar.
     /// @return Vector of common promoted type.
-    template <typename U> [[nodiscard]] auto operator*(const U &scalar) const;
+    template <typename U>
+        requires(std::is_arithmetic_v<U>)
+    [[nodiscard]] auto operator*(const U &scalar) const {
+        using R = std::common_type_t<T, U>;
+
+        Vector<R> result(_data.size());
+        std::transform(_data.begin(), _data.end(), result.data().begin(),
+                       [scalar](const T &value) { return value * scalar; });
+        return result;
+    }
 
     // Scalar * Vector
     /// It's recommended to use Vector * Scalar instead.
     /// @return Vector of common promoted type.
     template <typename U>
-    friend auto operator*(const U &scalar, const Vector<T> &vec);
+        requires(std::is_arithmetic_v<U>)
+    [[nodiscard]] friend auto operator*(const U &scalar, const Vector<T> &vec) {
+        return vec * scalar;
+    }
 
     // Vector * Vector -> Matrix
     /// Outer product of 2 vectors.
