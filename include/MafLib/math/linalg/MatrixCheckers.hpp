@@ -6,11 +6,6 @@
 namespace maf {
 
 template <typename T>
-[[nodiscard]] constexpr bool Matrix<T>::is_square() const {
-    return _rows == _cols;
-}
-
-template <typename T>
 [[nodiscard]] constexpr bool Matrix<T>::is_symmetric() const {
     if (!is_square()) {
         return false;

@@ -111,7 +111,7 @@ void should_allow_reinsertion_after_removal() {
 }
 
 int main() {
-    std::cout << "=== Running maf::Trie Tests ===" << std::endl;
+    std::cout << "=== Running Trie tests ===" << std::endl;
 
     should_return_true_if_inserted_word_exists();
     should_return_false_if_no_word_exists();
@@ -129,6 +129,6 @@ int main() {
     should_return_false_if_word_removed_and_reinserted_partially();
     should_allow_reinsertion_after_removal();
 
-    std::cout << "=== All tests passed ===" << std::endl;
+    std::cout << "=== All Trie tests passed ===" << std::endl;
     return 0;
 }

@@ -21,20 +21,6 @@ template <typename T> void Matrix<T>::make_identity() {
     }
 }
 
-// Inplace transpose of matrix
-template <typename T> void Matrix<T>::transpose() {
-    if (!is_square()) {
-        throw std::invalid_argument("Matrix must be square to transpose.");
-    }
-
-#pragma omp parallel for
-    for (size_t i = 0; i < _rows; ++i) {
-        for (size_t j = i + 1; j < _cols; ++j) {
-            std::swap(this->at(i, j), this->at(j, i));
-        }
-    }
-}
-
 // Creates new transposed matrix
 template <typename T> Matrix<T> Matrix<T>::transposed() const {
     Matrix<T> result(_cols, _rows);

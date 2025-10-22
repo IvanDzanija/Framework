@@ -3,6 +3,7 @@
 #include "MafLib/math/linalg/Matrix.hpp"
 #include "MafLib/math/linalg/MatrixMethods.hpp"
 #include "MafLib/math/linalg/Vector.hpp"
+#include <chrono>
 
 using namespace maf;
 
@@ -214,6 +215,8 @@ void should_return_transposed_copy_for_non_square_matrix() {
     assert(t.at(0, 1) == 4);
 }
 
+// Operators tests
+
 void should_correctly_perform_unary_minus() {
     Matrix<int> m1(2, 3, {1, 2, 3, 4, 5, 6});
     Matrix<int> m2(2, 3, {-1, -2, -3, -4, -5, -6});
@@ -338,7 +341,7 @@ void should_multiply_matrix_and_vector() {
 }
 
 int main() {
-    std::cout << "=== Running maf::Matrix Tests ===" << std::endl;
+    std::cout << "=== Running Matrix tests ===" << std::endl;
 
     should_construct_empty_matrix_with_zero_rows_and_columns();
     should_construct_empty_matrix_of_given_size();
@@ -360,11 +363,13 @@ int main() {
     should_return_true_for_diagonal_matrix();
     should_return_true_for_positive_definite_matrix();
 
+    // Methods tests
     should_fill_matrix_with_value();
     should_make_identity_matrix();
     should_transpose_square_matrix_in_place();
     should_return_transposed_copy_for_non_square_matrix();
 
+    // Operators tests
     should_correctly_perform_unary_minus();
     should_check_equality_between_identical_matrices();
     should_not_be_equal_if_any_element_differs();
@@ -376,6 +381,6 @@ int main() {
     should_multiply_matrices();
     should_multiply_matrix_and_vector();
 
-    std::cout << "=== All maf::Matrix tests passed ===" << std::endl;
+    std::cout << "=== All Matrix tests passed ===" << std::endl;
     return 0;
 }

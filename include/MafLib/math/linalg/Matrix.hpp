@@ -150,7 +150,7 @@ template <typename T> class Matrix {
 
     // Checkers
     /// Checks if the matrix is square.
-    [[nodiscard]] constexpr bool is_square() const;
+    [[nodiscard]] constexpr bool is_square() const { return _rows == _cols; }
 
     /// Checkes if the matrix is symmetric.
     [[nodiscard]] constexpr bool is_symmetric() const;
@@ -187,7 +187,32 @@ template <typename T> class Matrix {
     /// Inplace transpose of matrix for square matrices only.
     /// For transposing non square matrices use .transposed() that creates a new
     /// Matrix object and returns it.
-    void transpose();
+    void transpose() {
+        if (!is_square()) {
+            throw std::invalid_argument("Matrix must be square to transpose.");
+        }
+
+#pragma omp parallel for schedule(dynamic) collapse(2)
+        for (size_t i = 0; i < _rows; i += BLOCK_SIZE) {
+            for (size_t j = i; j < _cols; j += BLOCK_SIZE) {
+                const size_t n = i + BLOCK_SIZE;
+                const size_t m = j + BLOCK_SIZE;
+                if (i == j) {
+                    for (size_t k = i; k < std::min(n, _rows); ++k) {
+                        for (size_t l = k + 1; l < std::min(m, _cols); ++l) {
+                            std::swap(this->at(k, l), this->at(l, k));
+                        }
+                    }
+                } else {
+                    for (size_t k = i; k < std::min(n, _rows); ++k) {
+                        for (size_t l = j; l < std::min(m, _cols); ++l) {
+                            std::swap(this->at(k, l), this->at(l, k));
+                        }
+                    }
+                }
+            }
+        }
+    }
 
     /// Creates new transposed matrix
     /// @return Transposed matrix
@@ -351,7 +376,7 @@ template <typename T> class Matrix {
         const U *b_data = other.data().data();
         R *c_data = result.data().data();
 
-        result.fill(T(0));
+        result.fill(R(0));
 
 #pragma omp parallel for collapse(2) if (a_rows * b_cols > 10000)
         for (size_t ii = 0; ii < a_rows; ii += BLOCK_SIZE) {
