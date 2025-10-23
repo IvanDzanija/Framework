@@ -3,7 +3,7 @@
 
 namespace maf {
 
-template <typename T> class Trie {
+class Trie {
   private:
     struct TrieNode {
         // Definition of sigma -> 256 ascii chars
