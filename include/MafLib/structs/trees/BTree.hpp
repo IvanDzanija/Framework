@@ -42,7 +42,7 @@ template <typename T> class BTree {
         std::shared_ptr<BTNode> orphan = nullptr;
 
         BTNode() = default;
-        BTNode(const T &val, uint8 deg = 5, size_t size = 1)
+        explicit BTNode(const T &val, uint8 deg = 5, size_t size = 1)
             : _deg(deg), _size(size) {
             _first = new BTValue(val);
             _last = _first;
