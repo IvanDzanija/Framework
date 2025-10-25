@@ -1,10 +1,9 @@
 #ifndef MATRIX_H
 #define MATRIX_H
-#include <type_traits>
 #pragma once
 #include "MafLib/main/GlobalHeader.hpp"
 
-#define BLOCK_SIZE 128
+#define BLOCK_SIZE 64
 
 namespace maf {
 template <typename T> class Vector;

@@ -4,7 +4,7 @@
 #pragma once
 #include "MafLib/math/linalg/Matrix.hpp"
 
-#define BLOCK_SIZE 128
+#define BLOCK_SIZE 64
 
 namespace maf {
 template <typename T> class Vector {
