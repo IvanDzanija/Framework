@@ -391,9 +391,8 @@ void should_correctly_perform_plu_decomposition_on_small_matrix() {
             P.at(i, j) = P_.at(p.at(i), j);
         }
     }
-    auto PA = P * A;
-    auto LU = L * U;
-
+    Matrix<double> PA = P * A;
+    Matrix<double> LU = L * U;
     assert(loosely_equal(PA, LU));
 }
 
@@ -403,7 +402,7 @@ void should_correctly_handle_identity_matrix_in_plu() {
     assert(L == I);
     assert(U == I);
     for (size_t i = 0; i < 3; ++i) {
-        assert(P[i] == i);
+        assert(P.at(i) == i);
     }
 }
 
@@ -417,9 +416,10 @@ void should_correctly_decompose_upper_triangular_matrix() {
     }
 
     Matrix<double> Pm(3, 3);
-    Pm.fill(0);
-    for (size_t i = 0; i < 3; ++i)
-        Pm.at(i, P[i]) = 1.0;
+
+    for (size_t i = 0; i < 3; ++i) {
+        Pm.at(i, P.at(i)) = 1.0;
+    }
     Matrix<double> PA = Pm * U_true;
     Matrix<double> LU = L * U;
     assert(loosely_equal(PA, LU));
@@ -427,18 +427,44 @@ void should_correctly_decompose_upper_triangular_matrix() {
 
 void should_correctly_handle_negative_pivots_in_plu() {
     Matrix<double> A(2, 2, {-4, -2, -2, -1});
-    auto [P, L, U] = maf::plu(A);
+    auto [P, L, U] = plu(A);
     Matrix<double> Pm(2, 2);
-    Pm.fill(0);
-    for (size_t i = 0; i < 2; ++i)
+
+    for (size_t i = 0; i < 2; ++i) {
         Pm.at(i, P[i]) = 1.0;
+    }
     Matrix<double> PA = Pm * A;
     Matrix<double> LU = L * U;
-    for (size_t i = 0; i < 2; ++i) {
-        for (size_t j = 0; j < 2; ++j) {
-            assert(is_close(PA.at(i, j), LU.at(i, j), 1e-9));
+    assert(loosely_equal(PA, LU));
+}
+
+void time_test() {
+    const size_t N = 4000; // Size of the matrix (N x N)
+    Matrix<double> A(N, N);
+
+    // Fill the matrix with random values for a realistic test
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_real_distribution<> dis(-10.0, 10.0);
+    for (size_t i = 0; i < N; ++i) {
+        for (size_t j = 0; j < N; ++j) {
+            A.at(i, j) = dis(gen);
         }
     }
+
+    // Start timer
+    auto start = std::chrono::high_resolution_clock::now();
+
+    // Perform PLU decomposition
+    auto [P, L, U] = plu(A);
+
+    // Stop timer
+    auto end = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double> elapsed = end - start;
+
+    std::cout << "PLU decomposition for " << N << "x" << N << " matrix took "
+              << elapsed.count() << " seconds.\n";
+    std::cout << U.at(500, 500) << std::endl;
 }
 
 int main() {
@@ -488,8 +514,9 @@ int main() {
     should_correctly_perform_plu_decomposition_on_small_matrix();
     should_correctly_handle_identity_matrix_in_plu();
     should_correctly_decompose_upper_triangular_matrix();
-    // should_correctly_handle_negative_pivots_in_plu();
+    should_correctly_handle_negative_pivots_in_plu();
     std::cout << "=== All PLU tests passed ===" << std::endl;
+    time_test();
 
     std::cout << "=== All Matrix tests passed ===" << std::endl;
     return 0;
