@@ -391,10 +391,10 @@ void should_correctly_perform_plu_decomposition_on_small_matrix() {
             P.at(i, j) = P_.at(p.at(i), j);
         }
     }
-    auto C = P * A;
-    auto D = L * U;
+    auto PA = P * A;
+    auto LU = L * U;
 
-    assert(loosely_equal(C, D));
+    assert(loosely_equal(PA, LU));
 }
 
 void should_correctly_handle_identity_matrix_in_plu() {
@@ -409,20 +409,20 @@ void should_correctly_handle_identity_matrix_in_plu() {
 
 void should_correctly_decompose_upper_triangular_matrix() {
     Matrix<double> U_true(3, 3, {1, 2, 3, 0, 4, 5, 0, 0, 6});
-    auto [P, L, U] = maf::plu(U_true);
-    for (size_t i = 0; i < 3; ++i)
-        for (size_t j = 0; j < 3; ++j)
+    auto [P, L, U] = plu(U_true);
+    for (size_t i = 0; i < 3; ++i) {
+        for (size_t j = 0; j < 3; ++j) {
             assert(is_close(L.at(i, j), (i == j ? 1.0 : 0.0)));
-    // U should match original (up to permutation)
+        }
+    }
+
     Matrix<double> Pm(3, 3);
     Pm.fill(0);
     for (size_t i = 0; i < 3; ++i)
         Pm.at(i, P[i]) = 1.0;
     Matrix<double> PA = Pm * U_true;
     Matrix<double> LU = L * U;
-    for (size_t i = 0; i < 3; ++i)
-        for (size_t j = 0; j < 3; ++j)
-            assert(is_close(PA.at(i, j), LU.at(i, j), 1e-9));
+    assert(loosely_equal(PA, LU));
 }
 
 void should_correctly_handle_negative_pivots_in_plu() {
@@ -486,8 +486,8 @@ int main() {
     should_throw_if_plu_called_on_non_square_matrix();
     should_decompose_singular_matrix();
     should_correctly_perform_plu_decomposition_on_small_matrix();
-    // should_correctly_handle_identity_matrix_in_plu();
-    // should_correctly_decompose_upper_triangular_matrix();
+    should_correctly_handle_identity_matrix_in_plu();
+    should_correctly_decompose_upper_triangular_matrix();
     // should_correctly_handle_negative_pivots_in_plu();
     std::cout << "=== All PLU tests passed ===" << std::endl;
 
