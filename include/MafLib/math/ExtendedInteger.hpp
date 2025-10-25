@@ -2,7 +2,7 @@
 #define EXTENDEDINTEGER
 
 #pragma once
-#include <limits.h>
+#include <climits>
 #include <stdexcept>
 #include <variant>
 

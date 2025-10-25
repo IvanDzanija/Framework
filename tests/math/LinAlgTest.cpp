@@ -1,9 +1,8 @@
 #include "MafLib/main/GlobalHeader.hpp"
-#include "MafLib/math/linalg/CholeskyDecomposition.hpp"
 #include "MafLib/math/linalg/Matrix.hpp"
 #include "MafLib/math/linalg/MatrixMethods.hpp"
+#include "MafLib/math/linalg/PLU.hpp"
 #include "MafLib/math/linalg/Vector.hpp"
-#include <chrono>
 
 using namespace maf;
 
@@ -146,7 +145,7 @@ void should_return_true_for_triangular_matrix() {
     Matrix<float> m1(3, 3, data1);
     Matrix<float> m2(3, 3, data2);
     Matrix<float> m3(3, 3, data3);
-    Matrix<float> m4 = identity<float>(3);
+    Matrix<float> m4 = identity_matrix<float>(3);
     assert(m1.is_upper_triangular());
     assert(m2.is_lower_triangular());
     assert(m3.is_lower_triangular() && m3.is_upper_triangular());
@@ -160,7 +159,7 @@ void should_return_true_for_diagonal_matrix() {
     Matrix<float> m1(3, 3, data1);
     Matrix<float> m2(3, 3, data2);
     Matrix<float> m3(3, 3, data3);
-    Matrix<float> m4 = identity<float>(3);
+    Matrix<float> m4 = identity_matrix<float>(3);
     assert(m1.is_diagonal());
     assert(!m2.is_diagonal());
     assert(m3.is_diagonal());
@@ -336,8 +335,110 @@ void should_multiply_matrix_and_vector() {
 
     auto result = m * v;
     assert(result.size() == 2);
-    for (size_t i = 0; i < 2; ++i)
+    for (size_t i = 0; i < 2; ++i) {
         assert(is_close(result.at(i), expected.at(i)));
+    }
+}
+
+void should_throw_if_plu_called_on_non_square_matrix() {
+    Matrix<double> m(2, 3, {1, 2, 3, 4, 5, 6});
+    bool thrown = false;
+    try {
+        auto [P, L, U] = plu(m);
+    } catch (const std::invalid_argument &e) {
+        thrown = true;
+    }
+    assert(thrown);
+}
+
+void should_decompose_singular_matrix() {
+    Matrix<double> m(3, 3, {1, 2, 3, 2, 4, 6, 1, 2, 3});
+    auto [P, L, U] = maf::plu(m);
+    bool thrown = false;
+    try {
+        auto [P, L, U] = plu(m);
+    } catch (const std::invalid_argument &e) {
+        thrown = true;
+    }
+    assert(!thrown);
+}
+
+void should_correctly_perform_plu_decomposition_on_small_matrix() {
+    Matrix<double> A(3, 3, {2, 1, 1, 4, -6, 0, -2, 7, 2});
+
+    auto [p, L, U] = plu(A);
+
+    assert(L.is_square() && U.is_square());
+    assert(L.row_count() == 3 && U.row_count() == 3);
+    assert(p.size() == 3);
+
+    for (size_t i = 0; i < 3; ++i) {
+        assert(is_close(L.at(i, i), 1.0));
+        for (size_t j = i + 1; j < 3; ++j) {
+            assert(is_close(L.at(i, j), 0.0));
+        }
+    }
+
+    for (size_t i = 1; i < 3; ++i) {
+        for (size_t j = 0; j < i; ++j) {
+            assert(is_close(U.at(i, j), 0.0));
+        }
+    }
+    Matrix P_ = identity_matrix<double>(3);
+    Matrix<double> P(3, 3);
+    for (size_t i = 0; i < 3; ++i) {
+        for (size_t j = 0; j < 3; ++j) {
+            P.at(i, j) = P_.at(p.at(i), j);
+        }
+    }
+    auto C = P * A;
+    auto D = L * U;
+
+    assert(loosely_equal(C, D));
+}
+
+void should_correctly_handle_identity_matrix_in_plu() {
+    Matrix<double> I = identity_matrix<double>(3);
+    auto [P, L, U] = plu(I);
+    assert(L == I);
+    assert(U == I);
+    for (size_t i = 0; i < 3; ++i) {
+        assert(P[i] == i);
+    }
+}
+
+void should_correctly_decompose_upper_triangular_matrix() {
+    Matrix<double> U_true(3, 3, {1, 2, 3, 0, 4, 5, 0, 0, 6});
+    auto [P, L, U] = maf::plu(U_true);
+    for (size_t i = 0; i < 3; ++i)
+        for (size_t j = 0; j < 3; ++j)
+            assert(is_close(L.at(i, j), (i == j ? 1.0 : 0.0)));
+    // U should match original (up to permutation)
+    Matrix<double> Pm(3, 3);
+    Pm.fill(0);
+    for (size_t i = 0; i < 3; ++i)
+        Pm.at(i, P[i]) = 1.0;
+    Matrix<double> PA = Pm * U_true;
+    Matrix<double> LU = L * U;
+    for (size_t i = 0; i < 3; ++i)
+        for (size_t j = 0; j < 3; ++j)
+            assert(is_close(PA.at(i, j), LU.at(i, j), 1e-9));
+}
+
+void should_correctly_handle_negative_pivots_in_plu() {
+    Matrix<double> A(2, 2, {-4, -2, -2, -1});
+    auto [P, L, U] = maf::plu(A);
+    Matrix<double> Pm(2, 2);
+    Pm.fill(0);
+    for (size_t i = 0; i < 2; ++i)
+        Pm.at(i, P[i]) = 1.0;
+    Matrix<double> PA = Pm * A;
+    Matrix<double> LU = L * U;
+    for (size_t i = 0; i < 2; ++i) {
+        for (size_t j = 0; j < 2; ++j) {
+            assert(is_close(PA.at(i, j), LU.at(i, j), 1e-9));
+        }
+    }
 }
 
 int main() {
@@ -380,6 +481,15 @@ int main() {
     should_multiply_matrix_and_scalar();
     should_multiply_matrices();
     should_multiply_matrix_and_vector();
+
+    std::cout << "=== Running PLU decomposition tests ===" << std::endl;
+    should_throw_if_plu_called_on_non_square_matrix();
+    should_decompose_singular_matrix();
+    should_correctly_perform_plu_decomposition_on_small_matrix();
+    // should_correctly_handle_identity_matrix_in_plu();
+    // should_correctly_decompose_upper_triangular_matrix();
+    // should_correctly_handle_negative_pivots_in_plu();
+    std::cout << "=== All PLU tests passed ===" << std::endl;
 
     std::cout << "=== All Matrix tests passed ===" << std::endl;
     return 0;

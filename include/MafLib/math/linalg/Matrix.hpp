@@ -1,5 +1,6 @@
 #ifndef MATRIX_H
 #define MATRIX_H
+#include <type_traits>
 #pragma once
 #include "MafLib/main/GlobalHeader.hpp"
 
@@ -146,6 +147,14 @@ template <typename T> class Matrix {
 
     const T &at(size_t row, size_t col) const {
         return _data.at(_get_index(row, col));
+    }
+
+    [[nodiscard]] std::span<T> row_span(size_t row) {
+        return std::span<T>(&_data.at(_get_index(row, 0)), _cols);
+    }
+
+    [[nodiscard]] std::span<const T> row_span(size_t row) const {
+        return std::span<const T>(&_data.at(_get_index(row, 0)), _cols);
     }
 
     // Checkers
@@ -476,10 +485,45 @@ template <typename T> class Matrix {
     }
 };
 
+/// Creates new identity matrix.
+/// @return Matrix of given type.
+template <typename T> Matrix<T> inline identity_matrix(size_t size) {
+    Matrix<T> result(size, size);
+    result.make_identity();
+    return result;
+}
+
+/// Creates new matrix filled with ones.
+/// @return Matrix of given type.
+template <typename U> inline Matrix<U> ones(size_t rows, size_t cols) {
+    Matrix<U> result(rows, cols);
+    result.fill(U(1));
+    return result;
+}
+/// Checks if 2 matrices are loosely equal.
+template <typename T, typename U>
+[[nodiscard]] constexpr bool loosely_equal(const Matrix<T> &first,
+                                           const Matrix<U> &second) {
+    size_t n = first.row_count();
+    size_t m = first.column_count();
+    if (n != second.row_count() || m != second.column_count()) {
+        return false;
+    }
+    for (size_t i = 0; i < n; ++i) {
+        for (size_t j = 0; j < m; ++j) {
+            if (!is_close(first.at(i, j), second.at(i, j), 1e-10)) {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
 } // namespace maf
 
 #include "CholeskyDecomposition.hpp"
 #include "MatrixCheckers.hpp"
 #include "MatrixMethods.hpp"
+#include "PLU.hpp"
 
 #endif

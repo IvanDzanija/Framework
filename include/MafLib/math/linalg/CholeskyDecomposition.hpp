@@ -5,12 +5,11 @@
 #include "Matrix.hpp"
 namespace maf {
 
-/// Cholesky factorization of symmetric positive definite matrix.
-/// Symmetric positive definite matrix <=> has Cholesky factorization.
+/// Cholesky decomposition of symmetric positive definite matrix.
+/// Symmetric positive definite matrix <=> has Cholesky decomposition.
 template <typename T>
 [[nodiscard]] Matrix<T> cholesky(const Matrix<T> &matrix) {
     // O(n^3 / 3)
-    // Works only for symmetric positive-definite matrices
     if (!matrix.is_symmetric()) {
         throw std::invalid_argument(
             "Matrix must be symmetric to try Cholesky decomposition!");

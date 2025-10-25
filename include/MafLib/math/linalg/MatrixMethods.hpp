@@ -34,26 +34,4 @@ template <typename T> Matrix<T> Matrix<T>::transposed() const {
     return result;
 }
 
-/// Creates new matrix filled with zeros.
-/// @return Matrix of given type.
-template <typename U> inline Matrix<U> zeros(size_t rows, size_t cols) {
-    return Matrix<U>(rows, cols);
-}
-
-/// Creates new matrix filled with ones.
-/// @return Matrix of given type.
-template <typename U> inline Matrix<U> ones(size_t rows, size_t cols) {
-    Matrix<U> result(rows, cols);
-    result.fill(U(1));
-    return result;
-}
-
-/// Creates new identity matrix.
-/// @return Matrix of given type.
-template <typename U> Matrix<U> inline identity(size_t size) {
-    Matrix<U> result(size, size);
-    result.make_identity();
-    return result;
-}
-
 } // namespace maf

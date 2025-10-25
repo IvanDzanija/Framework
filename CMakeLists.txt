@@ -1,8 +1,8 @@
-cmake_minimum_required(VERSION 3.16)
+cmake_minimum_required(VERSION 3.20)
 
 project(MafLib
     VERSION 1.0.0
-    DESCRIPTION "Experimental C++ framework library for HPC"
+    DESCRIPTION "Experimental C++ framework for HPC"
     LANGUAGES CXX
 )
 
