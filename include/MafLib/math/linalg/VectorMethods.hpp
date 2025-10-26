@@ -1,6 +1,6 @@
 #include "Vector.hpp"
 
-namespace maf {
+namespace maf::math {
 
 template <typename T> void Vector<T>::fill(T value) noexcept {
     std::fill(_data.begin(), _data.end(), value);
@@ -32,4 +32,4 @@ template <typename T> Vector<T> Vector<T>::transposed() const noexcept {
     return ret(this->size(), _data, new_orientation);
 }
 
-} // namespace maf
+} // namespace maf::math

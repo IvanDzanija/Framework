@@ -3,9 +3,7 @@
 #pragma once
 #include "MafLib/main/GlobalHeader.hpp"
 
-#define BLOCK_SIZE 64
-
-namespace maf {
+namespace maf::math {
 template <typename T> class Vector;
 
 template <typename T> class Matrix {
@@ -518,7 +516,7 @@ template <typename T, typename U>
     return true;
 }
 
-} // namespace maf
+} // namespace maf::math
 
 #include "CholeskyDecomposition.hpp"
 #include "MatrixCheckers.hpp"

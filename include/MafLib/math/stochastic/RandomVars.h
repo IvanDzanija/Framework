@@ -4,7 +4,7 @@
 #include "MafLib/math/linalg/Matrix.hpp"
 #include "MafLib/math/linalg/Vector.hpp"
 
-namespace maf {
+namespace maf::math {
 
 /// Creates a vector of correlated random variables from a vector of independant
 /// random variables based on Cholesky decomposition of covariance matrix.
@@ -25,5 +25,5 @@ auto correlated_shocks(const Matrix<U> &L, const Vector<T> &Z) {
     return Y;
 }
 
-} // namespace maf
+} // namespace maf::math
 #endif

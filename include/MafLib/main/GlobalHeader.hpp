@@ -29,6 +29,8 @@ using uint32 = uint32_t;
 using int64 = int64_t;
 using uint64 = uint64_t;
 
+namespace maf {
+#define BLOCK_SIZE 64
 inline constexpr int8_t OUT_OF_BOUNDS = -1;
 inline constexpr int8_t NOT_SQUARE = -2;
 inline constexpr double EPSILON = 1e-6;
@@ -43,5 +45,7 @@ template <typename T, typename U>
     using R = std::common_type_t<T, U>;
     return std::abs(static_cast<R>(v1) - static_cast<R>(v2)) < epsilon;
 }
+
+} // namespace maf
 
 #endif // GLOBALHEADER_HPP

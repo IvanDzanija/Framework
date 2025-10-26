@@ -1,7 +1,7 @@
 #pragma once
 #include "Matrix.hpp"
 
-namespace maf {
+namespace maf::math {
 
 // Inplace fill
 template <typename T> void Matrix<T>::fill(T value) {
@@ -34,4 +34,4 @@ template <typename T> Matrix<T> Matrix<T>::transposed() const {
     return result;
 }
 
-} // namespace maf
+} // namespace maf::math

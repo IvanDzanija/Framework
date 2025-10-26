@@ -4,7 +4,7 @@
 #include <algorithm>
 #pragma once
 #include "Matrix.hpp"
-namespace maf {
+namespace maf::math {
 
 /// PLU decomposition of square matrix.
 /// P - permutation, L - lower triangular, U - upper triangular
@@ -101,6 +101,6 @@ plu(const Matrix<T> &matrix) {
     return std::make_tuple(std::move(P), std::move(L), std::move(U));
 }
 
-} // namespace maf
+} // namespace maf::math
 
 #endif

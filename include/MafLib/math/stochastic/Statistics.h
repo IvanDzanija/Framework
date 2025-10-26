@@ -4,7 +4,7 @@
 #include "MafLib/math/linalg/Matrix.hpp"
 #include "MafLib/math/linalg/Vector.hpp"
 
-namespace maf {
+namespace maf::math {
 
 /// Calculates the unbiased estimator of expected value aka mean.
 template <typename T> double mean(const Vector<T> &data) {
@@ -48,6 +48,6 @@ double covariance(const std::vector<T> &x, T mean_x, const std::vector<T> &y,
     return cov / (n - 1);
 }
 
-} // namespace maf
+} // namespace maf::math
 
 #endif

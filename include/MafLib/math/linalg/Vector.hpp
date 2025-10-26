@@ -6,7 +6,7 @@
 
 #define BLOCK_SIZE 64
 
-namespace maf {
+namespace maf::math {
 template <typename T> class Vector {
   public:
     enum Orientation { ROW, COLUMN };
@@ -141,7 +141,14 @@ template <typename T> class Vector {
 
     /// Null vector
     /// @return true if all values of the vector are/close to 0, false otherwise
-    [[nodiscard]] bool is_null() const noexcept;
+    [[nodiscard]] bool is_null() const noexcept {
+        for (const T &val : _data) {
+            if (!is_close(val, 0)) {
+                return false;
+            }
+        }
+        return true;
+    }
 
     // Operators
 
@@ -265,9 +272,8 @@ template <typename T> class Vector {
     }
 };
 
-} // namespace maf
+} // namespace maf::math
 
-#include "VectorCheckers.hpp"
 #include "VectorMethods.hpp"
 #include "VectorOperators.hpp"
 #endif

@@ -3,7 +3,7 @@
 #include "Matrix.hpp"
 #include <exception>
 
-namespace maf {
+namespace maf::math {
 
 template <typename T>
 [[nodiscard]] constexpr bool Matrix<T>::is_symmetric() const {
@@ -77,4 +77,4 @@ template <typename T>
     }
 }
 
-} // namespace maf
+} // namespace maf::math

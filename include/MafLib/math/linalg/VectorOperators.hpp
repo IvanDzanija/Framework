@@ -1,7 +1,7 @@
 #include "Vector.hpp"
 #include <type_traits>
 
-namespace maf {
+namespace maf::math {
 
 // Equality operator
 template <typename T> bool Vector<T>::operator==(const Vector &other) const {
@@ -178,4 +178,4 @@ auto Vector<T>::dot_product(const Vector<U> &other) const {
     return result;
 }
 
-} // namespace maf
+} // namespace maf::math

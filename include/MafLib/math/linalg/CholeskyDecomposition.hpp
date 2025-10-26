@@ -3,7 +3,7 @@
 
 #pragma once
 #include "Matrix.hpp"
-namespace maf {
+namespace maf::math {
 
 /// Cholesky decomposition of symmetric positive definite matrix.
 /// Symmetric positive definite matrix <=> has Cholesky decomposition.
@@ -37,6 +37,6 @@ template <typename T>
     return L;
 }
 
-} // namespace maf
+} // namespace maf::math
 
 #endif
