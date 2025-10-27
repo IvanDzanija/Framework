@@ -24,7 +24,7 @@ class Trie {
         /// Checks if this node is leaf.
         /// Uses current status of child_count variable.
         /// @return Boolean
-        [[nodiscard]] bool is_leaf() { return child_count == 0; }
+        [[nodiscard]] bool is_leaf() const { return child_count == 0; }
 
         /// Checks if there already is a transition for some $value.
         /// @return Pointer to the transition, nullptr if no transition exists.
@@ -51,6 +51,7 @@ class Trie {
         bool remove(char value) {
             TrieNode *node = transition(value);
             if (node != nullptr) {
+                delete node;
                 children.at(static_cast<unsigned char>(value)) = nullptr;
                 --child_count;
                 return true;
