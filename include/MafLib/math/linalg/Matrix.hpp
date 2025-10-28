@@ -419,9 +419,10 @@ template <typename T> class Matrix {
     template <typename U>
         requires(std::is_arithmetic_v<U>)
     [[nodiscard]] auto operator*(const U &scalar) const {
-        Matrix<std::common_type_t<T, U>> result(_rows, _cols);
+        using R = std::common_type_t<T, U>;
+        Matrix<R> result(_rows, _cols);
 
-        std::transform(_data.begin(), _data.end(), result._data.begin(),
+        std::transform(_data.begin(), _data.end(), result.data().begin(),
                        [scalar](const T &value) { return value * scalar; });
         return result;
     }
@@ -465,6 +466,67 @@ template <typename T> class Matrix {
         }
 
         return result;
+    }
+
+    // Matrix / Scalar
+    /// Divide each element of matrix by a scalar.
+    /// @return Matrix of common promoted type
+    template <typename U>
+        requires(std::is_arithmetic_v<U>)
+    [[nodiscard]] auto operator/(const U &scalar) const {
+        return *this * (T(1) / scalar);
+    }
+
+    // Scalar / Matrix
+    /// Divide the scalar by each element of the matrix.
+    /// @return Matrix of common promoted type
+    template <typename U>
+        requires(std::is_arithmetic_v<U>)
+    [[nodiscard]] friend auto operator/(const U &scalar,
+                                        const Matrix<T> &matrix) {
+        using R = std::common_type_t<T, U>;
+
+        Matrix<R> result(matrix._rows, matrix._cols);
+        std::transform(matrix._data.begin(), matrix._data.end(),
+                       result.data().begin(),
+                       [scalar](const T &value) { return value / scalar; });
+        return result;
+    }
+
+    template <typename U>
+        requires(std::is_arithmetic_v<U>)
+    [[nodiscard]] auto operator+=(const U &scalar) {
+        std::transform(
+            _data.begin(), _data.end(), _data.begin(),
+            [scalar](T val) { return static_cast<T>(val + scalar); });
+        return *this;
+    }
+
+    template <typename U>
+        requires(std::is_arithmetic_v<U>)
+    [[nodiscard]] auto operator-=(const U &scalar) {
+        std::transform(
+            _data.begin(), _data.end(), _data.begin(),
+            [scalar](T val) { return static_cast<T>(val - scalar); });
+        return *this;
+    }
+
+    template <typename U>
+        requires(std::is_arithmetic_v<U>)
+    [[nodiscard]] auto operator*=(const U &scalar) {
+        std::transform(
+            _data.begin(), _data.end(), _data.begin(),
+            [scalar](T val) { return static_cast<T>(val * scalar); });
+        return *this;
+    }
+
+    template <typename U>
+        requires(std::is_arithmetic_v<U>)
+    [[nodiscard]] auto operator/=(const U &scalar) {
+        std::transform(
+            _data.begin(), _data.end(), _data.begin(),
+            [scalar](T val) { return static_cast<T>(val / scalar); });
+        return *this;
     }
 
     // Debugging and printing

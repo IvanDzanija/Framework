@@ -511,6 +511,30 @@ void should_throw_if_not_positive_definite() {
     assert(thrown);
 }
 
+void time_test() {
+    size_t n = 4000;
+    std::mt19937 gen(std::random_device{}());
+    std::normal_distribution<> dist(0.0, 1.0);
+    math::Matrix<double> X(n, n);
+    for (int i = 0; i < n; ++i)
+        for (int j = 0; j < n; ++j)
+            X.at(i, j) = dist(gen);
+
+    double eps = 1e-7;
+    auto A = X.transposed() * X;
+    A = A + eps;
+
+    using namespace std::chrono;
+
+    auto start = high_resolution_clock::now(); // start timing
+    auto L = math::cholesky(A);
+    auto end = high_resolution_clock::now(); // end timing
+
+    duration<double> elapsed = end - start;
+    std::cout << "Elapsed time: " << elapsed.count() << " seconds\n";
+    std::cout << L.at(500, 500) << std::endl;
+}
+
 int main() {
     std::cout << "=== Running Matrix tests ===" << std::endl;
 
@@ -569,6 +593,7 @@ int main() {
     should_throw_if_non_symmetric();
     should_throw_if_not_positive_definite();
     std::cout << "=== All Cholesky tests passed ===" << std::endl;
+    time_test();
 
     std::cout << "=== All Matrix tests passed ===" << std::endl;
     return 0;
