@@ -58,7 +58,7 @@ target_compile_options(${PROJECT_NAME}
         -fcolor-diagnostics
         -Wall -Wextra -Wpedantic
         $<$<CONFIG:Debug>:-g -O0 -fsanitize=address -fsanitize=undefined>
-        $<$<CONFIG:Release>:-O2 -ffast-math -march=native -DNDEBUG>
+        $<$<CONFIG:Release>:-O2 -ffast-math -march=native -funroll-loops -DNDEBUG>
 )
 
 target_link_options(${PROJECT_NAME}

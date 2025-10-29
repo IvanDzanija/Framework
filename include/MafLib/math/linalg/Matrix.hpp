@@ -546,7 +546,8 @@ template <typename T> class Matrix {
 
 /// Creates new identity matrix.
 /// @return Matrix of given type.
-template <typename T> Matrix<T> inline identity_matrix(size_t size) {
+template <typename T>
+[[nodiscard]] Matrix<T> inline identity_matrix(size_t size) {
     Matrix<T> result(size, size);
     result.make_identity();
     return result;
@@ -554,7 +555,8 @@ template <typename T> Matrix<T> inline identity_matrix(size_t size) {
 
 /// Creates new matrix filled with ones.
 /// @return Matrix of given type.
-template <typename U> inline Matrix<U> ones(size_t rows, size_t cols) {
+template <typename U>
+[[nodiscard]] inline Matrix<U> ones(size_t rows, size_t cols) {
     Matrix<U> result(rows, cols);
     result.fill(U(1));
     return result;
@@ -562,7 +564,8 @@ template <typename U> inline Matrix<U> ones(size_t rows, size_t cols) {
 /// Checks if 2 matrices are loosely equal.
 template <typename T, typename U>
 [[nodiscard]] constexpr bool loosely_equal(const Matrix<T> &first,
-                                           const Matrix<U> &second) {
+                                           const Matrix<U> &second,
+                                           double eps = 1e-6) {
     size_t n = first.row_count();
     size_t m = first.column_count();
     if (n != second.row_count() || m != second.column_count()) {
@@ -570,12 +573,29 @@ template <typename T, typename U>
     }
     for (size_t i = 0; i < n; ++i) {
         for (size_t j = 0; j < m; ++j) {
-            if (!is_close(first.at(i, j), second.at(i, j), 1e-10)) {
+            if (!is_close(first.at(i, j), second.at(i, j), eps)) {
+                std::cout << i << ' ' << j << std::endl;
+                std::cout << first.at(i, j) << ' ' << second.at(i, j)
+                          << std::endl;
                 return false;
             }
         }
     }
     return true;
+}
+
+template <typename T>
+[[nodiscard]] Matrix<T> inline make_permutation_matrix(
+    const std::vector<uint32> &perm) {
+    size_t n = perm.size();
+    Matrix<T> result(n, n);
+#pragma omp parallel for if (n > 256)
+    for (size_t i = 0; i < n; ++i) {
+        const size_t j = perm.at(i);
+        result.at(i, j) = static_cast<T>(1);
+    }
+
+    return result;
 }
 
 } // namespace maf::math

@@ -5,6 +5,7 @@
 #include "MafLib/math/linalg/Vector.hpp"
 
 using namespace maf;
+using namespace std::chrono;
 
 void should_construct_empty_matrix_with_zero_rows_and_columns() {
     math::Matrix<int> m;
@@ -380,8 +381,6 @@ void should_correctly_perform_plu_decomposition_on_small_matrix() {
             assert(is_close(L.at(i, j), 0.0));
         }
     }
-    U.print();
-    L.print();
 
     for (size_t i = 1; i < 3; ++i) {
         for (size_t j = 0; j < i; ++j) {
@@ -442,6 +441,34 @@ void should_correctly_handle_negative_pivots_in_plu() {
     assert(loosely_equal(PA, LU));
 }
 
+void plu_time_test() {
+    const size_t n = 128;
+    math::Matrix<double> A(n, n);
+
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_real_distribution<> dis(-10.0, 10.0);
+    for (size_t i = 0; i < n; ++i) {
+        for (size_t j = 0; j < n; ++j) {
+            // A.at(i, j) = n * i + j;
+            A.at(i, j) = dis(gen);
+        }
+    }
+
+    auto start = std::chrono::high_resolution_clock::now();
+    auto [p, L, U] = plu(A);
+
+    auto P = math::make_permutation_matrix<double>(p);
+    auto end = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double> elapsed = end - start;
+    std::cout << "PLU elapsed time:" << elapsed.count() << " seconds.\n";
+    // std::cout << L.at(1000, 1000) << std::endl;
+    std::cout << A.size() << std::endl;
+    auto PA = P * A;
+    auto LU = L * U;
+    assert(math::loosely_equal(PA, LU));
+}
+
 void should_decompose_identity_matrix() {
     math::Matrix<double> I = math::identity_matrix<double>(4);
     math::Matrix<double> L = cholesky(I);
@@ -487,6 +514,14 @@ void should_reconstruct_from_random_b_times_b_t() {
     assert(loosely_equal(LLt, A));
 }
 
+void should_correctly_decompose_for_known_example() {
+    math::Matrix<double> B(3, 3, {1, 2, 1, 2, 5, 2, 1, 2, 10});
+
+    math::Matrix<double> L = cholesky(B);
+    math::Matrix<double> LLt = L * L.transposed();
+    assert(math::loosely_equal(LLt, B));
+}
+
 void should_throw_if_non_symmetric() {
     math::Matrix<double> A(2, 2, {1.0, 2.0, 3.0, 4.0}); // not symmetric
     bool thrown = false;
@@ -510,29 +545,27 @@ void should_throw_if_not_positive_definite() {
     }
     assert(thrown);
 }
-
-void time_test() {
-    size_t n = 4000;
+void cholesky_time_test() {
+    size_t n = 1000;
     std::mt19937 gen(std::random_device{}());
     std::normal_distribution<> dist(0.0, 1.0);
     math::Matrix<double> X(n, n);
-    for (int i = 0; i < n; ++i)
-        for (int j = 0; j < n; ++j)
+    for (size_t i = 0; i < n; ++i) {
+        for (size_t j = 0; j < n; ++j) {
             X.at(i, j) = dist(gen);
+        }
+    }
 
     double eps = 1e-7;
-    auto A = X.transposed() * X;
-    A = A + eps;
+    auto A = X.transposed() * X + eps;
 
-    using namespace std::chrono;
-
-    auto start = high_resolution_clock::now(); // start timing
+    auto start = high_resolution_clock::now();
     auto L = math::cholesky(A);
-    auto end = high_resolution_clock::now(); // end timing
-
+    auto end = high_resolution_clock::now();
     duration<double> elapsed = end - start;
-    std::cout << "Elapsed time: " << elapsed.count() << " seconds\n";
-    std::cout << L.at(500, 500) << std::endl;
+    std::cout << "Cholesky elapsed time: " << elapsed.count() << " seconds\n";
+    auto C = L * L.transposed();
+    assert(math::loosely_equal(C, A));
 }
 
 int main() {
@@ -583,17 +616,19 @@ int main() {
     should_correctly_handle_identity_matrix_in_plu();
     should_correctly_decompose_upper_triangular_matrix();
     should_correctly_handle_negative_pivots_in_plu();
+    plu_time_test();
     std::cout << "=== All PLU tests passed ===" << std::endl;
 
     std::cout << "=== Running Cholesky decomposition tests ===" << std::endl;
     should_decompose_identity_matrix();
     should_decompose_known_small_matrix();
+    should_correctly_decompose_for_known_example();
     should_decompose_diagonal_matrix();
     should_reconstruct_from_random_b_times_b_t();
     should_throw_if_non_symmetric();
     should_throw_if_not_positive_definite();
+    cholesky_time_test();
     std::cout << "=== All Cholesky tests passed ===" << std::endl;
-    time_test();
 
     std::cout << "=== All Matrix tests passed ===" << std::endl;
     return 0;

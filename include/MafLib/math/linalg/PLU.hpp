@@ -1,7 +1,6 @@
 #ifndef MATRIX_PLA_H
 #define MATRIX_PLA_H
 
-#include <algorithm>
 #pragma once
 #include "Matrix.hpp"
 namespace maf::math {
@@ -13,15 +12,15 @@ namespace maf::math {
 /// P is saved as a std::vector of fixed size with the final row order!
 /// @return Tuple of std::vector P, Matrix L, Matrix A.
 template <typename T>
-[[nodiscard]] std::tuple<std::vector<size_t>, Matrix<T>, Matrix<T>>
+[[nodiscard]] std::tuple<std::vector<uint32>, Matrix<T>, Matrix<T>>
 plu(const Matrix<T> &matrix) {
     if (!matrix.is_square()) {
         throw std::invalid_argument(
-            "Matrix must be square to try PLA decomposition!");
+            "Matrix must be square to try PLU decomposition!");
     }
 
     const size_t n = matrix.row_count();
-    std::vector<size_t> P(n);
+    std::vector<uint32> P(n);
     std::iota(P.begin(), P.end(), 0);
 
     Matrix<T> A = matrix;
@@ -30,6 +29,35 @@ plu(const Matrix<T> &matrix) {
     for (size_t ib = 0; ib < n; ib += BLOCK_SIZE) {
         const size_t block_end = std::min(ib + BLOCK_SIZE, n);
 
+        // Update blocks above current block
+        if (ib >= BLOCK_SIZE) {
+        }
+        // #pragma omp parallel for
+        for (size_t i = ib - BLOCK_SIZE; i < ib; ++i) {
+            auto pivot_row = A.row_span(i).subspan(ib);
+            for (size_t k = ib - BLOCK_SIZE; k < ib; ++k) {
+                if (i >= k) {
+                    continue;
+                }
+                T mult = L.at(k, i);
+                if (mult == T(0)) {
+                    continue;
+                }
+                auto target_row = A.row_span(k).subspan(ib);
+
+                if (k + 1 < ib) {
+                    __builtin_prefetch(&A.at(k + 1, ib), 0, 3);
+                }
+                const size_t len = n - ib;
+
+#pragma omp simd
+                for (size_t j = 0; j < len; ++j) {
+                    target_row[j] -= mult * pivot_row[j];
+                }
+            }
+        }
+
+        // Process current block
         for (size_t i = ib; i < block_end && i < n - 1; ++i) {
             // Find pivot in current column
             size_t pivot_row = i;
@@ -49,17 +77,19 @@ plu(const Matrix<T> &matrix) {
 
                 auto row_i = A.row_span(i);
                 auto row_p = A.row_span(pivot_row);
-                std::ranges::swap_ranges(row_i, row_p);
+                std::swap_ranges(row_i.begin(), row_i.end(), row_p.begin());
 
                 if (i > 0) {
                     auto l_row_i = L.row_span(i).subspan(0, i);
                     auto l_row_p = L.row_span(pivot_row).subspan(0, i);
-                    std::ranges::swap_ranges(l_row_i, l_row_p);
+                    std::swap_ranges(l_row_i.begin(), l_row_i.end(),
+                                     l_row_p.begin());
                 }
             }
 
             T pivot = A.at(i, i);
             if (is_close(pivot, static_cast<T>(0), static_cast<T>(1e-9))) {
+                std::cout << "singular " << std::endl;
                 continue;
             }
 
@@ -79,14 +109,17 @@ plu(const Matrix<T> &matrix) {
         if (block_end < n) {
 #pragma omp parallel for schedule(static, 8) if (n - block_end > 128)
             for (size_t i = block_end; i < n; ++i) {
+                auto target_row = A.row_span(i).subspan(block_end);
                 for (size_t k = ib; k < block_end; ++k) {
                     T mult = L.at(i, k);
                     if (mult == T(0)) {
                         continue;
                     }
+                    auto pivot_row = A.row_span(k).subspan(block_end);
 
-                    const T *pivot_row = &A.at(k, block_end);
-                    T *target_row = &A.at(i, block_end);
+                    if (k + 1 < block_end) {
+                        __builtin_prefetch(&A.at(k + 1, block_end), 0, 3);
+                    }
                     const size_t len = n - block_end;
 
 #pragma omp simd
@@ -107,6 +140,7 @@ plu(const Matrix<T> &matrix) {
         const size_t len = n - i;
         std::copy_n(a_row, len, u_row);
     }
+
     return std::make_tuple(std::move(P), std::move(L), std::move(U));
 }
 
