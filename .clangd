@@ -9,6 +9,8 @@ CompileFlags:
         - -Wextra
         - -Wpedantic
         - -I${project_root}/include
+        - -target
+        - arm64-apple-macos26
 
     # Flags to remove if they show up
     Remove:

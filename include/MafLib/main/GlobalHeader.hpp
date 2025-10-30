@@ -2,7 +2,6 @@
 #define GLOBALHEADER_HPP
 
 #pragma once
-#include <Accelerate/Accelerate.h>
 #include <algorithm>
 #include <array>
 #include <cassert>
