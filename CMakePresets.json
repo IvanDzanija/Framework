@@ -29,7 +29,7 @@
                 "CMAKE_BUILD_TYPE": "Release",
                 "CMAKE_CXX_COMPILER": "clang++",
                 "CMAKE_C_COMPILER": "clang",
-        "CMAKE_CXX_FLAGS_RELEASE": "-O2 -ffast-math -march=native -funroll-loops -DNDEBUG -Rpass=loop-vectorize -Rpass-missed=loop-vectorize -Rpass-analysis=loop-vectorize",
+        "CMAKE_CXX_FLAGS_RELEASE": "-O2 -ffast-math -march=native -funroll-loops -DNDEBUG",
                 "BUILD_EXAMPLES": "ON",
                 "BUILD_TESTS": "ON"
             },
