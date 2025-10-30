@@ -574,9 +574,6 @@ template <typename T, typename U>
     for (size_t i = 0; i < n; ++i) {
         for (size_t j = 0; j < m; ++j) {
             if (!is_close(first.at(i, j), second.at(i, j), eps)) {
-                std::cout << i << ' ' << j << std::endl;
-                std::cout << first.at(i, j) << ' ' << second.at(i, j)
-                          << std::endl;
                 return false;
             }
         }

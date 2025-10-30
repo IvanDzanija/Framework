@@ -442,7 +442,7 @@ void should_correctly_handle_negative_pivots_in_plu() {
 }
 
 void plu_time_test() {
-    const size_t n = 128;
+    const size_t n = 4000;
     math::Matrix<double> A(n, n);
 
     std::random_device rd;
@@ -450,7 +450,6 @@ void plu_time_test() {
     std::uniform_real_distribution<> dis(-10.0, 10.0);
     for (size_t i = 0; i < n; ++i) {
         for (size_t j = 0; j < n; ++j) {
-            // A.at(i, j) = n * i + j;
             A.at(i, j) = dis(gen);
         }
     }
@@ -462,8 +461,6 @@ void plu_time_test() {
     auto end = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double> elapsed = end - start;
     std::cout << "PLU elapsed time:" << elapsed.count() << " seconds.\n";
-    // std::cout << L.at(1000, 1000) << std::endl;
-    std::cout << A.size() << std::endl;
     auto PA = P * A;
     auto LU = L * U;
     assert(math::loosely_equal(PA, LU));
@@ -546,7 +543,7 @@ void should_throw_if_not_positive_definite() {
     assert(thrown);
 }
 void cholesky_time_test() {
-    size_t n = 1000;
+    const size_t n = 4000;
     std::mt19937 gen(std::random_device{}());
     std::normal_distribution<> dist(0.0, 1.0);
     math::Matrix<double> X(n, n);
