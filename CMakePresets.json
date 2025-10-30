@@ -10,7 +10,6 @@
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Debug",
                 "CMAKE_CXX_COMPILER": "clang++",
-                "CMAKE_CXX_FLAGS_DEBUG": "-framework Accelerate",
                 "CMAKE_C_COMPILER": "clang",
                 "BUILD_EXAMPLES": "ON",
                 "BUILD_TESTS": "ON"
