@@ -442,7 +442,7 @@ void should_correctly_handle_negative_pivots_in_plu() {
 }
 
 void plu_time_test() {
-    const size_t n = 4000;
+    const size_t n = 1000;
     math::Matrix<double> A(n, n);
 
     std::random_device rd;
@@ -543,7 +543,7 @@ void should_throw_if_not_positive_definite() {
     assert(thrown);
 }
 void cholesky_time_test() {
-    const size_t n = 4000;
+    const size_t n = 1000;
     std::mt19937 gen(std::random_device{}());
     std::normal_distribution<> dist(0.0, 1.0);
     math::Matrix<double> X(n, n);

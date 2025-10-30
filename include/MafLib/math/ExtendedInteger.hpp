@@ -37,7 +37,7 @@ class ExtendedInt {
         return is_inf() &&
                std::get<InfinityType>(_value) == InfinityType::PosInf;
     }
-    bool is_neg_inf() const {
+    [[nodiscard]] bool is_neg_inf() const {
         return is_inf() &&
                std::get<InfinityType>(_value) == InfinityType::NegInf;
     }
