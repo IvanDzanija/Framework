@@ -8,7 +8,7 @@ on:
 
 jobs:
     build-and-test:
-        runs-on: ubuntu-latest
+        runs-on: macos-latest
 
         steps:
             - name: Checkout repository
@@ -16,8 +16,8 @@ jobs:
 
             - name: Install dependencies
               run: |
-                  sudo apt-get update
-                  sudo apt-get install -y clang ninja-build cmake libomp-dev
+                  brew update
+                  brew install ninja cmake libomp
 
             - name: Configure (clang-debug preset)
               run: cmake --preset clang-debug
