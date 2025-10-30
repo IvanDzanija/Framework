@@ -343,6 +343,28 @@ void should_multiply_matrix_and_vector() {
     }
 }
 
+void time_test_matmul() {
+    const size_t n = 1024;
+    math::Matrix<double> A(n, n);
+    math::Matrix<double> B(n, n);
+
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_real_distribution<> dis(-10.0, 10.0);
+    for (size_t i = 0; i < n; ++i) {
+        for (size_t j = 0; j < n; ++j) {
+            A.at(i, j) = dis(gen);
+            B.at(i, j) = dis(gen);
+        }
+    }
+
+    auto start = std::chrono::high_resolution_clock::now();
+    auto C = A * B;
+    auto end = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double> elapsed = end - start;
+    std::cout << "MATMUL elapsed time:" << elapsed.count() << " seconds.\n";
+}
+
 void should_throw_if_plu_called_on_non_square_matrix() {
     math::Matrix<double> m(2, 3, {1, 2, 3, 4, 5, 6});
     bool thrown = false;
@@ -605,6 +627,7 @@ int main() {
     should_multiply_matrix_and_scalar();
     should_multiply_matrices();
     should_multiply_matrix_and_vector();
+    time_test_matmul();
 
     std::cout << "=== Running PLU decomposition tests ===" << std::endl;
     should_throw_if_plu_called_on_non_square_matrix();

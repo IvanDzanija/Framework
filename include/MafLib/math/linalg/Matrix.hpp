@@ -198,7 +198,7 @@ template <typename T> class Matrix {
             throw std::invalid_argument("Matrix must be square to transpose.");
         }
 
-#pragma omp parallel for schedule(dynamic) collapse(2)
+#pragma omp parallel for // schedule(dynamic) collapse(2)
         for (size_t i = 0; i < _rows; i += BLOCK_SIZE) {
             for (size_t j = i; j < _cols; j += BLOCK_SIZE) {
                 const size_t n = i + BLOCK_SIZE;
