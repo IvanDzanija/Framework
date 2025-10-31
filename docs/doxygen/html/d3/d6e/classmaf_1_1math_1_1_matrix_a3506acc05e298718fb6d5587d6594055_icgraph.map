@@ -1,0 +1,49 @@
+<map id="maf::math::Matrix::at" name="maf::math::Matrix::at">
+<area shape="rect" id="Node000001" title=" " alt="" coords="617,547,761,573"/>
+<area shape="rect" id="Node000002" href="$d4/d02/namespacemaf_1_1math.html#a45286ae95d74e7a19ecf706538b151e7" title=" " alt="" coords="186,122,326,148"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="683,533,673,423,652,272,636,197,617,129,594,74,581,54,568,40,544,23,521,13,499,9,477,9,430,20,375,40,342,57,312,79,270,123,266,120,309,76,339,52,373,35,429,15,477,4,500,3,522,8,546,19,571,36,586,51,599,72,622,127,642,195,657,271,678,422,688,532"/>
+<area shape="rect" id="Node000004" href="$d4/d02/namespacemaf_1_1math.html#a2eb500c1b4cfbb3169604245422bd93e" title=" " alt="" coords="399,49,544,90"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="681,533,666,437,642,309,608,186,588,137,567,105,543,87,546,83,571,101,593,135,613,184,647,308,672,436,687,532"/>
+<area shape="rect" id="Node000005" href="$d3/d6e/classmaf_1_1math_1_1_matrix.html#a48ce2d00357e89ece95524bd003b63c6" title="Checks if the matrix is lower triangular." alt="" coords="406,376,538,417"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="669,536,626,484,599,456,568,432,537,416,540,411,571,427,602,452,630,480,673,533"/>
+<area shape="rect" id="Node000007" href="$d3/d6e/classmaf_1_1math_1_1_matrix.html#a0f6daf36ebb2efd5970384565469323c" title="Checkes if the matrix is symmetric." alt="" coords="406,115,538,155"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="685,532,680,460,663,363,648,312,628,261,601,213,567,170,553,159,537,150,539,146,556,154,571,166,605,210,632,258,653,310,668,362,685,460,690,532"/>
+<area shape="rect" id="Node000008" href="$d3/d6e/classmaf_1_1math_1_1_matrix.html#af79337899f9b0f2613175daf53f18ea9" title="Checks if the matrix is upper triangular." alt="" coords="406,245,538,286"/>
+<area shape="poly" id="edge8_Node000001_Node000008" title=" " alt="" coords="680,533,668,483,646,421,613,357,592,327,568,301,537,282,540,278,571,297,596,324,618,354,651,419,673,482,685,532"/>
+<area shape="rect" id="Node000009" href="$d4/d02/namespacemaf_1_1math.html#a3d4733be1cd68ede07a9c2de6728b2d7" title="Checks if 2 matrices are loosely equal." alt="" coords="407,311,536,351"/>
+<area shape="poly" id="edge10_Node000001_Node000009" title=" " alt="" coords="676,534,660,497,637,451,606,406,568,366,536,348,538,344,571,362,610,402,641,449,665,494,681,532"/>
+<area shape="rect" id="Node000010" href="$d3/d6e/classmaf_1_1math_1_1_matrix.html#a12a8c0a0c3d48be5283f473f9b86c7e4" title="Converts the matrix to indentity matrix." alt="" coords="406,441,538,482"/>
+<area shape="poly" id="edge11_Node000001_Node000010" title=" " alt="" coords="652,542,568,497,537,485,539,480,570,493,655,537"/>
+<area shape="rect" id="Node000012" href="$d4/d02/namespacemaf_1_1math.html#ac44a6962e2d09c20d929223448b4421c" title="Performs a blocked PLU decomposition on a square matrix." alt="" coords="19,933,124,958"/>
+<area shape="poly" id="edge21_Node000001_Node000012" title=" " alt="" coords="688,589,678,699,657,849,641,925,622,993,599,1048,586,1068,571,1084,540,1104,508,1117,474,1123,438,1125,402,1121,366,1114,295,1089,228,1057,169,1021,87,961,91,957,172,1016,231,1052,297,1084,368,1109,403,1116,439,1120,473,1118,506,1111,538,1099,568,1080,581,1065,594,1045,617,991,636,924,652,848,673,698,683,588"/>
+<area shape="rect" id="Node000013" href="$d4/d02/namespacemaf_1_1math.html#a0fe2f174cf146553516e15feb16733c5" title=" " alt="" coords="374,507,569,547"/>
+<area shape="poly" id="edge14_Node000001_Node000013" title=" " alt="" coords="601,550,569,545,570,539,602,544"/>
+<area shape="rect" id="Node000014" href="$d3/d6e/classmaf_1_1math_1_1_matrix.html#a9e5e920bcd92c6a8a0a2c5098467a5e2" title=" " alt="" coords="406,572,538,613"/>
+<area shape="poly" id="edge15_Node000001_Node000014" title=" " alt="" coords="602,576,539,585,538,580,601,570"/>
+<area shape="rect" id="Node000015" href="$d3/d6e/classmaf_1_1math_1_1_matrix.html#a0440e67c7abf25ef0f37d8d96e9e5cd4" title=" " alt="" coords="406,637,538,678"/>
+<area shape="poly" id="edge16_Node000001_Node000015" title=" " alt="" coords="654,583,570,627,539,639,537,634,568,622,652,579"/>
+<area shape="rect" id="Node000016" href="$de/d35/classmaf_1_1math_1_1_vector.html#a3f7dfd09c96426650c80548b86804450" title=" " alt="" coords="404,703,539,743"/>
+<area shape="poly" id="edge17_Node000001_Node000016" title=" " alt="" coords="672,588,630,640,602,668,571,692,541,707,538,703,568,687,598,664,626,636,668,584"/>
+<area shape="rect" id="Node000017" href="$de/d35/classmaf_1_1math_1_1_vector.html#a00b97a160b42a4eeb740eb693a3f8bd5" title=" " alt="" coords="404,768,539,809"/>
+<area shape="poly" id="edge18_Node000001_Node000017" title=" " alt="" coords="681,588,665,626,641,671,610,717,571,757,541,774,538,770,568,753,606,714,637,668,660,624,676,586"/>
+<area shape="rect" id="Node000018" href="$d3/d6e/classmaf_1_1math_1_1_matrix.html#aeb756ee209272516a931a8ff9fccbcac" title=" " alt="" coords="406,833,538,874"/>
+<area shape="poly" id="edge19_Node000001_Node000018" title=" " alt="" coords="685,589,673,638,651,701,618,766,596,796,571,822,540,841,537,837,568,818,592,792,613,763,646,699,668,637,680,587"/>
+<area shape="rect" id="Node000019" href="$d3/d6e/classmaf_1_1math_1_1_matrix.html#aa73a0427aeb902c0a1e40623f3c6c52b" title=" " alt="" coords="406,899,538,939"/>
+<area shape="poly" id="edge20_Node000001_Node000019" title=" " alt="" coords="688,589,679,650,659,730,644,772,625,814,601,853,571,888,540,908,537,903,568,884,596,850,620,811,639,770,654,728,674,649,683,588"/>
+<area shape="rect" id="Node000020" href="$d3/d6e/classmaf_1_1math_1_1_matrix.html#a0172c1256848fd0d7888f45c4623336c" title=" " alt="" coords="406,964,538,1005"/>
+<area shape="poly" id="edge22_Node000001_Node000020" title=" " alt="" coords="690,589,685,661,668,758,653,810,632,861,605,910,571,953,556,965,539,974,537,969,553,960,567,949,601,907,627,859,648,808,663,757,680,660,685,588"/>
+<area shape="rect" id="Node000021" href="$d3/d6e/classmaf_1_1math_1_1_matrix.html#a65c510831554a29db6115f964b3679b0" title=" " alt="" coords="406,1029,538,1070"/>
+<area shape="poly" id="edge23_Node000001_Node000021" title=" " alt="" coords="687,589,672,684,647,812,613,936,593,984,571,1018,557,1030,540,1039,537,1034,554,1026,567,1015,588,982,608,934,642,811,666,683,681,588"/>
+<area shape="rect" id="Node000022" href="$d3/d6e/classmaf_1_1math_1_1_matrix.html#a246ca1334c2afc425a2eafc68b48fa38" title=" " alt="" coords="406,180,538,221"/>
+<area shape="poly" id="edge24_Node000001_Node000022" title=" " alt="" coords="683,532,674,471,655,392,640,349,620,308,596,270,568,236,537,216,540,212,571,232,601,267,625,306,644,347,660,390,679,470,688,531"/>
+<area shape="rect" id="Node000003" href="$d3/d6e/classmaf_1_1math_1_1_matrix.html#af716a9fdb890f168430aad15c9207a27" title=" " alt="" coords="5,115,138,155"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="170,138,138,138,138,132,170,132"/>
+<area shape="rect" id="Node000006" href="$d3/d6e/classmaf_1_1math_1_1_matrix.html#a90408b80daf821aff91fd2aed917ce8e" title="Checks if the matrix is diagonal." alt="" coords="190,311,322,351"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="390,374,322,354,323,348,392,369"/>
+<area shape="poly" id="edge7_Node000007_Node000002" title=" " alt="" coords="390,138,326,138,326,132,390,132"/>
+<area shape="poly" id="edge9_Node000008_Node000006" title=" " alt="" coords="392,293,323,313,322,308,390,287"/>
+<area shape="rect" id="Node000011" href="$d4/d02/namespacemaf_1_1math.html#a4d61c9a4c0434a2e01652894564f7ebb" title=" " alt="" coords="191,603,321,643"/>
+<area shape="poly" id="edge12_Node000010_Node000011" title=" " alt="" coords="392,488,375,497,344,522,315,551,273,604,269,601,311,547,340,518,373,493,390,483"/>
+<area shape="poly" id="edge13_Node000011_Node000012" title=" " alt="" coords="238,658,83,934,78,931,233,655"/>
+<area shape="poly" id="edge25_Node000022_Node000002" title=" " alt="" coords="390,178,300,151,302,146,391,173"/>
+</map>

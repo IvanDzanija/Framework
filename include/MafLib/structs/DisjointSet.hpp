@@ -4,11 +4,13 @@ namespace maf {
 
 template <typename T> class DisjointSets {
   private:
-    std::unordered_map<T, T> _links;
-    std::unordered_map<T, size_t> _sizes;
+    std::vector<T> _objects;
+    std::vector<size_t> _links;
+    std::vector<size_t> _sizes;
 
     void _ensure_exists(const T &x) {
         if (!_links.contains(x)) {
+            _links.insert(std::make_pair(x, x));
             _links.at(x) = x;
             _sizes.at(x) = 1;
         }

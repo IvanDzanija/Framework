@@ -1,0 +1,44 @@
+\doxysection{include/\+Maf\+Lib/math/linalg/\+Matrix.hpp File Reference}
+\hypertarget{_matrix_8hpp}{}\label{_matrix_8hpp}\index{include/MafLib/math/linalg/Matrix.hpp@{include/MafLib/math/linalg/Matrix.hpp}}
+{\ttfamily \#include "{}Maf\+Lib/main/\+Global\+Header.\+hpp"{}}\newline
+{\ttfamily \#include "{}Cholesky\+Decomposition.\+hpp"{}}\newline
+{\ttfamily \#include "{}Matrix\+Checkers.\+hpp"{}}\newline
+{\ttfamily \#include "{}Matrix\+Methods.\+hpp"{}}\newline
+{\ttfamily \#include "{}PLU.\+hpp"{}}\newline
+Include dependency graph for Matrix.\+hpp\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{d7/d77/_matrix_8hpp__incl}
+\end{center}
+\end{figure}
+This graph shows which files directly or indirectly include this file\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{d2/d7b/_matrix_8hpp__dep__incl}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{classmaf_1_1math_1_1_matrix}{maf\+::math\+::\+Matrix$<$ T $>$}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+namespace \mbox{\hyperlink{namespacemaf}{maf}}
+\item 
+namespace \mbox{\hyperlink{namespacemaf_1_1math}{maf\+::math}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+{\footnotesize template$<$typename T$>$ }\\\mbox{\hyperlink{classmaf_1_1math_1_1_matrix}{Matrix}}$<$ T $>$ \mbox{\hyperlink{namespacemaf_1_1math_a4d61c9a4c0434a2e01652894564f7ebb}{maf\+::math\+::identity\+\_\+matrix}} (size\+\_\+t size)
+\item 
+{\footnotesize template$<$typename U$>$ }\\\mbox{\hyperlink{classmaf_1_1math_1_1_matrix}{Matrix}}$<$ U $>$ \mbox{\hyperlink{namespacemaf_1_1math_a44a90b54cc59e94a6502aa223b893215}{maf\+::math\+::ones}} (size\+\_\+t rows, size\+\_\+t cols)
+\item 
+{\footnotesize template$<$typename T, typename U$>$ }\\constexpr bool \mbox{\hyperlink{namespacemaf_1_1math_a3d4733be1cd68ede07a9c2de6728b2d7}{maf\+::math\+::loosely\+\_\+equal}} (const \mbox{\hyperlink{classmaf_1_1math_1_1_matrix}{Matrix}}$<$ T $>$ \&first, const \mbox{\hyperlink{classmaf_1_1math_1_1_matrix}{Matrix}}$<$ U $>$ \&second, double eps=1e-\/6)
+\begin{DoxyCompactList}\small\item\em Checks if 2 matrices are loosely equal. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename T$>$ }\\\mbox{\hyperlink{classmaf_1_1math_1_1_matrix}{Matrix}}$<$ T $>$ \mbox{\hyperlink{namespacemaf_1_1math_a0fe2f174cf146553516e15feb16733c5}{maf\+::math\+::make\+\_\+permutation\+\_\+matrix}} (const std\+::vector$<$ \mbox{\hyperlink{_global_header_8hpp_a5522c54735d837fae7d6ba026b858441}{uint32}} $>$ \&perm)
+\end{DoxyCompactItemize}
