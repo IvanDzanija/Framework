@@ -2,7 +2,7 @@
 #define BIT_TWIDDLING_H
 #include <cmath>
 
-namespace bit {
+namespace maf::util {
 
 inline bool same_sign(int a, int b) { return ((a ^ b) >= 0); }
 
@@ -13,5 +13,5 @@ inline unsigned int most_significant_bit(int n) {
     return (n == 0) ? 0 : std::ilogb(d) + 1;
 }
 
-} // namespace bit
+} // namespace maf::util
 #endif // BIT_TWIDDLING_H
