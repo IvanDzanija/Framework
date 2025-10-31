@@ -5,7 +5,6 @@
 #include "Matrix.hpp"
 
 namespace maf::math {
-
 /**
  * @brief Performs a blocked PLU decomposition on a square matrix.
  *

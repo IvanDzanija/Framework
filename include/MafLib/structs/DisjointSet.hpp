@@ -30,7 +30,7 @@ namespace maf {
  * @version 2.0 (Handle-based, Union-by-Size, Path Compression)
  * @since 2025
  */
-template <typename T> class DisjointSets {
+template <typename T> class DisjointSet {
   private:
     std::vector<T> _objects;
     std::vector<size_t> _links; // _links[i] = parent of element i
@@ -203,19 +203,6 @@ template <typename T> class DisjointSets {
     [[nodiscard]] T &get_representative(size_t handle) {
         size_t repr_handle = find(handle);
         return _objects[repr_handle];
-    }
-
-    /**
-     * @brief Retrieves a const reference to the representative element
-     * of the set containing `handle`.
-     * @param handle The handle of an element in the set.
-     * @return A const reference (`const T&`) to the representative
-     * element.
-     * @throws std::out_of_range if `handle` is invalid/deleted.
-     */
-    [[nodiscard]] const T &get_representative(size_t handle) const {
-        size_t repr_handle = find(handle);
-        return _objects.at(repr_handle);
     }
 };
 
