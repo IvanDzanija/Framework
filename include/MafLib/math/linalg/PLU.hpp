@@ -114,46 +114,37 @@ plu(const Matrix<T> &matrix) {
 
         // Update Trailing Matrix
         if (block_end < n) {
-// Triangular Solve for U_12
-// We must solve L_11 * U_12 = A_12 for U_12.
+            // Triangular Solve for U_12
+            // We must solve L_11 * U_12 = A_12
 #pragma omp parallel for schedule(static, 8) if (n - block_end > 128)
             for (size_t j = block_end; j < n; ++j) {
-                // For each row i in L_11/A_12
                 for (size_t i = ib; i < block_end; ++i) {
                     T sum = _U.at(i, j);
-                    // sum -= L(i,k) * U(k,j)
-                    // This inner loop is small (<= PLU_BLOCK_SIZE), so no simd
+
+                    // Can't be SIMD because of column fetching
                     for (size_t k = ib; k < i; ++k) {
                         sum -= L.at(i, k) * _U.at(k, j);
                     }
-                    _U.at(i, j) = sum; // _U(i,j) is now U_12(i,j)
+                    _U.at(i, j) = sum;
                 }
             }
 
-// --- 2b. [Original] GEMM for A_22 ---
-// Now compute A_22 = A_22 - L_21 * U_12
-// L_21 is L(block_end..n, ib..block_end)
-// U_12 is _U(ib..block_end, block_end..n) (computed in 2a)
-// A_22 is _U(block_end..n, block_end..n)
+            // Now we can apply all the elimination effects on the next block
 #pragma omp parallel for schedule(static, 8) if (n - block_end > 128)
-            for (size_t i = block_end; i < n; ++i) { // Row in A_22/L_21
-                for (size_t k = ib; k < block_end;
-                     ++k) {                    // Col in L_21 / Row in U_12
-                    const T mult = L.at(i, k); // L_21(i, k)
+            for (size_t i = block_end; i < n; ++i) {
+                auto target_row = _U.row_span(i).subspan(block_end);
+                const size_t len = target_row.size();
+                for (size_t k = ib; k < block_end; ++k) {
+                    const T mult = L.at(i, k);
                     if (is_close(mult, static_cast<T>(0),
                                  static_cast<T>(1e-9))) {
                         continue;
                     }
-
-                    // Get row k of U_12
-                    const T *u12_row = &_U.at(k, block_end);
-                    // Get row i of A_22
-                    T *a22_row = &_U.at(i, block_end);
-                    const size_t len = n - block_end;
+                    auto pivot_row = _U.row_span(k).subspan(block_end);
 
 #pragma omp simd
                     for (size_t j = 0; j < len; ++j) {
-                        a22_row[j] -= mult * u12_row[j];
+                        target_row[j] -= mult * pivot_row[j];
                     }
                 }
             }
