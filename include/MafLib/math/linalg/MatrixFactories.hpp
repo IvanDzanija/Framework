@@ -12,6 +12,19 @@
  */
 namespace maf::math {
 /**
+ * @brief Creates a new identity matrix of a given size.
+ * @tparam T The numeric type of the matrix.
+ * @param size The width and height of the square matrix.
+ * @return An identity Matrix<T> of size (size x size).
+ */
+template <typename T>
+[[nodiscard]] Matrix<T> inline identity_matrix(size_t size) {
+    Matrix<T> result(size, size);
+    result.make_identity();
+    return result;
+}
+
+/**
  * @brief Creates a new matrix filled with ones.
  * @tparam U The numeric type of the matrix.
  * @param rows Number of rows.
