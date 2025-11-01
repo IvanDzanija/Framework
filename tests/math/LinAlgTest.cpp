@@ -193,6 +193,15 @@ void should_return_true_for_singular_matrix() {
     assert(m2.is_singular() == true);
 }
 
+void should_return_false_for_big_non_singular_matrix() {
+    math::Matrix<double> A(8, 8,
+                           {1, 0, 0, 0, 0, 0,  0, 0, 1, 1, 1, 1, 0, 0, 0,  0,
+                            0, 1, 2, 3, 0, -1, 0, 0, 0, 0, 1, 3, 0, 0, -1, 0,
+                            0, 0, 0, 0, 1, 0,  0, 0, 0, 0, 0, 0, 1, 1, 1,  1,
+                            0, 0, 1, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0, 0, 1,  3});
+    assert(!A.is_singular());
+}
+
 // Methods tests
 
 void should_fill_matrix_with_value() {
@@ -631,6 +640,7 @@ int main() {
     should_return_true_for_non_square_matrix();
     should_return_false_for_non_singular_matrix();
     should_return_true_for_singular_matrix();
+    should_return_false_for_non_singular_matrix();
 
     // Methods tests
     should_fill_matrix_with_value();
