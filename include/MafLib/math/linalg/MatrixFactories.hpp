@@ -39,32 +39,6 @@ template <typename U>
 }
 
 /**
- * @brief Checks if two matrices are element-wise equal within a tolerance.
- * @tparam T Numeric type of the first matrix.
- * @tparam U Numeric type of the second matrix.
- * @param eps The absolute tolerance for equality.
- * @return true if dimensions match and all elements are "close".
- */
-template <typename T, typename U>
-[[nodiscard]] constexpr bool loosely_equal(const Matrix<T> &first,
-                                           const Matrix<U> &second,
-                                           double eps = 1e-6) {
-    size_t n = first.row_count();
-    size_t m = first.column_count();
-    if (n != second.row_count() || m != second.column_count()) {
-        return false;
-    }
-    for (size_t i = 0; i < n; ++i) {
-        for (size_t j = 0; j < m; ++j) {
-            if (!is_close(first.at(i, j), second.at(i, j), eps)) {
-                return false;
-            }
-        }
-    }
-    return true;
-}
-
-/**
  * @brief Creates a new permutation matrix from a permutation vector.
  * @tparam T The numeric type of the matrix.
  * @param perm A vector where `perm[i] = j` means row `i` maps to
