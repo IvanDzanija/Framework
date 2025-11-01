@@ -2,47 +2,52 @@
 \hypertarget{classmaf_1_1math_1_1_matrix}{}\label{classmaf_1_1math_1_1_matrix}\index{maf::math::Matrix$<$ T $>$@{maf::math::Matrix$<$ T $>$}}
 
 
+A general-\/purpose, row-\/major, dense matrix class.  
+
+
+
+
 {\ttfamily \#include $<$Matrix.\+hpp$>$}
 
 \doxysubsubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
 \mbox{\hyperlink{classmaf_1_1math_1_1_matrix_afadd64902ef9d03291be6e799c38e904}{Matrix}} ()
-\item 
+\begin{DoxyCompactList}\small\item\em Default constructor. Creates an empty 0x0 matrix. \end{DoxyCompactList}\item 
 \mbox{\hyperlink{classmaf_1_1math_1_1_matrix_a137a88facec95aac4ec5e55cfd00e798}{Matrix}} (size\+\_\+t rows, size\+\_\+t cols, T \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{classmaf_1_1math_1_1_matrix_aca60efe3848c6a7635c9f609ca163528}{data}})
-\item 
+\begin{DoxyCompactList}\small\item\em Constructs a matrix from a raw data pointer. \end{DoxyCompactList}\item 
 \mbox{\hyperlink{classmaf_1_1math_1_1_matrix_ac3f6dd2d29dc8ec8af6d73ead9573bdb}{Matrix}} (size\+\_\+t rows, size\+\_\+t cols)
-\item 
+\begin{DoxyCompactList}\small\item\em Constructs an uninitialized matrix of size rows x cols. \end{DoxyCompactList}\item 
 \mbox{\hyperlink{classmaf_1_1math_1_1_matrix_a8b0c11e3b01e1a9f2a63764d13d6cb24}{Matrix}} (size\+\_\+t rows, size\+\_\+t cols, const std\+::vector$<$ T $>$ \&\mbox{\hyperlink{classmaf_1_1math_1_1_matrix_aca60efe3848c6a7635c9f609ca163528}{data}})
-\item 
+\begin{DoxyCompactList}\small\item\em Constructs from a std\+::vector, filled by rows. \end{DoxyCompactList}\item 
 \mbox{\hyperlink{classmaf_1_1math_1_1_matrix_a9e5e920bcd92c6a8a0a2c5098467a5e2}{Matrix}} (size\+\_\+t rows, size\+\_\+t cols, const std\+::vector$<$ std\+::vector$<$ T $>$ $>$ \&\mbox{\hyperlink{classmaf_1_1math_1_1_matrix_aca60efe3848c6a7635c9f609ca163528}{data}})
-\item 
+\begin{DoxyCompactList}\small\item\em Constructs from a nested std\+::vector (vector of vectors). \end{DoxyCompactList}\item 
 {\footnotesize template$<$typename U, size\+\_\+t N$>$ }\\\mbox{\hyperlink{classmaf_1_1math_1_1_matrix_ac57878bb415f6ea6f438e2bfe9fe9398}{Matrix}} (size\+\_\+t rows, size\+\_\+t cols, const std\+::array$<$ U, N $>$ \&\mbox{\hyperlink{classmaf_1_1math_1_1_matrix_aca60efe3848c6a7635c9f609ca163528}{data}})
-\item 
+\begin{DoxyCompactList}\small\item\em Constructs from a std\+::array, filled by rows. \end{DoxyCompactList}\item 
 {\footnotesize template$<$typename U$>$ }\\\mbox{\hyperlink{classmaf_1_1math_1_1_matrix_a0ce9252a1959be9152184bae6c5b08af}{Matrix}} (size\+\_\+t rows, size\+\_\+t cols, std\+::initializer\+\_\+list$<$ U $>$ list)
-\item 
+\begin{DoxyCompactList}\small\item\em Constructs from a std\+::initializer\+\_\+list, filled by rows. \end{DoxyCompactList}\item 
 std\+::vector$<$ T $>$ \& \mbox{\hyperlink{classmaf_1_1math_1_1_matrix_aca60efe3848c6a7635c9f609ca163528}{data}} () noexcept
-\item 
+\begin{DoxyCompactList}\small\item\em Gets a mutable reference to the underlying std\+::vector data store. \end{DoxyCompactList}\item 
 const std\+::vector$<$ T $>$ \& \mbox{\hyperlink{classmaf_1_1math_1_1_matrix_a473eb241e2869fb796d58c21fa2d6840}{data}} () const noexcept
-\item 
+\begin{DoxyCompactList}\small\item\em Gets a const reference to the underlying std\+::vector data store. \end{DoxyCompactList}\item 
 size\+\_\+t \mbox{\hyperlink{classmaf_1_1math_1_1_matrix_aa1fa0768048faff36f5dfc56911a8ce4}{row\+\_\+count}} () const noexcept
-\item 
+\begin{DoxyCompactList}\small\item\em Gets the number of rows. \end{DoxyCompactList}\item 
 size\+\_\+t \mbox{\hyperlink{classmaf_1_1math_1_1_matrix_a98d6cc10d243169d78f53d07406ace8b}{column\+\_\+count}} () const noexcept
-\item 
+\begin{DoxyCompactList}\small\item\em Gets the number of columns. \end{DoxyCompactList}\item 
 size\+\_\+t \mbox{\hyperlink{classmaf_1_1math_1_1_matrix_a45aa75653ab2200d6de78ec7accbda5b}{size}} () const noexcept
-\item 
+\begin{DoxyCompactList}\small\item\em Gets the total number of elements (rows \texorpdfstring{$\ast$}{*} cols). \end{DoxyCompactList}\item 
 T \& \mbox{\hyperlink{classmaf_1_1math_1_1_matrix_a3506acc05e298718fb6d5587d6594055}{at}} (size\+\_\+t row, size\+\_\+t col)
-\item 
+\begin{DoxyCompactList}\small\item\em Gets a mutable reference to the element at (row, col). \end{DoxyCompactList}\item 
 const T \& \mbox{\hyperlink{classmaf_1_1math_1_1_matrix_a0153f134a332e1f91c2ce151b2e460db}{at}} (size\+\_\+t row, size\+\_\+t col) const
-\item 
+\begin{DoxyCompactList}\small\item\em Gets a const reference to the element at (row, col). \end{DoxyCompactList}\item 
 std\+::span$<$ T $>$ \mbox{\hyperlink{classmaf_1_1math_1_1_matrix_afb33cbf4574399aa71beba18c85a2663}{row\+\_\+span}} (size\+\_\+t row)
-\item 
+\begin{DoxyCompactList}\small\item\em Gets a mutable std\+::span of a single row. \end{DoxyCompactList}\item 
 std\+::span$<$ const T $>$ \mbox{\hyperlink{classmaf_1_1math_1_1_matrix_ae00dc3fd1deab1868365bb3dc45c4f7d}{row\+\_\+span}} (size\+\_\+t row) const
-\item 
+\begin{DoxyCompactList}\small\item\em Gets a const std\+::span of a single row. \end{DoxyCompactList}\item 
 constexpr bool \mbox{\hyperlink{classmaf_1_1math_1_1_matrix_a774d7c4510a8977e5b19f5f332d5789c}{is\+\_\+square}} () const
-\begin{DoxyCompactList}\small\item\em Checks if the matrix is square. \end{DoxyCompactList}\item 
+\begin{DoxyCompactList}\small\item\em Checks if the matrix is square (rows == cols). \end{DoxyCompactList}\item 
 constexpr bool \mbox{\hyperlink{classmaf_1_1math_1_1_matrix_a0f6daf36ebb2efd5970384565469323c}{is\+\_\+symmetric}} () const
-\begin{DoxyCompactList}\small\item\em Checkes if the matrix is symmetric. \end{DoxyCompactList}\item 
+\begin{DoxyCompactList}\small\item\em Checks if the matrix is symmetric (A == A\texorpdfstring{$^\wedge$}{\string^}T). \end{DoxyCompactList}\item 
 constexpr bool \mbox{\hyperlink{classmaf_1_1math_1_1_matrix_af79337899f9b0f2613175daf53f18ea9}{is\+\_\+upper\+\_\+triangular}} () const
 \begin{DoxyCompactList}\small\item\em Checks if the matrix is upper triangular. \end{DoxyCompactList}\item 
 constexpr bool \mbox{\hyperlink{classmaf_1_1math_1_1_matrix_a48ce2d00357e89ece95524bd003b63c6}{is\+\_\+lower\+\_\+triangular}} () const
@@ -50,70 +55,92 @@ constexpr bool \mbox{\hyperlink{classmaf_1_1math_1_1_matrix_a48ce2d00357e89ece95
 constexpr bool \mbox{\hyperlink{classmaf_1_1math_1_1_matrix_a90408b80daf821aff91fd2aed917ce8e}{is\+\_\+diagonal}} () const
 \begin{DoxyCompactList}\small\item\em Checks if the matrix is diagonal. \end{DoxyCompactList}\item 
 bool \mbox{\hyperlink{classmaf_1_1math_1_1_matrix_af716a9fdb890f168430aad15c9207a27}{is\+\_\+positive\+\_\+definite}} () const
-\item 
+\begin{DoxyCompactList}\small\item\em Checks if the matrix is positive definite. \end{DoxyCompactList}\item 
 constexpr bool \mbox{\hyperlink{classmaf_1_1math_1_1_matrix_ae26826bcc4a303b29538a17c0a39de2b}{is\+\_\+singular}} () const
-\item 
+\begin{DoxyCompactList}\small\item\em Checks if the matrix is singular (non-\/invertible). \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{classmaf_1_1math_1_1_matrix_a71134f227c2c22e4ecf24b33ed3c0396}{fill}} (T value)
-\begin{DoxyCompactList}\small\item\em Fills the current matrix with \$value. \end{DoxyCompactList}\item 
+\begin{DoxyCompactList}\small\item\em Fills the entire matrix with a single value. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{classmaf_1_1math_1_1_matrix_a12a8c0a0c3d48be5283f473f9b86c7e4}{make\+\_\+identity}} ()
-\begin{DoxyCompactList}\small\item\em Converts the matrix to indentity matrix. \end{DoxyCompactList}\item 
+\begin{DoxyCompactList}\small\item\em Converts this matrix into an identity matrix. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{classmaf_1_1math_1_1_matrix_a65c510831554a29db6115f964b3679b0}{transpose}} ()
-\item 
+\begin{DoxyCompactList}\small\item\em Performs an in-\/place transpose of the matrix. \end{DoxyCompactList}\item 
 \mbox{\hyperlink{classmaf_1_1math_1_1_matrix_afadd64902ef9d03291be6e799c38e904}{Matrix}}$<$ T $>$ \mbox{\hyperlink{classmaf_1_1math_1_1_matrix_a246ca1334c2afc425a2eafc68b48fa38}{transposed}} () const
-\item 
+\begin{DoxyCompactList}\small\item\em Creates and returns a new matrix that is the transpose of this one. \end{DoxyCompactList}\item 
 constexpr bool \mbox{\hyperlink{classmaf_1_1math_1_1_matrix_a2486af6cec2a16a1af9a9f77cf938527}{operator==}} (const \mbox{\hyperlink{classmaf_1_1math_1_1_matrix_afadd64902ef9d03291be6e799c38e904}{Matrix}} \&other) const
-\item 
+\begin{DoxyCompactList}\small\item\em Checks for exact element-\/wise equality. \end{DoxyCompactList}\item 
 auto \mbox{\hyperlink{classmaf_1_1math_1_1_matrix_ae5b07162d3e9bd4d22621a76ec0635c5}{operator-\/}} () const
-\item 
+\begin{DoxyCompactList}\small\item\em Unary minus. Returns a new matrix with all elements negated. \end{DoxyCompactList}\item 
 {\footnotesize template$<$typename U$>$ }\\auto \mbox{\hyperlink{classmaf_1_1math_1_1_matrix_aeb756ee209272516a931a8ff9fccbcac}{operator+}} (const \mbox{\hyperlink{classmaf_1_1math_1_1_matrix_afadd64902ef9d03291be6e799c38e904}{Matrix}}$<$ U $>$ \&other) const
-\item 
+\begin{DoxyCompactList}\small\item\em Element-\/wise matrix addition. \end{DoxyCompactList}\item 
 {\footnotesize template$<$typename U$>$ \newline
 requires (std\+::is\+\_\+arithmetic\+\_\+v$<$U$>$)}\\auto \mbox{\hyperlink{classmaf_1_1math_1_1_matrix_ab01486aa7103052849a9e561627d3881}{operator+}} (const U \&scalar) const
-\item 
+\begin{DoxyCompactList}\small\item\em Element-\/wise scalar addition (\doxylink{classmaf_1_1math_1_1_matrix}{Matrix} + scalar). \end{DoxyCompactList}\item 
 {\footnotesize template$<$typename U$>$ }\\auto \mbox{\hyperlink{classmaf_1_1math_1_1_matrix_aa73a0427aeb902c0a1e40623f3c6c52b}{operator-\/}} (const \mbox{\hyperlink{classmaf_1_1math_1_1_matrix_afadd64902ef9d03291be6e799c38e904}{Matrix}}$<$ U $>$ \&other) const
-\item 
+\begin{DoxyCompactList}\small\item\em Element-\/wise matrix subtraction. \end{DoxyCompactList}\item 
 {\footnotesize template$<$typename U$>$ \newline
 requires (std\+::is\+\_\+arithmetic\+\_\+v$<$U$>$)}\\auto \mbox{\hyperlink{classmaf_1_1math_1_1_matrix_a154ee60c9aaaaaaa93b85999c2703715}{operator-\/}} (const U \&scalar) const
-\item 
+\begin{DoxyCompactList}\small\item\em Element-\/wise scalar subtraction (\doxylink{classmaf_1_1math_1_1_matrix}{Matrix} -\/ scalar). \end{DoxyCompactList}\item 
 {\footnotesize template$<$typename U$>$ }\\auto \mbox{\hyperlink{classmaf_1_1math_1_1_matrix_a74bd8dca601f691a7ec0b1eabf11c18d}{operator\texorpdfstring{$\ast$}{*}}} (const \mbox{\hyperlink{classmaf_1_1math_1_1_matrix_afadd64902ef9d03291be6e799c38e904}{Matrix}}$<$ U $>$ \&other) const
-\item 
+\begin{DoxyCompactList}\small\item\em Standard algebraic matrix multiplication (A \texorpdfstring{$\ast$}{*} B). \end{DoxyCompactList}\item 
 {\footnotesize template$<$typename U$>$ \newline
 requires (std\+::is\+\_\+arithmetic\+\_\+v$<$U$>$)}\\auto \mbox{\hyperlink{classmaf_1_1math_1_1_matrix_a169ccbd0b4babfcc2878336ca159e15d}{operator\texorpdfstring{$\ast$}{*}}} (const U \&scalar) const
-\item 
+\begin{DoxyCompactList}\small\item\em Element-\/wise scalar multiplication (\doxylink{classmaf_1_1math_1_1_matrix}{Matrix} \texorpdfstring{$\ast$}{*} scalar). \end{DoxyCompactList}\item 
 {\footnotesize template$<$typename U$>$ }\\auto \mbox{\hyperlink{classmaf_1_1math_1_1_matrix_a0440e67c7abf25ef0f37d8d96e9e5cd4}{operator\texorpdfstring{$\ast$}{*}}} (const \mbox{\hyperlink{classmaf_1_1math_1_1_vector}{Vector}}$<$ U $>$ \&other) const
-\item 
+\begin{DoxyCompactList}\small\item\em Matrix-\/\+Vector multiplication (\doxylink{classmaf_1_1math_1_1_matrix}{Matrix} \texorpdfstring{$\ast$}{*} column\+\_\+vector). \end{DoxyCompactList}\item 
 {\footnotesize template$<$typename U$>$ \newline
 requires (std\+::is\+\_\+arithmetic\+\_\+v$<$U$>$)}\\auto \mbox{\hyperlink{classmaf_1_1math_1_1_matrix_a1179634e7687eb8841212b04ff962f45}{operator/}} (const U \&scalar) const
-\item 
+\begin{DoxyCompactList}\small\item\em Element-\/wise scalar division (\doxylink{classmaf_1_1math_1_1_matrix}{Matrix} / scalar). \end{DoxyCompactList}\item 
 {\footnotesize template$<$typename U$>$ \newline
-requires (std\+::is\+\_\+arithmetic\+\_\+v$<$U$>$)}\\auto \mbox{\hyperlink{classmaf_1_1math_1_1_matrix_a8693e266271d08a66e45b5a5e9136d62}{operator+=}} (const U \&scalar)
-\item 
+requires (std\+::is\+\_\+arithmetic\+\_\+v$<$U$>$)}\\auto \& \mbox{\hyperlink{classmaf_1_1math_1_1_matrix_a26fe7a65851b5aa961f4a4d885d807b5}{operator+=}} (const U \&scalar)
+\begin{DoxyCompactList}\small\item\em In-\/place element-\/wise scalar addition. \end{DoxyCompactList}\item 
 {\footnotesize template$<$typename U$>$ \newline
-requires (std\+::is\+\_\+arithmetic\+\_\+v$<$U$>$)}\\auto \mbox{\hyperlink{classmaf_1_1math_1_1_matrix_aecc060c5ad12544a9ab2da314da305e0}{operator-\/=}} (const U \&scalar)
-\item 
+requires (std\+::is\+\_\+arithmetic\+\_\+v$<$U$>$)}\\auto \& \mbox{\hyperlink{classmaf_1_1math_1_1_matrix_a31de03ecf6e7f98e4877ac8e91c97579}{operator-\/=}} (const U \&scalar)
+\begin{DoxyCompactList}\small\item\em In-\/place element-\/wise scalar subtraction. \end{DoxyCompactList}\item 
 {\footnotesize template$<$typename U$>$ \newline
-requires (std\+::is\+\_\+arithmetic\+\_\+v$<$U$>$)}\\auto \mbox{\hyperlink{classmaf_1_1math_1_1_matrix_a68fe66fb22cf7d427d2a8765105c3292}{operator\texorpdfstring{$\ast$}{*}=}} (const U \&scalar)
-\item 
+requires (std\+::is\+\_\+arithmetic\+\_\+v$<$U$>$)}\\auto \& \mbox{\hyperlink{classmaf_1_1math_1_1_matrix_abb7612f96c7c26639931e0443e430870}{operator\texorpdfstring{$\ast$}{*}=}} (const U \&scalar)
+\begin{DoxyCompactList}\small\item\em In-\/place element-\/wise scalar multiplication. \end{DoxyCompactList}\item 
 {\footnotesize template$<$typename U$>$ \newline
-requires (std\+::is\+\_\+arithmetic\+\_\+v$<$U$>$)}\\auto \mbox{\hyperlink{classmaf_1_1math_1_1_matrix_a7298a9e2a9d026fd3b2b2b65a0c6c537}{operator/=}} (const U \&scalar)
-\item 
+requires (std\+::is\+\_\+arithmetic\+\_\+v$<$U$>$)}\\auto \& \mbox{\hyperlink{classmaf_1_1math_1_1_matrix_a1969abed03be909f9cf84438d037dccd}{operator/=}} (const U \&scalar)
+\begin{DoxyCompactList}\small\item\em In-\/place element-\/wise scalar division. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{classmaf_1_1math_1_1_matrix_a0172c1256848fd0d7888f45c4623336c}{print}} () const
-\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Prints the matrix contents to std\+::cout. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsubsection*{Friends}
 \begin{DoxyCompactItemize}
 \item 
 {\footnotesize template$<$typename U$>$ \newline
 requires (std\+::is\+\_\+arithmetic\+\_\+v$<$U$>$)}\\auto \mbox{\hyperlink{classmaf_1_1math_1_1_matrix_ac1a4a8908f26330e30b8343938cefa27}{operator+}} (const U \&scalar, const \mbox{\hyperlink{classmaf_1_1math_1_1_matrix_afadd64902ef9d03291be6e799c38e904}{Matrix}}$<$ T $>$ \&matrix)
-\item 
+\begin{DoxyCompactList}\small\item\em Element-\/wise scalar addition (scalar + \doxylink{classmaf_1_1math_1_1_matrix}{Matrix}). \end{DoxyCompactList}\item 
 {\footnotesize template$<$typename U$>$ \newline
 requires (std\+::is\+\_\+arithmetic\+\_\+v$<$U$>$)}\\auto \mbox{\hyperlink{classmaf_1_1math_1_1_matrix_a14ee9c5f4681f211daac074c3607fd34}{operator-\/}} (const U \&scalar, const \mbox{\hyperlink{classmaf_1_1math_1_1_matrix_afadd64902ef9d03291be6e799c38e904}{Matrix}}$<$ T $>$ \&matrix)
-\item 
+\begin{DoxyCompactList}\small\item\em Element-\/wise scalar subtraction (scalar -\/ \doxylink{classmaf_1_1math_1_1_matrix}{Matrix}). \end{DoxyCompactList}\item 
 {\footnotesize template$<$typename U$>$ \newline
 requires (std\+::is\+\_\+arithmetic\+\_\+v$<$U$>$)}\\auto \mbox{\hyperlink{classmaf_1_1math_1_1_matrix_ae4d98a390450ace53fddc8b24768da06}{operator\texorpdfstring{$\ast$}{*}}} (const U \&scalar, const \mbox{\hyperlink{classmaf_1_1math_1_1_matrix_afadd64902ef9d03291be6e799c38e904}{Matrix}}$<$ T $>$ \&matrix)
-\item 
+\begin{DoxyCompactList}\small\item\em Element-\/wise scalar multiplication (scalar \texorpdfstring{$\ast$}{*} \doxylink{classmaf_1_1math_1_1_matrix}{Matrix}). \end{DoxyCompactList}\item 
 {\footnotesize template$<$typename U$>$ \newline
 requires (std\+::is\+\_\+arithmetic\+\_\+v$<$U$>$)}\\auto \mbox{\hyperlink{classmaf_1_1math_1_1_matrix_a5ab05f3bf21d65821b108e2ae17ab753}{operator/}} (const U \&scalar, const \mbox{\hyperlink{classmaf_1_1math_1_1_matrix_afadd64902ef9d03291be6e799c38e904}{Matrix}}$<$ T $>$ \&matrix)
-\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Element-\/wise scalar division (scalar / \doxylink{classmaf_1_1math_1_1_matrix}{Matrix}). \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$typename T$>$\newline
+class maf\+::math\+::\+Matrix$<$ T $>$}
+A general-\/purpose, row-\/major, dense matrix class. 
+
+This class implements a matrix with contiguous row-\/major storage. It supports a wide range of arithmetic operations, constructors, and utility methods.
+
+The implementation is templated to support various numeric types (T). Many operations (like multiplication and addition) are parallelized using Open\+MP and employ blocking strategies for cache efficiency.
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em T} & The numeric type of the matrix elements (e.\+g., float, double, int).\\
+\hline
+\end{DoxyTemplParams}
+\begin{DoxyVersion}{Version}
+1.\+0 
+\end{DoxyVersion}
+\begin{DoxySince}{Since}
+2025 
+\end{DoxySince}
 
 
 \label{doc-constructors}
@@ -126,11 +153,16 @@ requires (std\+::is\+\_\+arithmetic\+\_\+v$<$U$>$)}\\auto \mbox{\hyperlink{class
 template$<$typename T$>$ \\
 \mbox{\hyperlink{classmaf_1_1math_1_1_matrix}{maf\+::math\+::\+Matrix}}$<$ T $>$\+::\+Matrix (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
 
-Here is the caller graph for this function\+:\nopagebreak
+
+
+Default constructor. Creates an empty 0x0 matrix. 
+
+Here is the caller graph for this function\+:
+\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
-\includegraphics[width=350pt]{d3/d6e/classmaf_1_1math_1_1_matrix_afadd64902ef9d03291be6e799c38e904_icgraph}
+\includegraphics[height=550pt]{d3/d6e/classmaf_1_1math_1_1_matrix_afadd64902ef9d03291be6e799c38e904_icgraph}
 \end{center}
 \end{figure}
 \Hypertarget{classmaf_1_1math_1_1_matrix_a137a88facec95aac4ec5e55cfd00e798}\index{maf::math::Matrix$<$ T $>$@{maf::math::Matrix$<$ T $>$}!Matrix@{Matrix}}
@@ -138,9 +170,28 @@ Here is the caller graph for this function\+:\nopagebreak
 \doxysubsubsection{\texorpdfstring{Matrix()}{Matrix()}\hspace{0.1cm}{\footnotesize\ttfamily [2/7]}}
 {\footnotesize\ttfamily \label{classmaf_1_1math_1_1_matrix_a137a88facec95aac4ec5e55cfd00e798} 
 template$<$typename T$>$ \\
-\mbox{\hyperlink{classmaf_1_1math_1_1_matrix}{maf\+::math\+::\+Matrix}}$<$ T $>$\+::\+Matrix (\begin{DoxyParamCaption}\item[{size\+\_\+t}]{rows}{, }\item[{size\+\_\+t}]{cols}{, }\item[{T \texorpdfstring{$\ast$}{*}}]{data}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+\mbox{\hyperlink{classmaf_1_1math_1_1_matrix}{maf\+::math\+::\+Matrix}}$<$ T $>$\+::\+Matrix (\begin{DoxyParamCaption}\item[{size\+\_\+t}]{rows}{, }\item[{size\+\_\+t}]{cols}{, }\item[{T \texorpdfstring{$\ast$}{*}}]{data}{}\end{DoxyParamCaption})}
 
-Here is the call graph for this function\+:\nopagebreak
+
+
+Constructs a matrix from a raw data pointer. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em rows} & Number of rows. \\
+\hline
+{\em cols} & Number of columns. \\
+\hline
+{\em data} & Pointer to a C-\/style array of size (rows \texorpdfstring{$\ast$}{*} cols) in row-\/major order. The data is COPIED into the matrix. \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em std\+::invalid\+\_\+argument} & if dimensions are zero or data is nullptr. \\
+\hline
+\end{DoxyExceptions}
+Here is the call graph for this function\+:
+\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -152,16 +203,51 @@ Here is the call graph for this function\+:\nopagebreak
 \doxysubsubsection{\texorpdfstring{Matrix()}{Matrix()}\hspace{0.1cm}{\footnotesize\ttfamily [3/7]}}
 {\footnotesize\ttfamily \label{classmaf_1_1math_1_1_matrix_ac3f6dd2d29dc8ec8af6d73ead9573bdb} 
 template$<$typename T$>$ \\
-\mbox{\hyperlink{classmaf_1_1math_1_1_matrix}{maf\+::math\+::\+Matrix}}$<$ T $>$\+::\+Matrix (\begin{DoxyParamCaption}\item[{size\+\_\+t}]{rows}{, }\item[{size\+\_\+t}]{cols}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+\mbox{\hyperlink{classmaf_1_1math_1_1_matrix}{maf\+::math\+::\+Matrix}}$<$ T $>$\+::\+Matrix (\begin{DoxyParamCaption}\item[{size\+\_\+t}]{rows}{, }\item[{size\+\_\+t}]{cols}{}\end{DoxyParamCaption})}
 
+
+
+Constructs an uninitialized matrix of size rows x cols. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em rows} & Number of rows. \\
+\hline
+{\em cols} & Number of columns. \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em std\+::invalid\+\_\+argument} & if dimensions are zero. \\
+\hline
+\end{DoxyExceptions}
 \Hypertarget{classmaf_1_1math_1_1_matrix_a8b0c11e3b01e1a9f2a63764d13d6cb24}\index{maf::math::Matrix$<$ T $>$@{maf::math::Matrix$<$ T $>$}!Matrix@{Matrix}}
 \index{Matrix@{Matrix}!maf::math::Matrix$<$ T $>$@{maf::math::Matrix$<$ T $>$}}
 \doxysubsubsection{\texorpdfstring{Matrix()}{Matrix()}\hspace{0.1cm}{\footnotesize\ttfamily [4/7]}}
 {\footnotesize\ttfamily \label{classmaf_1_1math_1_1_matrix_a8b0c11e3b01e1a9f2a63764d13d6cb24} 
 template$<$typename T$>$ \\
-\mbox{\hyperlink{classmaf_1_1math_1_1_matrix}{maf\+::math\+::\+Matrix}}$<$ T $>$\+::\+Matrix (\begin{DoxyParamCaption}\item[{size\+\_\+t}]{rows}{, }\item[{size\+\_\+t}]{cols}{, }\item[{const std\+::vector$<$ T $>$ \&}]{data}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+\mbox{\hyperlink{classmaf_1_1math_1_1_matrix}{maf\+::math\+::\+Matrix}}$<$ T $>$\+::\+Matrix (\begin{DoxyParamCaption}\item[{size\+\_\+t}]{rows}{, }\item[{size\+\_\+t}]{cols}{, }\item[{const std\+::vector$<$ T $>$ \&}]{data}{}\end{DoxyParamCaption})}
 
-Constructor from std\+::vector \doxylink{classmaf_1_1math_1_1_matrix}{Matrix} gets filled by rows. Here is the call graph for this function\+:\nopagebreak
+
+
+Constructs from a std\+::vector, filled by rows. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em rows} & Number of rows. \\
+\hline
+{\em cols} & Number of columns. \\
+\hline
+{\em data} & A std\+::vector of size (rows \texorpdfstring{$\ast$}{*} cols) in row-\/major order. \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em std\+::invalid\+\_\+argument} & if dimensions are zero or data size does not match. \\
+\hline
+\end{DoxyExceptions}
+Here is the call graph for this function\+:
+\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -173,9 +259,28 @@ Constructor from std\+::vector \doxylink{classmaf_1_1math_1_1_matrix}{Matrix} ge
 \doxysubsubsection{\texorpdfstring{Matrix()}{Matrix()}\hspace{0.1cm}{\footnotesize\ttfamily [5/7]}}
 {\footnotesize\ttfamily \label{classmaf_1_1math_1_1_matrix_a9e5e920bcd92c6a8a0a2c5098467a5e2} 
 template$<$typename T$>$ \\
-\mbox{\hyperlink{classmaf_1_1math_1_1_matrix}{maf\+::math\+::\+Matrix}}$<$ T $>$\+::\+Matrix (\begin{DoxyParamCaption}\item[{size\+\_\+t}]{rows}{, }\item[{size\+\_\+t}]{cols}{, }\item[{const std\+::vector$<$ std\+::vector$<$ T $>$ $>$ \&}]{data}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+\mbox{\hyperlink{classmaf_1_1math_1_1_matrix}{maf\+::math\+::\+Matrix}}$<$ T $>$\+::\+Matrix (\begin{DoxyParamCaption}\item[{size\+\_\+t}]{rows}{, }\item[{size\+\_\+t}]{cols}{, }\item[{const std\+::vector$<$ std\+::vector$<$ T $>$ $>$ \&}]{data}{}\end{DoxyParamCaption})}
 
-\doxylink{classmaf_1_1math_1_1_matrix}{Matrix} constructor from std\+::vector$<$std\+::vector$>$\texorpdfstring{$>$}{>} \doxylink{classmaf_1_1math_1_1_matrix}{Matrix} indices correspond to indices in std\+::vector$<$std\+::vector$>$\texorpdfstring{$>$}{>} Here is the call graph for this function\+:\nopagebreak
+
+
+Constructs from a nested std\+::vector (vector of vectors). 
+
+
+\begin{DoxyParams}{Parameters}
+{\em rows} & Number of rows. \\
+\hline
+{\em cols} & Number of columns. \\
+\hline
+{\em data} & A std\+::vector$<$std\+::vector$<$\+T$>$$>$. data.\+size() must equal rows, and data\mbox{[}0\mbox{]}.\doxylink{classmaf_1_1math_1_1_matrix_a45aa75653ab2200d6de78ec7accbda5b}{size()} must equal cols. \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em std\+::invalid\+\_\+argument} & if dimensions are zero or data shape does not match. \\
+\hline
+\end{DoxyExceptions}
+Here is the call graph for this function\+:
+\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -188,9 +293,35 @@ template$<$typename T$>$ \\
 {\footnotesize\ttfamily \label{classmaf_1_1math_1_1_matrix_ac57878bb415f6ea6f438e2bfe9fe9398} 
 template$<$typename T$>$ \\
 template$<$typename U, size\+\_\+t N$>$ \\
-\mbox{\hyperlink{classmaf_1_1math_1_1_matrix}{maf\+::math\+::\+Matrix}}$<$ T $>$\+::\+Matrix (\begin{DoxyParamCaption}\item[{size\+\_\+t}]{rows}{, }\item[{size\+\_\+t}]{cols}{, }\item[{const std\+::array$<$ U, N $>$ \&}]{data}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+\mbox{\hyperlink{classmaf_1_1math_1_1_matrix}{maf\+::math\+::\+Matrix}}$<$ T $>$\+::\+Matrix (\begin{DoxyParamCaption}\item[{size\+\_\+t}]{rows}{, }\item[{size\+\_\+t}]{cols}{, }\item[{const std\+::array$<$ U, N $>$ \&}]{data}{}\end{DoxyParamCaption})}
 
-\doxylink{classmaf_1_1math_1_1_matrix}{Matrix} constructor from std\+::array \doxylink{classmaf_1_1math_1_1_matrix}{Matrix} gets filled by rows. Here is the call graph for this function\+:\nopagebreak
+
+
+Constructs from a std\+::array, filled by rows. 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em U} & Type in the array (allows implicit conversion). \\
+\hline
+{\em N} & Size of the array. \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em rows} & Number of rows. \\
+\hline
+{\em cols} & Number of columns. \\
+\hline
+{\em data} & A std\+::array$<$\+U, N$>$ where N must equal (rows \texorpdfstring{$\ast$}{*} cols). \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em std\+::invalid\+\_\+argument} & if dimensions are zero or array size does not match. \\
+\hline
+\end{DoxyExceptions}
+Here is the call graph for this function\+:
+\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -203,9 +334,32 @@ template$<$typename U, size\+\_\+t N$>$ \\
 {\footnotesize\ttfamily \label{classmaf_1_1math_1_1_matrix_a0ce9252a1959be9152184bae6c5b08af} 
 template$<$typename T$>$ \\
 template$<$typename U$>$ \\
-\mbox{\hyperlink{classmaf_1_1math_1_1_matrix}{maf\+::math\+::\+Matrix}}$<$ T $>$\+::\+Matrix (\begin{DoxyParamCaption}\item[{size\+\_\+t}]{rows}{, }\item[{size\+\_\+t}]{cols}{, }\item[{std\+::initializer\+\_\+list$<$ U $>$}]{list}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+\mbox{\hyperlink{classmaf_1_1math_1_1_matrix}{maf\+::math\+::\+Matrix}}$<$ T $>$\+::\+Matrix (\begin{DoxyParamCaption}\item[{size\+\_\+t}]{rows}{, }\item[{size\+\_\+t}]{cols}{, }\item[{std\+::initializer\+\_\+list$<$ U $>$}]{list}{}\end{DoxyParamCaption})}
 
-\doxylink{classmaf_1_1math_1_1_matrix}{Matrix} constructor from std\+::initializer\+\_\+list \doxylink{classmaf_1_1math_1_1_matrix}{Matrix} gets filled by rows. 
+
+
+Constructs from a std\+::initializer\+\_\+list, filled by rows. 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em U} & Type in the list (allows implicit conversion). \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em rows} & Number of rows. \\
+\hline
+{\em cols} & Number of columns. \\
+\hline
+{\em list} & A std\+::initializer\+\_\+list\uline{ of size (rows \texorpdfstring{$\ast$}{*} cols). }\\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em std\+::invalid\+\_\+argument} & \uline{if dimensions are zero or list size does not match. }\\
+\hline
+\end{DoxyExceptions}
+
 
 \label{doc-func-members}
 \Hypertarget{classmaf_1_1math_1_1_matrix_doc-func-members}
@@ -217,7 +371,17 @@ template$<$typename U$>$ \\
 template$<$typename T$>$ \\
 T \& \mbox{\hyperlink{classmaf_1_1math_1_1_matrix}{maf\+::math\+::\+Matrix}}$<$ T $>$\+::at (\begin{DoxyParamCaption}\item[{size\+\_\+t}]{row}{, }\item[{size\+\_\+t}]{col}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
 
-Here is the caller graph for this function\+:\nopagebreak
+
+
+Gets a mutable reference to the element at (row, col). 
+
+
+\begin{DoxyExceptions}{Exceptions}
+{\em std\+::out\+\_\+of\+\_\+range} & if the index is invalid. \\
+\hline
+\end{DoxyExceptions}
+Here is the caller graph for this function\+:
+\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -231,6 +395,15 @@ Here is the caller graph for this function\+:\nopagebreak
 template$<$typename T$>$ \\
 const T \& \mbox{\hyperlink{classmaf_1_1math_1_1_matrix}{maf\+::math\+::\+Matrix}}$<$ T $>$\+::at (\begin{DoxyParamCaption}\item[{size\+\_\+t}]{row}{, }\item[{size\+\_\+t}]{col}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
 
+
+
+Gets a const reference to the element at (row, col). 
+
+
+\begin{DoxyExceptions}{Exceptions}
+{\em std\+::out\+\_\+of\+\_\+range} & if the index is invalid. \\
+\hline
+\end{DoxyExceptions}
 \Hypertarget{classmaf_1_1math_1_1_matrix_a98d6cc10d243169d78f53d07406ace8b}\index{maf::math::Matrix$<$ T $>$@{maf::math::Matrix$<$ T $>$}!column\_count@{column\_count}}
 \index{column\_count@{column\_count}!maf::math::Matrix$<$ T $>$@{maf::math::Matrix$<$ T $>$}}
 \doxysubsubsection{\texorpdfstring{column\_count()}{column\_count()}}
@@ -238,7 +411,12 @@ const T \& \mbox{\hyperlink{classmaf_1_1math_1_1_matrix}{maf\+::math\+::\+Matrix
 template$<$typename T$>$ \\
 size\+\_\+t \mbox{\hyperlink{classmaf_1_1math_1_1_matrix}{maf\+::math\+::\+Matrix}}$<$ T $>$\+::column\+\_\+count (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [nodiscard]}, {\ttfamily [noexcept]}}
 
-Here is the caller graph for this function\+:\nopagebreak
+
+
+Gets the number of columns. 
+
+Here is the caller graph for this function\+:
+\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -252,6 +430,13 @@ Here is the caller graph for this function\+:\nopagebreak
 template$<$typename T$>$ \\
 const std\+::vector$<$ T $>$ \& \mbox{\hyperlink{classmaf_1_1math_1_1_matrix}{maf\+::math\+::\+Matrix}}$<$ T $>$\+::data (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [nodiscard]}, {\ttfamily [noexcept]}}
 
+
+
+Gets a const reference to the underlying std\+::vector data store. 
+
+\begin{DoxyReturn}{Returns}
+const std\+::vector$<$\+T$>$\& 
+\end{DoxyReturn}
 \Hypertarget{classmaf_1_1math_1_1_matrix_aca60efe3848c6a7635c9f609ca163528}\index{maf::math::Matrix$<$ T $>$@{maf::math::Matrix$<$ T $>$}!data@{data}}
 \index{data@{data}!maf::math::Matrix$<$ T $>$@{maf::math::Matrix$<$ T $>$}}
 \doxysubsubsection{\texorpdfstring{data()}{data()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
@@ -259,7 +444,15 @@ const std\+::vector$<$ T $>$ \& \mbox{\hyperlink{classmaf_1_1math_1_1_matrix}{ma
 template$<$typename T$>$ \\
 std\+::vector$<$ T $>$ \& \mbox{\hyperlink{classmaf_1_1math_1_1_matrix}{maf\+::math\+::\+Matrix}}$<$ T $>$\+::data (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [nodiscard]}, {\ttfamily [noexcept]}}
 
-Here is the caller graph for this function\+:\nopagebreak
+
+
+Gets a mutable reference to the underlying std\+::vector data store. 
+
+\begin{DoxyReturn}{Returns}
+std\+::vector$<$\+T$>$\& 
+\end{DoxyReturn}
+Here is the caller graph for this function\+:
+\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -275,13 +468,14 @@ void \mbox{\hyperlink{classmaf_1_1math_1_1_matrix}{maf\+::math\+::\+Matrix}}$<$ 
 
 
 
-Fills the current matrix with \$value. 
+Fills the entire matrix with a single value. 
 
-Here is the caller graph for this function\+:\nopagebreak
+Here is the caller graph for this function\+:
+\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
-\includegraphics[width=350pt]{d3/d6e/classmaf_1_1math_1_1_matrix_a71134f227c2c22e4ecf24b33ed3c0396_icgraph}
+\includegraphics[width=324pt]{d3/d6e/classmaf_1_1math_1_1_matrix_a71134f227c2c22e4ecf24b33ed3c0396_icgraph}
 \end{center}
 \end{figure}
 \Hypertarget{classmaf_1_1math_1_1_matrix_a90408b80daf821aff91fd2aed917ce8e}\index{maf::math::Matrix$<$ T $>$@{maf::math::Matrix$<$ T $>$}!is\_diagonal@{is\_diagonal}}
@@ -295,7 +489,8 @@ bool \mbox{\hyperlink{classmaf_1_1math_1_1_matrix}{maf\+::math\+::\+Matrix}}$<$ 
 
 Checks if the matrix is diagonal. 
 
-Here is the call graph for this function\+:\nopagebreak
+Here is the call graph for this function\+:
+\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -313,7 +508,8 @@ bool \mbox{\hyperlink{classmaf_1_1math_1_1_matrix}{maf\+::math\+::\+Matrix}}$<$ 
 
 Checks if the matrix is lower triangular. 
 
-Here is the call graph for this function\+:\nopagebreak
+Here is the call graph for this function\+:
+\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -334,7 +530,12 @@ Here is the caller graph for this function\+:\nopagebreak
 template$<$typename T$>$ \\
 bool \mbox{\hyperlink{classmaf_1_1math_1_1_matrix}{maf\+::math\+::\+Matrix}}$<$ T $>$\+::is\+\_\+positive\+\_\+definite (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [nodiscard]}}
 
-Checks if matrix is positive definite. If matrix is symmetric it is sufficient to have Cholesky decomposition. TODO\+: If matrix isn\textquotesingle{}t symmetric Here is the call graph for this function\+:\nopagebreak
+
+
+Checks if the matrix is positive definite. 
+
+For symmetric matrices, attempts Cholesky decomposition. TODO\+: Add Sylvester\textquotesingle{}s criterion for non-\/symmetric. Defined in \doxylink{_matrix_checkers_8hpp}{Matrix\+Checkers.\+hpp} Here is the call graph for this function\+:
+\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -348,11 +549,18 @@ Checks if matrix is positive definite. If matrix is symmetric it is sufficient t
 template$<$typename T$>$ \\
 bool \mbox{\hyperlink{classmaf_1_1math_1_1_matrix}{maf\+::math\+::\+Matrix}}$<$ T $>$\+::is\+\_\+singular (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [nodiscard]}, {\ttfamily [constexpr]}}
 
-Checks if the matrix is singular. This is equivalent to\+: 1) \doxylink{classmaf_1_1math_1_1_matrix}{Matrix} A doesn\textquotesingle{}t have an inverse. 2) Rank (A) \texorpdfstring{$<$}{<} n 3) Determinant(\+A) = 0 4) Eigen value(\+A) = 0 Here is the call graph for this function\+:\nopagebreak
+
+
+Checks if the matrix is singular (non-\/invertible). 
+
+Equivalent to det(\+A) == 0.
+
+Equivalent to rank(\+A) \texorpdfstring{$<$}{<} max(dimensions(\+A)). Here is the call graph for this function\+:
+\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
-\includegraphics[width=315pt]{d3/d6e/classmaf_1_1math_1_1_matrix_ae26826bcc4a303b29538a17c0a39de2b_cgraph}
+\includegraphics[width=350pt]{d3/d6e/classmaf_1_1math_1_1_matrix_ae26826bcc4a303b29538a17c0a39de2b_cgraph}
 \end{center}
 \end{figure}
 \Hypertarget{classmaf_1_1math_1_1_matrix_a774d7c4510a8977e5b19f5f332d5789c}\index{maf::math::Matrix$<$ T $>$@{maf::math::Matrix$<$ T $>$}!is\_square@{is\_square}}
@@ -360,13 +568,14 @@ Checks if the matrix is singular. This is equivalent to\+: 1) \doxylink{classmaf
 \doxysubsubsection{\texorpdfstring{is\_square()}{is\_square()}}
 {\footnotesize\ttfamily \label{classmaf_1_1math_1_1_matrix_a774d7c4510a8977e5b19f5f332d5789c} 
 template$<$typename T$>$ \\
-bool \mbox{\hyperlink{classmaf_1_1math_1_1_matrix}{maf\+::math\+::\+Matrix}}$<$ T $>$\+::is\+\_\+square (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [nodiscard]}, {\ttfamily [constexpr]}}
+bool \mbox{\hyperlink{classmaf_1_1math_1_1_matrix}{maf\+::math\+::\+Matrix}}$<$ T $>$\+::is\+\_\+square (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [nodiscard]}, {\ttfamily [constexpr]}}
 
 
 
-Checks if the matrix is square. 
+Checks if the matrix is square (rows == cols). 
 
-Here is the caller graph for this function\+:\nopagebreak
+Here is the caller graph for this function\+:
+\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -382,16 +591,18 @@ bool \mbox{\hyperlink{classmaf_1_1math_1_1_matrix}{maf\+::math\+::\+Matrix}}$<$ 
 
 
 
-Checkes if the matrix is symmetric. 
+Checks if the matrix is symmetric (A == A\texorpdfstring{$^\wedge$}{\string^}T). 
 
-Here is the call graph for this function\+:\nopagebreak
+Here is the call graph for this function\+:
+\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
 \includegraphics[width=323pt]{d3/d6e/classmaf_1_1math_1_1_matrix_a0f6daf36ebb2efd5970384565469323c_cgraph}
 \end{center}
 \end{figure}
-Here is the caller graph for this function\+:\nopagebreak
+Here is the caller graph for this function\+:
+\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -409,7 +620,8 @@ bool \mbox{\hyperlink{classmaf_1_1math_1_1_matrix}{maf\+::math\+::\+Matrix}}$<$ 
 
 Checks if the matrix is upper triangular. 
 
-Here is the call graph for this function\+:\nopagebreak
+Here is the call graph for this function\+:
+\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -432,20 +644,19 @@ void \mbox{\hyperlink{classmaf_1_1math_1_1_matrix}{maf\+::math\+::\+Matrix}}$<$ 
 
 
 
-Converts the matrix to indentity matrix. 
+Converts this matrix into an identity matrix. 
 
-Here is the call graph for this function\+:\nopagebreak
+
+\begin{DoxyExceptions}{Exceptions}
+{\em std\+::runtime\+\_\+error} & if the matrix is not square.\\
+\hline
+\end{DoxyExceptions}
+Defined in \doxylink{_matrix_methods_8hpp}{Matrix\+Methods.\+hpp} Here is the call graph for this function\+:
+\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
 \includegraphics[width=324pt]{d3/d6e/classmaf_1_1math_1_1_matrix_a12a8c0a0c3d48be5283f473f9b86c7e4_cgraph}
-\end{center}
-\end{figure}
-Here is the caller graph for this function\+:\nopagebreak
-\begin{figure}[H]
-\begin{center}
-\leavevmode
-\includegraphics[width=350pt]{d3/d6e/classmaf_1_1math_1_1_matrix_a12a8c0a0c3d48be5283f473f9b86c7e4_icgraph}
 \end{center}
 \end{figure}
 \Hypertarget{classmaf_1_1math_1_1_matrix_a74bd8dca601f691a7ec0b1eabf11c18d}\index{maf::math::Matrix$<$ T $>$@{maf::math::Matrix$<$ T $>$}!operator\texorpdfstring{$\ast$}{*}@{operator\texorpdfstring{$\ast$}{*}}}
@@ -456,10 +667,25 @@ template$<$typename T$>$ \\
 template$<$typename U$>$ \\
 auto \mbox{\hyperlink{classmaf_1_1math_1_1_matrix}{maf\+::math\+::\+Matrix}}$<$ T $>$\+::operator\texorpdfstring{$\ast$}{*} (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classmaf_1_1math_1_1_matrix_afadd64902ef9d03291be6e799c38e904}{Matrix}}$<$ U $>$ \&}]{other}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [nodiscard]}}
 
-Standard algebraic matrix multiplication. \begin{DoxyReturn}{Returns}
-\doxylink{classmaf_1_1math_1_1_matrix}{Matrix} of common promoted type 
+
+
+Standard algebraic matrix multiplication (A \texorpdfstring{$\ast$}{*} B). 
+
+Implemented with a parallelized, cache-\/blocked algorithm. 
+\begin{DoxyTemplParams}{Template Parameters}
+{\em U} & Numeric type of the other matrix. \\
+\hline
+\end{DoxyTemplParams}
+\begin{DoxyReturn}{Returns}
+\doxylink{classmaf_1_1math_1_1_matrix}{Matrix} of the common, promoted type. 
 \end{DoxyReturn}
-Here is the call graph for this function\+:\nopagebreak
+
+\begin{DoxyExceptions}{Exceptions}
+{\em std\+::invalid\+\_\+argument} & if inner dimensions do not match (A.\+cols != B.\+rows). \\
+\hline
+\end{DoxyExceptions}
+Here is the call graph for this function\+:
+\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -475,10 +701,20 @@ template$<$typename U$>$ \newline
 requires (std\+::is\+\_\+arithmetic\+\_\+v$<$U$>$)\\
 auto \mbox{\hyperlink{classmaf_1_1math_1_1_matrix}{maf\+::math\+::\+Matrix}}$<$ T $>$\+::operator\texorpdfstring{$\ast$}{*} (\begin{DoxyParamCaption}\item[{const U \&}]{scalar}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [nodiscard]}}
 
-Multiply each element of matrix by a scalar. \begin{DoxyReturn}{Returns}
-\doxylink{classmaf_1_1math_1_1_matrix}{Matrix} of common promoted type 
+
+
+Element-\/wise scalar multiplication (\doxylink{classmaf_1_1math_1_1_matrix}{Matrix} \texorpdfstring{$\ast$}{*} scalar). 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em U} & An arithmetic scalar type. \\
+\hline
+\end{DoxyTemplParams}
+\begin{DoxyReturn}{Returns}
+\doxylink{classmaf_1_1math_1_1_matrix}{Matrix} of the common, promoted type. 
 \end{DoxyReturn}
-Here is the call graph for this function\+:\nopagebreak
+Here is the call graph for this function\+:
+\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -493,21 +729,43 @@ template$<$typename T$>$ \\
 template$<$typename U$>$ \\
 auto \mbox{\hyperlink{classmaf_1_1math_1_1_matrix}{maf\+::math\+::\+Matrix}}$<$ T $>$\+::operator\texorpdfstring{$\ast$}{*} (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classmaf_1_1math_1_1_vector}{Vector}}$<$ U $>$ \&}]{other}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [nodiscard]}}
 
-Here is the call graph for this function\+:\nopagebreak
+
+
+Matrix-\/\+Vector multiplication (\doxylink{classmaf_1_1math_1_1_matrix}{Matrix} \texorpdfstring{$\ast$}{*} column\+\_\+vector). 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em U} & Numeric type of the vector. \\
+\hline
+\end{DoxyTemplParams}
+\begin{DoxyReturn}{Returns}
+A new column \doxylink{classmaf_1_1math_1_1_vector}{Vector} of the common, promoted type. 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em std\+::invalid\+\_\+argument} & if vector is not a column vector or dimensions do not match. \\
+\hline
+\end{DoxyExceptions}
+Here is the call graph for this function\+:
+\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
 \includegraphics[width=334pt]{d3/d6e/classmaf_1_1math_1_1_matrix_a0440e67c7abf25ef0f37d8d96e9e5cd4_cgraph}
 \end{center}
 \end{figure}
-\Hypertarget{classmaf_1_1math_1_1_matrix_a68fe66fb22cf7d427d2a8765105c3292}\index{maf::math::Matrix$<$ T $>$@{maf::math::Matrix$<$ T $>$}!operator\texorpdfstring{$\ast$}{*}=@{operator\texorpdfstring{$\ast$}{*}=}}
+\Hypertarget{classmaf_1_1math_1_1_matrix_abb7612f96c7c26639931e0443e430870}\index{maf::math::Matrix$<$ T $>$@{maf::math::Matrix$<$ T $>$}!operator\texorpdfstring{$\ast$}{*}=@{operator\texorpdfstring{$\ast$}{*}=}}
 \index{operator\texorpdfstring{$\ast$}{*}=@{operator\texorpdfstring{$\ast$}{*}=}!maf::math::Matrix$<$ T $>$@{maf::math::Matrix$<$ T $>$}}
 \doxysubsubsection{\texorpdfstring{operator\texorpdfstring{$\ast$}{*}=()}{operator*=()}}
-{\footnotesize\ttfamily \label{classmaf_1_1math_1_1_matrix_a68fe66fb22cf7d427d2a8765105c3292} 
+{\footnotesize\ttfamily \label{classmaf_1_1math_1_1_matrix_abb7612f96c7c26639931e0443e430870} 
 template$<$typename T$>$ \\
 template$<$typename U$>$ \newline
 requires (std\+::is\+\_\+arithmetic\+\_\+v$<$U$>$)\\
-auto \mbox{\hyperlink{classmaf_1_1math_1_1_matrix}{maf\+::math\+::\+Matrix}}$<$ T $>$\+::operator\texorpdfstring{$\ast$}{*}= (\begin{DoxyParamCaption}\item[{const U \&}]{scalar}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [nodiscard]}}
+auto \& \mbox{\hyperlink{classmaf_1_1math_1_1_matrix}{maf\+::math\+::\+Matrix}}$<$ T $>$\+::operator\texorpdfstring{$\ast$}{*}= (\begin{DoxyParamCaption}\item[{const U \&}]{scalar}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+In-\/place element-\/wise scalar multiplication. 
 
 \Hypertarget{classmaf_1_1math_1_1_matrix_aeb756ee209272516a931a8ff9fccbcac}\index{maf::math::Matrix$<$ T $>$@{maf::math::Matrix$<$ T $>$}!operator+@{operator+}}
 \index{operator+@{operator+}!maf::math::Matrix$<$ T $>$@{maf::math::Matrix$<$ T $>$}}
@@ -517,14 +775,29 @@ template$<$typename T$>$ \\
 template$<$typename U$>$ \\
 auto \mbox{\hyperlink{classmaf_1_1math_1_1_matrix}{maf\+::math\+::\+Matrix}}$<$ T $>$\+::operator+ (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classmaf_1_1math_1_1_matrix_afadd64902ef9d03291be6e799c38e904}{Matrix}}$<$ U $>$ \&}]{other}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [nodiscard]}}
 
-Add 2 matrices elementwise \begin{DoxyReturn}{Returns}
-\doxylink{classmaf_1_1math_1_1_matrix}{Matrix} of common promoted type 
+
+
+Element-\/wise matrix addition. 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em U} & Numeric type of the other matrix. \\
+\hline
+\end{DoxyTemplParams}
+\begin{DoxyReturn}{Returns}
+\doxylink{classmaf_1_1math_1_1_matrix}{Matrix} of the common, promoted type. 
 \end{DoxyReturn}
-Here is the call graph for this function\+:\nopagebreak
+
+\begin{DoxyExceptions}{Exceptions}
+{\em std\+::invalid\+\_\+argument} & if dimensions do not match. \\
+\hline
+\end{DoxyExceptions}
+Here is the call graph for this function\+:
+\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
-\includegraphics[width=323pt]{d3/d6e/classmaf_1_1math_1_1_matrix_aeb756ee209272516a931a8ff9fccbcac_cgraph}
+\includegraphics[width=333pt]{d3/d6e/classmaf_1_1math_1_1_matrix_aeb756ee209272516a931a8ff9fccbcac_cgraph}
 \end{center}
 \end{figure}
 \Hypertarget{classmaf_1_1math_1_1_matrix_ab01486aa7103052849a9e561627d3881}\index{maf::math::Matrix$<$ T $>$@{maf::math::Matrix$<$ T $>$}!operator+@{operator+}}
@@ -536,24 +809,38 @@ template$<$typename U$>$ \newline
 requires (std\+::is\+\_\+arithmetic\+\_\+v$<$U$>$)\\
 auto \mbox{\hyperlink{classmaf_1_1math_1_1_matrix}{maf\+::math\+::\+Matrix}}$<$ T $>$\+::operator+ (\begin{DoxyParamCaption}\item[{const U \&}]{scalar}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [nodiscard]}}
 
-Add a scalar to each element of matrix. \begin{DoxyReturn}{Returns}
-\doxylink{classmaf_1_1math_1_1_matrix}{Matrix} of common promoted type 
+
+
+Element-\/wise scalar addition (\doxylink{classmaf_1_1math_1_1_matrix}{Matrix} + scalar). 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em U} & An arithmetic scalar type. \\
+\hline
+\end{DoxyTemplParams}
+\begin{DoxyReturn}{Returns}
+\doxylink{classmaf_1_1math_1_1_matrix}{Matrix} of the common, promoted type. 
 \end{DoxyReturn}
-Here is the call graph for this function\+:\nopagebreak
+Here is the call graph for this function\+:
+\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
 \includegraphics[width=333pt]{d3/d6e/classmaf_1_1math_1_1_matrix_ab01486aa7103052849a9e561627d3881_cgraph}
 \end{center}
 \end{figure}
-\Hypertarget{classmaf_1_1math_1_1_matrix_a8693e266271d08a66e45b5a5e9136d62}\index{maf::math::Matrix$<$ T $>$@{maf::math::Matrix$<$ T $>$}!operator+=@{operator+=}}
+\Hypertarget{classmaf_1_1math_1_1_matrix_a26fe7a65851b5aa961f4a4d885d807b5}\index{maf::math::Matrix$<$ T $>$@{maf::math::Matrix$<$ T $>$}!operator+=@{operator+=}}
 \index{operator+=@{operator+=}!maf::math::Matrix$<$ T $>$@{maf::math::Matrix$<$ T $>$}}
 \doxysubsubsection{\texorpdfstring{operator+=()}{operator+=()}}
-{\footnotesize\ttfamily \label{classmaf_1_1math_1_1_matrix_a8693e266271d08a66e45b5a5e9136d62} 
+{\footnotesize\ttfamily \label{classmaf_1_1math_1_1_matrix_a26fe7a65851b5aa961f4a4d885d807b5} 
 template$<$typename T$>$ \\
 template$<$typename U$>$ \newline
 requires (std\+::is\+\_\+arithmetic\+\_\+v$<$U$>$)\\
-auto \mbox{\hyperlink{classmaf_1_1math_1_1_matrix}{maf\+::math\+::\+Matrix}}$<$ T $>$\+::operator+= (\begin{DoxyParamCaption}\item[{const U \&}]{scalar}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [nodiscard]}}
+auto \& \mbox{\hyperlink{classmaf_1_1math_1_1_matrix}{maf\+::math\+::\+Matrix}}$<$ T $>$\+::operator+= (\begin{DoxyParamCaption}\item[{const U \&}]{scalar}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+In-\/place element-\/wise scalar addition. 
 
 \Hypertarget{classmaf_1_1math_1_1_matrix_ae5b07162d3e9bd4d22621a76ec0635c5}\index{maf::math::Matrix$<$ T $>$@{maf::math::Matrix$<$ T $>$}!operator-\/@{operator-\/}}
 \index{operator-\/@{operator-\/}!maf::math::Matrix$<$ T $>$@{maf::math::Matrix$<$ T $>$}}
@@ -562,10 +849,15 @@ auto \mbox{\hyperlink{classmaf_1_1math_1_1_matrix}{maf\+::math\+::\+Matrix}}$<$ 
 template$<$typename T$>$ \\
 auto \mbox{\hyperlink{classmaf_1_1math_1_1_matrix}{maf\+::math\+::\+Matrix}}$<$ T $>$\+::operator-\/ (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [nodiscard]}}
 
-Inverts the sign of all elements in matrix. \begin{DoxyReturn}{Returns}
-\doxylink{classmaf_1_1math_1_1_matrix}{Matrix} of same input type. 
+
+
+Unary minus. Returns a new matrix with all elements negated. 
+
+\begin{DoxyReturn}{Returns}
+{\ttfamily \doxylink{classmaf_1_1math_1_1_matrix}{Matrix}\texorpdfstring{$<$}{<}T\texorpdfstring{$>$}{>}} 
 \end{DoxyReturn}
-Here is the call graph for this function\+:\nopagebreak
+Here is the call graph for this function\+:
+\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -580,14 +872,29 @@ template$<$typename T$>$ \\
 template$<$typename U$>$ \\
 auto \mbox{\hyperlink{classmaf_1_1math_1_1_matrix}{maf\+::math\+::\+Matrix}}$<$ T $>$\+::operator-\/ (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classmaf_1_1math_1_1_matrix_afadd64902ef9d03291be6e799c38e904}{Matrix}}$<$ U $>$ \&}]{other}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [nodiscard]}}
 
-Subtract 2 matrices elementwise. Elements of first matrix -\/ elements of second matrix \begin{DoxyReturn}{Returns}
-\doxylink{classmaf_1_1math_1_1_matrix}{Matrix} of common promoted type 
+
+
+Element-\/wise matrix subtraction. 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em U} & Numeric type of the other matrix. \\
+\hline
+\end{DoxyTemplParams}
+\begin{DoxyReturn}{Returns}
+\doxylink{classmaf_1_1math_1_1_matrix}{Matrix} of the common, promoted type. 
 \end{DoxyReturn}
-Here is the call graph for this function\+:\nopagebreak
+
+\begin{DoxyExceptions}{Exceptions}
+{\em std\+::invalid\+\_\+argument} & if dimensions do not match. \\
+\hline
+\end{DoxyExceptions}
+Here is the call graph for this function\+:
+\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
-\includegraphics[width=323pt]{d3/d6e/classmaf_1_1math_1_1_matrix_aa73a0427aeb902c0a1e40623f3c6c52b_cgraph}
+\includegraphics[width=333pt]{d3/d6e/classmaf_1_1math_1_1_matrix_aa73a0427aeb902c0a1e40623f3c6c52b_cgraph}
 \end{center}
 \end{figure}
 \Hypertarget{classmaf_1_1math_1_1_matrix_a154ee60c9aaaaaaa93b85999c2703715}\index{maf::math::Matrix$<$ T $>$@{maf::math::Matrix$<$ T $>$}!operator-\/@{operator-\/}}
@@ -599,24 +906,38 @@ template$<$typename U$>$ \newline
 requires (std\+::is\+\_\+arithmetic\+\_\+v$<$U$>$)\\
 auto \mbox{\hyperlink{classmaf_1_1math_1_1_matrix}{maf\+::math\+::\+Matrix}}$<$ T $>$\+::operator-\/ (\begin{DoxyParamCaption}\item[{const U \&}]{scalar}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [nodiscard]}}
 
-Subtract a scalar from each element of matrix. \begin{DoxyReturn}{Returns}
-\doxylink{classmaf_1_1math_1_1_matrix}{Matrix} of common promoted type 
+
+
+Element-\/wise scalar subtraction (\doxylink{classmaf_1_1math_1_1_matrix}{Matrix} -\/ scalar). 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em U} & An arithmetic scalar type. \\
+\hline
+\end{DoxyTemplParams}
+\begin{DoxyReturn}{Returns}
+\doxylink{classmaf_1_1math_1_1_matrix}{Matrix} of the common, promoted type. 
 \end{DoxyReturn}
-Here is the call graph for this function\+:\nopagebreak
+Here is the call graph for this function\+:
+\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
 \includegraphics[width=333pt]{d3/d6e/classmaf_1_1math_1_1_matrix_a154ee60c9aaaaaaa93b85999c2703715_cgraph}
 \end{center}
 \end{figure}
-\Hypertarget{classmaf_1_1math_1_1_matrix_aecc060c5ad12544a9ab2da314da305e0}\index{maf::math::Matrix$<$ T $>$@{maf::math::Matrix$<$ T $>$}!operator-\/=@{operator-\/=}}
+\Hypertarget{classmaf_1_1math_1_1_matrix_a31de03ecf6e7f98e4877ac8e91c97579}\index{maf::math::Matrix$<$ T $>$@{maf::math::Matrix$<$ T $>$}!operator-\/=@{operator-\/=}}
 \index{operator-\/=@{operator-\/=}!maf::math::Matrix$<$ T $>$@{maf::math::Matrix$<$ T $>$}}
 \doxysubsubsection{\texorpdfstring{operator-\/=()}{operator-=()}}
-{\footnotesize\ttfamily \label{classmaf_1_1math_1_1_matrix_aecc060c5ad12544a9ab2da314da305e0} 
+{\footnotesize\ttfamily \label{classmaf_1_1math_1_1_matrix_a31de03ecf6e7f98e4877ac8e91c97579} 
 template$<$typename T$>$ \\
 template$<$typename U$>$ \newline
 requires (std\+::is\+\_\+arithmetic\+\_\+v$<$U$>$)\\
-auto \mbox{\hyperlink{classmaf_1_1math_1_1_matrix}{maf\+::math\+::\+Matrix}}$<$ T $>$\+::operator-\/= (\begin{DoxyParamCaption}\item[{const U \&}]{scalar}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [nodiscard]}}
+auto \& \mbox{\hyperlink{classmaf_1_1math_1_1_matrix}{maf\+::math\+::\+Matrix}}$<$ T $>$\+::operator-\/= (\begin{DoxyParamCaption}\item[{const U \&}]{scalar}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+In-\/place element-\/wise scalar subtraction. 
 
 \Hypertarget{classmaf_1_1math_1_1_matrix_a1179634e7687eb8841212b04ff962f45}\index{maf::math::Matrix$<$ T $>$@{maf::math::Matrix$<$ T $>$}!operator/@{operator/}}
 \index{operator/@{operator/}!maf::math::Matrix$<$ T $>$@{maf::math::Matrix$<$ T $>$}}
@@ -627,17 +948,30 @@ template$<$typename U$>$ \newline
 requires (std\+::is\+\_\+arithmetic\+\_\+v$<$U$>$)\\
 auto \mbox{\hyperlink{classmaf_1_1math_1_1_matrix}{maf\+::math\+::\+Matrix}}$<$ T $>$\+::operator/ (\begin{DoxyParamCaption}\item[{const U \&}]{scalar}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [nodiscard]}}
 
-Divide each element of matrix by a scalar. \begin{DoxyReturn}{Returns}
-\doxylink{classmaf_1_1math_1_1_matrix}{Matrix} of common promoted type 
+
+
+Element-\/wise scalar division (\doxylink{classmaf_1_1math_1_1_matrix}{Matrix} / scalar). 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em U} & An arithmetic scalar type. \\
+\hline
+\end{DoxyTemplParams}
+\begin{DoxyReturn}{Returns}
+\doxylink{classmaf_1_1math_1_1_matrix}{Matrix} of the common, promoted type. 
 \end{DoxyReturn}
-\Hypertarget{classmaf_1_1math_1_1_matrix_a7298a9e2a9d026fd3b2b2b65a0c6c537}\index{maf::math::Matrix$<$ T $>$@{maf::math::Matrix$<$ T $>$}!operator/=@{operator/=}}
+\Hypertarget{classmaf_1_1math_1_1_matrix_a1969abed03be909f9cf84438d037dccd}\index{maf::math::Matrix$<$ T $>$@{maf::math::Matrix$<$ T $>$}!operator/=@{operator/=}}
 \index{operator/=@{operator/=}!maf::math::Matrix$<$ T $>$@{maf::math::Matrix$<$ T $>$}}
 \doxysubsubsection{\texorpdfstring{operator/=()}{operator/=()}}
-{\footnotesize\ttfamily \label{classmaf_1_1math_1_1_matrix_a7298a9e2a9d026fd3b2b2b65a0c6c537} 
+{\footnotesize\ttfamily \label{classmaf_1_1math_1_1_matrix_a1969abed03be909f9cf84438d037dccd} 
 template$<$typename T$>$ \\
 template$<$typename U$>$ \newline
 requires (std\+::is\+\_\+arithmetic\+\_\+v$<$U$>$)\\
-auto \mbox{\hyperlink{classmaf_1_1math_1_1_matrix}{maf\+::math\+::\+Matrix}}$<$ T $>$\+::operator/= (\begin{DoxyParamCaption}\item[{const U \&}]{scalar}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [nodiscard]}}
+auto \& \mbox{\hyperlink{classmaf_1_1math_1_1_matrix}{maf\+::math\+::\+Matrix}}$<$ T $>$\+::operator/= (\begin{DoxyParamCaption}\item[{const U \&}]{scalar}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+In-\/place element-\/wise scalar division. 
 
 \Hypertarget{classmaf_1_1math_1_1_matrix_a2486af6cec2a16a1af9a9f77cf938527}\index{maf::math::Matrix$<$ T $>$@{maf::math::Matrix$<$ T $>$}!operator==@{operator==}}
 \index{operator==@{operator==}!maf::math::Matrix$<$ T $>$@{maf::math::Matrix$<$ T $>$}}
@@ -646,7 +980,12 @@ auto \mbox{\hyperlink{classmaf_1_1math_1_1_matrix}{maf\+::math\+::\+Matrix}}$<$ 
 template$<$typename T$>$ \\
 bool \mbox{\hyperlink{classmaf_1_1math_1_1_matrix}{maf\+::math\+::\+Matrix}}$<$ T $>$\+::operator== (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classmaf_1_1math_1_1_matrix_afadd64902ef9d03291be6e799c38e904}{Matrix}}$<$ T $>$ \&}]{other}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [nodiscard]}, {\ttfamily [constexpr]}}
 
-Checks if 2 matrices are exactly same, use loosely\+\_\+equal if working with floats. Here is the call graph for this function\+:\nopagebreak
+
+
+Checks for exact element-\/wise equality. 
+
+For floating-\/point, use {\ttfamily \doxylink{namespacemaf_1_1math_a3d4733be1cd68ede07a9c2de6728b2d7}{loosely\+\_\+equal()}}. Here is the call graph for this function\+:
+\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -660,7 +999,12 @@ Checks if 2 matrices are exactly same, use loosely\+\_\+equal if working with fl
 template$<$typename T$>$ \\
 void \mbox{\hyperlink{classmaf_1_1math_1_1_matrix}{maf\+::math\+::\+Matrix}}$<$ T $>$\+::print (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
 
-Here is the call graph for this function\+:\nopagebreak
+
+
+Prints the matrix contents to std\+::cout. 
+
+Sets floating point precision for readability. Here is the call graph for this function\+:
+\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -674,7 +1018,12 @@ Here is the call graph for this function\+:\nopagebreak
 template$<$typename T$>$ \\
 size\+\_\+t \mbox{\hyperlink{classmaf_1_1math_1_1_matrix}{maf\+::math\+::\+Matrix}}$<$ T $>$\+::row\+\_\+count (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [nodiscard]}, {\ttfamily [noexcept]}}
 
-Here is the caller graph for this function\+:\nopagebreak
+
+
+Gets the number of rows. 
+
+Here is the caller graph for this function\+:
+\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -688,7 +1037,17 @@ Here is the caller graph for this function\+:\nopagebreak
 template$<$typename T$>$ \\
 std\+::span$<$ T $>$ \mbox{\hyperlink{classmaf_1_1math_1_1_matrix}{maf\+::math\+::\+Matrix}}$<$ T $>$\+::row\+\_\+span (\begin{DoxyParamCaption}\item[{size\+\_\+t}]{row}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [nodiscard]}}
 
-Here is the caller graph for this function\+:\nopagebreak
+
+
+Gets a mutable std\+::span of a single row. 
+
+
+\begin{DoxyExceptions}{Exceptions}
+{\em std\+::out\+\_\+of\+\_\+range} & if the row is invalid. \\
+\hline
+\end{DoxyExceptions}
+Here is the caller graph for this function\+:
+\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -702,6 +1061,15 @@ Here is the caller graph for this function\+:\nopagebreak
 template$<$typename T$>$ \\
 std\+::span$<$ const T $>$ \mbox{\hyperlink{classmaf_1_1math_1_1_matrix}{maf\+::math\+::\+Matrix}}$<$ T $>$\+::row\+\_\+span (\begin{DoxyParamCaption}\item[{size\+\_\+t}]{row}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [nodiscard]}}
 
+
+
+Gets a const std\+::span of a single row. 
+
+
+\begin{DoxyExceptions}{Exceptions}
+{\em std\+::out\+\_\+of\+\_\+range} & if the row is invalid. \\
+\hline
+\end{DoxyExceptions}
 \Hypertarget{classmaf_1_1math_1_1_matrix_a45aa75653ab2200d6de78ec7accbda5b}\index{maf::math::Matrix$<$ T $>$@{maf::math::Matrix$<$ T $>$}!size@{size}}
 \index{size@{size}!maf::math::Matrix$<$ T $>$@{maf::math::Matrix$<$ T $>$}}
 \doxysubsubsection{\texorpdfstring{size()}{size()}}
@@ -709,7 +1077,12 @@ std\+::span$<$ const T $>$ \mbox{\hyperlink{classmaf_1_1math_1_1_matrix}{maf\+::
 template$<$typename T$>$ \\
 size\+\_\+t \mbox{\hyperlink{classmaf_1_1math_1_1_matrix}{maf\+::math\+::\+Matrix}}$<$ T $>$\+::size (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [nodiscard]}, {\ttfamily [noexcept]}}
 
-Here is the caller graph for this function\+:\nopagebreak
+
+
+Gets the total number of elements (rows \texorpdfstring{$\ast$}{*} cols). 
+
+Here is the caller graph for this function\+:
+\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -721,9 +1094,19 @@ Here is the caller graph for this function\+:\nopagebreak
 \doxysubsubsection{\texorpdfstring{transpose()}{transpose()}}
 {\footnotesize\ttfamily \label{classmaf_1_1math_1_1_matrix_a65c510831554a29db6115f964b3679b0} 
 template$<$typename T$>$ \\
-void \mbox{\hyperlink{classmaf_1_1math_1_1_matrix}{maf\+::math\+::\+Matrix}}$<$ T $>$\+::transpose (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+void \mbox{\hyperlink{classmaf_1_1math_1_1_matrix}{maf\+::math\+::\+Matrix}}$<$ T $>$\+::transpose (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
 
-Inplace transpose of matrix for square matrices only. For transposing non square matrices use .\doxylink{classmaf_1_1math_1_1_matrix_a246ca1334c2afc425a2eafc68b48fa38}{transposed()} that creates a new \doxylink{classmaf_1_1math_1_1_matrix}{Matrix} object and returns it. Here is the call graph for this function\+:\nopagebreak
+
+
+Performs an in-\/place transpose of the matrix. 
+
+Uses a parallelized, blocked algorithm. 
+\begin{DoxyExceptions}{Exceptions}
+{\em std\+::invalid\+\_\+argument} & if the matrix is not square. \\
+\hline
+\end{DoxyExceptions}
+Here is the call graph for this function\+:
+\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -737,21 +1120,19 @@ Inplace transpose of matrix for square matrices only. For transposing non square
 template$<$typename T$>$ \\
 \mbox{\hyperlink{classmaf_1_1math_1_1_matrix_afadd64902ef9d03291be6e799c38e904}{Matrix}}$<$ T $>$ \mbox{\hyperlink{classmaf_1_1math_1_1_matrix}{maf\+::math\+::\+Matrix}}$<$ T $>$\+::transposed (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [nodiscard]}}
 
-Creates new transposed matrix \begin{DoxyReturn}{Returns}
-Transposed matrix 
+
+
+Creates and returns a new matrix that is the transpose of this one. 
+
+\begin{DoxyReturn}{Returns}
+A new Matrix$<$\+T$>$ of size (cols x rows).
 \end{DoxyReturn}
-Here is the call graph for this function\+:\nopagebreak
+Defined in \doxylink{_matrix_methods_8hpp}{Matrix\+Methods.\+hpp} Here is the call graph for this function\+:
+\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
 \includegraphics[width=323pt]{d3/d6e/classmaf_1_1math_1_1_matrix_a246ca1334c2afc425a2eafc68b48fa38_cgraph}
-\end{center}
-\end{figure}
-Here is the caller graph for this function\+:\nopagebreak
-\begin{figure}[H]
-\begin{center}
-\leavevmode
-\includegraphics[width=350pt]{d3/d6e/classmaf_1_1math_1_1_matrix_a246ca1334c2afc425a2eafc68b48fa38_icgraph}
 \end{center}
 \end{figure}
 
@@ -768,9 +1149,10 @@ template$<$typename U$>$ \newline
 requires (std\+::is\+\_\+arithmetic\+\_\+v$<$U$>$)\\
 auto operator\texorpdfstring{$\ast$}{*} (\begin{DoxyParamCaption}\item[{const U \&}]{scalar}{, }\item[{const \mbox{\hyperlink{classmaf_1_1math_1_1_matrix_afadd64902ef9d03291be6e799c38e904}{Matrix}}$<$ T $>$ \&}]{matrix}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [friend]}}
 
-Multiply each element of matrix by a scalar. \begin{DoxyReturn}{Returns}
-\doxylink{classmaf_1_1math_1_1_matrix}{Matrix} of common promoted type 
-\end{DoxyReturn}
+
+
+Element-\/wise scalar multiplication (scalar \texorpdfstring{$\ast$}{*} \doxylink{classmaf_1_1math_1_1_matrix}{Matrix}). 
+
 \Hypertarget{classmaf_1_1math_1_1_matrix_ac1a4a8908f26330e30b8343938cefa27}\index{maf::math::Matrix$<$ T $>$@{maf::math::Matrix$<$ T $>$}!operator+@{operator+}}
 \index{operator+@{operator+}!maf::math::Matrix$<$ T $>$@{maf::math::Matrix$<$ T $>$}}
 \doxysubsubsection{\texorpdfstring{operator+}{operator+}}
@@ -780,9 +1162,10 @@ template$<$typename U$>$ \newline
 requires (std\+::is\+\_\+arithmetic\+\_\+v$<$U$>$)\\
 auto operator+ (\begin{DoxyParamCaption}\item[{const U \&}]{scalar}{, }\item[{const \mbox{\hyperlink{classmaf_1_1math_1_1_matrix_afadd64902ef9d03291be6e799c38e904}{Matrix}}$<$ T $>$ \&}]{matrix}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [friend]}}
 
-Add a scalar to each element of matrix. \begin{DoxyReturn}{Returns}
-\doxylink{classmaf_1_1math_1_1_matrix}{Matrix} of common promoted type 
-\end{DoxyReturn}
+
+
+Element-\/wise scalar addition (scalar + \doxylink{classmaf_1_1math_1_1_matrix}{Matrix}). 
+
 \Hypertarget{classmaf_1_1math_1_1_matrix_a14ee9c5f4681f211daac074c3607fd34}\index{maf::math::Matrix$<$ T $>$@{maf::math::Matrix$<$ T $>$}!operator-\/@{operator-\/}}
 \index{operator-\/@{operator-\/}!maf::math::Matrix$<$ T $>$@{maf::math::Matrix$<$ T $>$}}
 \doxysubsubsection{\texorpdfstring{operator-\/}{operator-}}
@@ -792,8 +1175,17 @@ template$<$typename U$>$ \newline
 requires (std\+::is\+\_\+arithmetic\+\_\+v$<$U$>$)\\
 auto operator-\/ (\begin{DoxyParamCaption}\item[{const U \&}]{scalar}{, }\item[{const \mbox{\hyperlink{classmaf_1_1math_1_1_matrix_afadd64902ef9d03291be6e799c38e904}{Matrix}}$<$ T $>$ \&}]{matrix}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [friend]}}
 
-Subtract each element of matrix from a scalar. \begin{DoxyReturn}{Returns}
-\doxylink{classmaf_1_1math_1_1_matrix}{Matrix} of common promoted type 
+
+
+Element-\/wise scalar subtraction (scalar -\/ \doxylink{classmaf_1_1math_1_1_matrix}{Matrix}). 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em U} & An arithmetic scalar type. \\
+\hline
+\end{DoxyTemplParams}
+\begin{DoxyReturn}{Returns}
+\doxylink{classmaf_1_1math_1_1_matrix}{Matrix} of the common, promoted type. 
 \end{DoxyReturn}
 \Hypertarget{classmaf_1_1math_1_1_matrix_a5ab05f3bf21d65821b108e2ae17ab753}\index{maf::math::Matrix$<$ T $>$@{maf::math::Matrix$<$ T $>$}!operator/@{operator/}}
 \index{operator/@{operator/}!maf::math::Matrix$<$ T $>$@{maf::math::Matrix$<$ T $>$}}
@@ -804,8 +1196,17 @@ template$<$typename U$>$ \newline
 requires (std\+::is\+\_\+arithmetic\+\_\+v$<$U$>$)\\
 auto operator/ (\begin{DoxyParamCaption}\item[{const U \&}]{scalar}{, }\item[{const \mbox{\hyperlink{classmaf_1_1math_1_1_matrix_afadd64902ef9d03291be6e799c38e904}{Matrix}}$<$ T $>$ \&}]{matrix}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [friend]}}
 
-Divide the scalar by each element of the matrix. \begin{DoxyReturn}{Returns}
-\doxylink{classmaf_1_1math_1_1_matrix}{Matrix} of common promoted type 
+
+
+Element-\/wise scalar division (scalar / \doxylink{classmaf_1_1math_1_1_matrix}{Matrix}). 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em U} & An arithmetic scalar type. \\
+\hline
+\end{DoxyTemplParams}
+\begin{DoxyReturn}{Returns}
+\doxylink{classmaf_1_1math_1_1_matrix}{Matrix} of the common, promoted type. 
 \end{DoxyReturn}
 
 
@@ -813,4 +1214,5 @@ The documentation for this class was generated from the following files\+:\begin
 \item 
 include/\+Maf\+Lib/math/linalg/\mbox{\hyperlink{_matrix_8hpp}{Matrix.\+hpp}}\item 
 include/\+Maf\+Lib/math/linalg/\mbox{\hyperlink{_matrix_checkers_8hpp}{Matrix\+Checkers.\+hpp}}\item 
+include/\+Maf\+Lib/math/linalg/\mbox{\hyperlink{_matrix_constructors_8hpp}{Matrix\+Constructors.\+hpp}}\item 
 include/\+Maf\+Lib/math/linalg/\mbox{\hyperlink{_matrix_methods_8hpp}{Matrix\+Methods.\+hpp}}\end{DoxyCompactItemize}

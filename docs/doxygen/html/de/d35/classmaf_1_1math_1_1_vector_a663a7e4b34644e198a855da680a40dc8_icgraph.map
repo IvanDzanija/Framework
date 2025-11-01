@@ -1,6 +1,6 @@
 <map id="maf::math::Vector::orientation" name="maf::math::Vector::orientation">
 <area shape="rect" id="Node000001" title=" " alt="" coords="188,169,322,210"/>
-<area shape="rect" id="Node000002" href="$d3/d6e/classmaf_1_1math_1_1_matrix.html#a0440e67c7abf25ef0f37d8d96e9e5cd4" title=" " alt="" coords="6,5,139,46"/>
+<area shape="rect" id="Node000002" href="$d3/d6e/classmaf_1_1math_1_1_matrix.html#a0440e67c7abf25ef0f37d8d96e9e5cd4" title="Matrix&#45;Vector multiplication (Matrix * column_vector)." alt="" coords="6,5,139,46"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="228,158,189,110,138,61,119,49,122,44,141,57,193,106,233,155"/>
 <area shape="rect" id="Node000003" href="$de/d35/classmaf_1_1math_1_1_vector.html#a20d90280ea731664d99eed92bfb5741c" title=" " alt="" coords="5,71,140,111"/>
 <area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="204,164,138,127,115,114,117,109,141,122,207,159"/>

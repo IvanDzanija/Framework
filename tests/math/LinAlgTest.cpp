@@ -174,6 +174,25 @@ void should_return_true_for_positive_definite_matrix() {
     assert(!m2.is_positive_definite());
 }
 
+void should_return_true_for_non_square_matrix() {
+    math::Matrix<double> m(2, 3, {1, 2, 3, 4, 5, 6});
+    assert(m.is_singular() == true);
+}
+
+void should_return_false_for_non_singular_matrix() {
+    math::Matrix<double> m = math::identity_matrix<double>(3);
+    math::Matrix<double> m2(2, 2, {1, 2, 3, 4});
+    assert(m.is_singular() == false);
+    assert(m2.is_singular() == false);
+}
+
+void should_return_true_for_singular_matrix() {
+    math::Matrix<double> m(2, 2, {1, 2, 2, 4});
+    math::Matrix<double> m2(3, 3, {0, 1, 2, 0, 3, 4, 0, 5, 6});
+    assert(m.is_singular() == true);
+    assert(m2.is_singular() == true);
+}
+
 // Methods tests
 
 void should_fill_matrix_with_value() {
@@ -343,7 +362,7 @@ void should_multiply_matrix_and_vector() {
     }
 }
 
-void time_test_matmul() {
+void matmul_time_test() {
     const size_t n = 1024;
     math::Matrix<double> A(n, n);
     math::Matrix<double> B(n, n);
@@ -376,16 +395,15 @@ void should_throw_if_plu_called_on_non_square_matrix() {
     assert(thrown);
 }
 
-void should_decompose_singular_matrix() {
+void should_throw_for_singular_matrix() {
     math::Matrix<double> m(3, 3, {1, 2, 3, 2, 4, 6, 1, 2, 3});
-    auto [P, L, U] = math::plu(m);
     bool thrown = false;
     try {
-        auto [P, L, U] = math::plu(m);
-    } catch (const std::invalid_argument &e) {
+        auto [p, L, U] = math::plu(m);
+    } catch (const std::runtime_error &e) {
         thrown = true;
     }
-    assert(!thrown);
+    assert(thrown);
 }
 
 void should_correctly_perform_plu_decomposition_on_small_matrix() {
@@ -451,7 +469,7 @@ void should_correctly_decompose_upper_triangular_matrix() {
 }
 
 void should_correctly_handle_negative_pivots_in_plu() {
-    math::Matrix<double> A(2, 2, {-4, -2, -2, -1});
+    math::Matrix<double> A(2, 2, {-4, -5, -2, -1});
     auto [P, L, U] = plu(A);
     math::Matrix<double> Pm(2, 2);
 
@@ -610,6 +628,9 @@ int main() {
     should_return_true_for_triangular_matrix();
     should_return_true_for_diagonal_matrix();
     should_return_true_for_positive_definite_matrix();
+    should_return_true_for_non_square_matrix();
+    should_return_false_for_non_singular_matrix();
+    should_return_true_for_singular_matrix();
 
     // Methods tests
     should_fill_matrix_with_value();
@@ -628,11 +649,11 @@ int main() {
     should_multiply_matrix_and_scalar();
     should_multiply_matrices();
     should_multiply_matrix_and_vector();
-    time_test_matmul();
+    matmul_time_test();
 
     std::cout << "=== Running PLU decomposition tests ===" << std::endl;
     should_throw_if_plu_called_on_non_square_matrix();
-    should_decompose_singular_matrix();
+    should_throw_for_singular_matrix();
     should_correctly_perform_plu_decomposition_on_small_matrix();
     should_correctly_handle_identity_matrix_in_plu();
     should_correctly_decompose_upper_triangular_matrix();

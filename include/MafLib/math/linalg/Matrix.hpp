@@ -6,16 +6,42 @@
 namespace maf::math {
 template <typename T> class Vector;
 
+/**
+ * @brief A general-purpose, row-major, dense matrix class.
+ *
+ * This class implements a matrix with contiguous row-major storage.
+ * It supports a wide range of arithmetic operations, constructors, and
+ * utility methods.
+ *
+ * The implementation is templated to support various numeric types (T).
+ * Many operations (like multiplication and addition) are parallelized
+ * using OpenMP and employ blocking strategies for cache efficiency.
+ *
+ * @tparam T The numeric type of the matrix elements (e.g., float,
+ * double, int).
+ *
+ * @version 1.0
+ * @since 2025
+ */
 template <typename T> class Matrix {
   private:
     size_t _rows;
     size_t _cols;
     std::vector<T> _data;
 
+    /**
+     * @brief Internal check if a row/column index is within bounds.
+     * @return true if 0 <= row < _rows and 0 <= col < _cols.
+     */
     [[nodiscard]] constexpr bool _is_valid_index(size_t row, size_t col) const {
         return row < _rows && col < _cols;
     }
 
+    /**
+     * @brief Converts a 2D (row, col) index to a 1D internal vector index.
+     * @throws std::out_of_range if the index is invalid.
+     * @return The 1D index into the _data vector.
+     */
     [[nodiscard]] constexpr size_t _get_index(size_t row, size_t col) const {
         if (!_is_valid_index(row, col)) {
             throw std::out_of_range("Index out of bounds.");
@@ -23,212 +49,209 @@ template <typename T> class Matrix {
         return (row * _cols) + col;
     }
 
+    /**
+     * @brief Internal helper to invert the sign of all elements in-place.
+     */
     void _invert_sign() {
-        for (auto &element : _data) {
-            element = -element;
+#pragma omp parallel for
+        for (size_t i = 0; i < _data.size(); ++i) {
+            _data[i] = -_data[i];
         }
     }
 
   public:
-    // Constructors and destructors
+    // --- Constructors and destructors ---
 
-    // Default constructor
+    /**
+     * @brief Default constructor. Creates an empty 0x0 matrix.
+     */
     Matrix() : _rows(0), _cols(0) {}
 
-    // Construct from raw data
-    Matrix(size_t rows, size_t cols, T *data) : _rows(rows), _cols(cols) {
-        if (rows == 0 || cols == 0) {
-            throw std::invalid_argument(
-                "Matrix dimensions must be greater than zero!");
-        }
-        if (data == nullptr) {
-            throw std::invalid_argument("Data pointer cannot be null!");
-        }
+    /**
+     * @brief Constructs a matrix from a raw data pointer.
+     * @param rows Number of rows.
+     * @param cols Number of columns.
+     * @param data Pointer to a C-style array of size (rows * cols) in
+     * row-major order. The data is COPIED into the matrix.
+     * @throws std::invalid_argument if dimensions are zero or data is
+     * nullptr.
+     */
+    Matrix(size_t rows, size_t cols, T *data);
 
-        _data.assign(data, data + (rows * cols));
-    }
+    /**
+     * @brief Constructs an uninitialized matrix of size rows x cols.
+     * @param rows Number of rows.
+     * @param cols Number of columns.
+     * @throws std::invalid_argument if dimensions are zero.
+     */
+    Matrix(size_t rows, size_t cols);
 
-    // Construct empty of size rows x cols
-    Matrix(size_t rows, size_t cols) : _rows(rows), _cols(cols) {
-        if (rows == 0 || cols == 0) {
-            throw std::invalid_argument(
-                "Matrix dimensions must be greater than zero.");
-        }
+    /**
+     * @brief Constructs from a std::vector, filled by rows.
+     * @param rows Number of rows.
+     * @param cols Number of columns.
+     * @param data A std::vector of size (rows * cols) in row-major order.
+     * @throws std::invalid_argument if dimensions are zero or data size
+     * does not match.
+     */
+    Matrix(size_t rows, size_t cols, const std::vector<T> &data);
 
-        _data.resize(rows * cols);
-    }
+    /**
+     * @brief Constructs from a nested std::vector (vector of vectors).
+     * @param rows Number of rows.
+     * @param cols Number of columns.
+     * @param data A std::vector<std::vector<T>>. data.size() must equal
+     * rows, and data[0].size() must equal cols.
+     * @throws std::invalid_argument if dimensions are zero or data shape
+     * does not match.
+     */
+    Matrix(size_t rows, size_t cols, const std::vector<std::vector<T>> &data);
 
-    // Constructors for std::vector and std::array
-
-    /// Constructor from std::vector
-    /// Matrix gets filled by rows.
-    Matrix(size_t rows, size_t cols, const std::vector<T> &data)
-        : _rows(rows), _cols(cols) {
-        if (rows == 0 || cols == 0) {
-            throw std::invalid_argument(
-                "Matrix dimensions must be greater than zero.");
-        }
-
-        if (data.size() != rows * cols) {
-            throw std::invalid_argument(
-                "Data size does not match matrix size.");
-        }
-
-        _data.assign(data.begin(), data.end());
-    }
-
-    /// Matrix constructor from std::vector<std::vector>>
-    /// Matrix indices correspond to indices in std::vector<std::vector>>
-    Matrix(size_t rows, size_t cols, const std::vector<std::vector<T>> &data)
-        : _rows(rows), _cols(cols) {
-        if (rows == 0 || cols == 0) {
-            throw std::invalid_argument(
-                "Matrix dimensions must be greater than zero.");
-        }
-
-        if (data.size() != rows || data.at(0).size() != cols) {
-            throw std::invalid_argument(
-                "Data size does not match matrix size.");
-        }
-
-        _data.resize(rows * cols);
-        for (size_t i = 0; i < rows; ++i) {
-            for (size_t j = 0; j < cols; ++j) {
-                _data.at(_get_index(i, j)) = static_cast<T>(data.at(i).at(j));
-            }
-        }
-    }
-
-    /// Matrix constructor from std::array
-    /// Matrix gets filled by rows.
+    /**
+     * @brief Constructs from a std::array, filled by rows.
+     * @tparam U Type in the array (allows implicit conversion).
+     * @tparam N Size of the array.
+     * @param rows Number of rows.
+     * @param cols Number of columns.
+     * @param data A std::array<U, N> where N must equal (rows * cols).
+     * @throws std::invalid_argument if dimensions are zero or array size
+     * does not match.
+     */
     template <typename U, size_t N>
-    Matrix(size_t rows, size_t cols, const std::array<U, N> &data)
-        : _rows(rows), _cols(cols) {
-        if (rows == 0 || cols == 0) {
-            throw std::invalid_argument(
-                "Matrix dimensions must be greater than zero.");
-        }
-        if (N != rows * cols) {
-            throw std::invalid_argument(
-                "Data size does not match matrix size.");
-        }
+    Matrix(size_t rows, size_t cols, const std::array<U, N> &data);
 
-        _data.assign(data.begin(), data.end());
-    }
-
-    /// Matrix constructor from std::initializer_list
-    /// Matrix gets filled by rows.
+    /**
+     * @brief Constructs from a std::initializer_list, filled by rows.
+     * @tparam U Type in the list (allows implicit conversion).
+     * @param rows Number of rows.
+     * @param cols Number of columns.
+     * @param list A std::initializer_list<U> of size (rows * cols).
+     * @throws std::invalid_argument if dimensions are zero or list size
+     * does not match.
+     */
     template <typename U>
-    Matrix(size_t rows, size_t cols, std::initializer_list<U> list)
-        : _rows(rows), _cols(cols) {
-        if (rows == 0 || cols == 0) {
-            throw std::invalid_argument(
-                "Matrix dimensions must be greater than zero.");
-        }
-        if (static_cast<size_t>(list.size()) != rows * cols) {
-            throw std::invalid_argument(
-                "Data size does not match matrix size.");
-        }
-        _data.assign(list.begin(), list.end());
-    }
+    Matrix(size_t rows, size_t cols, std::initializer_list<U> list);
 
-    // Getters and setters
+    // --- Getters and setters ---
 
+    /**
+     * @brief Gets a mutable reference to the underlying std::vector
+     * data store.
+     * @return std::vector<T>&
+     */
     [[nodiscard]] std::vector<T> &data() noexcept { return _data; }
+
+    /**
+     * @brief Gets a const reference to the underlying std::vector data
+     * store.
+     * @return const std::vector<T>&
+     */
     [[nodiscard]] const std::vector<T> &data() const noexcept { return _data; }
+
+    /** @brief Gets the number of rows. */
     [[nodiscard]] size_t row_count() const noexcept { return _rows; }
+
+    /** @brief Gets the number of columns. */
     [[nodiscard]] size_t column_count() const noexcept { return _cols; }
+
+    /** @brief Gets the total number of elements (rows * cols). */
     [[nodiscard]] size_t size() const noexcept { return _data.size(); }
 
+    /**
+     * @brief Gets a mutable reference to the element at (row, col).
+     * @throws std::out_of_range if the index is invalid.
+     */
     T &at(size_t row, size_t col) { return _data.at(_get_index(row, col)); }
 
+    /**
+     * @brief Gets a const reference to the element at (row, col).
+     * @throws std::out_of_range if the index is invalid.
+     */
     const T &at(size_t row, size_t col) const {
         return _data.at(_get_index(row, col));
     }
 
+    /**
+     * @brief Gets a mutable std::span of a single row.
+     * @throws std::out_of_range if the row is invalid.
+     */
     [[nodiscard]] std::span<T> row_span(size_t row) {
         return std::span<T>(&_data.at(_get_index(row, 0)), _cols);
     }
 
+    /**
+     * @brief Gets a const std::span of a single row.
+     * @throws std::out_of_range if the row is invalid.
+     */
     [[nodiscard]] std::span<const T> row_span(size_t row) const {
         return std::span<const T>(&_data.at(_get_index(row, 0)), _cols);
     }
 
-    // Checkers
-    /// Checks if the matrix is square.
-    [[nodiscard]] constexpr bool is_square() const { return _rows == _cols; }
+    // --- Checkers ---
 
-    /// Checkes if the matrix is symmetric.
+    /** @brief Checks if the matrix is square (rows == cols). */
+    [[nodiscard]] constexpr bool is_square() const;
+
+    /** @brief Checks if the matrix is symmetric (A == A^T). */
     [[nodiscard]] constexpr bool is_symmetric() const;
 
-    /// Checks if the matrix is upper triangular.
+    /** @brief Checks if the matrix is upper triangular */
     [[nodiscard]] constexpr bool is_upper_triangular() const;
 
-    /// Checks if the matrix is lower triangular.
+    /** @brief Checks if the matrix is lower triangular */
     [[nodiscard]] constexpr bool is_lower_triangular() const;
 
-    /// Checks if the matrix is diagonal.
+    /** @brief Checks if the matrix is diagonal */
     [[nodiscard]] constexpr bool is_diagonal() const;
 
-    /// Checks if matrix is positive definite.
-    /// If matrix is symmetric it is sufficient to have Cholesky decomposition.
-    /// TODO: If matrix isn't symmetric
+    /**
+     * @brief Checks if the matrix is positive definite.
+     * @details For symmetric matrices, attempts Cholesky decomposition.
+     * TODO: Add Sylvester's criterion for non-symmetric.
+     * Defined in MatrixCheckers.hpp
+     */
     [[nodiscard]] bool is_positive_definite() const;
 
-    /// Checks if the matrix is singular.
-    /// This is equivalent to:
-    /// 1) Matrix A doesn't have an inverse.
-    /// 2) Rank (A) < n
-    /// 3) Determinant(A) = 0
-    /// 4) Eigen value(A) = 0
+    /**
+     * @brief Checks if the matrix is singular (non-invertible).
+     * @details Equivalent to det(A) == 0.
+     * @details Equivalent to rank(A) < max(dimensions(A)).
+     */
     [[nodiscard]] constexpr bool is_singular() const;
 
-    // Methods
-    /// Fills the current matrix with $value.
+    // --- Methods ---
+
+    /** @brief Fills the entire matrix with a single value.*/
     void fill(T value);
 
-    /// Converts the matrix to indentity matrix.
+    /**
+     * @brief Converts this matrix into an identity matrix.
+     * @throws std::runtime_error if the matrix is not square.
+     * @details Defined in MatrixMethods.hpp
+     */
     void make_identity();
 
-    /// Inplace transpose of matrix for square matrices only.
-    /// For transposing non square matrices use .transposed() that creates a new
-    /// Matrix object and returns it.
-    void transpose() {
-        if (!is_square()) {
-            throw std::invalid_argument("Matrix must be square to transpose.");
-        }
+    /**
+     * @brief Performs an in-place transpose of the matrix.
+     * @details Uses a parallelized, blocked algorithm.
+     * @throws std::invalid_argument if the matrix is not square.
+     */
+    void transpose();
 
-#pragma omp parallel for // schedule(dynamic) collapse(2)
-        for (size_t i = 0; i < _rows; i += BLOCK_SIZE) {
-            for (size_t j = i; j < _cols; j += BLOCK_SIZE) {
-                const size_t n = i + BLOCK_SIZE;
-                const size_t m = j + BLOCK_SIZE;
-                if (i == j) {
-                    for (size_t k = i; k < std::min(n, _rows); ++k) {
-                        for (size_t l = k + 1; l < std::min(m, _cols); ++l) {
-                            std::swap(this->at(k, l), this->at(l, k));
-                        }
-                    }
-                } else {
-                    for (size_t k = i; k < std::min(n, _rows); ++k) {
-                        for (size_t l = j; l < std::min(m, _cols); ++l) {
-                            std::swap(this->at(k, l), this->at(l, k));
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    /// Creates new transposed matrix
-    /// @return Transposed matrix
+    /**
+     * @brief Creates and returns a new matrix that is the transpose of
+     * this one.
+     * @return A new Matrix<T> of size (cols x rows).
+     * @details Defined in MatrixMethods.hpp
+     */
     [[nodiscard]] Matrix<T> transposed() const;
 
-    // Operators
+    // --- Operators ---
 
-    // Matrix == Matrix
-    /// Checks if 2 matrices are exactly same,
-    /// use loosely_equal if working with floats.
+    /**
+     * @brief Checks for exact element-wise equality.
+     * @details For floating-point, use `loosely_equal()`.
+     */
     [[nodiscard]] constexpr bool operator==(const Matrix &other) const {
         if (_rows != other._rows || _cols != other._cols) {
             return false;
@@ -236,25 +259,29 @@ template <typename T> class Matrix {
         return _data == other._data;
     }
 
-    // Unary operator -
-    /// Inverts the sign of all elements in matrix.
-    /// @return Matrix of same input type.
+    /**
+     * @brief Unary minus. Returns a new matrix with all elements negated.
+     * @return `Matrix<T>`
+     */
     [[nodiscard]] auto operator-() const {
         Matrix<T> result = *this;
         result._invert_sign();
         return result;
     }
 
-    // Matrix + Matrix
-    /// Add 2 matrices elementwise
-    /// @return Matrix of common promoted type
+    /**
+     * @brief Element-wise matrix addition.
+     * @tparam U Numeric type of the other matrix.
+     * @return Matrix of the common, promoted type.
+     * @throws std::invalid_argument if dimensions do not match.
+     */
     template <typename U>
     [[nodiscard]] auto operator+(const Matrix<U> &other) const {
         using R = std::common_type_t<T, U>;
 
         if (_rows != other.row_count() || _cols != other.column_count()) {
             throw std::invalid_argument(
-                "Matrices have to be of same dimensions!");
+                "Matrices have to be of same dimensions for addition!");
         }
         Matrix<R> result(_rows, _cols);
 
@@ -262,38 +289,41 @@ template <typename T> class Matrix {
 #pragma omp parallel for collapse(2)
             for (size_t i = 0; i < _rows; ++i) {
                 for (size_t j = 0; j < _cols; ++j) {
-                    result.at(i, j) = this->at(i, j) + other.at(i, j);
+                    result.at(i, j) = static_cast<R>(this->at(i, j)) +
+                                      static_cast<R>(other.at(i, j));
                 }
             }
         } else {
 #pragma omp parallel for schedule(static, 1024)
             for (size_t idx = 0; idx < _data.size(); ++idx) {
-                size_t i = idx / _cols;
-                size_t j = idx % _cols;
-                result.at(i, j) = this->at(i, j) + other.at(i, j);
+                result.data()[idx] = static_cast<R>(_data[idx]) +
+                                     static_cast<R>(other.data()[idx]);
             }
         }
         return result;
     }
 
-    // Matrix + Scalar
-    /// Add a scalar to each element of matrix.
-    /// @return Matrix of common promoted type
+    /**
+     * @brief Element-wise scalar addition (Matrix + scalar).
+     * @tparam U An arithmetic scalar type.
+     * @return Matrix of the common, promoted type.
+     */
     template <typename U>
         requires(std::is_arithmetic_v<U>)
     [[nodiscard]] auto operator+(const U &scalar) const {
         using R = std::common_type_t<T, U>;
-
         Matrix<R> result(_rows, _cols);
-
         std::transform(_data.begin(), _data.end(), result.data().begin(),
-                       [scalar](const T &value) { return value + scalar; });
+                       [scalar](const T &value) {
+                           return static_cast<R>(value) +
+                                  static_cast<R>(scalar);
+                       });
         return result;
     }
 
-    // Scalar + Matrix
-    /// Add a scalar to each element of matrix.
-    /// @return Matrix of common promoted type
+    /**
+     * @brief Element-wise scalar addition (scalar + Matrix).
+     */
     template <typename U>
         requires(std::is_arithmetic_v<U>)
     [[nodiscard]] friend auto operator+(const U &scalar,
@@ -301,15 +331,17 @@ template <typename T> class Matrix {
         return matrix + scalar;
     }
 
-    // Matrix - Matrix
-    /// Subtract 2 matrices elementwise.
-    /// Elements of first matrix - elements of second matrix
-    /// @return Matrix of common promoted type
+    /**
+     * @brief Element-wise matrix subtraction.
+     * @tparam U Numeric type of the other matrix.
+     * @return Matrix of the common, promoted type.
+     * @throws std::invalid_argument if dimensions do not match.
+     */
     template <typename U>
     [[nodiscard]] auto operator-(const Matrix<U> &other) const {
         if (_rows != other.row_count() || _cols != other.column_count()) {
             throw std::invalid_argument(
-                "Matrices have to be of same dimensions!");
+                "Matrices have to be of same dimensions for subtraction!");
         }
 
         using R = std::common_type_t<T, U>;
@@ -319,37 +351,43 @@ template <typename T> class Matrix {
 #pragma omp parallel for collapse(2)
             for (size_t i = 0; i < _rows; ++i) {
                 for (size_t j = 0; j < _cols; ++j) {
-                    result.at(i, j) = this->at(i, j) - other.at(i, j);
+                    result.at(i, j) = static_cast<R>(this->at(i, j)) -
+                                      static_cast<R>(other.at(i, j));
                 }
             }
         } else {
 #pragma omp parallel for schedule(static, 1024)
             for (size_t idx = 0; idx < _data.size(); ++idx) {
-                size_t i = idx / _cols;
-                size_t j = idx % _cols;
-                result.at(i, j) = this->at(i, j) - other.at(i, j);
+                result.data()[idx] = static_cast<R>(_data[idx]) -
+                                     static_cast<R>(other.data()[idx]);
             }
         }
         return result;
     }
 
-    // Matrix - Scalar
-    /// Subtract a scalar from each element of matrix.
-    /// @return Matrix of common promoted type
+    /**
+     * @brief Element-wise scalar subtraction (Matrix - scalar).
+     * @tparam U An arithmetic scalar type.
+     * @return Matrix of the common, promoted type.
+     */
     template <typename U>
         requires(std::is_arithmetic_v<U>)
     [[nodiscard]] auto operator-(const U &scalar) const {
         using R = std::common_type_t<T, U>;
-
         Matrix<R> result(_rows, _cols);
         std::transform(_data.begin(), _data.end(), result.data().begin(),
-                       [scalar](const T &value) { return value - scalar; });
+                       [scalar](const T &value) {
+                           return static_cast<R>(value) -
+                                  static_cast<R>(scalar);
+                       });
         return result;
     }
 
-    // Scalar - Matrix
-    /// Subtract each element of matrix from a scalar.
-    /// @return Matrix of common promoted type
+    /**
+     * @brief Element-wise scalar subtraction (scalar - Matrix).
+     * @tparam U An arithmetic scalar type.
+     * @return Matrix of the common, promoted type.
+     */
     template <typename U>
         requires(std::is_arithmetic_v<U>)
     [[nodiscard]] friend auto operator-(const U &scalar,
@@ -358,25 +396,33 @@ template <typename T> class Matrix {
 
         Matrix<R> result(matrix._rows, matrix._cols);
         std::transform(matrix._data.begin(), matrix._data.end(),
-                       result.data().begin(),
-                       [scalar](const T &value) { return scalar - value; });
+                       result.data().begin(), [scalar](const T &value) {
+                           return static_cast<R>(scalar) -
+                                  static_cast<R>(value);
+                       });
         return result;
     }
 
-    // Matrix * Matrix
-    /// Standard algebraic matrix multiplication.
-    /// @return Matrix of common promoted type
+    /**
+     * @brief Standard algebraic matrix multiplication (A * B).
+     * @details Implemented with a parallelized, cache-blocked algorithm.
+     * @tparam U Numeric type of the other matrix.
+     * @return Matrix of the common, promoted type.
+     * @throws std::invalid_argument if inner dimensions do not match
+     * (A.cols != B.rows).
+     */
     template <typename U>
     [[nodiscard]] auto operator*(const Matrix<U> &other) const {
         if (_cols != other.row_count()) {
-            throw std::invalid_argument("Matrix dimensions do not match!");
+            throw std::invalid_argument(
+                "Matrix inner dimensions do not match for multiplication!");
         }
         using R = std::common_type_t<T, U>;
 
         const size_t a_rows = _rows;
         const size_t b_cols = other.column_count();
         const size_t a_cols = _cols;
-        Matrix<R> result(_rows, b_cols);
+        Matrix<R> result(a_rows, b_cols);
 
         const T *a_data = this->_data.data();
         const U *b_data = other.data().data();
@@ -388,7 +434,6 @@ template <typename T> class Matrix {
         for (size_t ii = 0; ii < a_rows; ii += BLOCK_SIZE) {
             for (size_t jj = 0; jj < b_cols; jj += BLOCK_SIZE) {
                 for (size_t kk = 0; kk < a_cols; kk += BLOCK_SIZE) {
-
                     // Process block
                     const size_t i_end = std::min(ii + BLOCK_SIZE, a_rows);
                     const size_t j_end = std::min(jj + BLOCK_SIZE, b_cols);
@@ -396,14 +441,15 @@ template <typename T> class Matrix {
 
                     for (size_t i = ii; i < i_end; ++i) {
                         for (size_t k = kk; k < k_end; ++k) {
-                            const T a_ik = a_data[(i * a_cols) + k];
+                            const R a_ik =
+                                static_cast<R>(a_data[(i * a_cols) + k]);
                             const size_t b_offset = k * b_cols;
                             const size_t c_offset = i * b_cols;
 
 #pragma omp simd
                             for (size_t j = jj; j < j_end; ++j) {
                                 c_data[c_offset + j] +=
-                                    a_ik * b_data[b_offset + j];
+                                    a_ik * static_cast<R>(b_data[b_offset + j]);
                             }
                         }
                     }
@@ -413,9 +459,11 @@ template <typename T> class Matrix {
         return result;
     }
 
-    // Matrix * Scalar
-    /// Multiply each element of matrix by a scalar.
-    /// @return Matrix of common promoted type
+    /**
+     * @brief Element-wise scalar multiplication (Matrix * scalar).
+     * @tparam U An arithmetic scalar type.
+     * @return Matrix of the common, promoted type.
+     */
     template <typename U>
         requires(std::is_arithmetic_v<U>)
     [[nodiscard]] auto operator*(const U &scalar) const {
@@ -423,13 +471,16 @@ template <typename T> class Matrix {
         Matrix<R> result(_rows, _cols);
 
         std::transform(_data.begin(), _data.end(), result.data().begin(),
-                       [scalar](const T &value) { return value * scalar; });
+                       [scalar](const T &value) {
+                           return static_cast<R>(value) *
+                                  static_cast<R>(scalar);
+                       });
         return result;
     }
 
-    // Scalar * Matrix
-    /// Multiply each element of matrix by a scalar.
-    /// @return Matrix of common promoted type
+    /**
+     * @brief Element-wise scalar multiplication (scalar * Matrix).
+     */
     template <typename U>
         requires(std::is_arithmetic_v<U>)
     [[nodiscard]] friend auto operator*(const U &scalar,
@@ -437,7 +488,13 @@ template <typename T> class Matrix {
         return matrix * scalar;
     }
 
-    // Matrix * Vector -> Vector
+    /**
+     * @brief Matrix-Vector multiplication (Matrix * column_vector).
+     * @tparam U Numeric type of the vector.
+     * @return A new column Vector of the common, promoted type.
+     * @throws std::invalid_argument if vector is not a column vector or
+     * dimensions do not match.
+     */
     template <typename U>
     [[nodiscard]] auto operator*(const Vector<U> &other) const {
         using R = std::common_type_t<T, U>;
@@ -458,81 +515,102 @@ template <typename T> class Matrix {
 
         Vector<R> result(n, std::vector<R>(n, R(0)), Vector<R>::COLUMN);
 
+#pragma omp parallel for
         for (size_t i = 0; i < n; ++i) {
+            R sum = R(0);
+            auto L_row_i = this->row_span(i);
+#pragma omp simd reduction(+ : sum)
             for (size_t j = 0; j < m; ++j) {
-                result.at(i) += static_cast<R>(this->at(i, j)) *
-                                static_cast<R>(other.at(j));
+                sum += static_cast<R>(L_row_i[j]) * static_cast<R>(other.at(j));
             }
+            result.at(i) = sum;
         }
-
         return result;
     }
 
-    // Matrix / Scalar
-    /// Divide each element of matrix by a scalar.
-    /// @return Matrix of common promoted type
+    /**
+     * @brief Element-wise scalar division (Matrix / scalar).
+     * @tparam U An arithmetic scalar type.
+     * @return Matrix of the common, promoted type.
+     */
     template <typename U>
         requires(std::is_arithmetic_v<U>)
     [[nodiscard]] auto operator/(const U &scalar) const {
-        return *this * (T(1) / scalar);
+        // Note: This promotes T to double if T is int, which is
+        // usually desired for division.
+        using R = std::common_type_t<T, U, double>;
+        return *this * (R(1) / static_cast<R>(scalar));
     }
 
-    // Scalar / Matrix
-    /// Divide the scalar by each element of the matrix.
-    /// @return Matrix of common promoted type
+    /**
+     * @brief Element-wise scalar division (scalar / Matrix).
+     * @tparam U An arithmetic scalar type.
+     * @return Matrix of the common, promoted type.
+     */
     template <typename U>
         requires(std::is_arithmetic_v<U>)
     [[nodiscard]] friend auto operator/(const U &scalar,
                                         const Matrix<T> &matrix) {
-        using R = std::common_type_t<T, U>;
+        using R = std::common_type_t<T, U, double>;
 
         Matrix<R> result(matrix._rows, matrix._cols);
         std::transform(matrix._data.begin(), matrix._data.end(),
-                       result.data().begin(),
-                       [scalar](const T &value) { return value / scalar; });
+                       result.data().begin(), [scalar](const T &value) {
+                           return static_cast<R>(scalar) /
+                                  static_cast<R>(value);
+                       });
         return result;
     }
 
+    /** @brief In-place element-wise scalar addition. */
     template <typename U>
         requires(std::is_arithmetic_v<U>)
-    [[nodiscard]] auto operator+=(const U &scalar) {
+    auto &operator+=(const U &scalar) {
         std::transform(
             _data.begin(), _data.end(), _data.begin(),
             [scalar](T val) { return static_cast<T>(val + scalar); });
         return *this;
     }
 
+    /** @brief In-place element-wise scalar subtraction. */
     template <typename U>
         requires(std::is_arithmetic_v<U>)
-    [[nodiscard]] auto operator-=(const U &scalar) {
+    auto &operator-=(const U &scalar) {
         std::transform(
             _data.begin(), _data.end(), _data.begin(),
             [scalar](T val) { return static_cast<T>(val - scalar); });
         return *this;
     }
 
+    /** @brief In-place element-wise scalar multiplication. */
     template <typename U>
         requires(std::is_arithmetic_v<U>)
-    [[nodiscard]] auto operator*=(const U &scalar) {
+    auto &operator*=(const U &scalar) {
         std::transform(
             _data.begin(), _data.end(), _data.begin(),
             [scalar](T val) { return static_cast<T>(val * scalar); });
         return *this;
     }
 
+    /** @brief In-place element-wise scalar division. */
     template <typename U>
         requires(std::is_arithmetic_v<U>)
-    [[nodiscard]] auto operator/=(const U &scalar) {
+    auto &operator/=(const U &scalar) {
         std::transform(
             _data.begin(), _data.end(), _data.begin(),
             [scalar](T val) { return static_cast<T>(val / scalar); });
         return *this;
     }
 
-    // Debugging and printing
+    // --- Debugging and printing ---
+
+    /**
+     * @brief Prints the matrix contents to std::cout.
+     * @details Sets floating point precision for readability.
+     */
     void print() const {
         if constexpr (std::is_floating_point_v<T>) {
-            std::cout << std::setprecision(5);
+            std::cout << std::fixed << std::setprecision(5);
         }
         for (size_t i = 0; i < _rows; ++i) {
             for (size_t j = 0; j < _cols; ++j) {
@@ -540,65 +618,15 @@ template <typename T> class Matrix {
             }
             std::cout << std::endl;
         }
-        std::cout << std::fixed;
     }
 };
-
-/// Creates new identity matrix.
-/// @return Matrix of given type.
-template <typename T>
-[[nodiscard]] Matrix<T> inline identity_matrix(size_t size) {
-    Matrix<T> result(size, size);
-    result.make_identity();
-    return result;
-}
-
-/// Creates new matrix filled with ones.
-/// @return Matrix of given type.
-template <typename U>
-[[nodiscard]] inline Matrix<U> ones(size_t rows, size_t cols) {
-    Matrix<U> result(rows, cols);
-    result.fill(U(1));
-    return result;
-}
-/// Checks if 2 matrices are loosely equal.
-template <typename T, typename U>
-[[nodiscard]] constexpr bool loosely_equal(const Matrix<T> &first,
-                                           const Matrix<U> &second,
-                                           double eps = 1e-6) {
-    size_t n = first.row_count();
-    size_t m = first.column_count();
-    if (n != second.row_count() || m != second.column_count()) {
-        return false;
-    }
-    for (size_t i = 0; i < n; ++i) {
-        for (size_t j = 0; j < m; ++j) {
-            if (!is_close(first.at(i, j), second.at(i, j), eps)) {
-                return false;
-            }
-        }
-    }
-    return true;
-}
-
-template <typename T>
-[[nodiscard]] Matrix<T> inline make_permutation_matrix(
-    const std::vector<uint32> &perm) {
-    size_t n = perm.size();
-    Matrix<T> result(n, n);
-#pragma omp parallel for if (n > 256)
-    for (size_t i = 0; i < n; ++i) {
-        const size_t j = perm.at(i);
-        result.at(i, j) = static_cast<T>(1);
-    }
-
-    return result;
-}
 
 } // namespace maf::math
 
 #include "CholeskyDecomposition.hpp"
 #include "MatrixCheckers.hpp"
+#include "MatrixConstructors.hpp"
+#include "MatrixFactories.hpp"
 #include "MatrixMethods.hpp"
 #include "PLU.hpp"
 

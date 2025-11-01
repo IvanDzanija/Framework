@@ -9,49 +9,49 @@
 \DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{_matrix_8hpp}{Matrix.hpp}}"{}}}
 \DoxyCodeLine{00006\ }
 \DoxyCodeLine{00007\ \textcolor{keyword}{namespace\ }\mbox{\hyperlink{namespacemaf_1_1math}{maf::math}}\ \{}
-\DoxyCodeLine{00008\ }
-\DoxyCodeLine{00038\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T>}
-\DoxyCodeLine{00039\ [[nodiscard]]\ std::tuple<std::vector<uint32>,\ \mbox{\hyperlink{classmaf_1_1math_1_1_matrix}{Matrix<T>}},\ \mbox{\hyperlink{classmaf_1_1math_1_1_matrix}{Matrix<T>}}>}
-\DoxyCodeLine{00040\ \mbox{\hyperlink{namespacemaf_1_1math_ac44a6962e2d09c20d929223448b4421c}{plu}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classmaf_1_1math_1_1_matrix}{Matrix<T>}}\ \&matrix)\ \{}
-\DoxyCodeLine{00041\ \ \ \ \ \textcolor{keywordflow}{if}\ (!matrix.\mbox{\hyperlink{classmaf_1_1math_1_1_matrix_a774d7c4510a8977e5b19f5f332d5789c}{is\_square}}())\ \{}
-\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::invalid\_argument(}
-\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}Matrix\ must\ be\ square\ for\ PLU\ decomposition!"{}});}
-\DoxyCodeLine{00044\ \ \ \ \ \}}
-\DoxyCodeLine{00045\ }
-\DoxyCodeLine{00046\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{size\_t}\ n\ =\ matrix.\mbox{\hyperlink{classmaf_1_1math_1_1_matrix_aa1fa0768048faff36f5dfc56911a8ce4}{row\_count}}();}
-\DoxyCodeLine{00047\ \ \ \ \ \textcolor{keywordflow}{if}\ (n\ ==\ 0)\ \{}
-\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \{std::vector<uint32>(),\ \mbox{\hyperlink{classmaf_1_1math_1_1_matrix}{Matrix<T>}}(),\ \mbox{\hyperlink{classmaf_1_1math_1_1_matrix}{Matrix<T>}}()\};}
-\DoxyCodeLine{00049\ \ \ \ \ \}}
-\DoxyCodeLine{00050\ }
-\DoxyCodeLine{00051\ \ \ \ \ std::vector<uint32>\ P(n);}
-\DoxyCodeLine{00052\ \ \ \ \ \textcolor{comment}{//\ Change\ this\ to\ ranges::iota\ when\ Apple\ Clang\ fully\ supports\ c++23}}
-\DoxyCodeLine{00053\ \ \ \ \ std::iota(P.begin(),\ P.end(),\ 0);}
-\DoxyCodeLine{00054\ \ \ \ \ \mbox{\hyperlink{classmaf_1_1math_1_1_matrix}{Matrix<T>}}\ \_U\ =\ matrix;}
-\DoxyCodeLine{00055\ \ \ \ \ \mbox{\hyperlink{classmaf_1_1math_1_1_matrix}{Matrix<T>}}\ L\ =\ \mbox{\hyperlink{namespacemaf_1_1math_a4d61c9a4c0434a2e01652894564f7ebb}{identity\_matrix<T>}}(n);}
-\DoxyCodeLine{00056\ }
-\DoxyCodeLine{00057\ \ \ \ \ \textcolor{comment}{//\ Conceptual\ block\ matrix:}}
-\DoxyCodeLine{00058\ \ \ \ \ \textcolor{comment}{//\ A\ =\ [A\_11,\ A\_12]}}
-\DoxyCodeLine{00059\ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ [A\_21,\ A\_22]}}
-\DoxyCodeLine{00060\ }
-\DoxyCodeLine{00061\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ ib\ =\ 0;\ ib\ <\ n;\ ib\ +=\ \mbox{\hyperlink{_global_header_8hpp_ad51ded0bbd705f02f73fc60c0b721ced}{BLOCK\_SIZE}})\ \{}
-\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{size\_t}\ block\_end\ =\ std::min(ib\ +\ \mbox{\hyperlink{_global_header_8hpp_ad51ded0bbd705f02f73fc60c0b721ced}{BLOCK\_SIZE}},\ n);}
-\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Panel\ Factorization}}
-\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ This\ computes\ L\_11,\ L\_21,\ U\_11\ and\ updates\ P}}
-\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ i\ =\ ib;\ i\ <\ block\_end\ \&\&\ i\ <\ n\ -\/\ 1;\ ++i)\ \{}
-\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Find\ Pivot}}
-\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ pivot\_row\ =\ i;}
-\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ \ \ \ \ T\ max\_val\ =\ std::abs(\_U.\mbox{\hyperlink{classmaf_1_1math_1_1_matrix_a3506acc05e298718fb6d5587d6594055}{at}}(i,\ i));}
-\DoxyCodeLine{00069\ }
-\DoxyCodeLine{00070\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ j\ =\ i\ +\ 1;\ j\ <\ n;\ ++j)\ \{}
-\DoxyCodeLine{00071\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ T\ curr\_val\ =\ std::abs(\_U.\mbox{\hyperlink{classmaf_1_1math_1_1_matrix_a3506acc05e298718fb6d5587d6594055}{at}}(j,\ i));}
-\DoxyCodeLine{00072\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (curr\_val\ >\ max\_val)\ \{}
-\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ max\_val\ =\ curr\_val;}
-\DoxyCodeLine{00074\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ pivot\_row\ =\ j;}
-\DoxyCodeLine{00075\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00077\ }
-\DoxyCodeLine{00078\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{namespacemaf_a11dab27cc975212d0cfebee780289026}{is\_close}}(max\_val,\ \textcolor{keyword}{static\_cast<}T\textcolor{keyword}{>}(0),\ \textcolor{keyword}{static\_cast<}T\textcolor{keyword}{>}(1e-\/9)))\ \{}
-\DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{continue};}
+\DoxyCodeLine{00037\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T>}
+\DoxyCodeLine{00038\ [[nodiscard]]\ std::tuple<std::vector<uint32>,\ \mbox{\hyperlink{classmaf_1_1math_1_1_matrix}{Matrix<T>}},\ \mbox{\hyperlink{classmaf_1_1math_1_1_matrix}{Matrix<T>}}>}
+\DoxyCodeLine{00039\ \mbox{\hyperlink{namespacemaf_1_1math_ac44a6962e2d09c20d929223448b4421c}{plu}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classmaf_1_1math_1_1_matrix}{Matrix<T>}}\ \&matrix)\ \{}
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{keywordflow}{if}\ (!matrix.\mbox{\hyperlink{classmaf_1_1math_1_1_matrix_a774d7c4510a8977e5b19f5f332d5789c}{is\_square}}())\ \{}
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::invalid\_argument(}
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}Matrix\ must\ be\ square\ for\ PLU\ decomposition!"{}});}
+\DoxyCodeLine{00043\ \ \ \ \ \}}
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00045\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{size\_t}\ n\ =\ matrix.\mbox{\hyperlink{classmaf_1_1math_1_1_matrix_aa1fa0768048faff36f5dfc56911a8ce4}{row\_count}}();}
+\DoxyCodeLine{00046\ \ \ \ \ \textcolor{keywordflow}{if}\ (n\ ==\ 0)\ \{}
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \{std::vector<uint32>(),\ \mbox{\hyperlink{classmaf_1_1math_1_1_matrix}{Matrix<T>}}(),\ \mbox{\hyperlink{classmaf_1_1math_1_1_matrix}{Matrix<T>}}()\};}
+\DoxyCodeLine{00048\ \ \ \ \ \}}
+\DoxyCodeLine{00049\ }
+\DoxyCodeLine{00050\ \ \ \ \ std::vector<uint32>\ P(n);}
+\DoxyCodeLine{00051\ \ \ \ \ \textcolor{comment}{//\ Change\ this\ to\ ranges::iota\ when\ Apple\ Clang\ fully\ supports\ c++23}}
+\DoxyCodeLine{00052\ \ \ \ \ std::iota(P.begin(),\ P.end(),\ 0);}
+\DoxyCodeLine{00053\ \ \ \ \ \mbox{\hyperlink{classmaf_1_1math_1_1_matrix}{Matrix<T>}}\ \_U\ =\ matrix;}
+\DoxyCodeLine{00054\ \ \ \ \ \mbox{\hyperlink{classmaf_1_1math_1_1_matrix}{Matrix<T>}}\ L\ =\ identity\_matrix<T>(n);}
+\DoxyCodeLine{00055\ }
+\DoxyCodeLine{00056\ \ \ \ \ \textcolor{comment}{//\ Conceptual\ block\ matrix:}}
+\DoxyCodeLine{00057\ \ \ \ \ \textcolor{comment}{//\ A\ =\ [A\_11,\ A\_12]}}
+\DoxyCodeLine{00058\ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ [A\_21,\ A\_22]}}
+\DoxyCodeLine{00059\ }
+\DoxyCodeLine{00060\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ ib\ =\ 0;\ ib\ <\ n;\ ib\ +=\ \mbox{\hyperlink{_global_header_8hpp_ad51ded0bbd705f02f73fc60c0b721ced}{BLOCK\_SIZE}})\ \{}
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{size\_t}\ block\_end\ =\ std::min(ib\ +\ \mbox{\hyperlink{_global_header_8hpp_ad51ded0bbd705f02f73fc60c0b721ced}{BLOCK\_SIZE}},\ n);}
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Panel\ Factorization}}
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ This\ computes\ L\_11,\ L\_21,\ U\_11\ and\ updates\ P}}
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ i\ =\ ib;\ i\ <\ block\_end\ \&\&\ i\ <\ n\ -\/\ 1;\ ++i)\ \{}
+\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Find\ Pivot}}
+\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ pivot\_row\ =\ i;}
+\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ \ \ \ \ T\ max\_val\ =\ std::abs(\_U.\mbox{\hyperlink{classmaf_1_1math_1_1_matrix_a3506acc05e298718fb6d5587d6594055}{at}}(i,\ i));}
+\DoxyCodeLine{00068\ }
+\DoxyCodeLine{00069\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ j\ =\ i\ +\ 1;\ j\ <\ n;\ ++j)\ \{}
+\DoxyCodeLine{00070\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ T\ curr\_val\ =\ std::abs(\_U.\mbox{\hyperlink{classmaf_1_1math_1_1_matrix_a3506acc05e298718fb6d5587d6594055}{at}}(j,\ i));}
+\DoxyCodeLine{00071\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (curr\_val\ >\ max\_val)\ \{}
+\DoxyCodeLine{00072\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ max\_val\ =\ curr\_val;}
+\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ pivot\_row\ =\ j;}
+\DoxyCodeLine{00074\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00075\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00076\ }
+\DoxyCodeLine{00077\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{namespacemaf_a11dab27cc975212d0cfebee780289026}{is\_close}}(max\_val,\ \textcolor{keyword}{static\_cast<}T\textcolor{keyword}{>}(0),\ 1e-\/9))\ \{}
+\DoxyCodeLine{00078\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(}
+\DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}Matrix\ is\ singular;\ pivot\ is\ near\ zero."{}});}
 \DoxyCodeLine{00080\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{00081\ }
 \DoxyCodeLine{00082\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (pivot\_row\ !=\ i)\ \{}
@@ -125,22 +125,25 @@
 \DoxyCodeLine{00150\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{00151\ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{00152\ \ \ \ \ \}}
-\DoxyCodeLine{00153\ }
-\DoxyCodeLine{00154\ \ \ \ \ \textcolor{comment}{//\ Extract\ U}}
-\DoxyCodeLine{00155\ \ \ \ \ \mbox{\hyperlink{classmaf_1_1math_1_1_matrix}{Matrix<T>}}\ U(n,\ n);}
-\DoxyCodeLine{00156\ \textcolor{preprocessor}{\#pragma\ omp\ parallel\ for\ schedule(static)\ if\ (n\ >\ 256)}}
-\DoxyCodeLine{00157\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ i\ =\ 0;\ i\ <\ n;\ ++i)\ \{}
-\DoxyCodeLine{00158\ \ \ \ \ \ \ \ \ T\ *u\_row\ =\ \&U.\mbox{\hyperlink{classmaf_1_1math_1_1_matrix_a3506acc05e298718fb6d5587d6594055}{at}}(i,\ i);}
-\DoxyCodeLine{00159\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ T\ *a\_row\ =\ \&\_U.\mbox{\hyperlink{classmaf_1_1math_1_1_matrix_a3506acc05e298718fb6d5587d6594055}{at}}(i,\ i);}
-\DoxyCodeLine{00160\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{size\_t}\ len\ =\ n\ -\/\ i;}
-\DoxyCodeLine{00161\ \ \ \ \ \ \ \ \ std::copy\_n(a\_row,\ len,\ u\_row);}
-\DoxyCodeLine{00162\ \ \ \ \ \}}
-\DoxyCodeLine{00163\ }
-\DoxyCodeLine{00164\ \ \ \ \ \textcolor{keywordflow}{return}\ std::make\_tuple(std::move(P),\ std::move(L),\ std::move(U));}
-\DoxyCodeLine{00165\ \}}
+\DoxyCodeLine{00153\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{namespacemaf_a11dab27cc975212d0cfebee780289026}{is\_close}}(\_U.\mbox{\hyperlink{classmaf_1_1math_1_1_matrix_a3506acc05e298718fb6d5587d6594055}{at}}(n\ -\/\ 1,\ n\ -\/\ 1),\ \textcolor{keyword}{static\_cast<}T\textcolor{keyword}{>}(0),\ 1e-\/9))\ \{}
+\DoxyCodeLine{00154\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(\textcolor{stringliteral}{"{}Matrix\ is\ singular;\ pivot\ is\ near\ zero."{}});}
+\DoxyCodeLine{00155\ \ \ \ \ \}}
+\DoxyCodeLine{00156\ }
+\DoxyCodeLine{00157\ \ \ \ \ \textcolor{comment}{//\ Extract\ U}}
+\DoxyCodeLine{00158\ \ \ \ \ \mbox{\hyperlink{classmaf_1_1math_1_1_matrix}{Matrix<T>}}\ U(n,\ n);}
+\DoxyCodeLine{00159\ \textcolor{preprocessor}{\#pragma\ omp\ parallel\ for\ schedule(static)\ if\ (n\ >\ 256)}}
+\DoxyCodeLine{00160\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ i\ =\ 0;\ i\ <\ n;\ ++i)\ \{}
+\DoxyCodeLine{00161\ \ \ \ \ \ \ \ \ T\ *u\_row\ =\ \&U.\mbox{\hyperlink{classmaf_1_1math_1_1_matrix_a3506acc05e298718fb6d5587d6594055}{at}}(i,\ i);}
+\DoxyCodeLine{00162\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ T\ *a\_row\ =\ \&\_U.\mbox{\hyperlink{classmaf_1_1math_1_1_matrix_a3506acc05e298718fb6d5587d6594055}{at}}(i,\ i);}
+\DoxyCodeLine{00163\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{size\_t}\ len\ =\ n\ -\/\ i;}
+\DoxyCodeLine{00164\ \ \ \ \ \ \ \ \ std::copy\_n(a\_row,\ len,\ u\_row);}
+\DoxyCodeLine{00165\ \ \ \ \ \}}
 \DoxyCodeLine{00166\ }
-\DoxyCodeLine{00167\ \}\ \textcolor{comment}{//\ namespace\ maf::math}}
-\DoxyCodeLine{00168\ }
-\DoxyCodeLine{00169\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\ MATRIX\_PLU\_H}}
+\DoxyCodeLine{00167\ \ \ \ \ \textcolor{keywordflow}{return}\ std::make\_tuple(std::move(P),\ std::move(L),\ std::move(U));}
+\DoxyCodeLine{00168\ \}}
+\DoxyCodeLine{00169\ }
+\DoxyCodeLine{00170\ \}\ \textcolor{comment}{//\ namespace\ maf::math}}
+\DoxyCodeLine{00171\ }
+\DoxyCodeLine{00172\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\ MATRIX\_PLU\_H}}
 
 \end{DoxyCode}

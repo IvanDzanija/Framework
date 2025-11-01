@@ -25,19 +25,50 @@
 \DoxyCodeLine{00021\ \ \ \ \ \}}
 \DoxyCodeLine{00022\ \}}
 \DoxyCodeLine{00023\ }
-\DoxyCodeLine{00024\ \textcolor{comment}{//\ Creates\ new\ transposed\ matrix}}
-\DoxyCodeLine{00025\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T>\ \mbox{\hyperlink{classmaf_1_1math_1_1_matrix_afadd64902ef9d03291be6e799c38e904}{Matrix<T>}}\ \mbox{\hyperlink{classmaf_1_1math_1_1_matrix_a246ca1334c2afc425a2eafc68b48fa38}{Matrix<T>::transposed}}()\textcolor{keyword}{\ const\ }\{}
-\DoxyCodeLine{00026\ \ \ \ \ \mbox{\hyperlink{classmaf_1_1math_1_1_matrix_afadd64902ef9d03291be6e799c38e904}{Matrix<T>}}\ result(\_cols,\ \_rows);}
-\DoxyCodeLine{00027\ }
-\DoxyCodeLine{00028\ \textcolor{preprocessor}{\#pragma\ omp\ parallel\ for\ if\ (\_data.size()\ >\ 100\ *\ 100)}}
-\DoxyCodeLine{00029\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ i\ =\ 0;\ i\ <\ \_rows;\ ++i)\ \{}
-\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ j\ =\ 0;\ j\ <\ \_cols;\ ++j)\ \{}
-\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ \ \ \ \ result.\mbox{\hyperlink{classmaf_1_1math_1_1_matrix_a3506acc05e298718fb6d5587d6594055}{at}}(j,\ i)\ =\ this-\/>\mbox{\hyperlink{classmaf_1_1math_1_1_matrix_a3506acc05e298718fb6d5587d6594055}{at}}(i,\ j);}
-\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00033\ \ \ \ \ \}}
-\DoxyCodeLine{00034\ \ \ \ \ \textcolor{keywordflow}{return}\ result;}
-\DoxyCodeLine{00035\ \}}
-\DoxyCodeLine{00036\ }
-\DoxyCodeLine{00037\ \}\ \textcolor{comment}{//\ namespace\ maf::math}}
+\DoxyCodeLine{00024\ \textcolor{comment}{//\ Performs\ an\ in-\/place\ transpose\ of\ the\ matrix.}}
+\DoxyCodeLine{00025\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T>\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classmaf_1_1math_1_1_matrix_a65c510831554a29db6115f964b3679b0}{Matrix<T>::transpose}}()\ \{}
+\DoxyCodeLine{00026\ \ \ \ \ \textcolor{keywordflow}{if}\ (!\mbox{\hyperlink{classmaf_1_1math_1_1_matrix_a774d7c4510a8977e5b19f5f332d5789c}{is\_square}}())\ \{}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::invalid\_argument(}
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}Matrix\ must\ be\ square\ to\ transpose\ in-\/place."{}});}
+\DoxyCodeLine{00029\ \ \ \ \ \}}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \textcolor{preprocessor}{\#pragma\ omp\ parallel\ for}}
+\DoxyCodeLine{00032\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ i\ =\ 0;\ i\ <\ \_rows;\ i\ +=\ \mbox{\hyperlink{_global_header_8hpp_ad51ded0bbd705f02f73fc60c0b721ced}{BLOCK\_SIZE}})\ \{}
+\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ j\ =\ i;\ j\ <\ \_cols;\ j\ +=\ \mbox{\hyperlink{_global_header_8hpp_ad51ded0bbd705f02f73fc60c0b721ced}{BLOCK\_SIZE}})\ \{}
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{size\_t}\ n\ =\ std::min(i\ +\ \mbox{\hyperlink{_global_header_8hpp_ad51ded0bbd705f02f73fc60c0b721ced}{BLOCK\_SIZE}},\ \_rows);}
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{size\_t}\ m\ =\ std::min(j\ +\ \mbox{\hyperlink{_global_header_8hpp_ad51ded0bbd705f02f73fc60c0b721ced}{BLOCK\_SIZE}},\ \_cols);}
+\DoxyCodeLine{00036\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (i\ ==\ j)\ \{}
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Diagonal\ block}}
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ k\ =\ i;\ k\ <\ n;\ ++k)\ \{}
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ l\ =\ k\ +\ 1;\ l\ <\ m;\ ++l)\ \{}
+\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::swap(this-\/>\mbox{\hyperlink{classmaf_1_1math_1_1_matrix_a3506acc05e298718fb6d5587d6594055}{at}}(k,\ l),\ this-\/>\mbox{\hyperlink{classmaf_1_1math_1_1_matrix_a3506acc05e298718fb6d5587d6594055}{at}}(l,\ k));}
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Off-\/diagonal\ block}}
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ k\ =\ i;\ k\ <\ n;\ ++k)\ \{}
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ l\ =\ j;\ l\ <\ m;\ ++l)\ \{}
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::swap(this-\/>\mbox{\hyperlink{classmaf_1_1math_1_1_matrix_a3506acc05e298718fb6d5587d6594055}{at}}(k,\ l),\ this-\/>\mbox{\hyperlink{classmaf_1_1math_1_1_matrix_a3506acc05e298718fb6d5587d6594055}{at}}(l,\ k));}
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00052\ \ \ \ \ \}}
+\DoxyCodeLine{00053\ \}}
+\DoxyCodeLine{00054\ }
+\DoxyCodeLine{00055\ \textcolor{comment}{//\ Creates\ new\ transposed\ matrix}}
+\DoxyCodeLine{00056\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T>\ \mbox{\hyperlink{classmaf_1_1math_1_1_matrix_afadd64902ef9d03291be6e799c38e904}{Matrix<T>}}\ \mbox{\hyperlink{classmaf_1_1math_1_1_matrix_a246ca1334c2afc425a2eafc68b48fa38}{Matrix<T>::transposed}}()\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00057\ \ \ \ \ \mbox{\hyperlink{classmaf_1_1math_1_1_matrix_afadd64902ef9d03291be6e799c38e904}{Matrix<T>}}\ result(\_cols,\ \_rows);}
+\DoxyCodeLine{00058\ }
+\DoxyCodeLine{00059\ \textcolor{preprocessor}{\#pragma\ omp\ parallel\ for\ if\ (\_data.size()\ >\ 100\ *\ 100)}}
+\DoxyCodeLine{00060\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ i\ =\ 0;\ i\ <\ \_rows;\ ++i)\ \{}
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ j\ =\ 0;\ j\ <\ \_cols;\ ++j)\ \{}
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ \ \ \ \ result.\mbox{\hyperlink{classmaf_1_1math_1_1_matrix_a3506acc05e298718fb6d5587d6594055}{at}}(j,\ i)\ =\ this-\/>\mbox{\hyperlink{classmaf_1_1math_1_1_matrix_a3506acc05e298718fb6d5587d6594055}{at}}(i,\ j);}
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00064\ \ \ \ \ \}}
+\DoxyCodeLine{00065\ \ \ \ \ \textcolor{keywordflow}{return}\ result;}
+\DoxyCodeLine{00066\ \}}
+\DoxyCodeLine{00067\ }
+\DoxyCodeLine{00068\ \}\ \textcolor{comment}{//\ namespace\ maf::math}}
 
 \end{DoxyCode}

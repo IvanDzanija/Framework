@@ -6,20 +6,18 @@
 class \mbox{\hyperlink{classmaf_1_1math_1_1_vector}{Vector}}
 \item 
 class \mbox{\hyperlink{classmaf_1_1math_1_1_matrix}{Matrix}}
-\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em A general-\/purpose, row-\/major, dense matrix class. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsubsection*{Functions}
 \begin{DoxyCompactItemize}
 \item 
 {\footnotesize template$<$typename T$>$ }\\\mbox{\hyperlink{classmaf_1_1math_1_1_matrix}{Matrix}}$<$ T $>$ \mbox{\hyperlink{namespacemaf_1_1math_a45286ae95d74e7a19ecf706538b151e7}{cholesky}} (const \mbox{\hyperlink{classmaf_1_1math_1_1_matrix}{Matrix}}$<$ T $>$ \&matrix)
-\item 
-{\footnotesize template$<$typename T$>$ }\\\mbox{\hyperlink{classmaf_1_1math_1_1_matrix}{Matrix}}$<$ T $>$ \mbox{\hyperlink{namespacemaf_1_1math_a4d61c9a4c0434a2e01652894564f7ebb}{identity\+\_\+matrix}} (size\+\_\+t size)
-\item 
+\begin{DoxyCompactList}\small\item\em Computes the Cholesky decomposition of a symmetric positive definite matrix. \end{DoxyCompactList}\item 
 {\footnotesize template$<$typename U$>$ }\\\mbox{\hyperlink{classmaf_1_1math_1_1_matrix}{Matrix}}$<$ U $>$ \mbox{\hyperlink{namespacemaf_1_1math_a44a90b54cc59e94a6502aa223b893215}{ones}} (size\+\_\+t rows, size\+\_\+t cols)
-\item 
+\begin{DoxyCompactList}\small\item\em Creates a new matrix filled with ones. \end{DoxyCompactList}\item 
 {\footnotesize template$<$typename T, typename U$>$ }\\constexpr bool \mbox{\hyperlink{namespacemaf_1_1math_a3d4733be1cd68ede07a9c2de6728b2d7}{loosely\+\_\+equal}} (const \mbox{\hyperlink{classmaf_1_1math_1_1_matrix}{Matrix}}$<$ T $>$ \&first, const \mbox{\hyperlink{classmaf_1_1math_1_1_matrix}{Matrix}}$<$ U $>$ \&second, double eps=1e-\/6)
-\begin{DoxyCompactList}\small\item\em Checks if 2 matrices are loosely equal. \end{DoxyCompactList}\item 
+\begin{DoxyCompactList}\small\item\em Checks if two matrices are element-\/wise equal within a tolerance. \end{DoxyCompactList}\item 
 {\footnotesize template$<$typename T$>$ }\\\mbox{\hyperlink{classmaf_1_1math_1_1_matrix}{Matrix}}$<$ T $>$ \mbox{\hyperlink{namespacemaf_1_1math_a0fe2f174cf146553516e15feb16733c5}{make\+\_\+permutation\+\_\+matrix}} (const std\+::vector$<$ \mbox{\hyperlink{_global_header_8hpp_a5522c54735d837fae7d6ba026b858441}{uint32}} $>$ \&perm)
-\item 
+\begin{DoxyCompactList}\small\item\em Creates a new permutation matrix from a permutation vector. \end{DoxyCompactList}\item 
 {\footnotesize template$<$typename T$>$ }\\std\+::tuple$<$ std\+::vector$<$ \mbox{\hyperlink{_global_header_8hpp_a5522c54735d837fae7d6ba026b858441}{uint32}} $>$, \mbox{\hyperlink{classmaf_1_1math_1_1_matrix}{Matrix}}$<$ T $>$, \mbox{\hyperlink{classmaf_1_1math_1_1_matrix}{Matrix}}$<$ T $>$ $>$ \mbox{\hyperlink{namespacemaf_1_1math_ac44a6962e2d09c20d929223448b4421c}{plu}} (const \mbox{\hyperlink{classmaf_1_1math_1_1_matrix}{Matrix}}$<$ T $>$ \&matrix)
 \begin{DoxyCompactList}\small\item\em Performs a blocked PLU decomposition on a square matrix. \end{DoxyCompactList}\item 
 {\footnotesize template$<$typename T, typename U$>$ }\\auto \mbox{\hyperlink{namespacemaf_1_1math_a92c661d711efb613ef38ff09aad60a11}{operator+}} (const U \&scalar, const \mbox{\hyperlink{classmaf_1_1math_1_1_vector}{Vector}}$<$ T $>$ \&vec)
@@ -46,14 +44,57 @@ class \mbox{\hyperlink{classmaf_1_1math_1_1_matrix}{Matrix}}
 template$<$typename T$>$ \\
 \mbox{\hyperlink{classmaf_1_1math_1_1_matrix}{Matrix}}$<$ T $>$ maf\+::math\+::cholesky (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classmaf_1_1math_1_1_matrix}{Matrix}}$<$ T $>$ \&}]{matrix}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [nodiscard]}}
 
-Cholesky decomposition of symmetric positive definite matrix. Symmetric positive definite matrix \texorpdfstring{$<$}{<}=\texorpdfstring{$>$}{>} has Cholesky decomposition. Here is the call graph for this function\+:\nopagebreak
+
+
+Computes the Cholesky decomposition of a symmetric positive definite matrix. 
+
+This function computes the Cholesky factorization (A = LL\texorpdfstring{$^\wedge$}{\string^}T) for a given square, symmetric, positive definite matrix A, where\+:
+\begin{DoxyItemize}
+\item A is the input matrix.
+\item L is a lower triangular matrix with positive diagonal entries.
+\item L\texorpdfstring{$^\wedge$}{\string^}T is the conjugate transpose of L (which is just the transpose for real matrices).
+\end{DoxyItemize}
+
+A matrix has a Cholesky decomposition if and only if it is symmetric and positive definite. This function checks for symmetry first. It then detects non-\/positive-\/definiteness during the computation.
+
+The decomposition is computed using a blocked Cholesky-\/\+Crout algorithm for improved cache performance. The implementation is parallelized using Open\+MP (for both multi-\/threading and SIMD vectorization) for further performance gains.
+
+More information\+: \href{https://en.wikipedia.org/wiki/Cholesky_decomposition}{\texttt{https\+://en.\+wikipedia.\+org/wiki/\+Cholesky\+\_\+decomposition}}
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em T} & The numeric type of the matrix elements (e.\+g., float, double). \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em matrix} & The const reference to the square, symmetric, positive definite input matrix (A) to decompose. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+(\doxylink{classmaf_1_1math_1_1_matrix}{Matrix$<$\+T$>$}) The lower triangular matrix (L).
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em std\+::invalid\+\_\+argument} & if the input matrix is not symmetric, or if it is not positive definite (detected during factorization).\\
+\hline
+\end{DoxyExceptions}
+\begin{DoxyVersion}{Version}
+1.\+0 (Blocked \& Parallelized) 
+\end{DoxyVersion}
+\begin{DoxySince}{Since}
+2025 
+\end{DoxySince}
+Here is the call graph for this function\+:
+\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
 \includegraphics[width=350pt]{d4/d02/namespacemaf_1_1math_a45286ae95d74e7a19ecf706538b151e7_cgraph}
 \end{center}
 \end{figure}
-Here is the caller graph for this function\+:\nopagebreak
+Here is the caller graph for this function\+:
+\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -70,7 +111,8 @@ auto maf\+::math\+::correlated\+\_\+shocks (\begin{DoxyParamCaption}\item[{const
 Creates a vector of correlated random variables from a vector of independant random variables based on Cholesky decomposition of covariance matrix. \href{https://en.wikipedia.org/wiki/Cholesky_decomposition\#Monte_Carlo_simulation}{\texttt{https\+://en.\+wikipedia.\+org/wiki/\+Cholesky\+\_\+decomposition\#\+Monte\+\_\+\+Carlo\+\_\+simulation}} \begin{DoxyReturn}{Returns}
 \doxylink{classmaf_1_1math_1_1_vector}{Vector} of common promoted type. 
 \end{DoxyReturn}
-Here is the call graph for this function\+:\nopagebreak
+Here is the call graph for this function\+:
+\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -102,30 +144,6 @@ Here is the call graph for this function\+:\nopagebreak
 \includegraphics[width=350pt]{d4/d02/namespacemaf_1_1math_a66ab6cca490d0bd2354b736a13658711_cgraph}
 \end{center}
 \end{figure}
-\Hypertarget{namespacemaf_1_1math_a4d61c9a4c0434a2e01652894564f7ebb}\index{maf::math@{maf::math}!identity\_matrix@{identity\_matrix}}
-\index{identity\_matrix@{identity\_matrix}!maf::math@{maf::math}}
-\doxysubsubsection{\texorpdfstring{identity\_matrix()}{identity\_matrix()}}
-{\footnotesize\ttfamily \label{namespacemaf_1_1math_a4d61c9a4c0434a2e01652894564f7ebb} 
-template$<$typename T$>$ \\
-\mbox{\hyperlink{classmaf_1_1math_1_1_matrix}{Matrix}}$<$ T $>$ maf\+::math\+::identity\+\_\+matrix (\begin{DoxyParamCaption}\item[{size\+\_\+t}]{size}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [nodiscard]}}
-
-Creates new identity matrix. \begin{DoxyReturn}{Returns}
-\doxylink{classmaf_1_1math_1_1_matrix}{Matrix} of given type. 
-\end{DoxyReturn}
-Here is the call graph for this function\+:\nopagebreak
-\begin{figure}[H]
-\begin{center}
-\leavevmode
-\includegraphics[width=350pt]{d4/d02/namespacemaf_1_1math_a4d61c9a4c0434a2e01652894564f7ebb_cgraph}
-\end{center}
-\end{figure}
-Here is the caller graph for this function\+:\nopagebreak
-\begin{figure}[H]
-\begin{center}
-\leavevmode
-\includegraphics[width=293pt]{d4/d02/namespacemaf_1_1math_a4d61c9a4c0434a2e01652894564f7ebb_icgraph}
-\end{center}
-\end{figure}
 \Hypertarget{namespacemaf_1_1math_a3d4733be1cd68ede07a9c2de6728b2d7}\index{maf::math@{maf::math}!loosely\_equal@{loosely\_equal}}
 \index{loosely\_equal@{loosely\_equal}!maf::math@{maf::math}}
 \doxysubsubsection{\texorpdfstring{loosely\_equal()}{loosely\_equal()}}
@@ -135,9 +153,25 @@ bool maf\+::math\+::loosely\+\_\+equal (\begin{DoxyParamCaption}\item[{const \mb
 
 
 
-Checks if 2 matrices are loosely equal. 
+Checks if two matrices are element-\/wise equal within a tolerance. 
 
-Here is the call graph for this function\+:\nopagebreak
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em T} & Numeric type of the first matrix. \\
+\hline
+{\em U} & Numeric type of the second matrix. \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em eps} & The absolute tolerance for equality. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true if dimensions match and all elements are "{}close"{}. 
+\end{DoxyReturn}
+Here is the call graph for this function\+:
+\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -151,7 +185,25 @@ Here is the call graph for this function\+:\nopagebreak
 template$<$typename T$>$ \\
 \mbox{\hyperlink{classmaf_1_1math_1_1_matrix}{Matrix}}$<$ T $>$ maf\+::math\+::make\+\_\+permutation\+\_\+matrix (\begin{DoxyParamCaption}\item[{const std\+::vector$<$ \mbox{\hyperlink{_global_header_8hpp_a5522c54735d837fae7d6ba026b858441}{uint32}} $>$ \&}]{perm}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [nodiscard]}}
 
-Here is the call graph for this function\+:\nopagebreak
+
+
+Creates a new permutation matrix from a permutation vector. 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em T} & The numeric type of the matrix. \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em perm} & A vector where {\ttfamily perm\mbox{[}i\mbox{]} = j} means row {\ttfamily i} maps to column {\ttfamily j}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A sparse permutation \doxylink{classmaf_1_1math_1_1_matrix}{Matrix$<$\+T$>$}. 
+\end{DoxyReturn}
+Here is the call graph for this function\+:
+\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -190,10 +242,27 @@ Here is the caller graph for this function\+:\nopagebreak
 template$<$typename U$>$ \\
 \mbox{\hyperlink{classmaf_1_1math_1_1_matrix}{Matrix}}$<$ U $>$ maf\+::math\+::ones (\begin{DoxyParamCaption}\item[{size\+\_\+t}]{rows}{, }\item[{size\+\_\+t}]{cols}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [nodiscard]}}
 
-Creates new matrix filled with ones. \begin{DoxyReturn}{Returns}
-\doxylink{classmaf_1_1math_1_1_matrix}{Matrix} of given type. 
+
+
+Creates a new matrix filled with ones. 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em U} & The numeric type of the matrix. \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em rows} & Number of rows. \\
+\hline
+{\em cols} & Number of columns. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A \doxylink{classmaf_1_1math_1_1_matrix}{Matrix}\uline{ of size (rows x cols) filled with U(1). }
 \end{DoxyReturn}
-Here is the call graph for this function\+:\nopagebreak
+Here is the call graph for this function\+:
+\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -266,10 +335,19 @@ A std\+::tuple containing\+:
 \begin{DoxySince}{Since}
 2025 
 \end{DoxySince}
-Here is the call graph for this function\+:\nopagebreak
+Here is the call graph for this function\+:
+\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
-\includegraphics[width=350pt]{d4/d02/namespacemaf_1_1math_ac44a6962e2d09c20d929223448b4421c_cgraph}
+\includegraphics[width=303pt]{d4/d02/namespacemaf_1_1math_ac44a6962e2d09c20d929223448b4421c_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=294pt]{d4/d02/namespacemaf_1_1math_ac44a6962e2d09c20d929223448b4421c_icgraph}
 \end{center}
 \end{figure}

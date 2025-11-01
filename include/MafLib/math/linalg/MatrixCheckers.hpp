@@ -1,10 +1,24 @@
+#ifndef MATRIX_CHECKERS_H
+#define MATRIX_CHECKERS_H
 #pragma once
-#include "MafLib/math/linalg/CholeskyDecomposition.hpp"
 #include "Matrix.hpp"
-#include <exception>
 
+/**
+ * @file MatrixCheckers.hpp
+ * @brief Contains implementations for the checker methods of the Matrix<T>
+ * class.
+ *
+ * This file is intended to be included at the *end* of Matrix.hpp and
+ * should not be included directly anywhere else.
+ */
 namespace maf::math {
+// Checks if matrix is square.
+template <typename T>
+[[nodiscard]] constexpr bool Matrix<T>::is_square() const {
+    return _rows == _cols;
+}
 
+// Checks if matrix is symmetric.
 template <typename T>
 [[nodiscard]] constexpr bool Matrix<T>::is_symmetric() const {
     if (!is_square()) {
@@ -19,6 +33,8 @@ template <typename T>
     }
     return true;
 }
+
+// Checks if matrix is upper triangular.
 template <typename T>
 [[nodiscard]] constexpr bool Matrix<T>::is_upper_triangular() const {
     if (!is_square()) {
@@ -34,6 +50,7 @@ template <typename T>
     return true;
 }
 
+// Checks if matrix is lower triangular.
 template <typename T>
 [[nodiscard]] constexpr bool Matrix<T>::is_lower_triangular() const {
     if (!is_square()) {
@@ -49,6 +66,7 @@ template <typename T>
     return true;
 }
 
+// Checks if matrix is diagonal.
 template <typename T>
 [[nodiscard]] constexpr bool Matrix<T>::is_diagonal() const {
     if (!is_square()) {
@@ -57,14 +75,18 @@ template <typename T>
     return is_upper_triangular() && is_lower_triangular();
 }
 
+// Checks if matrix is singular.
 template <typename T>
 [[nodiscard]] constexpr bool Matrix<T>::is_singular() const {
     if (!is_square()) {
-        return false;
+        return true;
     }
-    //  TODO: LOGIC
-    //   For now, we will assume the matrix is not singular
-    return false;
+    try {
+        plu(*this);
+        return false;
+    } catch (const std::runtime_error &e) {
+        return true;
+    }
 }
 
 template <typename T>
@@ -78,3 +100,5 @@ template <typename T>
 }
 
 } // namespace maf::math
+
+#endif

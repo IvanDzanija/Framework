@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['unite_0',['unite',['../d3/dee/classmaf_1_1_disjoint_sets.html#a3b9e098c857c3cd1b313f74e9c132ab7',1,'maf::DisjointSets']]],
-  ['united_1',['united',['../d3/dee/classmaf_1_1_disjoint_sets.html#ac01dc3c5155bbf762d38c9571be9bf24',1,'maf::DisjointSets']]]
+  ['unite_0',['unite',['../db/da1/classmaf_1_1_disjoint_set.html#ae8731c4fd9d0b6f8bed4f0b035306b9f',1,'maf::DisjointSet']]],
+  ['united_1',['united',['../db/da1/classmaf_1_1_disjoint_set.html#acb80ae42f825cae6c0f7e9f71eedf689',1,'maf::DisjointSet']]]
 ];

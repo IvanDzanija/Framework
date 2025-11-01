@@ -109,32 +109,51 @@ $(function() { codefold.init(); });
 </div><!--header-->
 <div class="contents">
 
+<p>A general-purpose, row-major, dense matrix class.  
+ <a href="#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="../../d8/d49/_matrix_8hpp_source.html">Matrix.hpp</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-methods" class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:afadd64902ef9d03291be6e799c38e904" id="r_afadd64902ef9d03291be6e799c38e904"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afadd64902ef9d03291be6e799c38e904">Matrix</a> ()</td></tr>
+<tr class="memdesc:afadd64902ef9d03291be6e799c38e904"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default constructor. Creates an empty 0x0 matrix.  <br /></td></tr>
 <tr class="memitem:a137a88facec95aac4ec5e55cfd00e798" id="r_a137a88facec95aac4ec5e55cfd00e798"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a137a88facec95aac4ec5e55cfd00e798">Matrix</a> (size_t rows, size_t cols, T *<a class="el" href="#aca60efe3848c6a7635c9f609ca163528">data</a>)</td></tr>
+<tr class="memdesc:a137a88facec95aac4ec5e55cfd00e798"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a matrix from a raw data pointer.  <br /></td></tr>
 <tr class="memitem:ac3f6dd2d29dc8ec8af6d73ead9573bdb" id="r_ac3f6dd2d29dc8ec8af6d73ead9573bdb"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac3f6dd2d29dc8ec8af6d73ead9573bdb">Matrix</a> (size_t rows, size_t cols)</td></tr>
+<tr class="memdesc:ac3f6dd2d29dc8ec8af6d73ead9573bdb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs an uninitialized matrix of size rows x cols.  <br /></td></tr>
 <tr class="memitem:a8b0c11e3b01e1a9f2a63764d13d6cb24" id="r_a8b0c11e3b01e1a9f2a63764d13d6cb24"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8b0c11e3b01e1a9f2a63764d13d6cb24">Matrix</a> (size_t rows, size_t cols, const std::vector&lt; T &gt; &amp;<a class="el" href="#aca60efe3848c6a7635c9f609ca163528">data</a>)</td></tr>
+<tr class="memdesc:a8b0c11e3b01e1a9f2a63764d13d6cb24"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs from a std::vector, filled by rows.  <br /></td></tr>
 <tr class="memitem:a9e5e920bcd92c6a8a0a2c5098467a5e2" id="r_a9e5e920bcd92c6a8a0a2c5098467a5e2"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9e5e920bcd92c6a8a0a2c5098467a5e2">Matrix</a> (size_t rows, size_t cols, const std::vector&lt; std::vector&lt; T &gt; &gt; &amp;<a class="el" href="#aca60efe3848c6a7635c9f609ca163528">data</a>)</td></tr>
+<tr class="memdesc:a9e5e920bcd92c6a8a0a2c5098467a5e2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs from a nested std::vector (vector of vectors).  <br /></td></tr>
 <tr class="memitem:ac57878bb415f6ea6f438e2bfe9fe9398" id="r_ac57878bb415f6ea6f438e2bfe9fe9398"><td class="memTemplParams" colspan="2">template&lt;typename U, size_t N&gt; </td></tr>
 <tr class="memitem:ac57878bb415f6ea6f438e2bfe9fe9398 template"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac57878bb415f6ea6f438e2bfe9fe9398">Matrix</a> (size_t rows, size_t cols, const std::array&lt; U, N &gt; &amp;<a class="el" href="#aca60efe3848c6a7635c9f609ca163528">data</a>)</td></tr>
+<tr class="memdesc:ac57878bb415f6ea6f438e2bfe9fe9398"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs from a std::array, filled by rows.  <br /></td></tr>
 <tr class="memitem:a0ce9252a1959be9152184bae6c5b08af" id="r_a0ce9252a1959be9152184bae6c5b08af"><td class="memTemplParams" colspan="2">template&lt;typename U&gt; </td></tr>
 <tr class="memitem:a0ce9252a1959be9152184bae6c5b08af template"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0ce9252a1959be9152184bae6c5b08af">Matrix</a> (size_t rows, size_t cols, std::initializer_list&lt; U &gt; list)</td></tr>
+<tr class="memdesc:a0ce9252a1959be9152184bae6c5b08af"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs from a std::initializer_list, filled by rows.  <br /></td></tr>
 <tr class="memitem:aca60efe3848c6a7635c9f609ca163528" id="r_aca60efe3848c6a7635c9f609ca163528"><td class="memItemLeft" align="right" valign="top">std::vector&lt; T &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aca60efe3848c6a7635c9f609ca163528">data</a> () noexcept</td></tr>
+<tr class="memdesc:aca60efe3848c6a7635c9f609ca163528"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets a mutable reference to the underlying std::vector data store.  <br /></td></tr>
 <tr class="memitem:a473eb241e2869fb796d58c21fa2d6840" id="r_a473eb241e2869fb796d58c21fa2d6840"><td class="memItemLeft" align="right" valign="top">const std::vector&lt; T &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a473eb241e2869fb796d58c21fa2d6840">data</a> () const noexcept</td></tr>
+<tr class="memdesc:a473eb241e2869fb796d58c21fa2d6840"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets a const reference to the underlying std::vector data store.  <br /></td></tr>
 <tr class="memitem:aa1fa0768048faff36f5dfc56911a8ce4" id="r_aa1fa0768048faff36f5dfc56911a8ce4"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa1fa0768048faff36f5dfc56911a8ce4">row_count</a> () const noexcept</td></tr>
+<tr class="memdesc:aa1fa0768048faff36f5dfc56911a8ce4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the number of rows.  <br /></td></tr>
 <tr class="memitem:a98d6cc10d243169d78f53d07406ace8b" id="r_a98d6cc10d243169d78f53d07406ace8b"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a98d6cc10d243169d78f53d07406ace8b">column_count</a> () const noexcept</td></tr>
+<tr class="memdesc:a98d6cc10d243169d78f53d07406ace8b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the number of columns.  <br /></td></tr>
 <tr class="memitem:a45aa75653ab2200d6de78ec7accbda5b" id="r_a45aa75653ab2200d6de78ec7accbda5b"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a45aa75653ab2200d6de78ec7accbda5b">size</a> () const noexcept</td></tr>
+<tr class="memdesc:a45aa75653ab2200d6de78ec7accbda5b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the total number of elements (rows * cols).  <br /></td></tr>
 <tr class="memitem:a3506acc05e298718fb6d5587d6594055" id="r_a3506acc05e298718fb6d5587d6594055"><td class="memItemLeft" align="right" valign="top">T &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3506acc05e298718fb6d5587d6594055">at</a> (size_t row, size_t col)</td></tr>
+<tr class="memdesc:a3506acc05e298718fb6d5587d6594055"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets a mutable reference to the element at (row, col).  <br /></td></tr>
 <tr class="memitem:a0153f134a332e1f91c2ce151b2e460db" id="r_a0153f134a332e1f91c2ce151b2e460db"><td class="memItemLeft" align="right" valign="top">const T &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0153f134a332e1f91c2ce151b2e460db">at</a> (size_t row, size_t col) const</td></tr>
+<tr class="memdesc:a0153f134a332e1f91c2ce151b2e460db"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets a const reference to the element at (row, col).  <br /></td></tr>
 <tr class="memitem:afb33cbf4574399aa71beba18c85a2663" id="r_afb33cbf4574399aa71beba18c85a2663"><td class="memItemLeft" align="right" valign="top">std::span&lt; T &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afb33cbf4574399aa71beba18c85a2663">row_span</a> (size_t row)</td></tr>
+<tr class="memdesc:afb33cbf4574399aa71beba18c85a2663"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets a mutable std::span of a single row.  <br /></td></tr>
 <tr class="memitem:ae00dc3fd1deab1868365bb3dc45c4f7d" id="r_ae00dc3fd1deab1868365bb3dc45c4f7d"><td class="memItemLeft" align="right" valign="top">std::span&lt; const T &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae00dc3fd1deab1868365bb3dc45c4f7d">row_span</a> (size_t row) const</td></tr>
+<tr class="memdesc:ae00dc3fd1deab1868365bb3dc45c4f7d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets a const std::span of a single row.  <br /></td></tr>
 <tr class="memitem:a774d7c4510a8977e5b19f5f332d5789c" id="r_a774d7c4510a8977e5b19f5f332d5789c"><td class="memItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a774d7c4510a8977e5b19f5f332d5789c">is_square</a> () const</td></tr>
-<tr class="memdesc:a774d7c4510a8977e5b19f5f332d5789c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if the matrix is square.  <br /></td></tr>
+<tr class="memdesc:a774d7c4510a8977e5b19f5f332d5789c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if the matrix is square (rows == cols).  <br /></td></tr>
 <tr class="memitem:a0f6daf36ebb2efd5970384565469323c" id="r_a0f6daf36ebb2efd5970384565469323c"><td class="memItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0f6daf36ebb2efd5970384565469323c">is_symmetric</a> () const</td></tr>
-<tr class="memdesc:a0f6daf36ebb2efd5970384565469323c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checkes if the matrix is symmetric.  <br /></td></tr>
+<tr class="memdesc:a0f6daf36ebb2efd5970384565469323c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if the matrix is symmetric (A == A^T).  <br /></td></tr>
 <tr class="memitem:af79337899f9b0f2613175daf53f18ea9" id="r_af79337899f9b0f2613175daf53f18ea9"><td class="memItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af79337899f9b0f2613175daf53f18ea9">is_upper_triangular</a> () const</td></tr>
 <tr class="memdesc:af79337899f9b0f2613175daf53f18ea9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if the matrix is upper triangular.  <br /></td></tr>
 <tr class="memitem:a48ce2d00357e89ece95524bd003b63c6" id="r_a48ce2d00357e89ece95524bd003b63c6"><td class="memItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a48ce2d00357e89ece95524bd003b63c6">is_lower_triangular</a> () const</td></tr>
@@ -142,65 +161,101 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a90408b80daf821aff91fd2aed917ce8e" id="r_a90408b80daf821aff91fd2aed917ce8e"><td class="memItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a90408b80daf821aff91fd2aed917ce8e">is_diagonal</a> () const</td></tr>
 <tr class="memdesc:a90408b80daf821aff91fd2aed917ce8e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if the matrix is diagonal.  <br /></td></tr>
 <tr class="memitem:af716a9fdb890f168430aad15c9207a27" id="r_af716a9fdb890f168430aad15c9207a27"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af716a9fdb890f168430aad15c9207a27">is_positive_definite</a> () const</td></tr>
+<tr class="memdesc:af716a9fdb890f168430aad15c9207a27"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if the matrix is positive definite.  <br /></td></tr>
 <tr class="memitem:ae26826bcc4a303b29538a17c0a39de2b" id="r_ae26826bcc4a303b29538a17c0a39de2b"><td class="memItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae26826bcc4a303b29538a17c0a39de2b">is_singular</a> () const</td></tr>
+<tr class="memdesc:ae26826bcc4a303b29538a17c0a39de2b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if the matrix is singular (non-invertible).  <br /></td></tr>
 <tr class="memitem:a71134f227c2c22e4ecf24b33ed3c0396" id="r_a71134f227c2c22e4ecf24b33ed3c0396"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a71134f227c2c22e4ecf24b33ed3c0396">fill</a> (T value)</td></tr>
-<tr class="memdesc:a71134f227c2c22e4ecf24b33ed3c0396"><td class="mdescLeft">&#160;</td><td class="mdescRight">Fills the current matrix with $value.  <br /></td></tr>
+<tr class="memdesc:a71134f227c2c22e4ecf24b33ed3c0396"><td class="mdescLeft">&#160;</td><td class="mdescRight">Fills the entire matrix with a single value.  <br /></td></tr>
 <tr class="memitem:a12a8c0a0c3d48be5283f473f9b86c7e4" id="r_a12a8c0a0c3d48be5283f473f9b86c7e4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a12a8c0a0c3d48be5283f473f9b86c7e4">make_identity</a> ()</td></tr>
-<tr class="memdesc:a12a8c0a0c3d48be5283f473f9b86c7e4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts the matrix to indentity matrix.  <br /></td></tr>
+<tr class="memdesc:a12a8c0a0c3d48be5283f473f9b86c7e4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts this matrix into an identity matrix.  <br /></td></tr>
 <tr class="memitem:a65c510831554a29db6115f964b3679b0" id="r_a65c510831554a29db6115f964b3679b0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a65c510831554a29db6115f964b3679b0">transpose</a> ()</td></tr>
+<tr class="memdesc:a65c510831554a29db6115f964b3679b0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Performs an in-place transpose of the matrix.  <br /></td></tr>
 <tr class="memitem:a246ca1334c2afc425a2eafc68b48fa38" id="r_a246ca1334c2afc425a2eafc68b48fa38"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#afadd64902ef9d03291be6e799c38e904">Matrix</a>&lt; T &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a246ca1334c2afc425a2eafc68b48fa38">transposed</a> () const</td></tr>
+<tr class="memdesc:a246ca1334c2afc425a2eafc68b48fa38"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates and returns a new matrix that is the transpose of this one.  <br /></td></tr>
 <tr class="memitem:a2486af6cec2a16a1af9a9f77cf938527" id="r_a2486af6cec2a16a1af9a9f77cf938527"><td class="memItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2486af6cec2a16a1af9a9f77cf938527">operator==</a> (const <a class="el" href="#afadd64902ef9d03291be6e799c38e904">Matrix</a> &amp;other) const</td></tr>
+<tr class="memdesc:a2486af6cec2a16a1af9a9f77cf938527"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks for exact element-wise equality.  <br /></td></tr>
 <tr class="memitem:ae5b07162d3e9bd4d22621a76ec0635c5" id="r_ae5b07162d3e9bd4d22621a76ec0635c5"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae5b07162d3e9bd4d22621a76ec0635c5">operator-</a> () const</td></tr>
+<tr class="memdesc:ae5b07162d3e9bd4d22621a76ec0635c5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Unary minus. Returns a new matrix with all elements negated.  <br /></td></tr>
 <tr class="memitem:aeb756ee209272516a931a8ff9fccbcac" id="r_aeb756ee209272516a931a8ff9fccbcac"><td class="memTemplParams" colspan="2">template&lt;typename U&gt; </td></tr>
 <tr class="memitem:aeb756ee209272516a931a8ff9fccbcac template"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aeb756ee209272516a931a8ff9fccbcac">operator+</a> (const <a class="el" href="#afadd64902ef9d03291be6e799c38e904">Matrix</a>&lt; U &gt; &amp;other) const</td></tr>
+<tr class="memdesc:aeb756ee209272516a931a8ff9fccbcac"><td class="mdescLeft">&#160;</td><td class="mdescRight">Element-wise matrix addition.  <br /></td></tr>
 <tr class="memitem:ab01486aa7103052849a9e561627d3881" id="r_ab01486aa7103052849a9e561627d3881"><td class="memTemplParams" colspan="2">template&lt;typename U&gt; <br />
 requires (std::is_arithmetic_v&lt;U&gt;)</td></tr>
 <tr class="memitem:ab01486aa7103052849a9e561627d3881 template"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab01486aa7103052849a9e561627d3881">operator+</a> (const U &amp;scalar) const</td></tr>
+<tr class="memdesc:ab01486aa7103052849a9e561627d3881"><td class="mdescLeft">&#160;</td><td class="mdescRight">Element-wise scalar addition (<a class="el" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html" title="A general-purpose, row-major, dense matrix class.">Matrix</a> + scalar).  <br /></td></tr>
 <tr class="memitem:aa73a0427aeb902c0a1e40623f3c6c52b" id="r_aa73a0427aeb902c0a1e40623f3c6c52b"><td class="memTemplParams" colspan="2">template&lt;typename U&gt; </td></tr>
 <tr class="memitem:aa73a0427aeb902c0a1e40623f3c6c52b template"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa73a0427aeb902c0a1e40623f3c6c52b">operator-</a> (const <a class="el" href="#afadd64902ef9d03291be6e799c38e904">Matrix</a>&lt; U &gt; &amp;other) const</td></tr>
+<tr class="memdesc:aa73a0427aeb902c0a1e40623f3c6c52b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Element-wise matrix subtraction.  <br /></td></tr>
 <tr class="memitem:a154ee60c9aaaaaaa93b85999c2703715" id="r_a154ee60c9aaaaaaa93b85999c2703715"><td class="memTemplParams" colspan="2">template&lt;typename U&gt; <br />
 requires (std::is_arithmetic_v&lt;U&gt;)</td></tr>
 <tr class="memitem:a154ee60c9aaaaaaa93b85999c2703715 template"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a154ee60c9aaaaaaa93b85999c2703715">operator-</a> (const U &amp;scalar) const</td></tr>
+<tr class="memdesc:a154ee60c9aaaaaaa93b85999c2703715"><td class="mdescLeft">&#160;</td><td class="mdescRight">Element-wise scalar subtraction (<a class="el" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html" title="A general-purpose, row-major, dense matrix class.">Matrix</a> - scalar).  <br /></td></tr>
 <tr class="memitem:a74bd8dca601f691a7ec0b1eabf11c18d" id="r_a74bd8dca601f691a7ec0b1eabf11c18d"><td class="memTemplParams" colspan="2">template&lt;typename U&gt; </td></tr>
 <tr class="memitem:a74bd8dca601f691a7ec0b1eabf11c18d template"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a74bd8dca601f691a7ec0b1eabf11c18d">operator*</a> (const <a class="el" href="#afadd64902ef9d03291be6e799c38e904">Matrix</a>&lt; U &gt; &amp;other) const</td></tr>
+<tr class="memdesc:a74bd8dca601f691a7ec0b1eabf11c18d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Standard algebraic matrix multiplication (A * B).  <br /></td></tr>
 <tr class="memitem:a169ccbd0b4babfcc2878336ca159e15d" id="r_a169ccbd0b4babfcc2878336ca159e15d"><td class="memTemplParams" colspan="2">template&lt;typename U&gt; <br />
 requires (std::is_arithmetic_v&lt;U&gt;)</td></tr>
 <tr class="memitem:a169ccbd0b4babfcc2878336ca159e15d template"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a169ccbd0b4babfcc2878336ca159e15d">operator*</a> (const U &amp;scalar) const</td></tr>
+<tr class="memdesc:a169ccbd0b4babfcc2878336ca159e15d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Element-wise scalar multiplication (<a class="el" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html" title="A general-purpose, row-major, dense matrix class.">Matrix</a> * scalar).  <br /></td></tr>
 <tr class="memitem:a0440e67c7abf25ef0f37d8d96e9e5cd4" id="r_a0440e67c7abf25ef0f37d8d96e9e5cd4"><td class="memTemplParams" colspan="2">template&lt;typename U&gt; </td></tr>
 <tr class="memitem:a0440e67c7abf25ef0f37d8d96e9e5cd4 template"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0440e67c7abf25ef0f37d8d96e9e5cd4">operator*</a> (const <a class="el" href="../../de/d35/classmaf_1_1math_1_1_vector.html">Vector</a>&lt; U &gt; &amp;other) const</td></tr>
+<tr class="memdesc:a0440e67c7abf25ef0f37d8d96e9e5cd4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Matrix-Vector multiplication (<a class="el" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html" title="A general-purpose, row-major, dense matrix class.">Matrix</a> * column_vector).  <br /></td></tr>
 <tr class="memitem:a1179634e7687eb8841212b04ff962f45" id="r_a1179634e7687eb8841212b04ff962f45"><td class="memTemplParams" colspan="2">template&lt;typename U&gt; <br />
 requires (std::is_arithmetic_v&lt;U&gt;)</td></tr>
 <tr class="memitem:a1179634e7687eb8841212b04ff962f45 template"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1179634e7687eb8841212b04ff962f45">operator/</a> (const U &amp;scalar) const</td></tr>
-<tr class="memitem:a8693e266271d08a66e45b5a5e9136d62" id="r_a8693e266271d08a66e45b5a5e9136d62"><td class="memTemplParams" colspan="2">template&lt;typename U&gt; <br />
+<tr class="memdesc:a1179634e7687eb8841212b04ff962f45"><td class="mdescLeft">&#160;</td><td class="mdescRight">Element-wise scalar division (<a class="el" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html" title="A general-purpose, row-major, dense matrix class.">Matrix</a> / scalar).  <br /></td></tr>
+<tr class="memitem:a26fe7a65851b5aa961f4a4d885d807b5" id="r_a26fe7a65851b5aa961f4a4d885d807b5"><td class="memTemplParams" colspan="2">template&lt;typename U&gt; <br />
 requires (std::is_arithmetic_v&lt;U&gt;)</td></tr>
-<tr class="memitem:a8693e266271d08a66e45b5a5e9136d62 template"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8693e266271d08a66e45b5a5e9136d62">operator+=</a> (const U &amp;scalar)</td></tr>
-<tr class="memitem:aecc060c5ad12544a9ab2da314da305e0" id="r_aecc060c5ad12544a9ab2da314da305e0"><td class="memTemplParams" colspan="2">template&lt;typename U&gt; <br />
+<tr class="memitem:a26fe7a65851b5aa961f4a4d885d807b5 template"><td class="memItemLeft" align="right" valign="top">auto &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a26fe7a65851b5aa961f4a4d885d807b5">operator+=</a> (const U &amp;scalar)</td></tr>
+<tr class="memdesc:a26fe7a65851b5aa961f4a4d885d807b5"><td class="mdescLeft">&#160;</td><td class="mdescRight">In-place element-wise scalar addition.  <br /></td></tr>
+<tr class="memitem:a31de03ecf6e7f98e4877ac8e91c97579" id="r_a31de03ecf6e7f98e4877ac8e91c97579"><td class="memTemplParams" colspan="2">template&lt;typename U&gt; <br />
 requires (std::is_arithmetic_v&lt;U&gt;)</td></tr>
-<tr class="memitem:aecc060c5ad12544a9ab2da314da305e0 template"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aecc060c5ad12544a9ab2da314da305e0">operator-=</a> (const U &amp;scalar)</td></tr>
-<tr class="memitem:a68fe66fb22cf7d427d2a8765105c3292" id="r_a68fe66fb22cf7d427d2a8765105c3292"><td class="memTemplParams" colspan="2">template&lt;typename U&gt; <br />
+<tr class="memitem:a31de03ecf6e7f98e4877ac8e91c97579 template"><td class="memItemLeft" align="right" valign="top">auto &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a31de03ecf6e7f98e4877ac8e91c97579">operator-=</a> (const U &amp;scalar)</td></tr>
+<tr class="memdesc:a31de03ecf6e7f98e4877ac8e91c97579"><td class="mdescLeft">&#160;</td><td class="mdescRight">In-place element-wise scalar subtraction.  <br /></td></tr>
+<tr class="memitem:abb7612f96c7c26639931e0443e430870" id="r_abb7612f96c7c26639931e0443e430870"><td class="memTemplParams" colspan="2">template&lt;typename U&gt; <br />
 requires (std::is_arithmetic_v&lt;U&gt;)</td></tr>
-<tr class="memitem:a68fe66fb22cf7d427d2a8765105c3292 template"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a68fe66fb22cf7d427d2a8765105c3292">operator*=</a> (const U &amp;scalar)</td></tr>
-<tr class="memitem:a7298a9e2a9d026fd3b2b2b65a0c6c537" id="r_a7298a9e2a9d026fd3b2b2b65a0c6c537"><td class="memTemplParams" colspan="2">template&lt;typename U&gt; <br />
+<tr class="memitem:abb7612f96c7c26639931e0443e430870 template"><td class="memItemLeft" align="right" valign="top">auto &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abb7612f96c7c26639931e0443e430870">operator*=</a> (const U &amp;scalar)</td></tr>
+<tr class="memdesc:abb7612f96c7c26639931e0443e430870"><td class="mdescLeft">&#160;</td><td class="mdescRight">In-place element-wise scalar multiplication.  <br /></td></tr>
+<tr class="memitem:a1969abed03be909f9cf84438d037dccd" id="r_a1969abed03be909f9cf84438d037dccd"><td class="memTemplParams" colspan="2">template&lt;typename U&gt; <br />
 requires (std::is_arithmetic_v&lt;U&gt;)</td></tr>
-<tr class="memitem:a7298a9e2a9d026fd3b2b2b65a0c6c537 template"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7298a9e2a9d026fd3b2b2b65a0c6c537">operator/=</a> (const U &amp;scalar)</td></tr>
+<tr class="memitem:a1969abed03be909f9cf84438d037dccd template"><td class="memItemLeft" align="right" valign="top">auto &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1969abed03be909f9cf84438d037dccd">operator/=</a> (const U &amp;scalar)</td></tr>
+<tr class="memdesc:a1969abed03be909f9cf84438d037dccd"><td class="mdescLeft">&#160;</td><td class="mdescRight">In-place element-wise scalar division.  <br /></td></tr>
 <tr class="memitem:a0172c1256848fd0d7888f45c4623336c" id="r_a0172c1256848fd0d7888f45c4623336c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0172c1256848fd0d7888f45c4623336c">print</a> () const</td></tr>
+<tr class="memdesc:a0172c1256848fd0d7888f45c4623336c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Prints the matrix contents to std::cout.  <br /></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-friends" class="groupheader"><a id="friends" name="friends"></a>
 Friends</h2></td></tr>
 <tr class="memitem:ac1a4a8908f26330e30b8343938cefa27" id="r_ac1a4a8908f26330e30b8343938cefa27"><td class="memTemplParams" colspan="2">template&lt;typename U&gt; <br />
 requires (std::is_arithmetic_v&lt;U&gt;)</td></tr>
 <tr class="memitem:ac1a4a8908f26330e30b8343938cefa27 template"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac1a4a8908f26330e30b8343938cefa27">operator+</a> (const U &amp;scalar, const <a class="el" href="#afadd64902ef9d03291be6e799c38e904">Matrix</a>&lt; T &gt; &amp;matrix)</td></tr>
+<tr class="memdesc:ac1a4a8908f26330e30b8343938cefa27"><td class="mdescLeft">&#160;</td><td class="mdescRight">Element-wise scalar addition (scalar + <a class="el" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html" title="A general-purpose, row-major, dense matrix class.">Matrix</a>).  <br /></td></tr>
 <tr class="memitem:a14ee9c5f4681f211daac074c3607fd34" id="r_a14ee9c5f4681f211daac074c3607fd34"><td class="memTemplParams" colspan="2">template&lt;typename U&gt; <br />
 requires (std::is_arithmetic_v&lt;U&gt;)</td></tr>
 <tr class="memitem:a14ee9c5f4681f211daac074c3607fd34 template"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a14ee9c5f4681f211daac074c3607fd34">operator-</a> (const U &amp;scalar, const <a class="el" href="#afadd64902ef9d03291be6e799c38e904">Matrix</a>&lt; T &gt; &amp;matrix)</td></tr>
+<tr class="memdesc:a14ee9c5f4681f211daac074c3607fd34"><td class="mdescLeft">&#160;</td><td class="mdescRight">Element-wise scalar subtraction (scalar - <a class="el" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html" title="A general-purpose, row-major, dense matrix class.">Matrix</a>).  <br /></td></tr>
 <tr class="memitem:ae4d98a390450ace53fddc8b24768da06" id="r_ae4d98a390450ace53fddc8b24768da06"><td class="memTemplParams" colspan="2">template&lt;typename U&gt; <br />
 requires (std::is_arithmetic_v&lt;U&gt;)</td></tr>
 <tr class="memitem:ae4d98a390450ace53fddc8b24768da06 template"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae4d98a390450ace53fddc8b24768da06">operator*</a> (const U &amp;scalar, const <a class="el" href="#afadd64902ef9d03291be6e799c38e904">Matrix</a>&lt; T &gt; &amp;matrix)</td></tr>
+<tr class="memdesc:ae4d98a390450ace53fddc8b24768da06"><td class="mdescLeft">&#160;</td><td class="mdescRight">Element-wise scalar multiplication (scalar * <a class="el" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html" title="A general-purpose, row-major, dense matrix class.">Matrix</a>).  <br /></td></tr>
 <tr class="memitem:a5ab05f3bf21d65821b108e2ae17ab753" id="r_a5ab05f3bf21d65821b108e2ae17ab753"><td class="memTemplParams" colspan="2">template&lt;typename U&gt; <br />
 requires (std::is_arithmetic_v&lt;U&gt;)</td></tr>
 <tr class="memitem:a5ab05f3bf21d65821b108e2ae17ab753 template"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5ab05f3bf21d65821b108e2ae17ab753">operator/</a> (const U &amp;scalar, const <a class="el" href="#afadd64902ef9d03291be6e799c38e904">Matrix</a>&lt; T &gt; &amp;matrix)</td></tr>
+<tr class="memdesc:a5ab05f3bf21d65821b108e2ae17ab753"><td class="mdescLeft">&#160;</td><td class="mdescRight">Element-wise scalar division (scalar / <a class="el" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html" title="A general-purpose, row-major, dense matrix class.">Matrix</a>).  <br /></td></tr>
 </table>
-<a name="doc-constructors" id="doc-constructors"></a><h2 id="header-doc-constructors" class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
+<div class="textblock"><div class="compoundTemplParams">template&lt;typename T&gt;<br />
+class maf::math::Matrix&lt; T &gt;</div><p>A general-purpose, row-major, dense matrix class. </p>
+<p>This class implements a matrix with contiguous row-major storage. It supports a wide range of arithmetic operations, constructors, and utility methods.</p>
+<p>The implementation is templated to support various numeric types (T). Many operations (like multiplication and addition) are parallelized using OpenMP and employ blocking strategies for cache efficiency.</p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">T</td><td>The numeric type of the matrix elements (e.g., float, double, int).</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section version"><dt>Version</dt><dd>1.0 </dd></dl>
+<dl class="section since"><dt>Since</dt><dd>2025 </dd></dl>
+</div><a name="doc-constructors" id="doc-constructors"></a><h2 id="header-doc-constructors" class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="afadd64902ef9d03291be6e799c38e904" name="afadd64902ef9d03291be6e799c38e904"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#afadd64902ef9d03291be6e799c38e904">&#9670;&#160;</a></span>Matrix() <span class="overload">[1/7]</span></h2>
 
@@ -225,42 +280,40 @@ template&lt;typename T&gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Default constructor. Creates an empty 0x0 matrix. </p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../d3/d6e/classmaf_1_1math_1_1_matrix_afadd64902ef9d03291be6e799c38e904_icgraph.png" border="0" usemap="#ad3/d6e/classmaf_1_1math_1_1_matrix_afadd64902ef9d03291be6e799c38e904_icgraph" loading="lazy" alt=""/></div>
 <map name="ad3/d6e/classmaf_1_1math_1_1_matrix_afadd64902ef9d03291be6e799c38e904_icgraph" id="ad3/d6e/classmaf_1_1math_1_1_matrix_afadd64902ef9d03291be6e799c38e904_icgraph">
-<area shape="rect" title=" " alt="" coords="554,397,687,438"/>
-<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a74bd8dca601f691a7ec0b1eabf11c18d" title=" " alt="" coords="374,5,506,46"/>
-<area shape="poly" title=" " alt="" coords="614,382,606,316,587,231,573,186,555,142,532,99,504,61,490,48,494,44,508,57,537,96,560,139,578,184,592,230,611,315,620,381"/>
-<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a169ccbd0b4babfcc2878336ca159e15d" title=" " alt="" coords="374,71,506,111"/>
-<area shape="poly" title=" " alt="" coords="611,383,600,328,579,260,548,190,528,156,504,126,490,114,493,110,508,122,532,153,553,187,584,258,605,327,617,382"/>
-<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#ae4d98a390450ace53fddc8b24768da06" title=" " alt="" coords="374,136,506,177"/>
-<area shape="poly" title=" " alt="" coords="607,383,592,341,571,290,541,238,504,192,489,179,492,175,508,188,546,235,575,288,597,339,612,382"/>
-<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#aeb756ee209272516a931a8ff9fccbcac" title=" " alt="" coords="374,201,506,242"/>
-<area shape="poly" title=" " alt="" coords="600,385,560,321,534,287,505,257,487,245,491,240,508,253,538,284,565,318,604,382"/>
-<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#ab01486aa7103052849a9e561627d3881" title=" " alt="" coords="374,267,506,307"/>
-<area shape="poly" title=" " alt="" coords="586,389,548,356,505,323,484,310,487,306,508,318,552,351,590,385"/>
-<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#ac1a4a8908f26330e30b8343938cefa27" title=" " alt="" coords="374,332,506,373"/>
-<area shape="poly" title=" " alt="" coords="547,394,497,376,499,371,549,389"/>
-<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#ae5b07162d3e9bd4d22621a76ec0635c5" title=" " alt="" coords="374,397,506,438"/>
-<area shape="poly" title=" " alt="" coords="539,420,507,420,507,415,539,415"/>
-<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#aa73a0427aeb902c0a1e40623f3c6c52b" title=" " alt="" coords="374,463,506,503"/>
-<area shape="poly" title=" " alt="" coords="549,446,499,465,497,460,547,441"/>
-<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a154ee60c9aaaaaaa93b85999c2703715" title=" " alt="" coords="374,528,506,569"/>
-<area shape="poly" title=" " alt="" coords="590,450,552,484,508,517,487,530,484,525,505,513,548,480,586,446"/>
-<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a14ee9c5f4681f211daac074c3607fd34" title=" " alt="" coords="374,593,506,634"/>
-<area shape="poly" title=" " alt="" coords="604,454,565,517,538,552,508,582,491,595,487,591,505,578,534,548,560,514,600,451"/>
-<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a5ab05f3bf21d65821b108e2ae17ab753" title=" " alt="" coords="374,659,506,699"/>
-<area shape="poly" title=" " alt="" coords="612,454,597,497,575,548,546,600,508,648,492,660,489,656,504,644,541,597,571,545,592,495,607,452"/>
-<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a2486af6cec2a16a1af9a9f77cf938527" title=" " alt="" coords="374,724,506,765"/>
-<area shape="poly" title=" " alt="" coords="617,454,605,509,584,577,553,648,532,682,508,713,493,725,490,721,504,709,528,679,548,646,579,575,600,507,611,453"/>
-<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a246ca1334c2afc425a2eafc68b48fa38" title=" " alt="" coords="374,789,506,830"/>
-<area shape="poly" title=" " alt="" coords="620,454,611,520,592,606,578,651,560,696,537,739,508,778,494,791,490,787,504,775,532,736,555,694,573,649,587,604,606,519,614,453"/>
-<area shape="rect" href="../../d4/d02/namespacemaf_1_1math.html#a45286ae95d74e7a19ecf706538b151e7" title=" " alt="" coords="186,797,326,822"/>
-<area shape="poly" title=" " alt="" coords="359,812,326,812,326,807,359,807"/>
-<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#af716a9fdb890f168430aad15c9207a27" title=" " alt="" coords="5,789,138,830"/>
-<area shape="poly" title=" " alt="" coords="170,812,138,812,138,807,170,807"/>
+<area shape="rect" title="Default constructor. Creates an empty 0x0 matrix." alt="" coords="186,397,318,438"/>
+<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a74bd8dca601f691a7ec0b1eabf11c18d" title="Standard algebraic matrix multiplication (A * B)." alt="" coords="5,5,138,46"/>
+<area shape="poly" title=" " alt="" coords="246,382,237,316,219,231,204,186,186,142,163,99,136,61,122,48,125,44,140,57,168,96,191,139,209,184,224,230,242,315,251,381"/>
+<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a169ccbd0b4babfcc2878336ca159e15d" title="Element&#45;wise scalar multiplication (Matrix * scalar)." alt="" coords="5,71,138,111"/>
+<area shape="poly" title=" " alt="" coords="243,383,231,328,211,260,179,190,159,156,136,126,121,114,125,110,140,122,164,153,184,187,216,258,236,327,248,382"/>
+<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#ae4d98a390450ace53fddc8b24768da06" title="Element&#45;wise scalar multiplication (scalar * Matrix)." alt="" coords="5,136,138,177"/>
+<area shape="poly" title=" " alt="" coords="238,383,224,341,202,290,173,238,136,192,120,179,124,175,140,188,177,235,207,288,229,339,243,382"/>
+<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#aeb756ee209272516a931a8ff9fccbcac" title="Element&#45;wise matrix addition." alt="" coords="5,201,138,242"/>
+<area shape="poly" title=" " alt="" coords="231,385,192,321,166,287,136,257,119,245,122,240,139,253,170,284,196,318,235,382"/>
+<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#ab01486aa7103052849a9e561627d3881" title="Element&#45;wise scalar addition (Matrix + scalar)." alt="" coords="5,267,138,307"/>
+<area shape="poly" title=" " alt="" coords="217,389,180,356,136,323,116,310,118,306,139,318,183,351,221,385"/>
+<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#ac1a4a8908f26330e30b8343938cefa27" title="Element&#45;wise scalar addition (scalar + Matrix)." alt="" coords="5,332,138,373"/>
+<area shape="poly" title=" " alt="" coords="179,394,129,376,131,371,180,389"/>
+<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#ae5b07162d3e9bd4d22621a76ec0635c5" title="Unary minus. Returns a new matrix with all elements negated." alt="" coords="5,397,138,438"/>
+<area shape="poly" title=" " alt="" coords="170,420,138,420,138,415,170,415"/>
+<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#aa73a0427aeb902c0a1e40623f3c6c52b" title="Element&#45;wise matrix subtraction." alt="" coords="5,463,138,503"/>
+<area shape="poly" title=" " alt="" coords="180,446,131,465,129,460,179,441"/>
+<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a154ee60c9aaaaaaa93b85999c2703715" title="Element&#45;wise scalar subtraction (Matrix &#45; scalar)." alt="" coords="5,528,138,569"/>
+<area shape="poly" title=" " alt="" coords="221,450,183,484,139,517,118,530,116,525,136,513,180,480,217,446"/>
+<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a14ee9c5f4681f211daac074c3607fd34" title="Element&#45;wise scalar subtraction (scalar &#45; Matrix)." alt="" coords="5,593,138,634"/>
+<area shape="poly" title=" " alt="" coords="235,454,196,517,170,552,139,582,122,595,119,591,136,578,166,548,192,514,231,451"/>
+<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a5ab05f3bf21d65821b108e2ae17ab753" title="Element&#45;wise scalar division (scalar / Matrix)." alt="" coords="5,659,138,699"/>
+<area shape="poly" title=" " alt="" coords="243,454,229,497,207,548,177,600,140,648,124,660,120,656,136,644,173,597,202,545,224,495,238,452"/>
+<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a2486af6cec2a16a1af9a9f77cf938527" title="Checks for exact element&#45;wise equality." alt="" coords="5,724,138,765"/>
+<area shape="poly" title=" " alt="" coords="248,454,236,509,216,577,184,648,164,682,140,713,125,725,121,721,136,709,159,679,179,646,211,575,231,507,243,453"/>
+<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a246ca1334c2afc425a2eafc68b48fa38" title="Creates and returns a new matrix that is the transpose of this one." alt="" coords="5,789,138,830"/>
+<area shape="poly" title=" " alt="" coords="251,454,242,520,224,606,209,651,191,696,168,739,140,778,125,791,122,787,136,775,163,736,186,694,204,649,219,604,237,519,246,453"/>
 </map>
 </div>
 
@@ -273,9 +326,6 @@ Here is the caller graph for this function:</div>
 <div class="memproto">
 <div class="memtemplate">
 template&lt;typename T&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html">maf::math::Matrix</a>&lt; T &gt;::Matrix </td>
@@ -293,19 +343,30 @@ template&lt;typename T&gt; </div>
           <td class="paramtype">T *</td>          <td class="paramname"><span class="paramname"><em>data</em></span>&#160;)</td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
+
+<p>Constructs a matrix from a raw data pointer. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">rows</td><td>Number of rows. </td></tr>
+    <tr><td class="paramname">cols</td><td>Number of columns. </td></tr>
+    <tr><td class="paramname">data</td><td>Pointer to a C-style array of size (rows * cols) in row-major order. The data is COPIED into the matrix. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::invalid_argument</td><td>if dimensions are zero or data is nullptr. </td></tr>
+  </table>
+  </dd>
+</dl>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../d3/d6e/classmaf_1_1math_1_1_matrix_a137a88facec95aac4ec5e55cfd00e798_cgraph.png" border="0" usemap="#ad3/d6e/classmaf_1_1math_1_1_matrix_a137a88facec95aac4ec5e55cfd00e798_cgraph" loading="lazy" alt=""/></div>
 <map name="ad3/d6e/classmaf_1_1math_1_1_matrix_a137a88facec95aac4ec5e55cfd00e798_cgraph" id="ad3/d6e/classmaf_1_1math_1_1_matrix_a137a88facec95aac4ec5e55cfd00e798_cgraph">
-<area shape="rect" title=" " alt="" coords="5,5,138,46"/>
-<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#aca60efe3848c6a7635c9f609ca163528" title=" " alt="" coords="186,13,343,38"/>
+<area shape="rect" title="Constructs a matrix from a raw data pointer." alt="" coords="5,5,138,46"/>
+<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#aca60efe3848c6a7635c9f609ca163528" title="Gets a mutable reference to the underlying std::vector data store." alt="" coords="186,13,343,38"/>
 <area shape="poly" title=" " alt="" coords="138,23,170,23,170,28,138,28"/>
 </map>
 </div>
@@ -319,9 +380,6 @@ Here is the call graph for this function:</div>
 <div class="memproto">
 <div class="memtemplate">
 template&lt;typename T&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html">maf::math::Matrix</a>&lt; T &gt;::Matrix </td>
@@ -334,12 +392,22 @@ template&lt;typename T&gt; </div>
           <td class="paramtype">size_t</td>          <td class="paramname"><span class="paramname"><em>cols</em></span>&#160;)</td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
+
+<p>Constructs an uninitialized matrix of size rows x cols. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">rows</td><td>Number of rows. </td></tr>
+    <tr><td class="paramname">cols</td><td>Number of columns. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::invalid_argument</td><td>if dimensions are zero. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -350,9 +418,6 @@ template&lt;typename T&gt; </div>
 <div class="memproto">
 <div class="memtemplate">
 template&lt;typename T&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html">maf::math::Matrix</a>&lt; T &gt;::Matrix </td>
@@ -370,20 +435,30 @@ template&lt;typename T&gt; </div>
           <td class="paramtype">const std::vector&lt; T &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>data</em></span>&#160;)</td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
-<p>Constructor from std::vector <a class="el" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html">Matrix</a> gets filled by rows. </p>
+
+<p>Constructs from a std::vector, filled by rows. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">rows</td><td>Number of rows. </td></tr>
+    <tr><td class="paramname">cols</td><td>Number of columns. </td></tr>
+    <tr><td class="paramname">data</td><td>A std::vector of size (rows * cols) in row-major order. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::invalid_argument</td><td>if dimensions are zero or data size does not match. </td></tr>
+  </table>
+  </dd>
+</dl>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../d3/d6e/classmaf_1_1math_1_1_matrix_a8b0c11e3b01e1a9f2a63764d13d6cb24_cgraph.png" border="0" usemap="#ad3/d6e/classmaf_1_1math_1_1_matrix_a8b0c11e3b01e1a9f2a63764d13d6cb24_cgraph" loading="lazy" alt=""/></div>
 <map name="ad3/d6e/classmaf_1_1math_1_1_matrix_a8b0c11e3b01e1a9f2a63764d13d6cb24_cgraph" id="ad3/d6e/classmaf_1_1math_1_1_matrix_a8b0c11e3b01e1a9f2a63764d13d6cb24_cgraph">
-<area shape="rect" title=" " alt="" coords="5,5,138,46"/>
-<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#aca60efe3848c6a7635c9f609ca163528" title=" " alt="" coords="186,13,343,38"/>
+<area shape="rect" title="Constructs from a std::vector, filled by rows." alt="" coords="5,5,138,46"/>
+<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#aca60efe3848c6a7635c9f609ca163528" title="Gets a mutable reference to the underlying std::vector data store." alt="" coords="186,13,343,38"/>
 <area shape="poly" title=" " alt="" coords="138,23,170,23,170,28,138,28"/>
 </map>
 </div>
@@ -397,9 +472,6 @@ Here is the call graph for this function:</div>
 <div class="memproto">
 <div class="memtemplate">
 template&lt;typename T&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html">maf::math::Matrix</a>&lt; T &gt;::Matrix </td>
@@ -417,22 +489,32 @@ template&lt;typename T&gt; </div>
           <td class="paramtype">const std::vector&lt; std::vector&lt; T &gt; &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>data</em></span>&#160;)</td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
-<p><a class="el" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html">Matrix</a> constructor from std::vector&lt;std::vector&gt;&gt; <a class="el" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html">Matrix</a> indices correspond to indices in std::vector&lt;std::vector&gt;&gt; </p>
+
+<p>Constructs from a nested std::vector (vector of vectors). </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">rows</td><td>Number of rows. </td></tr>
+    <tr><td class="paramname">cols</td><td>Number of columns. </td></tr>
+    <tr><td class="paramname">data</td><td>A std::vector&lt;std::vector&lt;T&gt;&gt;. data.size() must equal rows, and data[0].<a class="el" href="#a45aa75653ab2200d6de78ec7accbda5b" title="Gets the total number of elements (rows * cols).">size()</a> must equal cols. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::invalid_argument</td><td>if dimensions are zero or data shape does not match. </td></tr>
+  </table>
+  </dd>
+</dl>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../d3/d6e/classmaf_1_1math_1_1_matrix_a9e5e920bcd92c6a8a0a2c5098467a5e2_cgraph.png" border="0" usemap="#ad3/d6e/classmaf_1_1math_1_1_matrix_a9e5e920bcd92c6a8a0a2c5098467a5e2_cgraph" loading="lazy" alt=""/></div>
 <map name="ad3/d6e/classmaf_1_1math_1_1_matrix_a9e5e920bcd92c6a8a0a2c5098467a5e2_cgraph" id="ad3/d6e/classmaf_1_1math_1_1_matrix_a9e5e920bcd92c6a8a0a2c5098467a5e2_cgraph">
-<area shape="rect" title=" " alt="" coords="5,23,138,64"/>
-<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a3506acc05e298718fb6d5587d6594055" title=" " alt="" coords="193,5,336,31"/>
+<area shape="rect" title="Constructs from a nested std::vector (vector of vectors)." alt="" coords="5,23,138,64"/>
+<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a3506acc05e298718fb6d5587d6594055" title="Gets a mutable reference to the element at (row, col)." alt="" coords="193,5,336,31"/>
 <area shape="poly" title=" " alt="" coords="138,32,177,27,177,32,139,37"/>
-<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#aca60efe3848c6a7635c9f609ca163528" title=" " alt="" coords="186,55,343,80"/>
+<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#aca60efe3848c6a7635c9f609ca163528" title="Gets a mutable reference to the underlying std::vector data store." alt="" coords="186,55,343,80"/>
 <area shape="poly" title=" " alt="" coords="139,49,171,53,170,59,138,54"/>
 </map>
 </div>
@@ -448,9 +530,6 @@ Here is the call graph for this function:</div>
 template&lt;typename T&gt; </div>
 <div class="memtemplate">
 template&lt;typename U, size_t N&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html">maf::math::Matrix</a>&lt; T &gt;::Matrix </td>
@@ -468,20 +547,37 @@ template&lt;typename U, size_t N&gt; </div>
           <td class="paramtype">const std::array&lt; U, N &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>data</em></span>&#160;)</td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
-<p><a class="el" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html">Matrix</a> constructor from std::array <a class="el" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html">Matrix</a> gets filled by rows. </p>
+
+<p>Constructs from a std::array, filled by rows. </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">U</td><td>Type in the array (allows implicit conversion). </td></tr>
+    <tr><td class="paramname">N</td><td>Size of the array. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">rows</td><td>Number of rows. </td></tr>
+    <tr><td class="paramname">cols</td><td>Number of columns. </td></tr>
+    <tr><td class="paramname">data</td><td>A std::array&lt;U, N&gt; where N must equal (rows * cols). </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::invalid_argument</td><td>if dimensions are zero or array size does not match. </td></tr>
+  </table>
+  </dd>
+</dl>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../d3/d6e/classmaf_1_1math_1_1_matrix_ac57878bb415f6ea6f438e2bfe9fe9398_cgraph.png" border="0" usemap="#ad3/d6e/classmaf_1_1math_1_1_matrix_ac57878bb415f6ea6f438e2bfe9fe9398_cgraph" loading="lazy" alt=""/></div>
 <map name="ad3/d6e/classmaf_1_1math_1_1_matrix_ac57878bb415f6ea6f438e2bfe9fe9398_cgraph" id="ad3/d6e/classmaf_1_1math_1_1_matrix_ac57878bb415f6ea6f438e2bfe9fe9398_cgraph">
-<area shape="rect" title=" " alt="" coords="5,5,138,46"/>
-<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#aca60efe3848c6a7635c9f609ca163528" title=" " alt="" coords="186,13,343,38"/>
+<area shape="rect" title="Constructs from a std::array, filled by rows." alt="" coords="5,5,138,46"/>
+<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#aca60efe3848c6a7635c9f609ca163528" title="Gets a mutable reference to the underlying std::vector data store." alt="" coords="186,13,343,38"/>
 <area shape="poly" title=" " alt="" coords="138,23,170,23,170,28,138,28"/>
 </map>
 </div>
@@ -497,9 +593,6 @@ Here is the call graph for this function:</div>
 template&lt;typename T&gt; </div>
 <div class="memtemplate">
 template&lt;typename U&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html">maf::math::Matrix</a>&lt; T &gt;::Matrix </td>
@@ -517,13 +610,29 @@ template&lt;typename U&gt; </div>
           <td class="paramtype">std::initializer_list&lt; U &gt;</td>          <td class="paramname"><span class="paramname"><em>list</em></span>&#160;)</td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
-<p><a class="el" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html">Matrix</a> constructor from std::initializer_list <a class="el" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html">Matrix</a> gets filled by rows. </p>
+
+<p>Constructs from a std::initializer_list, filled by rows. </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">U</td><td>Type in the list (allows implicit conversion). </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">rows</td><td>Number of rows. </td></tr>
+    <tr><td class="paramname">cols</td><td>Number of columns. </td></tr>
+    <tr><td class="paramname">list</td><td>A std::initializer_list<u> of size (rows * cols). </u></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::invalid_argument</td><td><u>if dimensions are zero or list size does not match. </u></td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -556,58 +665,62 @@ template&lt;typename T&gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Gets a mutable reference to the element at (row, col). </p>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::out_of_range</td><td>if the index is invalid. </td></tr>
+  </table>
+  </dd>
+</dl>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../d3/d6e/classmaf_1_1math_1_1_matrix_a3506acc05e298718fb6d5587d6594055_icgraph.png" border="0" usemap="#ad3/d6e/classmaf_1_1math_1_1_matrix_a3506acc05e298718fb6d5587d6594055_icgraph" loading="lazy" alt=""/></div>
 <map name="ad3/d6e/classmaf_1_1math_1_1_matrix_a3506acc05e298718fb6d5587d6594055_icgraph" id="ad3/d6e/classmaf_1_1math_1_1_matrix_a3506acc05e298718fb6d5587d6594055_icgraph">
-<area shape="rect" title=" " alt="" coords="617,547,761,573"/>
-<area shape="rect" href="../../d4/d02/namespacemaf_1_1math.html#a45286ae95d74e7a19ecf706538b151e7" title=" " alt="" coords="186,122,326,148"/>
-<area shape="poly" title=" " alt="" coords="683,533,673,423,652,272,636,197,617,129,594,74,581,54,568,40,544,23,521,13,499,9,477,9,430,20,375,40,342,57,312,79,270,123,266,120,309,76,339,52,373,35,429,15,477,4,500,3,522,8,546,19,571,36,586,51,599,72,622,127,642,195,657,271,678,422,688,532"/>
-<area shape="rect" href="../../d4/d02/namespacemaf_1_1math.html#a2eb500c1b4cfbb3169604245422bd93e" title=" " alt="" coords="399,49,544,90"/>
-<area shape="poly" title=" " alt="" coords="681,533,666,437,642,309,608,186,588,137,567,105,543,87,546,83,571,101,593,135,613,184,647,308,672,436,687,532"/>
-<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a48ce2d00357e89ece95524bd003b63c6" title="Checks if the matrix is lower triangular." alt="" coords="406,376,538,417"/>
-<area shape="poly" title=" " alt="" coords="669,536,626,484,599,456,568,432,537,416,540,411,571,427,602,452,630,480,673,533"/>
-<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a0f6daf36ebb2efd5970384565469323c" title="Checkes if the matrix is symmetric." alt="" coords="406,115,538,155"/>
-<area shape="poly" title=" " alt="" coords="685,532,680,460,663,363,648,312,628,261,601,213,567,170,553,159,537,150,539,146,556,154,571,166,605,210,632,258,653,310,668,362,685,460,690,532"/>
-<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#af79337899f9b0f2613175daf53f18ea9" title="Checks if the matrix is upper triangular." alt="" coords="406,245,538,286"/>
-<area shape="poly" title=" " alt="" coords="680,533,668,483,646,421,613,357,592,327,568,301,537,282,540,278,571,297,596,324,618,354,651,419,673,482,685,532"/>
-<area shape="rect" href="../../d4/d02/namespacemaf_1_1math.html#a3d4733be1cd68ede07a9c2de6728b2d7" title="Checks if 2 matrices are loosely equal." alt="" coords="407,311,536,351"/>
-<area shape="poly" title=" " alt="" coords="676,534,660,497,637,451,606,406,568,366,536,348,538,344,571,362,610,402,641,449,665,494,681,532"/>
-<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a12a8c0a0c3d48be5283f473f9b86c7e4" title="Converts the matrix to indentity matrix." alt="" coords="406,441,538,482"/>
-<area shape="poly" title=" " alt="" coords="652,542,568,497,537,485,539,480,570,493,655,537"/>
-<area shape="rect" href="../../d4/d02/namespacemaf_1_1math.html#ac44a6962e2d09c20d929223448b4421c" title="Performs a blocked PLU decomposition on a square matrix." alt="" coords="19,933,124,958"/>
-<area shape="poly" title=" " alt="" coords="688,589,678,699,657,849,641,925,622,993,599,1048,586,1068,571,1084,540,1104,508,1117,474,1123,438,1125,402,1121,366,1114,295,1089,228,1057,169,1021,87,961,91,957,172,1016,231,1052,297,1084,368,1109,403,1116,439,1120,473,1118,506,1111,538,1099,568,1080,581,1065,594,1045,617,991,636,924,652,848,673,698,683,588"/>
-<area shape="rect" href="../../d4/d02/namespacemaf_1_1math.html#a0fe2f174cf146553516e15feb16733c5" title=" " alt="" coords="374,507,569,547"/>
-<area shape="poly" title=" " alt="" coords="601,550,569,545,570,539,602,544"/>
-<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a9e5e920bcd92c6a8a0a2c5098467a5e2" title=" " alt="" coords="406,572,538,613"/>
-<area shape="poly" title=" " alt="" coords="602,576,539,585,538,580,601,570"/>
-<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a0440e67c7abf25ef0f37d8d96e9e5cd4" title=" " alt="" coords="406,637,538,678"/>
-<area shape="poly" title=" " alt="" coords="654,583,570,627,539,639,537,634,568,622,652,579"/>
-<area shape="rect" href="../../de/d35/classmaf_1_1math_1_1_vector.html#a3f7dfd09c96426650c80548b86804450" title=" " alt="" coords="404,703,539,743"/>
-<area shape="poly" title=" " alt="" coords="672,588,630,640,602,668,571,692,541,707,538,703,568,687,598,664,626,636,668,584"/>
-<area shape="rect" href="../../de/d35/classmaf_1_1math_1_1_vector.html#a00b97a160b42a4eeb740eb693a3f8bd5" title=" " alt="" coords="404,768,539,809"/>
-<area shape="poly" title=" " alt="" coords="681,588,665,626,641,671,610,717,571,757,541,774,538,770,568,753,606,714,637,668,660,624,676,586"/>
-<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#aeb756ee209272516a931a8ff9fccbcac" title=" " alt="" coords="406,833,538,874"/>
-<area shape="poly" title=" " alt="" coords="685,589,673,638,651,701,618,766,596,796,571,822,540,841,537,837,568,818,592,792,613,763,646,699,668,637,680,587"/>
-<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#aa73a0427aeb902c0a1e40623f3c6c52b" title=" " alt="" coords="406,899,538,939"/>
-<area shape="poly" title=" " alt="" coords="688,589,679,650,659,730,644,772,625,814,601,853,571,888,540,908,537,903,568,884,596,850,620,811,639,770,654,728,674,649,683,588"/>
-<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a0172c1256848fd0d7888f45c4623336c" title=" " alt="" coords="406,964,538,1005"/>
-<area shape="poly" title=" " alt="" coords="690,589,685,661,668,758,653,810,632,861,605,910,571,953,556,965,539,974,537,969,553,960,567,949,601,907,627,859,648,808,663,757,680,660,685,588"/>
-<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a65c510831554a29db6115f964b3679b0" title=" " alt="" coords="406,1029,538,1070"/>
-<area shape="poly" title=" " alt="" coords="687,589,672,684,647,812,613,936,593,984,571,1018,557,1030,540,1039,537,1034,554,1026,567,1015,588,982,608,934,642,811,666,683,681,588"/>
-<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a246ca1334c2afc425a2eafc68b48fa38" title=" " alt="" coords="406,180,538,221"/>
-<area shape="poly" title=" " alt="" coords="683,532,674,471,655,392,640,349,620,308,596,270,568,236,537,216,540,212,571,232,601,267,625,306,644,347,660,390,679,470,688,531"/>
-<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#af716a9fdb890f168430aad15c9207a27" title=" " alt="" coords="5,115,138,155"/>
-<area shape="poly" title=" " alt="" coords="170,138,138,138,138,132,170,132"/>
-<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a90408b80daf821aff91fd2aed917ce8e" title="Checks if the matrix is diagonal." alt="" coords="190,311,322,351"/>
-<area shape="poly" title=" " alt="" coords="390,374,322,354,323,348,392,369"/>
-<area shape="poly" title=" " alt="" coords="390,138,326,138,326,132,390,132"/>
-<area shape="poly" title=" " alt="" coords="392,293,323,313,322,308,390,287"/>
-<area shape="rect" href="../../d4/d02/namespacemaf_1_1math.html#a4d61c9a4c0434a2e01652894564f7ebb" title=" " alt="" coords="191,603,321,643"/>
-<area shape="poly" title=" " alt="" coords="392,488,375,497,344,522,315,551,273,604,269,601,311,547,340,518,373,493,390,483"/>
-<area shape="poly" title=" " alt="" coords="238,658,83,934,78,931,233,655"/>
-<area shape="poly" title=" " alt="" coords="390,178,300,151,302,146,391,173"/>
+<area shape="rect" title="Gets a mutable reference to the element at (row, col)." alt="" coords="617,513,761,539"/>
+<area shape="rect" href="../../d4/d02/namespacemaf_1_1math.html#a45286ae95d74e7a19ecf706538b151e7" title="Computes the Cholesky decomposition of a symmetric positive definite matrix." alt="" coords="186,60,326,85"/>
+<area shape="poly" title=" " alt="" coords="683,498,671,394,649,254,634,183,615,121,593,70,581,52,568,39,534,19,496,10,456,9,415,14,340,36,283,62,281,57,338,31,414,9,455,3,496,5,536,14,571,34,585,49,598,68,620,119,639,182,654,253,677,393,688,497"/>
+<area shape="rect" href="../../d4/d02/namespacemaf_1_1math.html#a2eb500c1b4cfbb3169604245422bd93e" title=" " alt="" coords="399,48,544,89"/>
+<area shape="poly" title=" " alt="" coords="686,498,682,421,667,316,652,259,631,203,603,150,567,104,543,87,546,82,571,100,608,147,636,201,657,257,672,314,688,420,691,498"/>
+<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a48ce2d00357e89ece95524bd003b63c6" title="Checks if the matrix is lower triangular." alt="" coords="406,179,538,220"/>
+<area shape="poly" title=" " alt="" coords="681,498,671,443,650,372,617,298,594,265,568,235,537,216,540,211,571,231,598,261,621,296,655,370,676,441,687,497"/>
+<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a0f6daf36ebb2efd5970384565469323c" title="Checks if the matrix is symmetric (A == A^T)." alt="" coords="406,114,538,154"/>
+<area shape="poly" title=" " alt="" coords="684,498,677,432,659,344,644,297,624,251,599,207,567,169,553,158,537,150,540,145,556,154,571,165,603,204,629,248,649,295,664,342,682,431,689,497"/>
+<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#af79337899f9b0f2613175daf53f18ea9" title="Checks if the matrix is upper triangular." alt="" coords="406,244,538,285"/>
+<area shape="poly" title=" " alt="" coords="678,499,664,456,641,402,609,347,590,322,568,300,537,282,540,277,571,296,594,319,614,344,646,400,669,454,683,498"/>
+<area shape="rect" href="../../d4/d02/namespacemaf_1_1math.html#a3d4733be1cd68ede07a9c2de6728b2d7" title="Checks if two matrices are element&#45;wise equal within a tolerance." alt="" coords="407,310,536,350"/>
+<area shape="poly" title=" " alt="" coords="673,501,632,433,602,397,568,365,536,348,538,343,571,361,606,393,636,430,677,498"/>
+<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a12a8c0a0c3d48be5283f473f9b86c7e4" title="Converts this matrix into an identity matrix." alt="" coords="406,375,538,416"/>
+<area shape="poly" title=" " alt="" coords="662,504,620,467,568,431,537,417,539,412,571,426,623,463,666,500"/>
+<area shape="rect" href="../../d4/d02/namespacemaf_1_1math.html#a0fe2f174cf146553516e15feb16733c5" title="Creates a new permutation matrix from a permutation vector." alt="" coords="374,440,569,481"/>
+<area shape="poly" title=" " alt="" coords="629,511,541,484,543,479,630,506"/>
+<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a9e5e920bcd92c6a8a0a2c5098467a5e2" title="Constructs from a nested std::vector (vector of vectors)." alt="" coords="406,506,538,546"/>
+<area shape="poly" title=" " alt="" coords="602,529,538,529,538,523,602,523"/>
+<area shape="rect" href="../../de/d35/classmaf_1_1math_1_1_vector.html#a3f7dfd09c96426650c80548b86804450" title=" " alt="" coords="404,571,539,612"/>
+<area shape="poly" title=" " alt="" coords="630,546,540,574,539,568,629,541"/>
+<area shape="rect" href="../../de/d35/classmaf_1_1math_1_1_vector.html#a00b97a160b42a4eeb740eb693a3f8bd5" title=" " alt="" coords="404,636,539,677"/>
+<area shape="poly" title=" " alt="" coords="666,552,623,589,571,626,540,640,538,635,568,621,620,585,662,548"/>
+<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#aeb756ee209272516a931a8ff9fccbcac" title="Element&#45;wise matrix addition." alt="" coords="406,702,538,742"/>
+<area shape="poly" title=" " alt="" coords="677,554,636,622,606,659,571,691,540,708,537,703,568,686,602,655,632,619,673,551"/>
+<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#aa73a0427aeb902c0a1e40623f3c6c52b" title="Element&#45;wise matrix subtraction." alt="" coords="406,767,538,808"/>
+<area shape="poly" title=" " alt="" coords="683,554,669,598,646,652,614,708,594,733,571,756,540,775,537,770,568,752,590,730,609,705,641,650,664,596,678,553"/>
+<area shape="rect" href="../../d4/d02/namespacemaf_1_1math.html#ac44a6962e2d09c20d929223448b4421c" title="Performs a blocked PLU decomposition on a square matrix." alt="" coords="419,832,524,857"/>
+<area shape="poly" title=" " alt="" coords="687,554,677,611,657,683,642,720,623,757,599,791,571,821,549,835,526,843,524,837,547,830,568,817,595,788,618,754,637,718,652,681,672,609,682,554"/>
+<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a0172c1256848fd0d7888f45c4623336c" title="Prints the matrix contents to std::cout." alt="" coords="406,882,538,922"/>
+<area shape="poly" title=" " alt="" coords="689,555,681,619,662,704,647,749,627,793,602,835,571,872,556,883,539,892,537,887,553,879,567,868,598,832,623,791,642,747,657,702,676,618,683,554"/>
+<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a65c510831554a29db6115f964b3679b0" title="Performs an in&#45;place transpose of the matrix." alt="" coords="406,947,538,988"/>
+<area shape="poly" title=" " alt="" coords="691,555,686,629,670,731,655,786,634,840,607,891,571,936,556,948,539,957,537,952,553,943,567,932,602,888,629,837,650,784,665,730,681,629,685,554"/>
+<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a246ca1334c2afc425a2eafc68b48fa38" title="Creates and returns a new matrix that is the transpose of this one." alt="" coords="406,1012,538,1053"/>
+<area shape="poly" title=" " alt="" coords="687,555,672,654,648,787,632,854,614,915,594,966,571,1001,557,1013,540,1022,537,1017,554,1009,567,997,589,963,609,914,627,853,643,786,667,653,681,554"/>
+<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#af716a9fdb890f168430aad15c9207a27" title="Checks if the matrix is positive definite." alt="" coords="5,52,138,93"/>
+<area shape="poly" title=" " alt="" coords="170,75,138,75,138,70,170,70"/>
+<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a90408b80daf821aff91fd2aed917ce8e" title="Checks if the matrix is diagonal." alt="" coords="190,212,322,253"/>
+<area shape="poly" title=" " alt="" coords="391,214,323,225,322,220,390,209"/>
+<area shape="poly" title=" " alt="" coords="390,114,303,89,305,83,391,108"/>
+<area shape="poly" title=" " alt="" coords="390,255,322,245,323,240,391,250"/>
+<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#ae26826bcc4a303b29538a17c0a39de2b" title="Checks if the matrix is singular (non&#45;invertible)." alt="" coords="190,824,322,865"/>
+<area shape="poly" title=" " alt="" coords="404,847,322,847,322,842,404,842"/>
 </map>
 </div>
 
@@ -642,6 +755,14 @@ template&lt;typename T&gt; </div>
 </table>
 </div><div class="memdoc">
 
+<p>Gets a const reference to the element at (row, col). </p>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::out_of_range</td><td>if the index is invalid. </td></tr>
+  </table>
+  </dd>
+</dl>
+
 </div>
 </div>
 <a id="a98d6cc10d243169d78f53d07406ace8b" name="a98d6cc10d243169d78f53d07406ace8b"></a>
@@ -668,23 +789,25 @@ template&lt;typename T&gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Gets the number of columns. </p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../d3/d6e/classmaf_1_1math_1_1_matrix_a98d6cc10d243169d78f53d07406ace8b_icgraph.png" border="0" usemap="#ad3/d6e/classmaf_1_1math_1_1_matrix_a98d6cc10d243169d78f53d07406ace8b_icgraph" loading="lazy" alt=""/></div>
 <map name="ad3/d6e/classmaf_1_1math_1_1_matrix_a98d6cc10d243169d78f53d07406ace8b_icgraph" id="ad3/d6e/classmaf_1_1math_1_1_matrix_a98d6cc10d243169d78f53d07406ace8b_icgraph">
-<area shape="rect" title=" " alt="" coords="188,169,320,210"/>
-<area shape="rect" href="../../d4/d02/namespacemaf_1_1math.html#a3d4733be1cd68ede07a9c2de6728b2d7" title="Checks if 2 matrices are loosely equal." alt="" coords="8,5,137,46"/>
+<area shape="rect" title="Gets the number of columns." alt="" coords="188,169,320,210"/>
+<area shape="rect" href="../../d4/d02/namespacemaf_1_1math.html#a3d4733be1cd68ede07a9c2de6728b2d7" title="Checks if two matrices are element&#45;wise equal within a tolerance." alt="" coords="8,5,137,46"/>
 <area shape="poly" title=" " alt="" coords="228,158,188,110,138,61,119,49,122,44,141,57,192,106,232,155"/>
-<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a74bd8dca601f691a7ec0b1eabf11c18d" title=" " alt="" coords="6,71,139,111"/>
+<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a74bd8dca601f691a7ec0b1eabf11c18d" title="Standard algebraic matrix multiplication (A * B)." alt="" coords="6,71,139,111"/>
 <area shape="poly" title=" " alt="" coords="203,163,138,127,115,114,117,110,141,122,206,159"/>
-<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a0440e67c7abf25ef0f37d8d96e9e5cd4" title=" " alt="" coords="6,136,139,177"/>
+<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a0440e67c7abf25ef0f37d8d96e9e5cd4" title="Matrix&#45;Vector multiplication (Matrix * column_vector)." alt="" coords="6,136,139,177"/>
 <area shape="poly" title=" " alt="" coords="172,177,139,171,140,166,173,172"/>
 <area shape="rect" href="../../de/d35/classmaf_1_1math_1_1_vector.html#a3f7dfd09c96426650c80548b86804450" title=" " alt="" coords="5,201,140,242"/>
 <area shape="poly" title=" " alt="" coords="173,207,141,212,140,207,172,201"/>
-<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#aeb756ee209272516a931a8ff9fccbcac" title=" " alt="" coords="6,267,139,307"/>
+<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#aeb756ee209272516a931a8ff9fccbcac" title="Element&#45;wise matrix addition." alt="" coords="6,267,139,307"/>
 <area shape="poly" title=" " alt="" coords="205,220,141,256,117,268,115,264,138,251,202,216"/>
-<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#aa73a0427aeb902c0a1e40623f3c6c52b" title=" " alt="" coords="6,332,139,373"/>
+<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#aa73a0427aeb902c0a1e40623f3c6c52b" title="Element&#45;wise matrix subtraction." alt="" coords="6,332,139,373"/>
 <area shape="poly" title=" " alt="" coords="232,224,192,273,141,321,122,334,119,329,138,317,188,269,227,221"/>
 </map>
 </div>
@@ -716,6 +839,9 @@ template&lt;typename T&gt; </div>
 </table>
 </div><div class="memdoc">
 
+<p>Gets a const reference to the underlying std::vector data store. </p>
+<dl class="section return"><dt>Returns</dt><dd>const std::vector&lt;T&gt;&amp; </dd></dl>
+
 </div>
 </div>
 <a id="aca60efe3848c6a7635c9f609ca163528" name="aca60efe3848c6a7635c9f609ca163528"></a>
@@ -742,32 +868,39 @@ template&lt;typename T&gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Gets a mutable reference to the underlying std::vector data store. </p>
+<dl class="section return"><dt>Returns</dt><dd>std::vector&lt;T&gt;&amp; </dd></dl>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../d3/d6e/classmaf_1_1math_1_1_matrix_aca60efe3848c6a7635c9f609ca163528_icgraph.png" border="0" usemap="#ad3/d6e/classmaf_1_1math_1_1_matrix_aca60efe3848c6a7635c9f609ca163528_icgraph" loading="lazy" alt=""/></div>
 <map name="ad3/d6e/classmaf_1_1math_1_1_matrix_aca60efe3848c6a7635c9f609ca163528_icgraph" id="ad3/d6e/classmaf_1_1math_1_1_matrix_aca60efe3848c6a7635c9f609ca163528_icgraph">
-<area shape="rect" title=" " alt="" coords="186,308,343,333"/>
-<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#ac57878bb415f6ea6f438e2bfe9fe9398" title=" " alt="" coords="5,5,138,46"/>
-<area shape="poly" title=" " alt="" coords="254,293,239,245,214,184,180,119,159,88,136,61,120,49,124,44,140,57,164,85,185,116,219,181,244,243,259,292"/>
-<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a9e5e920bcd92c6a8a0a2c5098467a5e2" title=" " alt="" coords="5,71,138,111"/>
-<area shape="poly" title=" " alt="" coords="249,295,206,214,174,168,136,126,119,114,122,110,139,122,178,164,210,211,254,292"/>
-<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a8b0c11e3b01e1a9f2a63764d13d6cb24" title=" " alt="" coords="5,136,138,177"/>
-<area shape="poly" title=" " alt="" coords="241,297,196,245,136,192,117,179,120,175,139,188,199,242,245,293"/>
-<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a137a88facec95aac4ec5e55cfd00e798" title=" " alt="" coords="5,201,138,242"/>
-<area shape="poly" title=" " alt="" coords="223,302,136,257,112,245,115,240,139,253,225,298"/>
-<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a74bd8dca601f691a7ec0b1eabf11c18d" title=" " alt="" coords="5,267,138,307"/>
-<area shape="poly" title=" " alt="" coords="171,307,138,301,139,296,172,302"/>
-<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a169ccbd0b4babfcc2878336ca159e15d" title=" " alt="" coords="5,332,138,373"/>
-<area shape="poly" title=" " alt="" coords="170,339,139,344,138,339,170,333"/>
-<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#ab01486aa7103052849a9e561627d3881" title=" " alt="" coords="5,397,138,438"/>
-<area shape="poly" title=" " alt="" coords="225,343,115,399,112,394,222,338"/>
-<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a154ee60c9aaaaaaa93b85999c2703715" title=" " alt="" coords="5,463,138,503"/>
-<area shape="poly" title=" " alt="" coords="245,347,199,398,139,452,120,464,117,460,136,448,196,394,241,343"/>
-<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a14ee9c5f4681f211daac074c3607fd34" title=" " alt="" coords="5,528,138,569"/>
-<area shape="poly" title=" " alt="" coords="254,348,210,429,178,475,139,517,122,530,119,525,136,513,174,472,206,426,249,346"/>
-<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a5ab05f3bf21d65821b108e2ae17ab753" title=" " alt="" coords="5,593,138,634"/>
-<area shape="poly" title=" " alt="" coords="259,349,243,397,219,459,185,524,164,554,140,582,124,595,120,591,136,578,159,551,180,521,214,457,238,396,253,347"/>
+<area shape="rect" title="Gets a mutable reference to the underlying std::vector data store." alt="" coords="186,373,343,398"/>
+<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#ac57878bb415f6ea6f438e2bfe9fe9398" title="Constructs from a std::array, filled by rows." alt="" coords="5,5,138,46"/>
+<area shape="poly" title=" " alt="" coords="257,358,245,299,223,220,187,136,163,97,136,61,121,49,125,44,140,57,168,94,192,134,228,218,250,298,262,357"/>
+<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a9e5e920bcd92c6a8a0a2c5098467a5e2" title="Constructs from a nested std::vector (vector of vectors)." alt="" coords="5,71,138,111"/>
+<area shape="poly" title=" " alt="" coords="254,359,239,310,214,249,180,184,159,154,136,126,120,114,124,110,140,122,164,151,185,181,219,247,244,308,259,357"/>
+<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a8b0c11e3b01e1a9f2a63764d13d6cb24" title="Constructs from a std::vector, filled by rows." alt="" coords="5,136,138,177"/>
+<area shape="poly" title=" " alt="" coords="249,360,206,279,174,233,136,192,119,179,122,175,139,188,178,230,210,276,254,358"/>
+<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a137a88facec95aac4ec5e55cfd00e798" title="Constructs a matrix from a raw data pointer." alt="" coords="5,201,138,242"/>
+<area shape="poly" title=" " alt="" coords="241,362,196,311,136,257,117,245,120,240,139,253,199,307,245,359"/>
+<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a74bd8dca601f691a7ec0b1eabf11c18d" title="Standard algebraic matrix multiplication (A * B)." alt="" coords="5,267,138,307"/>
+<area shape="poly" title=" " alt="" coords="223,368,136,323,112,310,115,306,139,318,225,363"/>
+<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a169ccbd0b4babfcc2878336ca159e15d" title="Element&#45;wise scalar multiplication (Matrix * scalar)." alt="" coords="5,332,138,373"/>
+<area shape="poly" title=" " alt="" coords="171,372,138,366,139,361,172,367"/>
+<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#aeb756ee209272516a931a8ff9fccbcac" title="Element&#45;wise matrix addition." alt="" coords="5,397,138,438"/>
+<area shape="poly" title=" " alt="" coords="170,404,139,409,138,404,170,399"/>
+<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#ab01486aa7103052849a9e561627d3881" title="Element&#45;wise scalar addition (Matrix + scalar)." alt="" coords="5,463,138,503"/>
+<area shape="poly" title=" " alt="" coords="225,408,115,465,112,460,222,403"/>
+<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#aa73a0427aeb902c0a1e40623f3c6c52b" title="Element&#45;wise matrix subtraction." alt="" coords="5,528,138,569"/>
+<area shape="poly" title=" " alt="" coords="245,412,199,464,139,517,120,530,117,525,136,513,196,460,241,409"/>
+<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a154ee60c9aaaaaaa93b85999c2703715" title="Element&#45;wise scalar subtraction (Matrix &#45; scalar)." alt="" coords="5,593,138,634"/>
+<area shape="poly" title=" " alt="" coords="254,414,210,494,178,541,139,582,122,595,119,591,136,578,174,537,206,492,249,411"/>
+<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a14ee9c5f4681f211daac074c3607fd34" title="Element&#45;wise scalar subtraction (scalar &#45; Matrix)." alt="" coords="5,659,138,699"/>
+<area shape="poly" title=" " alt="" coords="259,414,243,463,219,524,185,589,164,620,140,648,124,660,120,656,136,644,159,616,180,586,214,522,238,461,253,413"/>
+<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a5ab05f3bf21d65821b108e2ae17ab753" title="Element&#45;wise scalar division (scalar / Matrix)." alt="" coords="5,724,138,765"/>
+<area shape="poly" title=" " alt="" coords="262,414,250,474,227,553,192,637,168,677,140,713,125,725,121,721,136,709,163,674,187,634,222,551,245,473,256,413"/>
 </map>
 </div>
 
@@ -790,23 +923,19 @@ template&lt;typename T&gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Fills the current matrix with $value. </p>
+<p>Fills the entire matrix with a single value. </p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../d3/d6e/classmaf_1_1math_1_1_matrix_a71134f227c2c22e4ecf24b33ed3c0396_icgraph.png" border="0" usemap="#ad3/d6e/classmaf_1_1math_1_1_matrix_a71134f227c2c22e4ecf24b33ed3c0396_icgraph" loading="lazy" alt=""/></div>
 <map name="ad3/d6e/classmaf_1_1math_1_1_matrix_a71134f227c2c22e4ecf24b33ed3c0396_icgraph" id="ad3/d6e/classmaf_1_1math_1_1_matrix_a71134f227c2c22e4ecf24b33ed3c0396_icgraph">
-<area shape="rect" title="Fills the current matrix with $value." alt="" coords="517,70,663,96"/>
-<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a12a8c0a0c3d48be5283f473f9b86c7e4" title="Converts the matrix to indentity matrix." alt="" coords="337,5,469,46"/>
-<area shape="poly" title=" " alt="" coords="530,68,469,49,471,43,532,63"/>
-<area shape="rect" href="../../d4/d02/namespacemaf_1_1math.html#a44a90b54cc59e94a6502aa223b893215" title=" " alt="" coords="345,70,461,96"/>
-<area shape="poly" title=" " alt="" coords="502,86,462,86,462,80,502,80"/>
-<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a74bd8dca601f691a7ec0b1eabf11c18d" title=" " alt="" coords="337,120,469,161"/>
-<area shape="poly" title=" " alt="" coords="532,103,471,123,469,117,530,98"/>
-<area shape="rect" href="../../d4/d02/namespacemaf_1_1math.html#a4d61c9a4c0434a2e01652894564f7ebb" title=" " alt="" coords="159,5,289,46"/>
-<area shape="poly" title=" " alt="" coords="321,28,290,28,290,23,321,23"/>
-<area shape="rect" href="../../d4/d02/namespacemaf_1_1math.html#ac44a6962e2d09c20d929223448b4421c" title="Performs a blocked PLU decomposition on a square matrix." alt="" coords="5,13,111,38"/>
-<area shape="poly" title=" " alt="" coords="143,28,111,28,111,23,143,23"/>
+<area shape="rect" title="Fills the entire matrix with a single value." alt="" coords="186,70,331,96"/>
+<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a12a8c0a0c3d48be5283f473f9b86c7e4" title="Converts this matrix into an identity matrix." alt="" coords="5,5,138,46"/>
+<area shape="poly" title=" " alt="" coords="199,68,137,49,139,43,200,63"/>
+<area shape="rect" href="../../d4/d02/namespacemaf_1_1math.html#a44a90b54cc59e94a6502aa223b893215" title="Creates a new matrix filled with ones." alt="" coords="13,70,130,96"/>
+<area shape="poly" title=" " alt="" coords="170,86,130,86,130,80,170,80"/>
+<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a74bd8dca601f691a7ec0b1eabf11c18d" title="Standard algebraic matrix multiplication (A * B)." alt="" coords="5,120,138,161"/>
+<area shape="poly" title=" " alt="" coords="200,103,139,123,137,117,199,98"/>
 </map>
 </div>
 
@@ -846,11 +975,11 @@ Here is the call graph for this function:</div>
 <area shape="rect" title="Checks if the matrix is diagonal." alt="" coords="5,71,138,111"/>
 <area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a48ce2d00357e89ece95524bd003b63c6" title="Checks if the matrix is lower triangular." alt="" coords="186,71,318,111"/>
 <area shape="poly" title=" " alt="" coords="138,88,170,88,170,94,138,94"/>
-<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a774d7c4510a8977e5b19f5f332d5789c" title="Checks if the matrix is square." alt="" coords="372,112,504,153"/>
+<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a774d7c4510a8977e5b19f5f332d5789c" title="Checks if the matrix is square (rows == cols)." alt="" coords="372,112,504,153"/>
 <area shape="poly" title=" " alt="" coords="137,109,186,120,274,129,356,132,356,137,273,135,185,126,136,115"/>
 <area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#af79337899f9b0f2613175daf53f18ea9" title="Checks if the matrix is upper triangular." alt="" coords="186,5,318,46"/>
 <area shape="poly" title=" " alt="" coords="129,68,179,49,180,54,130,73"/>
-<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a3506acc05e298718fb6d5587d6594055" title=" " alt="" coords="366,62,509,88"/>
+<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a3506acc05e298718fb6d5587d6594055" title="Gets a mutable reference to the element at (row, col)." alt="" coords="366,62,509,88"/>
 <area shape="poly" title=" " alt="" coords="318,83,350,80,351,85,318,88"/>
 <area shape="rect" href="../../df/dba/namespacemaf.html#a11dab27cc975212d0cfebee780289026" title=" " alt="" coords="388,13,487,38"/>
 <area shape="poly" title=" " alt="" coords="308,68,365,47,381,41,383,47,367,52,310,73"/>
@@ -895,11 +1024,11 @@ Here is the call graph for this function:</div>
 <div class="center"><img src="../../d3/d6e/classmaf_1_1math_1_1_matrix_a48ce2d00357e89ece95524bd003b63c6_cgraph.png" border="0" usemap="#ad3/d6e/classmaf_1_1math_1_1_matrix_a48ce2d00357e89ece95524bd003b63c6_cgraph" loading="lazy" alt=""/></div>
 <map name="ad3/d6e/classmaf_1_1math_1_1_matrix_a48ce2d00357e89ece95524bd003b63c6_cgraph" id="ad3/d6e/classmaf_1_1math_1_1_matrix_a48ce2d00357e89ece95524bd003b63c6_cgraph">
 <area shape="rect" title="Checks if the matrix is lower triangular." alt="" coords="5,47,138,88"/>
-<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a3506acc05e298718fb6d5587d6594055" title=" " alt="" coords="186,5,329,31"/>
+<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a3506acc05e298718fb6d5587d6594055" title="Gets a mutable reference to the element at (row, col)." alt="" coords="186,5,329,31"/>
 <area shape="poly" title=" " alt="" coords="137,47,191,33,192,38,139,53"/>
 <area shape="rect" href="../../df/dba/namespacemaf.html#a11dab27cc975212d0cfebee780289026" title=" " alt="" coords="208,55,307,80"/>
 <area shape="poly" title=" " alt="" coords="138,65,192,65,192,70,138,70"/>
-<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a774d7c4510a8977e5b19f5f332d5789c" title="Checks if the matrix is square." alt="" coords="191,104,324,145"/>
+<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a774d7c4510a8977e5b19f5f332d5789c" title="Checks if the matrix is square (rows == cols)." alt="" coords="191,104,324,145"/>
 <area shape="poly" title=" " alt="" coords="139,85,177,97,176,103,137,90"/>
 </map>
 </div>
@@ -940,33 +1069,30 @@ template&lt;typename T&gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Checks if matrix is positive definite. If matrix is symmetric it is sufficient to have Cholesky decomposition. TODO: If matrix isn't symmetric </p>
+
+<p>Checks if the matrix is positive definite. </p>
+<p>For symmetric matrices, attempts Cholesky decomposition. TODO: Add Sylvester's criterion for non-symmetric. Defined in <a class="el" href="../../d2/d09/_matrix_checkers_8hpp.html" title="Contains implementations for the checker methods of the Matrix&lt;T&gt; class.">MatrixCheckers.hpp</a> </p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../d3/d6e/classmaf_1_1math_1_1_matrix_af716a9fdb890f168430aad15c9207a27_cgraph.png" border="0" usemap="#ad3/d6e/classmaf_1_1math_1_1_matrix_af716a9fdb890f168430aad15c9207a27_cgraph" loading="lazy" alt=""/></div>
 <map name="ad3/d6e/classmaf_1_1math_1_1_matrix_af716a9fdb890f168430aad15c9207a27_cgraph" id="ad3/d6e/classmaf_1_1math_1_1_matrix_af716a9fdb890f168430aad15c9207a27_cgraph">
-<area shape="rect" title=" " alt="" coords="5,173,138,214"/>
-<area shape="rect" href="../../d4/d02/namespacemaf_1_1math.html#a45286ae95d74e7a19ecf706538b151e7" title=" " alt="" coords="186,181,326,206"/>
-<area shape="poly" title=" " alt="" coords="138,191,170,191,170,196,138,196"/>
-<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a3506acc05e298718fb6d5587d6594055" title=" " alt="" coords="554,124,698,149"/>
-<area shape="poly" title=" " alt="" coords="299,178,373,159,458,147,538,139,539,144,459,152,375,164,300,183"/>
-<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a0f6daf36ebb2efd5970384565469323c" title="Checkes if the matrix is symmetric." alt="" coords="374,59,506,99"/>
-<area shape="poly" title=" " alt="" coords="276,178,373,115,389,105,392,110,375,120,279,182"/>
-<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#aa1fa0768048faff36f5dfc56911a8ce4" title=" " alt="" coords="374,173,506,214"/>
-<area shape="poly" title=" " alt="" coords="326,191,358,191,358,196,326,196"/>
-<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#afb33cbf4574399aa71beba18c85a2663" title=" " alt="" coords="374,239,506,279"/>
-<area shape="poly" title=" " alt="" coords="295,205,367,230,365,235,293,210"/>
-<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a246ca1334c2afc425a2eafc68b48fa38" title=" " alt="" coords="374,304,506,345"/>
-<area shape="poly" title=" " alt="" coords="273,205,317,245,376,289,383,294,380,298,372,293,314,249,269,209"/>
-<area shape="poly" title=" " alt="" coords="507,97,568,116,567,121,506,102"/>
-<area shape="rect" href="../../df/dba/namespacemaf.html#a11dab27cc975212d0cfebee780289026" title=" " alt="" coords="576,70,676,96"/>
-<area shape="poly" title=" " alt="" coords="507,78,561,79,561,84,507,83"/>
-<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a774d7c4510a8977e5b19f5f332d5789c" title="Checks if the matrix is square." alt="" coords="560,5,692,46"/>
-<area shape="poly" title=" " alt="" coords="506,57,545,46,546,51,507,63"/>
-<area shape="poly" title=" " alt="" coords="487,301,505,289,537,258,565,224,607,161,612,164,569,227,541,262,508,293,490,306"/>
-<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#afadd64902ef9d03291be6e799c38e904" title=" " alt="" coords="560,304,692,345"/>
-<area shape="poly" title=" " alt="" coords="507,322,545,322,545,327,507,327"/>
+<area shape="rect" title="Checks if the matrix is positive definite." alt="" coords="5,86,138,126"/>
+<area shape="rect" href="../../d4/d02/namespacemaf_1_1math.html#a45286ae95d74e7a19ecf706538b151e7" title="Computes the Cholesky decomposition of a symmetric positive definite matrix." alt="" coords="186,93,326,119"/>
+<area shape="poly" title=" " alt="" coords="138,104,170,104,170,109,138,109"/>
+<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a3506acc05e298718fb6d5587d6594055" title="Gets a mutable reference to the element at (row, col)." alt="" coords="554,5,698,31"/>
+<area shape="poly" title=" " alt="" coords="274,90,318,63,373,38,458,21,539,14,539,20,458,26,375,43,320,68,277,95"/>
+<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a0f6daf36ebb2efd5970384565469323c" title="Checks if the matrix is symmetric (A == A^T)." alt="" coords="374,52,506,93"/>
+<area shape="poly" title=" " alt="" coords="326,91,358,85,359,90,327,96"/>
+<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#aa1fa0768048faff36f5dfc56911a8ce4" title="Gets the number of rows." alt="" coords="374,118,506,158"/>
+<area shape="poly" title=" " alt="" coords="327,116,359,121,358,127,326,121"/>
+<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#afb33cbf4574399aa71beba18c85a2663" title="Gets a mutable std::span of a single row." alt="" coords="374,183,506,224"/>
+<area shape="poly" title=" " alt="" coords="283,117,375,168,385,173,383,178,373,173,280,122"/>
+<area shape="poly" title=" " alt="" coords="506,51,565,33,566,38,507,56"/>
+<area shape="rect" href="../../df/dba/namespacemaf.html#a11dab27cc975212d0cfebee780289026" title=" " alt="" coords="576,59,676,84"/>
+<area shape="poly" title=" " alt="" coords="507,70,561,69,561,75,507,75"/>
+<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a774d7c4510a8977e5b19f5f332d5789c" title="Checks if the matrix is square (rows == cols)." alt="" coords="560,108,692,149"/>
+<area shape="poly" title=" " alt="" coords="507,90,546,102,545,107,506,95"/>
 </map>
 </div>
 
@@ -996,15 +1122,29 @@ template&lt;typename T&gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Checks if the matrix is singular. This is equivalent to: 1) <a class="el" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html">Matrix</a> A doesn't have an inverse. 2) Rank (A) &lt; n 3) Determinant(A) = 0 4) Eigen value(A) = 0 </p>
+
+<p>Checks if the matrix is singular (non-invertible). </p>
+<p>Equivalent to det(A) == 0.</p>
+<p>Equivalent to rank(A) &lt; max(dimensions(A)). </p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../d3/d6e/classmaf_1_1math_1_1_matrix_ae26826bcc4a303b29538a17c0a39de2b_cgraph.png" border="0" usemap="#ad3/d6e/classmaf_1_1math_1_1_matrix_ae26826bcc4a303b29538a17c0a39de2b_cgraph" loading="lazy" alt=""/></div>
 <map name="ad3/d6e/classmaf_1_1math_1_1_matrix_ae26826bcc4a303b29538a17c0a39de2b_cgraph" id="ad3/d6e/classmaf_1_1math_1_1_matrix_ae26826bcc4a303b29538a17c0a39de2b_cgraph">
-<area shape="rect" title=" " alt="" coords="5,5,138,46"/>
-<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a774d7c4510a8977e5b19f5f332d5789c" title="Checks if the matrix is square." alt="" coords="186,5,318,46"/>
-<area shape="poly" title=" " alt="" coords="138,23,170,23,170,28,138,28"/>
+<area shape="rect" title="Checks if the matrix is singular (non&#45;invertible)." alt="" coords="5,63,138,103"/>
+<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a774d7c4510a8977e5b19f5f332d5789c" title="Checks if the matrix is square (rows == cols)." alt="" coords="344,5,477,46"/>
+<area shape="poly" title=" " alt="" coords="138,69,329,37,330,42,139,75"/>
+<area shape="rect" href="../../d4/d02/namespacemaf_1_1math.html#ac44a6962e2d09c20d929223448b4421c" title="Performs a blocked PLU decomposition on a square matrix." alt="" coords="186,96,291,121"/>
+<area shape="poly" title=" " alt="" coords="139,90,170,95,170,101,138,96"/>
+<area shape="poly" title=" " alt="" coords="264,93,338,55,348,51,350,55,340,60,266,97"/>
+<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a3506acc05e298718fb6d5587d6594055" title="Gets a mutable reference to the element at (row, col)." alt="" coords="339,70,482,96"/>
+<area shape="poly" title=" " alt="" coords="291,98,323,93,324,98,292,103"/>
+<area shape="rect" href="../../df/dba/namespacemaf.html#a11dab27cc975212d0cfebee780289026" title=" " alt="" coords="361,120,460,145"/>
+<area shape="poly" title=" " alt="" coords="292,113,346,121,346,126,291,118"/>
+<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#aa1fa0768048faff36f5dfc56911a8ce4" title="Gets the number of rows." alt="" coords="344,169,477,210"/>
+<area shape="poly" title=" " alt="" coords="267,119,340,155,350,160,348,165,338,160,265,124"/>
+<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#afb33cbf4574399aa71beba18c85a2663" title="Gets a mutable std::span of a single row." alt="" coords="344,235,477,275"/>
+<area shape="poly" title=" " alt="" coords="251,120,287,168,312,195,341,220,348,224,345,229,337,224,309,199,283,171,247,123"/>
 </map>
 </div>
 
@@ -1030,43 +1170,41 @@ template&lt;typename T&gt; </div>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel nodiscard">nodiscard</span><span class="mlabel constexpr">constexpr</span></span>  </td>
+<span class="mlabels"><span class="mlabel nodiscard">nodiscard</span><span class="mlabel constexpr">constexpr</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p>Checks if the matrix is square. </p>
+<p>Checks if the matrix is square (rows == cols). </p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../d3/d6e/classmaf_1_1math_1_1_matrix_a774d7c4510a8977e5b19f5f332d5789c_icgraph.png" border="0" usemap="#ad3/d6e/classmaf_1_1math_1_1_matrix_a774d7c4510a8977e5b19f5f332d5789c_icgraph" loading="lazy" alt=""/></div>
 <map name="ad3/d6e/classmaf_1_1math_1_1_matrix_a774d7c4510a8977e5b19f5f332d5789c_icgraph" id="ad3/d6e/classmaf_1_1math_1_1_matrix_a774d7c4510a8977e5b19f5f332d5789c_icgraph">
-<area shape="rect" title="Checks if the matrix is square." alt="" coords="554,200,687,241"/>
+<area shape="rect" title="Checks if the matrix is square (rows == cols)." alt="" coords="554,196,687,237"/>
 <area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a90408b80daf821aff91fd2aed917ce8e" title="Checks if the matrix is diagonal." alt="" coords="190,36,322,77"/>
-<area shape="poly" title=" " alt="" coords="608,186,595,147,574,102,544,60,526,42,505,27,480,16,454,10,400,11,347,22,302,38,300,33,345,17,399,6,455,5,482,11,508,22,529,38,548,56,578,99,599,145,613,185"/>
+<area shape="poly" title=" " alt="" coords="608,182,594,143,573,100,543,59,525,41,505,27,480,16,454,10,399,11,347,22,302,38,300,33,345,17,399,6,455,5,482,11,508,22,529,37,547,55,577,97,599,141,613,181"/>
 <area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a48ce2d00357e89ece95524bd003b63c6" title="Checks if the matrix is lower triangular." alt="" coords="374,36,506,77"/>
-<area shape="poly" title=" " alt="" coords="594,190,555,141,505,92,486,80,489,75,508,88,559,137,598,186"/>
-<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#ae26826bcc4a303b29538a17c0a39de2b" title=" " alt="" coords="374,102,506,142"/>
-<area shape="poly" title=" " alt="" coords="570,195,505,158,482,145,484,141,508,153,573,190"/>
-<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a0f6daf36ebb2efd5970384565469323c" title="Checkes if the matrix is symmetric." alt="" coords="374,232,506,273"/>
-<area shape="poly" title=" " alt="" coords="539,238,507,244,506,238,538,233"/>
-<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#af79337899f9b0f2613175daf53f18ea9" title="Checks if the matrix is upper triangular." alt="" coords="374,167,506,208"/>
-<area shape="poly" title=" " alt="" coords="539,208,506,202,507,197,540,203"/>
-<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a12a8c0a0c3d48be5283f473f9b86c7e4" title="Converts the matrix to indentity matrix." alt="" coords="374,298,506,338"/>
-<area shape="poly" title=" " alt="" coords="572,251,508,287,484,300,482,295,505,282,569,247"/>
-<area shape="rect" href="../../d4/d02/namespacemaf_1_1math.html#ac44a6962e2d09c20d929223448b4421c" title="Performs a blocked PLU decomposition on a square matrix." alt="" coords="19,333,124,359"/>
-<area shape="poly" title=" " alt="" coords="603,256,565,308,538,333,507,352,457,371,405,382,351,387,298,387,200,377,122,362,123,357,200,372,298,381,351,381,404,376,456,365,505,348,535,329,561,305,599,253"/>
-<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a65c510831554a29db6115f964b3679b0" title=" " alt="" coords="374,412,506,453"/>
-<area shape="poly" title=" " alt="" coords="605,257,566,325,539,362,508,396,485,414,481,410,505,392,535,359,561,322,600,254"/>
+<area shape="poly" title=" " alt="" coords="594,186,554,139,505,92,486,80,489,75,508,88,558,135,598,182"/>
+<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#ae26826bcc4a303b29538a17c0a39de2b" title="Checks if the matrix is singular (non&#45;invertible)." alt="" coords="190,282,322,322"/>
+<area shape="poly" title=" " alt="" coords="540,235,375,272,323,286,322,281,373,267,539,230"/>
+<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a0f6daf36ebb2efd5970384565469323c" title="Checks if the matrix is symmetric (A == A^T)." alt="" coords="374,167,506,208"/>
+<area shape="poly" title=" " alt="" coords="538,206,506,201,507,195,539,201"/>
+<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#af79337899f9b0f2613175daf53f18ea9" title="Checks if the matrix is upper triangular." alt="" coords="374,102,506,142"/>
+<area shape="poly" title=" " alt="" coords="566,191,505,158,481,145,484,140,508,153,569,186"/>
+<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a12a8c0a0c3d48be5283f473f9b86c7e4" title="Converts this matrix into an identity matrix." alt="" coords="374,282,506,322"/>
+<area shape="poly" title=" " alt="" coords="563,246,486,283,484,279,561,242"/>
+<area shape="rect" href="../../d4/d02/namespacemaf_1_1math.html#ac44a6962e2d09c20d929223448b4421c" title="Performs a blocked PLU decomposition on a square matrix." alt="" coords="388,346,493,372"/>
+<area shape="poly" title=" " alt="" coords="596,251,557,295,508,336,485,348,482,343,505,332,554,291,592,248"/>
+<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a65c510831554a29db6115f964b3679b0" title="Performs an in&#45;place transpose of the matrix." alt="" coords="374,396,506,437"/>
+<area shape="poly" title=" " alt="" coords="605,252,566,319,539,354,508,387,493,398,489,393,505,383,535,351,562,316,601,249"/>
 <area shape="poly" title=" " alt="" coords="359,59,322,59,322,54,359,54"/>
-<area shape="rect" href="../../d4/d02/namespacemaf_1_1math.html#a45286ae95d74e7a19ecf706538b151e7" title=" " alt="" coords="186,240,326,266"/>
-<area shape="poly" title=" " alt="" coords="359,255,326,255,326,250,359,250"/>
-<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#af716a9fdb890f168430aad15c9207a27" title=" " alt="" coords="5,232,138,273"/>
-<area shape="poly" title=" " alt="" coords="170,255,138,255,138,250,170,250"/>
-<area shape="poly" title=" " alt="" coords="380,161,372,156,320,117,278,80,281,76,324,113,376,152,383,157"/>
-<area shape="rect" href="../../d4/d02/namespacemaf_1_1math.html#a4d61c9a4c0434a2e01652894564f7ebb" title=" " alt="" coords="191,298,321,338"/>
-<area shape="poly" title=" " alt="" coords="359,321,321,321,321,315,359,315"/>
-<area shape="poly" title=" " alt="" coords="176,333,125,341,124,336,175,328"/>
+<area shape="rect" href="../../d4/d02/namespacemaf_1_1math.html#a45286ae95d74e7a19ecf706538b151e7" title="Computes the Cholesky decomposition of a symmetric positive definite matrix." alt="" coords="186,174,326,200"/>
+<area shape="poly" title=" " alt="" coords="359,190,326,190,326,185,359,185"/>
+<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#af716a9fdb890f168430aad15c9207a27" title="Checks if the matrix is positive definite." alt="" coords="5,167,138,208"/>
+<area shape="poly" title=" " alt="" coords="170,190,138,190,138,185,170,185"/>
+<area shape="poly" title=" " alt="" coords="366,98,314,80,316,75,368,93"/>
+<area shape="poly" title=" " alt="" coords="381,344,322,325,323,320,383,339"/>
 </map>
 </div>
 
@@ -1097,18 +1235,18 @@ template&lt;typename T&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Checkes if the matrix is symmetric. </p>
+<p>Checks if the matrix is symmetric (A == A^T). </p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../d3/d6e/classmaf_1_1math_1_1_matrix_a0f6daf36ebb2efd5970384565469323c_cgraph.png" border="0" usemap="#ad3/d6e/classmaf_1_1math_1_1_matrix_a0f6daf36ebb2efd5970384565469323c_cgraph" loading="lazy" alt=""/></div>
 <map name="ad3/d6e/classmaf_1_1math_1_1_matrix_a0f6daf36ebb2efd5970384565469323c_cgraph" id="ad3/d6e/classmaf_1_1math_1_1_matrix_a0f6daf36ebb2efd5970384565469323c_cgraph">
-<area shape="rect" title="Checkes if the matrix is symmetric." alt="" coords="5,47,138,88"/>
-<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a3506acc05e298718fb6d5587d6594055" title=" " alt="" coords="186,5,329,31"/>
+<area shape="rect" title="Checks if the matrix is symmetric (A == A^T)." alt="" coords="5,47,138,88"/>
+<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a3506acc05e298718fb6d5587d6594055" title="Gets a mutable reference to the element at (row, col)." alt="" coords="186,5,329,31"/>
 <area shape="poly" title=" " alt="" coords="137,47,191,33,192,38,139,53"/>
 <area shape="rect" href="../../df/dba/namespacemaf.html#a11dab27cc975212d0cfebee780289026" title=" " alt="" coords="208,55,307,80"/>
 <area shape="poly" title=" " alt="" coords="138,65,192,65,192,70,138,70"/>
-<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a774d7c4510a8977e5b19f5f332d5789c" title="Checks if the matrix is square." alt="" coords="191,104,324,145"/>
+<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a774d7c4510a8977e5b19f5f332d5789c" title="Checks if the matrix is square (rows == cols)." alt="" coords="191,104,324,145"/>
 <area shape="poly" title=" " alt="" coords="139,85,177,97,176,103,137,90"/>
 </map>
 </div>
@@ -1117,10 +1255,10 @@ Here is the caller graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../d3/d6e/classmaf_1_1math_1_1_matrix_a0f6daf36ebb2efd5970384565469323c_icgraph.png" border="0" usemap="#ad3/d6e/classmaf_1_1math_1_1_matrix_a0f6daf36ebb2efd5970384565469323c_icgraph" loading="lazy" alt=""/></div>
 <map name="ad3/d6e/classmaf_1_1math_1_1_matrix_a0f6daf36ebb2efd5970384565469323c_icgraph" id="ad3/d6e/classmaf_1_1math_1_1_matrix_a0f6daf36ebb2efd5970384565469323c_icgraph">
-<area shape="rect" title="Checkes if the matrix is symmetric." alt="" coords="374,5,506,46"/>
-<area shape="rect" href="../../d4/d02/namespacemaf_1_1math.html#a45286ae95d74e7a19ecf706538b151e7" title=" " alt="" coords="186,13,326,38"/>
+<area shape="rect" title="Checks if the matrix is symmetric (A == A^T)." alt="" coords="374,5,506,46"/>
+<area shape="rect" href="../../d4/d02/namespacemaf_1_1math.html#a45286ae95d74e7a19ecf706538b151e7" title="Computes the Cholesky decomposition of a symmetric positive definite matrix." alt="" coords="186,13,326,38"/>
 <area shape="poly" title=" " alt="" coords="359,28,326,28,326,23,359,23"/>
-<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#af716a9fdb890f168430aad15c9207a27" title=" " alt="" coords="5,5,138,46"/>
+<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#af716a9fdb890f168430aad15c9207a27" title="Checks if the matrix is positive definite." alt="" coords="5,5,138,46"/>
 <area shape="poly" title=" " alt="" coords="170,28,138,28,138,23,170,23"/>
 </map>
 </div>
@@ -1159,11 +1297,11 @@ Here is the call graph for this function:</div>
 <div class="center"><img src="../../d3/d6e/classmaf_1_1math_1_1_matrix_af79337899f9b0f2613175daf53f18ea9_cgraph.png" border="0" usemap="#ad3/d6e/classmaf_1_1math_1_1_matrix_af79337899f9b0f2613175daf53f18ea9_cgraph" loading="lazy" alt=""/></div>
 <map name="ad3/d6e/classmaf_1_1math_1_1_matrix_af79337899f9b0f2613175daf53f18ea9_cgraph" id="ad3/d6e/classmaf_1_1math_1_1_matrix_af79337899f9b0f2613175daf53f18ea9_cgraph">
 <area shape="rect" title="Checks if the matrix is upper triangular." alt="" coords="5,47,138,88"/>
-<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a3506acc05e298718fb6d5587d6594055" title=" " alt="" coords="186,5,329,31"/>
+<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a3506acc05e298718fb6d5587d6594055" title="Gets a mutable reference to the element at (row, col)." alt="" coords="186,5,329,31"/>
 <area shape="poly" title=" " alt="" coords="137,47,191,33,192,38,139,53"/>
 <area shape="rect" href="../../df/dba/namespacemaf.html#a11dab27cc975212d0cfebee780289026" title=" " alt="" coords="208,55,307,80"/>
 <area shape="poly" title=" " alt="" coords="138,65,192,65,192,70,138,70"/>
-<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a774d7c4510a8977e5b19f5f332d5789c" title="Checks if the matrix is square." alt="" coords="191,104,324,145"/>
+<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a774d7c4510a8977e5b19f5f332d5789c" title="Checks if the matrix is square (rows == cols)." alt="" coords="191,104,324,145"/>
 <area shape="poly" title=" " alt="" coords="139,85,177,97,176,103,137,90"/>
 </map>
 </div>
@@ -1197,31 +1335,26 @@ template&lt;typename T&gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Converts the matrix to indentity matrix. </p>
+<p>Converts this matrix into an identity matrix. </p>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::runtime_error</td><td>if the matrix is not square.</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>Defined in <a class="el" href="../../d5/d39/_matrix_methods_8hpp.html">MatrixMethods.hpp</a> </p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../d3/d6e/classmaf_1_1math_1_1_matrix_a12a8c0a0c3d48be5283f473f9b86c7e4_cgraph.png" border="0" usemap="#ad3/d6e/classmaf_1_1math_1_1_matrix_a12a8c0a0c3d48be5283f473f9b86c7e4_cgraph" loading="lazy" alt=""/></div>
 <map name="ad3/d6e/classmaf_1_1math_1_1_matrix_a12a8c0a0c3d48be5283f473f9b86c7e4_cgraph" id="ad3/d6e/classmaf_1_1math_1_1_matrix_a12a8c0a0c3d48be5283f473f9b86c7e4_cgraph">
-<area shape="rect" title="Converts the matrix to indentity matrix." alt="" coords="5,47,138,88"/>
-<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a3506acc05e298718fb6d5587d6594055" title=" " alt="" coords="187,5,330,31"/>
+<area shape="rect" title="Converts this matrix into an identity matrix." alt="" coords="5,47,138,88"/>
+<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a3506acc05e298718fb6d5587d6594055" title="Gets a mutable reference to the element at (row, col)." alt="" coords="187,5,330,31"/>
 <area shape="poly" title=" " alt="" coords="138,47,192,33,193,38,139,53"/>
-<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a71134f227c2c22e4ecf24b33ed3c0396" title="Fills the current matrix with $value." alt="" coords="186,55,331,80"/>
+<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a71134f227c2c22e4ecf24b33ed3c0396" title="Fills the entire matrix with a single value." alt="" coords="186,55,331,80"/>
 <area shape="poly" title=" " alt="" coords="138,65,170,65,170,70,138,70"/>
-<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a774d7c4510a8977e5b19f5f332d5789c" title="Checks if the matrix is square." alt="" coords="192,104,324,145"/>
+<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a774d7c4510a8977e5b19f5f332d5789c" title="Checks if the matrix is square (rows == cols)." alt="" coords="192,104,324,145"/>
 <area shape="poly" title=" " alt="" coords="139,85,178,97,176,103,137,90"/>
-</map>
-</div>
-<div class="dynheader">
-Here is the caller graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><img src="../../d3/d6e/classmaf_1_1math_1_1_matrix_a12a8c0a0c3d48be5283f473f9b86c7e4_icgraph.png" border="0" usemap="#ad3/d6e/classmaf_1_1math_1_1_matrix_a12a8c0a0c3d48be5283f473f9b86c7e4_icgraph" loading="lazy" alt=""/></div>
-<map name="ad3/d6e/classmaf_1_1math_1_1_matrix_a12a8c0a0c3d48be5283f473f9b86c7e4_icgraph" id="ad3/d6e/classmaf_1_1math_1_1_matrix_a12a8c0a0c3d48be5283f473f9b86c7e4_icgraph">
-<area shape="rect" title="Converts the matrix to indentity matrix." alt="" coords="337,5,469,46"/>
-<area shape="rect" href="../../d4/d02/namespacemaf_1_1math.html#a4d61c9a4c0434a2e01652894564f7ebb" title=" " alt="" coords="159,5,289,46"/>
-<area shape="poly" title=" " alt="" coords="321,28,290,28,290,23,321,23"/>
-<area shape="rect" href="../../d4/d02/namespacemaf_1_1math.html#ac44a6962e2d09c20d929223448b4421c" title="Performs a blocked PLU decomposition on a square matrix." alt="" coords="5,13,111,38"/>
-<area shape="poly" title=" " alt="" coords="143,28,111,28,111,23,143,23"/>
 </map>
 </div>
 
@@ -1253,22 +1386,36 @@ template&lt;typename U&gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Standard algebraic matrix multiplication. </p><dl class="section return"><dt>Returns</dt><dd><a class="el" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html">Matrix</a> of common promoted type </dd></dl>
+
+<p>Standard algebraic matrix multiplication (A * B). </p>
+<p>Implemented with a parallelized, cache-blocked algorithm. </p><dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">U</td><td>Numeric type of the other matrix. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html" title="A general-purpose, row-major, dense matrix class.">Matrix</a> of the common, promoted type. </dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::invalid_argument</td><td>if inner dimensions do not match (A.cols != B.rows). </td></tr>
+  </table>
+  </dd>
+</dl>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../d3/d6e/classmaf_1_1math_1_1_matrix_a74bd8dca601f691a7ec0b1eabf11c18d_cgraph.png" border="0" usemap="#ad3/d6e/classmaf_1_1math_1_1_matrix_a74bd8dca601f691a7ec0b1eabf11c18d_cgraph" loading="lazy" alt=""/></div>
 <map name="ad3/d6e/classmaf_1_1math_1_1_matrix_a74bd8dca601f691a7ec0b1eabf11c18d_cgraph" id="ad3/d6e/classmaf_1_1math_1_1_matrix_a74bd8dca601f691a7ec0b1eabf11c18d_cgraph">
-<area shape="rect" title=" " alt="" coords="5,112,138,153"/>
-<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a98d6cc10d243169d78f53d07406ace8b" title=" " alt="" coords="198,5,330,46"/>
+<area shape="rect" title="Standard algebraic matrix multiplication (A * B)." alt="" coords="5,112,138,153"/>
+<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a98d6cc10d243169d78f53d07406ace8b" title="Gets the number of columns." alt="" coords="198,5,330,46"/>
 <area shape="poly" title=" " alt="" coords="100,109,184,55,194,51,196,55,187,60,103,114"/>
-<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#aca60efe3848c6a7635c9f609ca163528" title=" " alt="" coords="186,70,343,96"/>
+<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#aca60efe3848c6a7635c9f609ca163528" title="Gets a mutable reference to the underlying std::vector data store." alt="" coords="186,70,343,96"/>
 <area shape="poly" title=" " alt="" coords="138,113,196,98,197,103,139,118"/>
-<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a71134f227c2c22e4ecf24b33ed3c0396" title="Fills the current matrix with $value." alt="" coords="192,120,337,145"/>
+<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a71134f227c2c22e4ecf24b33ed3c0396" title="Fills the entire matrix with a single value." alt="" coords="192,120,337,145"/>
 <area shape="poly" title=" " alt="" coords="138,130,177,130,177,135,138,135"/>
-<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#afadd64902ef9d03291be6e799c38e904" title=" " alt="" coords="198,169,330,210"/>
+<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#afadd64902ef9d03291be6e799c38e904" title="Default constructor. Creates an empty 0x0 matrix." alt="" coords="198,169,330,210"/>
 <area shape="poly" title=" " alt="" coords="139,150,185,163,183,168,138,155"/>
-<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#aa1fa0768048faff36f5dfc56911a8ce4" title=" " alt="" coords="198,235,330,275"/>
+<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#aa1fa0768048faff36f5dfc56911a8ce4" title="Gets the number of rows." alt="" coords="198,235,330,275"/>
 <area shape="poly" title=" " alt="" coords="97,151,138,185,187,219,197,225,194,230,184,224,134,189,94,155"/>
 </map>
 </div>
@@ -1302,16 +1449,24 @@ requires (std::is_arithmetic_v&lt;U&gt;)</div>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Multiply each element of matrix by a scalar. </p><dl class="section return"><dt>Returns</dt><dd><a class="el" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html">Matrix</a> of common promoted type </dd></dl>
+
+<p>Element-wise scalar multiplication (<a class="el" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html" title="A general-purpose, row-major, dense matrix class.">Matrix</a> * scalar). </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">U</td><td>An arithmetic scalar type. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html" title="A general-purpose, row-major, dense matrix class.">Matrix</a> of the common, promoted type. </dd></dl>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../d3/d6e/classmaf_1_1math_1_1_matrix_a169ccbd0b4babfcc2878336ca159e15d_cgraph.png" border="0" usemap="#ad3/d6e/classmaf_1_1math_1_1_matrix_a169ccbd0b4babfcc2878336ca159e15d_cgraph" loading="lazy" alt=""/></div>
 <map name="ad3/d6e/classmaf_1_1math_1_1_matrix_a169ccbd0b4babfcc2878336ca159e15d_cgraph" id="ad3/d6e/classmaf_1_1math_1_1_matrix_a169ccbd0b4babfcc2878336ca159e15d_cgraph">
-<area shape="rect" title=" " alt="" coords="5,27,138,68"/>
-<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#aca60efe3848c6a7635c9f609ca163528" title=" " alt="" coords="186,5,343,31"/>
+<area shape="rect" title="Element&#45;wise scalar multiplication (Matrix * scalar)." alt="" coords="5,27,138,68"/>
+<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#aca60efe3848c6a7635c9f609ca163528" title="Gets a mutable reference to the underlying std::vector data store." alt="" coords="186,5,343,31"/>
 <area shape="poly" title=" " alt="" coords="138,35,170,30,171,35,139,40"/>
-<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#afadd64902ef9d03291be6e799c38e904" title=" " alt="" coords="198,55,330,96"/>
+<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#afadd64902ef9d03291be6e799c38e904" title="Default constructor. Creates an empty 0x0 matrix." alt="" coords="198,55,330,96"/>
 <area shape="poly" title=" " alt="" coords="139,54,184,61,183,66,138,60"/>
 </map>
 </div>
@@ -1344,31 +1499,46 @@ template&lt;typename U&gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Matrix-Vector multiplication (<a class="el" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html" title="A general-purpose, row-major, dense matrix class.">Matrix</a> * column_vector). </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">U</td><td>Numeric type of the vector. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A new column <a class="el" href="../../de/d35/classmaf_1_1math_1_1_vector.html">Vector</a> of the common, promoted type. </dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::invalid_argument</td><td>if vector is not a column vector or dimensions do not match. </td></tr>
+  </table>
+  </dd>
+</dl>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../d3/d6e/classmaf_1_1math_1_1_matrix_a0440e67c7abf25ef0f37d8d96e9e5cd4_cgraph.png" border="0" usemap="#ad3/d6e/classmaf_1_1math_1_1_matrix_a0440e67c7abf25ef0f37d8d96e9e5cd4_cgraph" loading="lazy" alt=""/></div>
 <map name="ad3/d6e/classmaf_1_1math_1_1_matrix_a0440e67c7abf25ef0f37d8d96e9e5cd4_cgraph" id="ad3/d6e/classmaf_1_1math_1_1_matrix_a0440e67c7abf25ef0f37d8d96e9e5cd4_cgraph">
-<area shape="rect" title=" " alt="" coords="5,138,138,178"/>
-<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a3506acc05e298718fb6d5587d6594055" title=" " alt="" coords="193,5,336,31"/>
-<area shape="poly" title=" " alt="" coords="86,136,127,88,154,62,184,40,192,35,195,40,187,44,157,66,130,91,90,139"/>
-<area shape="rect" href="../../de/d35/classmaf_1_1math_1_1_vector.html#ac8e1222d4ef75824b94980aaf6de600f" title=" " alt="" coords="192,55,338,80"/>
-<area shape="poly" title=" " alt="" coords="103,135,185,90,202,84,204,88,187,95,106,140"/>
-<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a98d6cc10d243169d78f53d07406ace8b" title=" " alt="" coords="199,104,331,145"/>
-<area shape="poly" title=" " alt="" coords="137,144,183,136,184,141,138,149"/>
-<area shape="rect" href="../../de/d35/classmaf_1_1math_1_1_vector.html#a663a7e4b34644e198a855da680a40dc8" title=" " alt="" coords="198,170,332,210"/>
-<area shape="poly" title=" " alt="" coords="138,166,183,174,182,179,137,172"/>
-<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#aa1fa0768048faff36f5dfc56911a8ce4" title=" " alt="" coords="199,235,331,276"/>
-<area shape="poly" title=" " alt="" coords="109,177,187,220,200,226,197,231,184,225,106,181"/>
-<area shape="rect" href="../../de/d35/classmaf_1_1math_1_1_vector.html#a486da0689bba119f338f50eb5e334a1a" title=" " alt="" coords="186,300,344,326"/>
-<area shape="poly" title=" " alt="" coords="88,177,128,231,156,260,187,285,197,291,194,296,184,290,152,264,124,235,83,180"/>
+<area shape="rect" title="Matrix&#45;Vector multiplication (Matrix * column_vector)." alt="" coords="5,154,138,194"/>
+<area shape="rect" href="../../de/d35/classmaf_1_1math_1_1_vector.html#ac8e1222d4ef75824b94980aaf6de600f" title=" " alt="" coords="192,5,338,31"/>
+<area shape="poly" title=" " alt="" coords="83,152,124,97,152,67,184,41,194,35,197,40,187,46,156,71,128,100,88,155"/>
+<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a98d6cc10d243169d78f53d07406ace8b" title="Gets the number of columns." alt="" coords="199,55,331,96"/>
+<area shape="poly" title=" " alt="" coords="105,151,184,106,197,100,200,105,187,111,108,156"/>
+<area shape="rect" href="../../de/d35/classmaf_1_1math_1_1_vector.html#a663a7e4b34644e198a855da680a40dc8" title=" " alt="" coords="198,120,332,161"/>
+<area shape="poly" title=" " alt="" coords="137,160,182,152,183,158,138,165"/>
+<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#aa1fa0768048faff36f5dfc56911a8ce4" title="Gets the number of rows." alt="" coords="199,186,331,226"/>
+<area shape="poly" title=" " alt="" coords="138,182,184,190,183,195,137,188"/>
+<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#afb33cbf4574399aa71beba18c85a2663" title="Gets a mutable std::span of a single row." alt="" coords="199,251,331,292"/>
+<area shape="poly" title=" " alt="" coords="109,193,187,236,200,242,197,247,184,241,106,197"/>
+<area shape="rect" href="../../de/d35/classmaf_1_1math_1_1_vector.html#a486da0689bba119f338f50eb5e334a1a" title=" " alt="" coords="186,316,344,342"/>
+<area shape="poly" title=" " alt="" coords="88,193,128,247,156,276,187,301,197,307,194,312,184,306,152,280,124,251,83,196"/>
 </map>
 </div>
 
 </div>
 </div>
-<a id="a68fe66fb22cf7d427d2a8765105c3292" name="a68fe66fb22cf7d427d2a8765105c3292"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a68fe66fb22cf7d427d2a8765105c3292">&#9670;&#160;</a></span>operator*=()</h2>
+<a id="abb7612f96c7c26639931e0443e430870" name="abb7612f96c7c26639931e0443e430870"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abb7612f96c7c26639931e0443e430870">&#9670;&#160;</a></span>operator*=()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1382,7 +1552,7 @@ requires (std::is_arithmetic_v&lt;U&gt;)</div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">auto <a class="el" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html">maf::math::Matrix</a>&lt; T &gt;::operator*= </td>
+          <td class="memname">auto &amp; <a class="el" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html">maf::math::Matrix</a>&lt; T &gt;::operator*= </td>
           <td>(</td>
           <td class="paramtype">const U &amp;</td>          <td class="paramname"><span class="paramname"><em>scalar</em></span></td><td>)</td>
           <td></td>
@@ -1390,10 +1560,12 @@ requires (std::is_arithmetic_v&lt;U&gt;)</div>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel nodiscard">nodiscard</span></span>  </td>
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>In-place element-wise scalar multiplication. </p>
 
 </div>
 </div>
@@ -1423,21 +1595,37 @@ template&lt;typename U&gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Add 2 matrices elementwise </p><dl class="section return"><dt>Returns</dt><dd><a class="el" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html">Matrix</a> of common promoted type </dd></dl>
+
+<p>Element-wise matrix addition. </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">U</td><td>Numeric type of the other matrix. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html" title="A general-purpose, row-major, dense matrix class.">Matrix</a> of the common, promoted type. </dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::invalid_argument</td><td>if dimensions do not match. </td></tr>
+  </table>
+  </dd>
+</dl>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../d3/d6e/classmaf_1_1math_1_1_matrix_aeb756ee209272516a931a8ff9fccbcac_cgraph.png" border="0" usemap="#ad3/d6e/classmaf_1_1math_1_1_matrix_aeb756ee209272516a931a8ff9fccbcac_cgraph" loading="lazy" alt=""/></div>
 <map name="ad3/d6e/classmaf_1_1math_1_1_matrix_aeb756ee209272516a931a8ff9fccbcac_cgraph" id="ad3/d6e/classmaf_1_1math_1_1_matrix_aeb756ee209272516a931a8ff9fccbcac_cgraph">
-<area shape="rect" title=" " alt="" coords="5,88,138,129"/>
-<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a3506acc05e298718fb6d5587d6594055" title=" " alt="" coords="186,5,329,31"/>
-<area shape="poly" title=" " alt="" coords="104,86,184,41,200,34,202,39,187,46,106,90"/>
-<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a98d6cc10d243169d78f53d07406ace8b" title=" " alt="" coords="191,55,324,96"/>
-<area shape="poly" title=" " alt="" coords="137,94,176,87,177,93,138,100"/>
-<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#afadd64902ef9d03291be6e799c38e904" title=" " alt="" coords="191,120,324,161"/>
-<area shape="poly" title=" " alt="" coords="138,118,177,124,176,130,137,123"/>
-<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#aa1fa0768048faff36f5dfc56911a8ce4" title=" " alt="" coords="191,186,324,226"/>
-<area shape="poly" title=" " alt="" coords="109,127,187,170,198,176,196,181,184,175,107,132"/>
+<area shape="rect" title="Element&#45;wise matrix addition." alt="" coords="5,112,138,153"/>
+<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a3506acc05e298718fb6d5587d6594055" title="Gets a mutable reference to the element at (row, col)." alt="" coords="193,5,336,31"/>
+<area shape="poly" title=" " alt="" coords="92,110,133,75,184,41,198,35,200,39,187,46,136,80,96,114"/>
+<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a98d6cc10d243169d78f53d07406ace8b" title="Gets the number of columns." alt="" coords="198,55,330,96"/>
+<area shape="poly" title=" " alt="" coords="138,111,183,97,185,102,139,116"/>
+<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#aca60efe3848c6a7635c9f609ca163528" title="Gets a mutable reference to the underlying std::vector data store." alt="" coords="186,120,343,146"/>
+<area shape="poly" title=" " alt="" coords="138,130,170,130,170,136,138,136"/>
+<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#afadd64902ef9d03291be6e799c38e904" title="Default constructor. Creates an empty 0x0 matrix." alt="" coords="198,170,330,210"/>
+<area shape="poly" title=" " alt="" coords="139,150,185,164,183,169,138,155"/>
+<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#aa1fa0768048faff36f5dfc56911a8ce4" title="Gets the number of rows." alt="" coords="198,235,330,276"/>
+<area shape="poly" title=" " alt="" coords="97,152,138,185,187,220,197,225,194,230,184,224,134,190,94,156"/>
 </map>
 </div>
 
@@ -1470,24 +1658,32 @@ requires (std::is_arithmetic_v&lt;U&gt;)</div>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Add a scalar to each element of matrix. </p><dl class="section return"><dt>Returns</dt><dd><a class="el" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html">Matrix</a> of common promoted type </dd></dl>
+
+<p>Element-wise scalar addition (<a class="el" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html" title="A general-purpose, row-major, dense matrix class.">Matrix</a> + scalar). </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">U</td><td>An arithmetic scalar type. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html" title="A general-purpose, row-major, dense matrix class.">Matrix</a> of the common, promoted type. </dd></dl>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../d3/d6e/classmaf_1_1math_1_1_matrix_ab01486aa7103052849a9e561627d3881_cgraph.png" border="0" usemap="#ad3/d6e/classmaf_1_1math_1_1_matrix_ab01486aa7103052849a9e561627d3881_cgraph" loading="lazy" alt=""/></div>
 <map name="ad3/d6e/classmaf_1_1math_1_1_matrix_ab01486aa7103052849a9e561627d3881_cgraph" id="ad3/d6e/classmaf_1_1math_1_1_matrix_ab01486aa7103052849a9e561627d3881_cgraph">
-<area shape="rect" title=" " alt="" coords="5,27,138,68"/>
-<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#aca60efe3848c6a7635c9f609ca163528" title=" " alt="" coords="186,5,343,31"/>
+<area shape="rect" title="Element&#45;wise scalar addition (Matrix + scalar)." alt="" coords="5,27,138,68"/>
+<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#aca60efe3848c6a7635c9f609ca163528" title="Gets a mutable reference to the underlying std::vector data store." alt="" coords="186,5,343,31"/>
 <area shape="poly" title=" " alt="" coords="138,35,170,30,171,35,139,40"/>
-<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#afadd64902ef9d03291be6e799c38e904" title=" " alt="" coords="198,55,330,96"/>
+<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#afadd64902ef9d03291be6e799c38e904" title="Default constructor. Creates an empty 0x0 matrix." alt="" coords="198,55,330,96"/>
 <area shape="poly" title=" " alt="" coords="139,54,184,61,183,66,138,60"/>
 </map>
 </div>
 
 </div>
 </div>
-<a id="a8693e266271d08a66e45b5a5e9136d62" name="a8693e266271d08a66e45b5a5e9136d62"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8693e266271d08a66e45b5a5e9136d62">&#9670;&#160;</a></span>operator+=()</h2>
+<a id="a26fe7a65851b5aa961f4a4d885d807b5" name="a26fe7a65851b5aa961f4a4d885d807b5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a26fe7a65851b5aa961f4a4d885d807b5">&#9670;&#160;</a></span>operator+=()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1501,7 +1697,7 @@ requires (std::is_arithmetic_v&lt;U&gt;)</div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">auto <a class="el" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html">maf::math::Matrix</a>&lt; T &gt;::operator+= </td>
+          <td class="memname">auto &amp; <a class="el" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html">maf::math::Matrix</a>&lt; T &gt;::operator+= </td>
           <td>(</td>
           <td class="paramtype">const U &amp;</td>          <td class="paramname"><span class="paramname"><em>scalar</em></span></td><td>)</td>
           <td></td>
@@ -1509,10 +1705,12 @@ requires (std::is_arithmetic_v&lt;U&gt;)</div>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel nodiscard">nodiscard</span></span>  </td>
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>In-place element-wise scalar addition. </p>
 
 </div>
 </div>
@@ -1540,14 +1738,16 @@ template&lt;typename T&gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Inverts the sign of all elements in matrix. </p><dl class="section return"><dt>Returns</dt><dd><a class="el" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html">Matrix</a> of same input type. </dd></dl>
+
+<p>Unary minus. Returns a new matrix with all elements negated. </p>
+<dl class="section return"><dt>Returns</dt><dd><span class="tt"><a class="el" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html" title="A general-purpose, row-major, dense matrix class.">Matrix</a>&lt;T&gt;</span> </dd></dl>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../d3/d6e/classmaf_1_1math_1_1_matrix_ae5b07162d3e9bd4d22621a76ec0635c5_cgraph.png" border="0" usemap="#ad3/d6e/classmaf_1_1math_1_1_matrix_ae5b07162d3e9bd4d22621a76ec0635c5_cgraph" loading="lazy" alt=""/></div>
 <map name="ad3/d6e/classmaf_1_1math_1_1_matrix_ae5b07162d3e9bd4d22621a76ec0635c5_cgraph" id="ad3/d6e/classmaf_1_1math_1_1_matrix_ae5b07162d3e9bd4d22621a76ec0635c5_cgraph">
-<area shape="rect" title=" " alt="" coords="5,5,138,46"/>
-<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#afadd64902ef9d03291be6e799c38e904" title=" " alt="" coords="186,5,318,46"/>
+<area shape="rect" title="Unary minus. Returns a new matrix with all elements negated." alt="" coords="5,5,138,46"/>
+<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#afadd64902ef9d03291be6e799c38e904" title="Default constructor. Creates an empty 0x0 matrix." alt="" coords="186,5,318,46"/>
 <area shape="poly" title=" " alt="" coords="138,23,170,23,170,28,138,28"/>
 </map>
 </div>
@@ -1580,21 +1780,37 @@ template&lt;typename U&gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Subtract 2 matrices elementwise. Elements of first matrix - elements of second matrix </p><dl class="section return"><dt>Returns</dt><dd><a class="el" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html">Matrix</a> of common promoted type </dd></dl>
+
+<p>Element-wise matrix subtraction. </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">U</td><td>Numeric type of the other matrix. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html" title="A general-purpose, row-major, dense matrix class.">Matrix</a> of the common, promoted type. </dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::invalid_argument</td><td>if dimensions do not match. </td></tr>
+  </table>
+  </dd>
+</dl>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../d3/d6e/classmaf_1_1math_1_1_matrix_aa73a0427aeb902c0a1e40623f3c6c52b_cgraph.png" border="0" usemap="#ad3/d6e/classmaf_1_1math_1_1_matrix_aa73a0427aeb902c0a1e40623f3c6c52b_cgraph" loading="lazy" alt=""/></div>
 <map name="ad3/d6e/classmaf_1_1math_1_1_matrix_aa73a0427aeb902c0a1e40623f3c6c52b_cgraph" id="ad3/d6e/classmaf_1_1math_1_1_matrix_aa73a0427aeb902c0a1e40623f3c6c52b_cgraph">
-<area shape="rect" title=" " alt="" coords="5,88,138,129"/>
-<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a3506acc05e298718fb6d5587d6594055" title=" " alt="" coords="186,5,329,31"/>
-<area shape="poly" title=" " alt="" coords="104,86,184,41,200,34,202,39,187,46,106,90"/>
-<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a98d6cc10d243169d78f53d07406ace8b" title=" " alt="" coords="191,55,324,96"/>
-<area shape="poly" title=" " alt="" coords="137,94,176,87,177,93,138,100"/>
-<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#afadd64902ef9d03291be6e799c38e904" title=" " alt="" coords="191,120,324,161"/>
-<area shape="poly" title=" " alt="" coords="138,118,177,124,176,130,137,123"/>
-<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#aa1fa0768048faff36f5dfc56911a8ce4" title=" " alt="" coords="191,186,324,226"/>
-<area shape="poly" title=" " alt="" coords="109,127,187,170,198,176,196,181,184,175,107,132"/>
+<area shape="rect" title="Element&#45;wise matrix subtraction." alt="" coords="5,112,138,153"/>
+<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a3506acc05e298718fb6d5587d6594055" title="Gets a mutable reference to the element at (row, col)." alt="" coords="193,5,336,31"/>
+<area shape="poly" title=" " alt="" coords="92,110,133,75,184,41,198,35,200,39,187,46,136,80,96,114"/>
+<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a98d6cc10d243169d78f53d07406ace8b" title="Gets the number of columns." alt="" coords="198,55,330,96"/>
+<area shape="poly" title=" " alt="" coords="138,111,183,97,185,102,139,116"/>
+<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#aca60efe3848c6a7635c9f609ca163528" title="Gets a mutable reference to the underlying std::vector data store." alt="" coords="186,120,343,146"/>
+<area shape="poly" title=" " alt="" coords="138,130,170,130,170,136,138,136"/>
+<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#afadd64902ef9d03291be6e799c38e904" title="Default constructor. Creates an empty 0x0 matrix." alt="" coords="198,170,330,210"/>
+<area shape="poly" title=" " alt="" coords="139,150,185,164,183,169,138,155"/>
+<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#aa1fa0768048faff36f5dfc56911a8ce4" title="Gets the number of rows." alt="" coords="198,235,330,276"/>
+<area shape="poly" title=" " alt="" coords="97,152,138,185,187,220,197,225,194,230,184,224,134,190,94,156"/>
 </map>
 </div>
 
@@ -1627,24 +1843,32 @@ requires (std::is_arithmetic_v&lt;U&gt;)</div>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Subtract a scalar from each element of matrix. </p><dl class="section return"><dt>Returns</dt><dd><a class="el" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html">Matrix</a> of common promoted type </dd></dl>
+
+<p>Element-wise scalar subtraction (<a class="el" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html" title="A general-purpose, row-major, dense matrix class.">Matrix</a> - scalar). </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">U</td><td>An arithmetic scalar type. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html" title="A general-purpose, row-major, dense matrix class.">Matrix</a> of the common, promoted type. </dd></dl>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../d3/d6e/classmaf_1_1math_1_1_matrix_a154ee60c9aaaaaaa93b85999c2703715_cgraph.png" border="0" usemap="#ad3/d6e/classmaf_1_1math_1_1_matrix_a154ee60c9aaaaaaa93b85999c2703715_cgraph" loading="lazy" alt=""/></div>
 <map name="ad3/d6e/classmaf_1_1math_1_1_matrix_a154ee60c9aaaaaaa93b85999c2703715_cgraph" id="ad3/d6e/classmaf_1_1math_1_1_matrix_a154ee60c9aaaaaaa93b85999c2703715_cgraph">
-<area shape="rect" title=" " alt="" coords="5,27,138,68"/>
-<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#aca60efe3848c6a7635c9f609ca163528" title=" " alt="" coords="186,5,343,31"/>
+<area shape="rect" title="Element&#45;wise scalar subtraction (Matrix &#45; scalar)." alt="" coords="5,27,138,68"/>
+<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#aca60efe3848c6a7635c9f609ca163528" title="Gets a mutable reference to the underlying std::vector data store." alt="" coords="186,5,343,31"/>
 <area shape="poly" title=" " alt="" coords="138,35,170,30,171,35,139,40"/>
-<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#afadd64902ef9d03291be6e799c38e904" title=" " alt="" coords="198,55,330,96"/>
+<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#afadd64902ef9d03291be6e799c38e904" title="Default constructor. Creates an empty 0x0 matrix." alt="" coords="198,55,330,96"/>
 <area shape="poly" title=" " alt="" coords="139,54,184,61,183,66,138,60"/>
 </map>
 </div>
 
 </div>
 </div>
-<a id="aecc060c5ad12544a9ab2da314da305e0" name="aecc060c5ad12544a9ab2da314da305e0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aecc060c5ad12544a9ab2da314da305e0">&#9670;&#160;</a></span>operator-=()</h2>
+<a id="a31de03ecf6e7f98e4877ac8e91c97579" name="a31de03ecf6e7f98e4877ac8e91c97579"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a31de03ecf6e7f98e4877ac8e91c97579">&#9670;&#160;</a></span>operator-=()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1658,7 +1882,7 @@ requires (std::is_arithmetic_v&lt;U&gt;)</div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">auto <a class="el" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html">maf::math::Matrix</a>&lt; T &gt;::operator-= </td>
+          <td class="memname">auto &amp; <a class="el" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html">maf::math::Matrix</a>&lt; T &gt;::operator-= </td>
           <td>(</td>
           <td class="paramtype">const U &amp;</td>          <td class="paramname"><span class="paramname"><em>scalar</em></span></td><td>)</td>
           <td></td>
@@ -1666,10 +1890,12 @@ requires (std::is_arithmetic_v&lt;U&gt;)</div>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel nodiscard">nodiscard</span></span>  </td>
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>In-place element-wise scalar subtraction. </p>
 
 </div>
 </div>
@@ -1700,12 +1926,20 @@ requires (std::is_arithmetic_v&lt;U&gt;)</div>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Divide each element of matrix by a scalar. </p><dl class="section return"><dt>Returns</dt><dd><a class="el" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html">Matrix</a> of common promoted type </dd></dl>
+
+<p>Element-wise scalar division (<a class="el" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html" title="A general-purpose, row-major, dense matrix class.">Matrix</a> / scalar). </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">U</td><td>An arithmetic scalar type. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html" title="A general-purpose, row-major, dense matrix class.">Matrix</a> of the common, promoted type. </dd></dl>
 
 </div>
 </div>
-<a id="a7298a9e2a9d026fd3b2b2b65a0c6c537" name="a7298a9e2a9d026fd3b2b2b65a0c6c537"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7298a9e2a9d026fd3b2b2b65a0c6c537">&#9670;&#160;</a></span>operator/=()</h2>
+<a id="a1969abed03be909f9cf84438d037dccd" name="a1969abed03be909f9cf84438d037dccd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1969abed03be909f9cf84438d037dccd">&#9670;&#160;</a></span>operator/=()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1719,7 +1953,7 @@ requires (std::is_arithmetic_v&lt;U&gt;)</div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">auto <a class="el" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html">maf::math::Matrix</a>&lt; T &gt;::operator/= </td>
+          <td class="memname">auto &amp; <a class="el" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html">maf::math::Matrix</a>&lt; T &gt;::operator/= </td>
           <td>(</td>
           <td class="paramtype">const U &amp;</td>          <td class="paramname"><span class="paramname"><em>scalar</em></span></td><td>)</td>
           <td></td>
@@ -1727,10 +1961,12 @@ requires (std::is_arithmetic_v&lt;U&gt;)</div>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel nodiscard">nodiscard</span></span>  </td>
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>In-place element-wise scalar division. </p>
 
 </div>
 </div>
@@ -1758,14 +1994,16 @@ template&lt;typename T&gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Checks if 2 matrices are exactly same, use loosely_equal if working with floats. </p>
+
+<p>Checks for exact element-wise equality. </p>
+<p>For floating-point, use <span class="tt"><a class="el" href="../../d4/d02/namespacemaf_1_1math.html#a3d4733be1cd68ede07a9c2de6728b2d7" title="Checks if two matrices are element-wise equal within a tolerance.">loosely_equal()</a></span>. </p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../d3/d6e/classmaf_1_1math_1_1_matrix_a2486af6cec2a16a1af9a9f77cf938527_cgraph.png" border="0" usemap="#ad3/d6e/classmaf_1_1math_1_1_matrix_a2486af6cec2a16a1af9a9f77cf938527_cgraph" loading="lazy" alt=""/></div>
 <map name="ad3/d6e/classmaf_1_1math_1_1_matrix_a2486af6cec2a16a1af9a9f77cf938527_cgraph" id="ad3/d6e/classmaf_1_1math_1_1_matrix_a2486af6cec2a16a1af9a9f77cf938527_cgraph">
-<area shape="rect" title=" " alt="" coords="5,5,138,46"/>
-<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#afadd64902ef9d03291be6e799c38e904" title=" " alt="" coords="186,5,318,46"/>
+<area shape="rect" title="Checks for exact element&#45;wise equality." alt="" coords="5,5,138,46"/>
+<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#afadd64902ef9d03291be6e799c38e904" title="Default constructor. Creates an empty 0x0 matrix." alt="" coords="186,5,318,46"/>
 <area shape="poly" title=" " alt="" coords="138,23,170,23,170,28,138,28"/>
 </map>
 </div>
@@ -1796,13 +2034,16 @@ template&lt;typename T&gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Prints the matrix contents to std::cout. </p>
+<p>Sets floating point precision for readability. </p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../d3/d6e/classmaf_1_1math_1_1_matrix_a0172c1256848fd0d7888f45c4623336c_cgraph.png" border="0" usemap="#ad3/d6e/classmaf_1_1math_1_1_matrix_a0172c1256848fd0d7888f45c4623336c_cgraph" loading="lazy" alt=""/></div>
 <map name="ad3/d6e/classmaf_1_1math_1_1_matrix_a0172c1256848fd0d7888f45c4623336c_cgraph" id="ad3/d6e/classmaf_1_1math_1_1_matrix_a0172c1256848fd0d7888f45c4623336c_cgraph">
-<area shape="rect" title=" " alt="" coords="5,5,138,46"/>
-<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a3506acc05e298718fb6d5587d6594055" title=" " alt="" coords="186,13,329,38"/>
+<area shape="rect" title="Prints the matrix contents to std::cout." alt="" coords="5,5,138,46"/>
+<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a3506acc05e298718fb6d5587d6594055" title="Gets a mutable reference to the element at (row, col)." alt="" coords="186,13,329,38"/>
 <area shape="poly" title=" " alt="" coords="138,23,170,23,170,28,138,28"/>
 </map>
 </div>
@@ -1833,30 +2074,34 @@ template&lt;typename T&gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Gets the number of rows. </p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../d3/d6e/classmaf_1_1math_1_1_matrix_aa1fa0768048faff36f5dfc56911a8ce4_icgraph.png" border="0" usemap="#ad3/d6e/classmaf_1_1math_1_1_matrix_aa1fa0768048faff36f5dfc56911a8ce4_icgraph" loading="lazy" alt=""/></div>
 <map name="ad3/d6e/classmaf_1_1math_1_1_matrix_aa1fa0768048faff36f5dfc56911a8ce4_icgraph" id="ad3/d6e/classmaf_1_1math_1_1_matrix_aa1fa0768048faff36f5dfc56911a8ce4_icgraph">
-<area shape="rect" title=" " alt="" coords="374,227,506,267"/>
-<area shape="rect" href="../../d4/d02/namespacemaf_1_1math.html#a45286ae95d74e7a19ecf706538b151e7" title=" " alt="" coords="186,13,326,38"/>
+<area shape="rect" title="Gets the number of rows." alt="" coords="374,227,506,267"/>
+<area shape="rect" href="../../d4/d02/namespacemaf_1_1math.html#a45286ae95d74e7a19ecf706538b151e7" title="Computes the Cholesky decomposition of a symmetric positive definite matrix." alt="" coords="186,13,326,38"/>
 <area shape="poly" title=" " alt="" coords="425,213,409,176,388,133,359,90,324,53,305,41,308,37,328,49,363,87,392,130,414,174,430,211"/>
-<area shape="rect" href="../../d4/d02/namespacemaf_1_1math.html#a3d4733be1cd68ede07a9c2de6728b2d7" title="Checks if 2 matrices are loosely equal." alt="" coords="191,63,320,103"/>
+<area shape="rect" href="../../d4/d02/namespacemaf_1_1math.html#a3d4733be1cd68ede07a9c2de6728b2d7" title="Checks if two matrices are element&#45;wise equal within a tolerance." alt="" coords="191,63,320,103"/>
 <area shape="poly" title=" " alt="" coords="414,216,375,167,324,118,305,106,308,102,328,114,379,163,418,212"/>
-<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a74bd8dca601f691a7ec0b1eabf11c18d" title=" " alt="" coords="190,128,322,169"/>
+<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a74bd8dca601f691a7ec0b1eabf11c18d" title="Standard algebraic matrix multiplication (A * B)." alt="" coords="190,128,322,169"/>
 <area shape="poly" title=" " alt="" coords="390,221,325,184,300,172,303,167,327,179,392,216"/>
-<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a0440e67c7abf25ef0f37d8d96e9e5cd4" title=" " alt="" coords="190,193,322,234"/>
+<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a0440e67c7abf25ef0f37d8d96e9e5cd4" title="Matrix&#45;Vector multiplication (Matrix * column_vector)." alt="" coords="190,193,322,234"/>
 <area shape="poly" title=" " alt="" coords="359,235,322,228,323,223,360,230"/>
 <area shape="rect" href="../../de/d35/classmaf_1_1math_1_1_vector.html#a3f7dfd09c96426650c80548b86804450" title=" " alt="" coords="189,259,323,299"/>
 <area shape="poly" title=" " alt="" coords="359,264,324,270,323,265,359,258"/>
-<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#aeb756ee209272516a931a8ff9fccbcac" title=" " alt="" coords="190,324,322,365"/>
+<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#aeb756ee209272516a931a8ff9fccbcac" title="Element&#45;wise matrix addition." alt="" coords="190,324,322,365"/>
 <area shape="poly" title=" " alt="" coords="392,278,327,313,303,326,300,321,325,309,389,273"/>
-<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#aa73a0427aeb902c0a1e40623f3c6c52b" title=" " alt="" coords="190,389,322,430"/>
+<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#aa73a0427aeb902c0a1e40623f3c6c52b" title="Element&#45;wise matrix subtraction." alt="" coords="190,389,322,430"/>
 <area shape="poly" title=" " alt="" coords="418,282,379,330,328,378,308,391,305,386,324,374,375,327,414,278"/>
 <area shape="rect" href="../../d4/d02/namespacemaf_1_1math.html#ac44a6962e2d09c20d929223448b4421c" title="Performs a blocked PLU decomposition on a square matrix." alt="" coords="203,454,308,480"/>
 <area shape="poly" title=" " alt="" coords="430,283,414,320,392,363,363,406,328,444,308,456,305,451,324,440,359,403,388,360,409,318,425,281"/>
-<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#af716a9fdb890f168430aad15c9207a27" title=" " alt="" coords="5,5,138,46"/>
+<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#af716a9fdb890f168430aad15c9207a27" title="Checks if the matrix is positive definite." alt="" coords="5,5,138,46"/>
 <area shape="poly" title=" " alt="" coords="170,28,138,28,138,23,170,23"/>
+<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#ae26826bcc4a303b29538a17c0a39de2b" title="Checks if the matrix is singular (non&#45;invertible)." alt="" coords="5,447,138,487"/>
+<area shape="poly" title=" " alt="" coords="188,470,138,470,138,464,188,464"/>
 </map>
 </div>
 
@@ -1886,18 +2131,30 @@ template&lt;typename T&gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Gets a mutable std::span of a single row. </p>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::out_of_range</td><td>if the row is invalid. </td></tr>
+  </table>
+  </dd>
+</dl>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../d3/d6e/classmaf_1_1math_1_1_matrix_afb33cbf4574399aa71beba18c85a2663_icgraph.png" border="0" usemap="#ad3/d6e/classmaf_1_1math_1_1_matrix_afb33cbf4574399aa71beba18c85a2663_icgraph" loading="lazy" alt=""/></div>
 <map name="ad3/d6e/classmaf_1_1math_1_1_matrix_afb33cbf4574399aa71beba18c85a2663_icgraph" id="ad3/d6e/classmaf_1_1math_1_1_matrix_afb33cbf4574399aa71beba18c85a2663_icgraph">
-<area shape="rect" title=" " alt="" coords="374,31,506,71"/>
-<area shape="rect" href="../../d4/d02/namespacemaf_1_1math.html#a45286ae95d74e7a19ecf706538b151e7" title=" " alt="" coords="186,13,326,38"/>
-<area shape="poly" title=" " alt="" coords="358,42,326,38,326,33,359,37"/>
-<area shape="rect" href="../../d4/d02/namespacemaf_1_1math.html#ac44a6962e2d09c20d929223448b4421c" title="Performs a blocked PLU decomposition on a square matrix." alt="" coords="203,62,308,88"/>
-<area shape="poly" title=" " alt="" coords="359,64,309,71,308,66,359,59"/>
-<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#af716a9fdb890f168430aad15c9207a27" title=" " alt="" coords="5,5,138,46"/>
+<area shape="rect" title="Gets a mutable std::span of a single row." alt="" coords="374,63,506,103"/>
+<area shape="rect" href="../../d4/d02/namespacemaf_1_1math.html#a45286ae95d74e7a19ecf706538b151e7" title="Computes the Cholesky decomposition of a symmetric positive definite matrix." alt="" coords="186,13,326,38"/>
+<area shape="poly" title=" " alt="" coords="359,61,299,42,300,37,360,55"/>
+<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a0440e67c7abf25ef0f37d8d96e9e5cd4" title="Matrix&#45;Vector multiplication (Matrix * column_vector)." alt="" coords="190,63,322,103"/>
+<area shape="poly" title=" " alt="" coords="359,86,322,86,322,80,359,80"/>
+<area shape="rect" href="../../d4/d02/namespacemaf_1_1math.html#ac44a6962e2d09c20d929223448b4421c" title="Performs a blocked PLU decomposition on a square matrix." alt="" coords="203,128,308,153"/>
+<area shape="poly" title=" " alt="" coords="360,111,300,129,299,124,359,105"/>
+<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#af716a9fdb890f168430aad15c9207a27" title="Checks if the matrix is positive definite." alt="" coords="5,5,138,46"/>
 <area shape="poly" title=" " alt="" coords="170,28,138,28,138,23,170,23"/>
+<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#ae26826bcc4a303b29538a17c0a39de2b" title="Checks if the matrix is singular (non&#45;invertible)." alt="" coords="5,120,138,161"/>
+<area shape="poly" title=" " alt="" coords="188,143,138,143,138,138,188,138"/>
 </map>
 </div>
 
@@ -1928,6 +2185,14 @@ template&lt;typename T&gt; </div>
 </table>
 </div><div class="memdoc">
 
+<p>Gets a const std::span of a single row. </p>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::out_of_range</td><td>if the row is invalid. </td></tr>
+  </table>
+  </dd>
+</dl>
+
 </div>
 </div>
 <a id="a45aa75653ab2200d6de78ec7accbda5b" name="a45aa75653ab2200d6de78ec7accbda5b"></a>
@@ -1954,13 +2219,15 @@ template&lt;typename T&gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Gets the total number of elements (rows * cols). </p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../d3/d6e/classmaf_1_1math_1_1_matrix_a45aa75653ab2200d6de78ec7accbda5b_icgraph.png" border="0" usemap="#ad3/d6e/classmaf_1_1math_1_1_matrix_a45aa75653ab2200d6de78ec7accbda5b_icgraph" loading="lazy" alt=""/></div>
 <map name="ad3/d6e/classmaf_1_1math_1_1_matrix_a45aa75653ab2200d6de78ec7accbda5b_icgraph" id="ad3/d6e/classmaf_1_1math_1_1_matrix_a45aa75653ab2200d6de78ec7accbda5b_icgraph">
-<area shape="rect" title=" " alt="" coords="249,13,405,38"/>
-<area shape="rect" href="../../d4/d02/namespacemaf_1_1math.html#a0fe2f174cf146553516e15feb16733c5" title=" " alt="" coords="5,5,201,46"/>
+<area shape="rect" title="Gets the total number of elements (rows * cols)." alt="" coords="249,13,405,38"/>
+<area shape="rect" href="../../d4/d02/namespacemaf_1_1math.html#a0fe2f174cf146553516e15feb16733c5" title="Creates a new permutation matrix from a permutation vector." alt="" coords="5,5,201,46"/>
 <area shape="poly" title=" " alt="" coords="233,28,201,28,201,23,233,23"/>
 </map>
 </div>
@@ -1974,9 +2241,6 @@ Here is the caller graph for this function:</div>
 <div class="memproto">
 <div class="memtemplate">
 template&lt;typename T&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">void <a class="el" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html">maf::math::Matrix</a>&lt; T &gt;::transpose </td>
@@ -1985,22 +2249,24 @@ template&lt;typename T&gt; </div>
           <td></td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
-<p>Inplace transpose of matrix for square matrices only. For transposing non square matrices use .<a class="el" href="#a246ca1334c2afc425a2eafc68b48fa38">transposed()</a> that creates a new <a class="el" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html">Matrix</a> object and returns it. </p>
+
+<p>Performs an in-place transpose of the matrix. </p>
+<p>Uses a parallelized, blocked algorithm. </p><dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::invalid_argument</td><td>if the matrix is not square. </td></tr>
+  </table>
+  </dd>
+</dl>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../d3/d6e/classmaf_1_1math_1_1_matrix_a65c510831554a29db6115f964b3679b0_cgraph.png" border="0" usemap="#ad3/d6e/classmaf_1_1math_1_1_matrix_a65c510831554a29db6115f964b3679b0_cgraph" loading="lazy" alt=""/></div>
 <map name="ad3/d6e/classmaf_1_1math_1_1_matrix_a65c510831554a29db6115f964b3679b0_cgraph" id="ad3/d6e/classmaf_1_1math_1_1_matrix_a65c510831554a29db6115f964b3679b0_cgraph">
-<area shape="rect" title=" " alt="" coords="5,27,138,68"/>
-<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a3506acc05e298718fb6d5587d6594055" title=" " alt="" coords="186,5,329,31"/>
+<area shape="rect" title="Performs an in&#45;place transpose of the matrix." alt="" coords="5,27,138,68"/>
+<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a3506acc05e298718fb6d5587d6594055" title="Gets a mutable reference to the element at (row, col)." alt="" coords="186,5,329,31"/>
 <area shape="poly" title=" " alt="" coords="138,34,170,29,171,34,138,40"/>
-<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a774d7c4510a8977e5b19f5f332d5789c" title="Checks if the matrix is square." alt="" coords="191,55,324,96"/>
+<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a774d7c4510a8977e5b19f5f332d5789c" title="Checks if the matrix is square (rows == cols)." alt="" coords="191,55,324,96"/>
 <area shape="poly" title=" " alt="" coords="138,55,177,61,176,66,138,60"/>
 </map>
 </div>
@@ -2031,29 +2297,20 @@ template&lt;typename T&gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Creates new transposed matrix </p><dl class="section return"><dt>Returns</dt><dd>Transposed matrix </dd></dl>
+
+<p>Creates and returns a new matrix that is the transpose of this one. </p>
+<dl class="section return"><dt>Returns</dt><dd>A new Matrix&lt;T&gt; of size (cols x rows).</dd></dl>
+<p>Defined in <a class="el" href="../../d5/d39/_matrix_methods_8hpp.html">MatrixMethods.hpp</a> </p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../d3/d6e/classmaf_1_1math_1_1_matrix_a246ca1334c2afc425a2eafc68b48fa38_cgraph.png" border="0" usemap="#ad3/d6e/classmaf_1_1math_1_1_matrix_a246ca1334c2afc425a2eafc68b48fa38_cgraph" loading="lazy" alt=""/></div>
 <map name="ad3/d6e/classmaf_1_1math_1_1_matrix_a246ca1334c2afc425a2eafc68b48fa38_cgraph" id="ad3/d6e/classmaf_1_1math_1_1_matrix_a246ca1334c2afc425a2eafc68b48fa38_cgraph">
-<area shape="rect" title=" " alt="" coords="5,27,138,68"/>
-<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a3506acc05e298718fb6d5587d6594055" title=" " alt="" coords="186,5,329,31"/>
+<area shape="rect" title="Creates and returns a new matrix that is the transpose of this one." alt="" coords="5,27,138,68"/>
+<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#a3506acc05e298718fb6d5587d6594055" title="Gets a mutable reference to the element at (row, col)." alt="" coords="186,5,329,31"/>
 <area shape="poly" title=" " alt="" coords="138,34,170,29,171,34,138,40"/>
-<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#afadd64902ef9d03291be6e799c38e904" title=" " alt="" coords="191,55,324,96"/>
+<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#afadd64902ef9d03291be6e799c38e904" title="Default constructor. Creates an empty 0x0 matrix." alt="" coords="191,55,324,96"/>
 <area shape="poly" title=" " alt="" coords="138,55,177,61,176,66,138,60"/>
-</map>
-</div>
-<div class="dynheader">
-Here is the caller graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><img src="../../d3/d6e/classmaf_1_1math_1_1_matrix_a246ca1334c2afc425a2eafc68b48fa38_icgraph.png" border="0" usemap="#ad3/d6e/classmaf_1_1math_1_1_matrix_a246ca1334c2afc425a2eafc68b48fa38_icgraph" loading="lazy" alt=""/></div>
-<map name="ad3/d6e/classmaf_1_1math_1_1_matrix_a246ca1334c2afc425a2eafc68b48fa38_icgraph" id="ad3/d6e/classmaf_1_1math_1_1_matrix_a246ca1334c2afc425a2eafc68b48fa38_icgraph">
-<area shape="rect" title=" " alt="" coords="374,5,506,46"/>
-<area shape="rect" href="../../d4/d02/namespacemaf_1_1math.html#a45286ae95d74e7a19ecf706538b151e7" title=" " alt="" coords="186,13,326,38"/>
-<area shape="poly" title=" " alt="" coords="359,28,326,28,326,23,359,23"/>
-<area shape="rect" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html#af716a9fdb890f168430aad15c9207a27" title=" " alt="" coords="5,5,138,46"/>
-<area shape="poly" title=" " alt="" coords="170,28,138,28,138,23,170,23"/>
 </map>
 </div>
 
@@ -2091,7 +2348,8 @@ requires (std::is_arithmetic_v&lt;U&gt;)</div>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Multiply each element of matrix by a scalar. </p><dl class="section return"><dt>Returns</dt><dd><a class="el" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html">Matrix</a> of common promoted type </dd></dl>
+
+<p>Element-wise scalar multiplication (scalar * <a class="el" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html" title="A general-purpose, row-major, dense matrix class.">Matrix</a>). </p>
 
 </div>
 </div>
@@ -2126,7 +2384,8 @@ requires (std::is_arithmetic_v&lt;U&gt;)</div>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Add a scalar to each element of matrix. </p><dl class="section return"><dt>Returns</dt><dd><a class="el" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html">Matrix</a> of common promoted type </dd></dl>
+
+<p>Element-wise scalar addition (scalar + <a class="el" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html" title="A general-purpose, row-major, dense matrix class.">Matrix</a>). </p>
 
 </div>
 </div>
@@ -2161,7 +2420,15 @@ requires (std::is_arithmetic_v&lt;U&gt;)</div>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Subtract each element of matrix from a scalar. </p><dl class="section return"><dt>Returns</dt><dd><a class="el" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html">Matrix</a> of common promoted type </dd></dl>
+
+<p>Element-wise scalar subtraction (scalar - <a class="el" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html" title="A general-purpose, row-major, dense matrix class.">Matrix</a>). </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">U</td><td>An arithmetic scalar type. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html" title="A general-purpose, row-major, dense matrix class.">Matrix</a> of the common, promoted type. </dd></dl>
 
 </div>
 </div>
@@ -2196,13 +2463,22 @@ requires (std::is_arithmetic_v&lt;U&gt;)</div>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Divide the scalar by each element of the matrix. </p><dl class="section return"><dt>Returns</dt><dd><a class="el" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html">Matrix</a> of common promoted type </dd></dl>
+
+<p>Element-wise scalar division (scalar / <a class="el" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html" title="A general-purpose, row-major, dense matrix class.">Matrix</a>). </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">U</td><td>An arithmetic scalar type. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="../../d3/d6e/classmaf_1_1math_1_1_matrix.html" title="A general-purpose, row-major, dense matrix class.">Matrix</a> of the common, promoted type. </dd></dl>
 
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>include/MafLib/math/linalg/<a class="el" href="../../d8/d49/_matrix_8hpp_source.html">Matrix.hpp</a></li>
 <li>include/MafLib/math/linalg/<a class="el" href="../../d2/d09/_matrix_checkers_8hpp_source.html">MatrixCheckers.hpp</a></li>
+<li>include/MafLib/math/linalg/<a class="el" href="../../db/d6f/_matrix_constructors_8hpp_source.html">MatrixConstructors.hpp</a></li>
 <li>include/MafLib/math/linalg/<a class="el" href="../../d5/d39/_matrix_methods_8hpp_source.html">MatrixMethods.hpp</a></li>
 </ul>
 </div><!-- contents -->

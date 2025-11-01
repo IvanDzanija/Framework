@@ -74,8 +74,9 @@ plu(const Matrix<T> &matrix) {
                 }
             }
 
-            if (is_close(max_val, static_cast<T>(0), static_cast<T>(1e-9))) {
-                continue;
+            if (is_close(max_val, static_cast<T>(0), 1e-9)) {
+                throw std::runtime_error(
+                    "Matrix is singular; pivot is near zero.");
             }
 
             if (pivot_row != i) {
@@ -148,6 +149,9 @@ plu(const Matrix<T> &matrix) {
                 }
             }
         }
+    }
+    if (is_close(_U.at(n - 1, n - 1), static_cast<T>(0), 1e-9)) {
+        throw std::runtime_error("Matrix is singular; pivot is near zero.");
     }
 
     // Extract U

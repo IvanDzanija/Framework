@@ -4,9 +4,41 @@
 #include "Matrix.hpp"
 
 namespace maf::math {
-
-/// Cholesky decomposition of symmetric positive definite matrix.
-/// Symmetric positive definite matrix <=> has Cholesky decomposition.
+/**
+ * @brief Computes the Cholesky decomposition of a symmetric positive
+ * definite matrix.
+ *
+ * This function computes the Cholesky factorization (A = LL^T) for a
+ * given square, symmetric, positive definite matrix A, where:
+ * - A is the input matrix.
+ * - L is a lower triangular matrix with positive diagonal entries.
+ * - L^T is the conjugate transpose of L (which is just the transpose for
+ * real matrices).
+ *
+ * A matrix has a Cholesky decomposition if and only if it is symmetric
+ * and positive definite. This function checks for symmetry first. It
+ * then detects non-positive-definiteness during the computation.
+ *
+ * The decomposition is computed using a blocked Cholesky-Crout algorithm
+ * for improved cache performance. The implementation is parallelized
+ * using OpenMP (for both multi-threading and SIMD vectorization)
+ * for further performance gains.
+ *
+ * More information:
+ * https://en.wikipedia.org/wiki/Cholesky_decomposition
+ *
+ * @tparam T The numeric type of the matrix elements (e.g., float,
+ * double).
+ * @param matrix The const reference to the square, symmetric, positive
+ * definite input matrix (A) to decompose.
+ * @return (Matrix<T>) The lower triangular matrix (L).
+ *
+ * @throws std::invalid_argument if the input matrix is not symmetric,
+ * or if it is not positive definite (detected during factorization).
+ *
+ * @version 1.0 (Blocked & Parallelized)
+ * @since 2025
+ */
 template <typename T>
 [[nodiscard]] Matrix<T> cholesky(const Matrix<T> &matrix) {
     if (!matrix.is_symmetric()) {
@@ -16,7 +48,6 @@ template <typename T>
 
     size_t n = matrix.row_count();
     Matrix<T> L(n, n);
-    auto D = matrix.transposed();
 
     for (size_t jj = 0; jj < n; jj += BLOCK_SIZE) {
         const size_t j_end = std::min(jj + BLOCK_SIZE, n);

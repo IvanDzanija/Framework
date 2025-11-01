@@ -105,70 +105,74 @@ $(function() { codefold.init(); });
   <div class="headertitle"><div class="title">MatrixCheckers.hpp File Reference</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &quot;<a class="el" href="../../d5/d1f/_cholesky_decomposition_8hpp_source.html">MafLib/math/linalg/CholeskyDecomposition.hpp</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="../../d8/d49/_matrix_8hpp_source.html">Matrix.hpp</a>&quot;</code><br />
-<code>#include &lt;exception&gt;</code><br />
+
+<p>Contains implementations for the checker methods of the Matrix&lt;T&gt; class.  
+<a href="#details">More...</a></p>
+<div class="textblock"><code>#include &quot;<a class="el" href="../../d8/d49/_matrix_8hpp_source.html">Matrix.hpp</a>&quot;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for MatrixCheckers.hpp:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../d4/d91/_matrix_checkers_8hpp__incl.png" border="0" usemap="#ainclude_2_maf_lib_2math_2linalg_2_matrix_checkers_8hpp" loading="lazy" alt=""/></div>
 <map name="ainclude_2_maf_lib_2math_2linalg_2_matrix_checkers_8hpp" id="ainclude_2_maf_lib_2math_2linalg_2_matrix_checkers_8hpp">
-<area shape="rect" title=" " alt="" coords="1004,5,1180,46"/>
-<area shape="rect" href="../../d5/d1f/_cholesky_decomposition_8hpp.html" title=" " alt="" coords="850,94,1043,135"/>
-<area shape="poly" title=" " alt="" coords="1060,49,994,88,991,84,1057,44"/>
-<area shape="rect" href="../../d8/d49/_matrix_8hpp.html" title=" " alt="" coords="977,183,1060,208"/>
-<area shape="poly" title=" " alt="" coords="1080,48,1045,136,1027,170,1022,168,1040,134,1075,46"/>
-<area shape="rect" title=" " alt="" coords="1141,102,1218,127"/>
-<area shape="poly" title=" " alt="" coords="1114,45,1159,89,1155,93,1110,48"/>
-<area shape="poly" title=" " alt="" coords="958,133,992,170,988,174,954,137"/>
-<area shape="poly" title=" " alt="" coords="1034,181,1064,133,1090,61,1095,62,1069,136,1038,184"/>
-<area shape="poly" title=" " alt="" coords="1012,184,981,147,985,144,1016,180"/>
-<area shape="rect" href="../../d1/df7/_global_header_8hpp.html" title=" " alt="" coords="730,256,929,282"/>
-<area shape="poly" title=" " alt="" coords="987,211,876,253,874,248,985,206"/>
-<area shape="rect" href="../../d5/d39/_matrix_methods_8hpp.html" title=" " alt="" coords="952,256,1085,282"/>
-<area shape="poly" title=" " alt="" coords="1014,209,1012,241,1007,241,1009,208"/>
-<area shape="rect" href="../../d2/dd9/_p_l_u_8hpp.html" title=" " alt="" coords="1109,256,1181,282"/>
-<area shape="poly" title=" " alt="" coords="1034,207,1104,246,1102,251,1032,211"/>
-<area shape="rect" title=" " alt="" coords="5,330,80,356"/>
-<area shape="poly" title=" " alt="" coords="729,277,448,293,274,309,95,332,95,327,273,304,447,288,729,271"/>
-<area shape="rect" title=" " alt="" coords="104,330,154,356"/>
-<area shape="poly" title=" " alt="" coords="729,276,617,281,478,291,326,308,170,333,169,327,325,302,478,286,616,276,729,270"/>
-<area shape="rect" title=" " alt="" coords="178,330,243,356"/>
-<area shape="poly" title=" " alt="" coords="729,279,516,297,389,312,258,332,258,327,388,307,516,292,729,274"/>
-<area shape="rect" title=" " alt="" coords="267,330,327,356"/>
-<area shape="poly" title=" " alt="" coords="729,281,553,299,343,332,342,327,552,294,729,276"/>
-<area shape="rect" title=" " alt="" coords="351,330,408,356"/>
-<area shape="poly" title=" " alt="" coords="730,284,589,303,424,332,423,327,588,297,729,279"/>
-<area shape="rect" title=" " alt="" coords="432,330,493,356"/>
-<area shape="poly" title=" " alt="" coords="752,285,641,305,508,332,507,327,640,300,751,280"/>
-<area shape="rect" title=" " alt="" coords="516,330,577,356"/>
-<area shape="poly" title=" " alt="" coords="780,285,592,332,591,327,778,280"/>
-<area shape="rect" title=" " alt="" coords="601,330,678,356"/>
-<area shape="poly" title=" " alt="" coords="798,285,687,327,685,322,796,280"/>
-<area shape="rect" title=" " alt="" coords="703,330,769,356"/>
-<area shape="poly" title=" " alt="" coords="815,285,765,323,762,318,812,280"/>
-<area shape="rect" title=" " alt="" coords="794,330,865,356"/>
-<area shape="poly" title=" " alt="" coords="832,282,832,314,826,314,826,282"/>
-<area shape="rect" title=" " alt="" coords="888,330,957,356"/>
-<area shape="poly" title=" " alt="" coords="847,280,896,318,893,323,843,285"/>
-<area shape="rect" title=" " alt="" coords="980,330,1038,356"/>
-<area shape="poly" title=" " alt="" coords="861,280,967,322,965,327,859,285"/>
-<area shape="rect" title=" " alt="" coords="1061,330,1128,356"/>
-<area shape="poly" title=" " alt="" coords="875,280,1047,326,1046,331,873,285"/>
-<area shape="rect" title=" " alt="" coords="1152,330,1216,356"/>
-<area shape="poly" title=" " alt="" coords="900,280,1137,327,1136,332,899,285"/>
-<area shape="rect" title=" " alt="" coords="1240,330,1301,356"/>
-<area shape="poly" title=" " alt="" coords="930,280,1066,299,1226,327,1225,332,1065,304,929,285"/>
-<area shape="rect" title=" " alt="" coords="1324,330,1374,356"/>
-<area shape="poly" title=" " alt="" coords="929,279,1139,304,1310,327,1309,333,1138,309,929,284"/>
-<area shape="rect" title=" " alt="" coords="1398,330,1476,356"/>
-<area shape="poly" title=" " alt="" coords="929,278,1383,327,1382,333,929,284"/>
-<area shape="rect" title=" " alt="" coords="1500,330,1582,356"/>
-<area shape="poly" title=" " alt="" coords="930,278,940,279,1092,291,1211,298,1331,308,1485,327,1484,332,1331,313,1211,304,1091,297,940,285,929,284"/>
-<area shape="rect" title=" " alt="" coords="1606,330,1663,356"/>
-<area shape="poly" title=" " alt="" coords="930,278,940,279,1122,290,1265,294,1409,302,1591,327,1590,332,1408,307,1265,299,1122,296,940,285,929,284"/>
-<area shape="poly" title=" " alt="" coords="1023,256,1025,223,1030,224,1028,256"/>
-<area shape="poly" title=" " alt="" coords="1129,258,1059,218,1062,214,1132,253"/>
+<area shape="rect" title="Contains implementations for the checker methods of the Matrix&lt;T&gt; class." alt="" coords="1326,5,1503,46"/>
+<area shape="rect" href="../../d8/d49/_matrix_8hpp.html" title=" " alt="" coords="1373,94,1456,120"/>
+<area shape="poly" title=" " alt="" coords="1409,46,1409,78,1403,78,1404,46"/>
+<area shape="poly" title=" " alt="" coords="1419,93,1421,62,1426,62,1424,94"/>
+<area shape="rect" href="../../d1/df7/_global_header_8hpp.html" title=" " alt="" coords="730,168,929,193"/>
+<area shape="poly" title=" " alt="" coords="1373,116,945,168,944,163,1373,111"/>
+<area shape="rect" href="../../d5/d1f/_cholesky_decomposition_8hpp.html" title=" " alt="" coords="952,168,1141,193"/>
+<area shape="poly" title=" " alt="" coords="1373,118,1118,167,1117,161,1372,112"/>
+<area shape="rect" href="../../db/d6f/_matrix_constructors_8hpp.html" title="Contains implementations for the constructors of the Matrix&lt;T&gt; class." alt="" coords="1165,168,1322,193"/>
+<area shape="poly" title=" " alt="" coords="1380,123,1281,163,1279,158,1378,118"/>
+<area shape="rect" href="../../dc/dc6/_matrix_factories_8hpp.html" title="Contains various implementations for producing specific matrices." alt="" coords="1346,168,1483,193"/>
+<area shape="poly" title=" " alt="" coords="1410,120,1408,152,1403,152,1405,120"/>
+<area shape="rect" href="../../d5/d39/_matrix_methods_8hpp.html" title=" " alt="" coords="1507,168,1639,193"/>
+<area shape="poly" title=" " alt="" coords="1436,118,1526,159,1524,164,1433,123"/>
+<area shape="rect" href="../../d2/dd9/_p_l_u_8hpp.html" title=" " alt="" coords="1664,168,1736,193"/>
+<area shape="poly" title=" " alt="" coords="1457,118,1649,166,1648,171,1455,123"/>
+<area shape="rect" title=" " alt="" coords="5,241,80,267"/>
+<area shape="poly" title=" " alt="" coords="729,188,448,205,274,221,95,244,95,238,273,215,447,199,729,183"/>
+<area shape="rect" title=" " alt="" coords="104,241,154,267"/>
+<area shape="poly" title=" " alt="" coords="729,187,617,192,478,202,326,219,170,244,169,239,325,214,478,197,616,187,729,182"/>
+<area shape="rect" title=" " alt="" coords="178,241,243,267"/>
+<area shape="poly" title=" " alt="" coords="729,190,516,208,389,223,258,244,258,238,388,218,516,203,729,185"/>
+<area shape="rect" title=" " alt="" coords="267,241,327,267"/>
+<area shape="poly" title=" " alt="" coords="729,192,553,211,343,243,342,238,552,205,729,187"/>
+<area shape="rect" title=" " alt="" coords="351,241,408,267"/>
+<area shape="poly" title=" " alt="" coords="730,195,589,214,424,243,423,238,588,209,729,190"/>
+<area shape="rect" title=" " alt="" coords="432,241,493,267"/>
+<area shape="poly" title=" " alt="" coords="752,197,641,216,508,243,507,238,640,211,751,191"/>
+<area shape="rect" title=" " alt="" coords="516,241,577,267"/>
+<area shape="poly" title=" " alt="" coords="780,197,592,243,591,238,778,191"/>
+<area shape="rect" title=" " alt="" coords="601,241,678,267"/>
+<area shape="poly" title=" " alt="" coords="798,196,687,238,685,233,796,191"/>
+<area shape="rect" title=" " alt="" coords="703,241,769,267"/>
+<area shape="poly" title=" " alt="" coords="815,196,765,234,762,230,812,192"/>
+<area shape="rect" title=" " alt="" coords="794,241,865,267"/>
+<area shape="poly" title=" " alt="" coords="832,194,832,226,826,226,826,194"/>
+<area shape="rect" title=" " alt="" coords="888,241,957,267"/>
+<area shape="poly" title=" " alt="" coords="847,192,896,230,893,234,843,196"/>
+<area shape="rect" title=" " alt="" coords="980,241,1038,267"/>
+<area shape="poly" title=" " alt="" coords="861,191,967,233,965,238,859,196"/>
+<area shape="rect" title=" " alt="" coords="1061,241,1128,267"/>
+<area shape="poly" title=" " alt="" coords="875,191,1047,237,1046,243,873,196"/>
+<area shape="rect" title=" " alt="" coords="1152,241,1216,267"/>
+<area shape="poly" title=" " alt="" coords="900,191,1137,238,1136,243,899,197"/>
+<area shape="rect" title=" " alt="" coords="1240,241,1301,267"/>
+<area shape="poly" title=" " alt="" coords="930,191,1066,210,1226,238,1225,244,1065,215,929,196"/>
+<area shape="rect" title=" " alt="" coords="1324,241,1374,267"/>
+<area shape="poly" title=" " alt="" coords="929,190,1139,215,1310,239,1309,244,1138,220,929,196"/>
+<area shape="rect" title=" " alt="" coords="1398,241,1476,267"/>
+<area shape="poly" title=" " alt="" coords="929,190,1383,239,1382,244,929,195"/>
+<area shape="rect" title=" " alt="" coords="1500,241,1582,267"/>
+<area shape="poly" title=" " alt="" coords="930,190,940,191,1092,203,1211,210,1331,219,1485,238,1484,244,1331,224,1211,215,1091,208,940,196,929,195"/>
+<area shape="rect" title=" " alt="" coords="1606,241,1663,267"/>
+<area shape="poly" title=" " alt="" coords="930,190,940,191,1122,202,1265,205,1409,213,1591,238,1590,244,1408,219,1265,211,1122,207,940,196,929,195"/>
+<area shape="poly" title=" " alt="" coords="1116,164,1357,118,1358,123,1117,170"/>
+<area shape="poly" title=" " alt="" coords="1279,165,1378,124,1380,129,1281,170"/>
+<area shape="poly" title=" " alt="" coords="1419,167,1421,135,1426,135,1424,167"/>
+<area shape="poly" title=" " alt="" coords="1552,169,1461,128,1463,124,1554,165"/>
+<area shape="poly" title=" " alt="" coords="1662,171,1471,123,1472,118,1664,166"/>
 </map>
 </div>
 </div><div class="textblock"><div class="dynheader">
@@ -176,34 +180,39 @@ This graph shows which files directly or indirectly include this file:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../d5/d6a/_matrix_checkers_8hpp__dep__incl.png" border="0" usemap="#ainclude_2_maf_lib_2math_2linalg_2_matrix_checkers_8hppdep" loading="lazy" alt=""/></div>
 <map name="ainclude_2_maf_lib_2math_2linalg_2_matrix_checkers_8hppdep" id="ainclude_2_maf_lib_2math_2linalg_2_matrix_checkers_8hppdep">
-<area shape="rect" title=" " alt="" coords="293,5,469,46"/>
-<area shape="rect" href="../../d8/d49/_matrix_8hpp.html" title=" " alt="" coords="312,94,450,135"/>
-<area shape="poly" title=" " alt="" coords="375,61,376,93,371,94,370,62"/>
-<area shape="poly" title=" " alt="" coords="387,79,386,47,392,46,393,78"/>
+<area shape="rect" title="Contains implementations for the checker methods of the Matrix&lt;T&gt; class." alt="" coords="670,5,847,46"/>
+<area shape="rect" href="../../d8/d49/_matrix_8hpp.html" title=" " alt="" coords="689,94,828,135"/>
+<area shape="poly" title=" " alt="" coords="752,61,753,93,748,94,747,62"/>
+<area shape="poly" title=" " alt="" coords="765,79,764,47,769,46,770,78"/>
 <area shape="rect" href="../../d5/d1f/_cholesky_decomposition_8hpp.html" title=" " alt="" coords="5,183,232,223"/>
-<area shape="poly" title=" " alt="" coords="300,142,171,185,170,180,298,137"/>
-<area shape="rect" href="../../d5/d39/_matrix_methods_8hpp.html" title=" " alt="" coords="357,183,528,223"/>
-<area shape="poly" title=" " alt="" coords="398,146,423,181,419,184,393,150"/>
-<area shape="rect" href="../../d2/dd9/_p_l_u_8hpp.html" title=" " alt="" coords="552,183,690,223"/>
-<area shape="poly" title=" " alt="" coords="443,138,560,180,558,185,441,143"/>
-<area shape="rect" href="../../db/d20/_vector_8hpp.html" title=" " alt="" coords="715,183,853,223"/>
-<area shape="poly" title=" " alt="" coords="466,130,703,180,715,183,714,188,702,185,465,135"/>
-<area shape="rect" href="../../d9/d56/_random_vars_8h.html" title=" " alt="" coords="250,271,425,312"/>
-<area shape="poly" title=" " alt="" coords="336,146,317,163,304,184,299,206,303,229,313,251,324,269,320,272,308,253,298,230,294,206,299,182,313,160,332,142"/>
-<area shape="rect" href="../../da/df2/_statistics_8h.html" title=" " alt="" coords="484,271,639,312"/>
-<area shape="poly" title=" " alt="" coords="358,149,348,167,342,186,340,205,347,222,367,237,401,251,484,274,482,279,399,256,365,242,343,225,335,206,336,185,343,165,354,146"/>
-<area shape="poly" title=" " alt="" coords="159,172,351,44,354,49,162,176"/>
-<area shape="poly" title=" " alt="" coords="200,175,328,133,330,138,201,180"/>
-<area shape="poly" title=" " alt="" coords="426,171,401,137,405,134,430,168"/>
-<area shape="poly" title=" " alt="" coords="559,179,442,138,444,133,561,174"/>
-<area shape="rect" href="../../d3/d50/_vector_methods_8hpp.html" title=" " alt="" coords="680,271,853,312"/>
-<area shape="poly" title=" " alt="" coords="771,239,765,271,760,270,765,238"/>
-<area shape="rect" href="../../dd/d8d/_vector_operators_8hpp.html" title=" " alt="" coords="877,271,1056,312"/>
-<area shape="poly" title=" " alt="" coords="832,228,918,268,916,273,830,233"/>
-<area shape="poly" title=" " alt="" coords="700,227,426,278,425,273,699,221"/>
-<area shape="poly" title=" " alt="" coords="720,232,613,273,611,268,718,227"/>
-<area shape="poly" title=" " alt="" coords="780,256,785,223,790,224,785,257"/>
-<area shape="poly" title=" " alt="" coords="918,267,832,226,834,221,920,262"/>
+<area shape="poly" title=" " alt="" coords="675,128,233,185,232,180,674,122"/>
+<area shape="rect" href="../../db/d6f/_matrix_constructors_8hpp.html" title="Contains implementations for the constructors of the Matrix&lt;T&gt; class." alt="" coords="256,183,451,223"/>
+<area shape="poly" title=" " alt="" coords="675,135,438,185,437,179,674,129"/>
+<area shape="rect" href="../../dc/dc6/_matrix_factories_8hpp.html" title="Contains various implementations for producing specific matrices." alt="" coords="475,183,650,223"/>
+<area shape="poly" title=" " alt="" coords="693,143,600,185,598,180,691,139"/>
+<area shape="rect" href="../../d5/d39/_matrix_methods_8hpp.html" title=" " alt="" coords="673,183,844,223"/>
+<area shape="poly" title=" " alt="" coords="752,150,753,182,748,182,747,150"/>
+<area shape="rect" href="../../d2/dd9/_p_l_u_8hpp.html" title=" " alt="" coords="868,183,1006,223"/>
+<area shape="poly" title=" " alt="" coords="806,140,890,180,888,185,804,145"/>
+<area shape="rect" href="../../db/d20/_vector_8hpp.html" title=" " alt="" coords="1031,183,1169,223"/>
+<area shape="poly" title=" " alt="" coords="843,134,1031,182,1030,187,842,139"/>
+<area shape="rect" href="../../d9/d56/_random_vars_8h.html" title=" " alt="" coords="1190,271,1365,312"/>
+<area shape="poly" title=" " alt="" coords="844,120,1031,142,1120,159,1156,169,1182,180,1210,200,1234,223,1268,269,1264,272,1230,227,1207,204,1180,185,1154,174,1119,164,1030,147,843,125"/>
+<area shape="rect" href="../../da/df2/_statistics_8h.html" title=" " alt="" coords="1389,271,1544,312"/>
+<area shape="poly" title=" " alt="" coords="843,118,1021,138,1123,156,1225,180,1283,200,1340,223,1432,268,1430,273,1338,228,1281,205,1223,185,1122,161,1020,143,843,124"/>
+<area shape="poly" title=" " alt="" coords="247,181,255,180,688,123,689,128,256,185,247,187"/>
+<area shape="poly" title=" " alt="" coords="466,177,688,129,690,135,467,182"/>
+<area shape="poly" title=" " alt="" coords="628,174,721,133,723,138,630,179"/>
+<area shape="poly" title=" " alt="" coords="765,167,764,135,769,135,770,167"/>
+<area shape="poly" title=" " alt="" coords="890,178,806,138,808,133,892,173"/>
+<area shape="rect" href="../../d3/d50/_vector_methods_8hpp.html" title=" " alt="" coords="790,271,962,312"/>
+<area shape="poly" title=" " alt="" coords="1028,232,920,273,918,268,1026,227"/>
+<area shape="rect" href="../../dd/d8d/_vector_operators_8hpp.html" title=" " alt="" coords="986,271,1166,312"/>
+<area shape="poly" title=" " alt="" coords="1084,239,1076,272,1071,270,1079,238"/>
+<area shape="poly" title=" " alt="" coords="1155,228,1238,268,1236,273,1152,233"/>
+<area shape="poly" title=" " alt="" coords="1185,222,1389,269,1388,275,1184,227"/>
+<area shape="poly" title=" " alt="" coords="948,263,1056,221,1058,226,950,268"/>
+<area shape="poly" title=" " alt="" coords="1091,256,1099,223,1105,224,1097,257"/>
 </map>
 </div>
 </div>
@@ -214,7 +223,10 @@ Namespaces</h2></td></tr>
 <tr class="memitem:maf" id="r_maf"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../df/dba/namespacemaf.html">maf</a></td></tr>
 <tr class="memitem:maf_3A_3Amath" id="r_maf_3A_3Amath"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d4/d02/namespacemaf_1_1math.html">maf::math</a></td></tr>
 </table>
-</div><!-- contents -->
+<a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Contains implementations for the checker methods of the Matrix&lt;T&gt; class. </p>
+<p>This file is intended to be included at the <em>end</em> of <a class="el" href="../../d8/d49/_matrix_8hpp.html">Matrix.hpp</a> and should not be included directly anywhere else. </p>
+</div></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 Generated by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.15.0
