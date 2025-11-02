@@ -95,8 +95,27 @@
 \DoxyCodeLine{00099\ \ \ \ \ \}}
 \DoxyCodeLine{00100\ \}}
 \DoxyCodeLine{00101\ }
-\DoxyCodeLine{00102\ \}\ \textcolor{comment}{//\ namespace\ maf::math}}
-\DoxyCodeLine{00103\ }
-\DoxyCodeLine{00104\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00109\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T,\ \textcolor{keyword}{typename}\ U>}
+\DoxyCodeLine{00110\ [[nodiscard]]\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{namespacemaf_1_1math_a3d4733be1cd68ede07a9c2de6728b2d7}{loosely\_equal}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classmaf_1_1math_1_1_matrix}{Matrix<T>}}\ \&first,}
+\DoxyCodeLine{00111\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classmaf_1_1math_1_1_matrix}{Matrix<U>}}\ \&second,}
+\DoxyCodeLine{00112\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ eps\ =\ 1e-\/6)\ \{}
+\DoxyCodeLine{00113\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ n\ =\ first.\mbox{\hyperlink{classmaf_1_1math_1_1_matrix_aa1fa0768048faff36f5dfc56911a8ce4}{row\_count}}();}
+\DoxyCodeLine{00114\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ m\ =\ first.\mbox{\hyperlink{classmaf_1_1math_1_1_matrix_a98d6cc10d243169d78f53d07406ace8b}{column\_count}}();}
+\DoxyCodeLine{00115\ \ \ \ \ \textcolor{keywordflow}{if}\ (n\ !=\ second.\mbox{\hyperlink{classmaf_1_1math_1_1_matrix_aa1fa0768048faff36f5dfc56911a8ce4}{row\_count}}()\ ||\ m\ !=\ second.\mbox{\hyperlink{classmaf_1_1math_1_1_matrix_a98d6cc10d243169d78f53d07406ace8b}{column\_count}}())\ \{}
+\DoxyCodeLine{00116\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00117\ \ \ \ \ \}}
+\DoxyCodeLine{00118\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ i\ =\ 0;\ i\ <\ n;\ ++i)\ \{}
+\DoxyCodeLine{00119\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ j\ =\ 0;\ j\ <\ m;\ ++j)\ \{}
+\DoxyCodeLine{00120\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!\mbox{\hyperlink{namespacemaf_a11dab27cc975212d0cfebee780289026}{is\_close}}(first.\mbox{\hyperlink{classmaf_1_1math_1_1_matrix_a3506acc05e298718fb6d5587d6594055}{at}}(i,\ j),\ second.\mbox{\hyperlink{classmaf_1_1math_1_1_matrix_a3506acc05e298718fb6d5587d6594055}{at}}(i,\ j),\ eps))\ \{}
+\DoxyCodeLine{00121\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00122\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00123\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00124\ \ \ \ \ \}}
+\DoxyCodeLine{00125\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00126\ \}}
+\DoxyCodeLine{00127\ }
+\DoxyCodeLine{00128\ \}\ \textcolor{comment}{//\ namespace\ maf::math}}
+\DoxyCodeLine{00129\ }
+\DoxyCodeLine{00130\ \textcolor{preprocessor}{\#endif}}
 
 \end{DoxyCode}
