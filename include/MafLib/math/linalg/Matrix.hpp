@@ -68,6 +68,14 @@ template <typename T> class Matrix {
     Matrix() : _rows(0), _cols(0) {}
 
     /**
+     * @brief Constructs an uninitialized matrix of size rows x cols.
+     * @param rows Number of rows.
+     * @param cols Number of columns.
+     * @throws std::invalid_argument if dimensions are zero.
+     */
+    Matrix(size_t rows, size_t cols);
+
+    /**
      * @brief Constructs a matrix from a raw data pointer.
      * @param rows Number of rows.
      * @param cols Number of columns.
@@ -77,14 +85,6 @@ template <typename T> class Matrix {
      * nullptr.
      */
     Matrix(size_t rows, size_t cols, T *data);
-
-    /**
-     * @brief Constructs an uninitialized matrix of size rows x cols.
-     * @param rows Number of rows.
-     * @param cols Number of columns.
-     * @throws std::invalid_argument if dimensions are zero.
-     */
-    Matrix(size_t rows, size_t cols);
 
     /**
      * @brief Constructs from a std::vector, filled by rows.
