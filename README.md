@@ -1,4 +1,4 @@
-# Framework
+# MafLib
 
 A modern, header-only C++ framework for numerical computing and linear algebra operations, designed with performance and ease of use in mind.
 
