@@ -3,6 +3,10 @@
 #include "VectorTests.cpp"
 
 int main() {
-    MatrixTests().run_all_tests();
+    std::cout << "=== Running Matrix tests ===" << std::endl;
+    auto matrix_tests = MatrixTests();
+    matrix_tests.run_all_tests();
+    matrix_tests.print_summary();
+
     VectorTests().run_all_tests();
 }

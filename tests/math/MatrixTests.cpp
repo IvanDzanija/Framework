@@ -640,9 +640,6 @@ class MatrixTests : public ITest {
 
   public:
     int run_all_tests() override {
-        std::cout << "=== Running Matrix tests ===" << std::endl;
-
-        std::cout << "=== Running constructors tests ===" << std::endl;
         should_construct_empty_matrix_with_zero_rows_and_columns();
         should_construct_empty_matrix_of_given_size();
         should_throw_if_constructed_with_zero_dimensions();
@@ -655,9 +652,6 @@ class MatrixTests : public ITest {
         should_construct_from_std_array();
         should_construct_from_initializer_list();
         should_throw_if_initializer_list_size_mismatch();
-        std::cout << "=== All constructors tests passed ===" << std::endl;
-
-        std::cout << "=== Running checkers tests ===" << std::endl;
         should_return_true_for_square_matrix();
         should_return_true_for_symmetric_matrix();
         should_return_true_for_triangular_matrix();
@@ -667,16 +661,10 @@ class MatrixTests : public ITest {
         should_return_false_for_non_singular_matrix();
         should_return_true_for_singular_matrix();
         should_return_false_for_non_singular_matrix();
-        std::cout << "=== All checkers tests passed ===" << std::endl;
-
-        std::cout << "=== Running methods tests ===" << std::endl;
         should_fill_matrix_with_value();
         should_make_identity_matrix();
         should_transpose_square_matrix_in_place();
         should_return_transposed_copy_for_non_square_matrix();
-        std::cout << "=== All methods tests passed ===" << std::endl;
-
-        std::cout << "=== Running operators tests ===" << std::endl;
         should_correctly_perform_unary_minus();
         should_check_equality_between_identical_matrices();
         should_not_be_equal_if_any_element_differs();
@@ -688,9 +676,6 @@ class MatrixTests : public ITest {
         should_multiply_matrices();
         should_multiply_matrix_and_vector();
         matmul_time_test();
-        std::cout << "=== All operators tests passed ===" << std::endl;
-
-        std::cout << "=== Running PLU decomposition tests ===" << std::endl;
         should_throw_if_plu_called_on_non_square_matrix();
         should_throw_for_singular_matrix();
         should_correctly_perform_plu_decomposition_on_small_matrix();
@@ -698,10 +683,6 @@ class MatrixTests : public ITest {
         should_correctly_decompose_upper_triangular_matrix();
         should_correctly_handle_negative_pivots_in_plu();
         plu_time_test();
-        std::cout << "=== All PLU tests passed ===" << std::endl;
-
-        std::cout << "=== Running Cholesky decomposition tests ==="
-                  << std::endl;
         should_decompose_identity_matrix();
         should_decompose_known_small_matrix();
         should_correctly_decompose_for_known_example();
@@ -710,10 +691,6 @@ class MatrixTests : public ITest {
         should_throw_if_non_symmetric();
         should_throw_if_not_positive_definite();
         cholesky_time_test();
-        std::cout << "=== All Cholesky tests passed ===" << std::endl;
-
-        std::cout << "=== All Matrix tests passed ===" << std::endl;
-        print_summary();
         return 0;
     }
 };

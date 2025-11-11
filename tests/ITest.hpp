@@ -11,6 +11,13 @@ class ITest {
 
     virtual int run_all_tests() = 0;
 
+    void print_summary() const {
+        std::cout << "\n=== Checks Summary ===\n"
+                  << "Passed: " << _passed << "\n"
+                  << "Failed: " << _failed << "\n"
+                  << "====================\n";
+    }
+
   protected:
     void assert_true(bool condition, const std::string &msg, const char *file,
                      int line) {
@@ -22,12 +29,6 @@ class ITest {
             std::cout << "[PASS] " << msg << std::endl;
             ++_passed;
         }
-    }
-    void print_summary() const {
-        std::cout << "\n=== Test Summary ===\n"
-                  << "Passed: " << _passed << "\n"
-                  << "Failed: " << _failed << "\n"
-                  << "====================\n";
     }
 };
 
