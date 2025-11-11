@@ -9,6 +9,7 @@
 namespace maf::math {
 template <typename T> class Vector {
   public:
+    using value_type = T;
     enum Orientation { ROW, COLUMN };
 
   private:

@@ -24,6 +24,9 @@ template <typename T> class Vector;
  * @since 2025
  */
 template <typename T> class Matrix {
+  public:
+    using value_type = T;
+
   private:
     size_t _rows;
     size_t _cols;

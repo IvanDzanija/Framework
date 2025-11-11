@@ -1,18 +1,27 @@
 # MafLib
 
-A modern, header-only C++ framework for numerical computing and linear algebra operations, designed with performance and ease of use in mind.
+A modern, header-only C++ framework for numerical computing and linear algebra
+operations, designed with performance and ease of use in mind.
 
 ## Overview
 
-Framework is a small experimental C++ library that provides essential building blocks for numerical computing applications. Built with modern C++ standards and optimized for performance, it aims to deliver a clean, intuitive API for mathematical operations commonly needed in computational finance, scientific computing, and numerical analysis.
+Framework is a small experimental C++ library that provides essential building
+blocks for numerical computing applications. Built with modern C++ standards and
+optimized for performance, it aims to deliver a clean, intuitive API for
+mathematical operations commonly needed in computational finance, scientific
+computing, and numerical analysis.
 
 ## Features
 
-- **Header-Only Design**: Easy integration into existing projects without complex build configurations
-- **Modern C++ Standards**: Leverages C++20/C++23 features for clean, expressive code
-- **CMake Integration**: Simple build system with separate debug and release configurations
+- **Header-Only Design**: Easy integration into existing projects without
+  complex build configurations
+- **Modern C++ Standards**: Leverages C++20/C++23 features for clean, expressive
+  code
+- **CMake Integration**: Simple build system with separate debug and release
+  configurations
 - **Cross-Platform**: Works on macOS, Linux, and other Unix-like systems
-- **Performance Focused**: Optimized for numerical computations with Clang compiler support
+- **Performance Focused**: Optimized for numerical computations with Clang
+  compiler support
 - **Comprehensive Testing**: Built-in test suite using CTest
 
 ## Project Structure
@@ -33,7 +42,8 @@ Framework/
 
 - **C++ Compiler**: Clang with C++20 support (or later)
 - **CMake**: Version 3.15 or higher
-- **Operating System**: macOS, Linux (Ubuntu with Sway), or other Unix-like systems
+- **Operating System**: macOS, Linux (Ubuntu with Sway), or other Unix-like
+  systems
 
 ## Quick Start
 
@@ -75,7 +85,8 @@ After building in release mode:
 
 ## Usage
 
-Since Framework is header-only, simply include the necessary headers in your project:
+Since Framework is header-only, simply include the necessary headers in your
+project:
 
 ```cpp
 #include <framework/your_header.h>
@@ -103,6 +114,7 @@ target_link_libraries(your_target PRIVATE framework)
 ### Compiler Flags
 
 The project is configured to use Clang with optimizations:
+
 - **Debug**: Includes debugging symbols and assertions
 - **Release**: Maximum optimization levels for performance
 
@@ -127,7 +139,8 @@ Contributions are welcome! When contributing:
 Framework is built around several key principles:
 
 - **Simplicity**: Clean, intuitive APIs that are easy to understand and use
-- **Performance**: Compile-time optimization through templates and modern C++ features
+- **Performance**: Compile-time optimization through templates and modern C++
+  features
 - **Correctness**: Comprehensive testing to ensure reliability
 - **Flexibility**: Modular design allowing users to include only what they need
 - **Maintainability**: Clear code structure and documentation
@@ -190,11 +203,13 @@ This project is released under the MIT License. See `LICENSE` file for details.
 
 ## Acknowledgments
 
-Built as an experimental framework to explore modern C++ design patterns and numerical computing techniques.
+Built as an experimental framework to explore modern C++ design patterns and
+numerical computing techniques.
 
 ---
 
-**Note**: This is an experimental project under active development. APIs may change as the framework evolves.
+**Note**: This is an experimental project under active development. APIs may
+change as the framework evolves.
 
 ## Getting Help
 
@@ -206,8 +221,9 @@ If you encounter issues or have questions:
 
 ## Versioning
 
-This project is currently in experimental/development phase. Semantic versioning will be adopted upon the first stable release.
+This project is currently in experimental/development phase. Semantic versioning
+will be adopted upon the first stable release.
 
 ---
 
-*Last updated: November 2025*
+_Last updated: November 2025_

@@ -4,7 +4,7 @@ cmake_minimum_required(VERSION 3.16)
 set(TEST_NAME LinAlgTests)
 
 add_executable(${TEST_NAME}
-    LinAlgTest.cpp
+    LinAlgTests.cpp
 )
 
 target_link_libraries(${TEST_NAME}
@@ -15,6 +15,7 @@ target_link_libraries(${TEST_NAME}
 target_include_directories(${TEST_NAME}
     PRIVATE
         ${PROJECT_SOURCE_DIR}/include
+        ${PROJECT_SOURCE_DIR}/tests
 )
 
 add_test(NAME ${TEST_NAME} COMMAND ${TEST_NAME})

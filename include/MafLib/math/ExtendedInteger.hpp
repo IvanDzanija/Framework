@@ -2,9 +2,7 @@
 #define EXTENDEDINTEGER
 
 #pragma once
-#include <climits>
-#include <stdexcept>
-#include <variant>
+#include "MafLib/main/GlobalHeader.hpp"
 
 /**
  * @brief An extended integer class that supports positive and negative infinity
@@ -18,11 +16,11 @@
  */
 class ExtendedInt {
   public:
-    enum class InfinityType { PosInf, NegInf };
+    enum class InfinityType : uint8 { PosInf, NegInf };
 
     // Factory methods
-    static ExtendedInt pos_inf() { return ExtendedInt(InfinityType::PosInf); }
-    static ExtendedInt neg_inf() { return ExtendedInt(InfinityType::NegInf); }
+    static ExtendedInt pos_inf() { return {InfinityType::PosInf}; }
+    static ExtendedInt neg_inf() { return {InfinityType::NegInf}; }
 
     // Constructors
     ExtendedInt() : _value(0) {} // Default constructor initilizes value to 0
@@ -91,9 +89,9 @@ class ExtendedInt {
         }
 
         else if (is_inf() && other.is_finite()) {
-            return ExtendedInt(get_value());
+            return {get_value()};
         } else if (is_finite() && other.is_inf()) {
-            return ExtendedInt(other.get_value());
+            return {other.get_value()};
         }
 
         // Same infinities are not allowed!
@@ -102,7 +100,7 @@ class ExtendedInt {
             throw std::runtime_error("Mixing infinities is not allowed!");
         } else {
             // Positive infinity - negative infinity
-            return ExtendedInt(get_value());
+            return {get_value()};
         }
     }
     bool operator==(const ExtendedInt &other) const {
