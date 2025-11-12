@@ -1,45 +1,45 @@
 name: MafLib Tests
 on:
-    push:
-        branches: [main]
-    pull_request:
-        branches: [main]
+    push:
+        branches: [main]
+    pull_request:
+        branches: [main]
 
 jobs:
-    build-and-test:
-        strategy:
-            matrix:
-                os: [ubuntu-latest, macos-latest]
-        runs-on: ${{ matrix.os }}
+    build-and-test:
+        strategy:
+            matrix:
+                os: [ubuntu-latest, macos-latest]
+        runs-on: ${{ matrix.os }}
 
-        steps:
-            - name: Checkout repository
-              uses: actions/checkout@v4
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v4
 
-            # Linux setup
-            - name: Install dependencies (Linux)
-              if: runner.os == 'Linux'
-              run: |
-                  sudo apt-get update
-                  sudo apt-get install -y clang ninja-build cmake libomp-dev
+            # Linux setup
+            - name: Install dependencies (Linux)
+              if: runner.os == 'Linux'
+              run: |
+                  sudo apt-get update
+                  sudo apt-get install -y clang ninja-build cmake libomp-dev
 
-            # macOS setup
-            - name: Install dependencies (macOS)
-              if: runner.os == 'macOS'
-              run: |
-                  brew update
-                  brew install cmake ninja llvm libomp
-                  echo "Adding Apple Clang to PATH"
-                  echo "$(brew --prefix llvm)/bin" >> $GITHUB_PATH
+            # macOS setup
+            - name: Install dependencies (macOS)
+              if: runner.os == 'macOS'
+              run: |
+                  brew update
+                  brew install cmake ninja llvm libomp
+                  echo "Adding Apple Clang to PATH"
+                  echo "$(brew --prefix llvm)/bin" >> $GITHUB_PATH
 
-            # Configure (CMake preset)
-            - name: Configure (clang-debug preset)
-              run: cmake --preset clang-debug
+            # Configure (CMake preset)
+            - name: Configure (clang-debug preset)
+              run: cmake --preset clang-debug
 
-            # ⚙️ Build
-            - name: Build
-              run: cmake --build --preset clang-debug --parallel
+            # ⚙️ Build
+            - name: Build
+              run: cmake --build --preset clang-debug --parallel
 
-            # 🧪 Run tests
-            - name: Run tests
-              run: ctest --preset clang-debug --output-on-failure
+            # 🧪 Run tests
+            - name: Run tests
+              run: ctest --preset clang-debug --output-on-failure
