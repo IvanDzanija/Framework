@@ -40,7 +40,7 @@ jobs:
                   echo "Adding Apple Clang to PATH"
                   echo "$(brew --prefix llvm)/bin" >> $GITHUB_PATH
 
-            # 🔧 Configure (CMake preset)
+            # Configure (CMake preset)
             - name: Configure (clang-debug preset)
               run: cmake --preset clang-debug
 

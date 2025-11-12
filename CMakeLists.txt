@@ -81,11 +81,6 @@ install(EXPORT ${PROJECT_NAME}Targets
     DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
 )
 
-option(BUILD_EXAMPLES "Build examples" OFF)
-if(BUILD_EXAMPLES)
-    add_subdirectory(examples)
-endif()
-
 option(BUILD_TESTS "Build tests" OFF)
 if(BUILD_TESTS)
     enable_testing()

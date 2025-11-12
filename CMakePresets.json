@@ -11,7 +11,6 @@
                 "CMAKE_BUILD_TYPE": "Debug",
                 "CMAKE_CXX_COMPILER": "clang++",
                 "CMAKE_C_COMPILER": "clang",
-                "BUILD_EXAMPLES": "ON",
                 "BUILD_TESTS": "ON"
             },
             "environment": {
@@ -30,7 +29,6 @@
                 "CMAKE_CXX_COMPILER": "clang++",
                 "CMAKE_C_COMPILER": "clang",
                 "CMAKE_CXX_FLAGS_RELEASE": "-O3 -ffast-math -march=native -funroll-loops -DNDEBUG",
-                "BUILD_EXAMPLES": "ON",
                 "BUILD_TESTS": "ON"
             },
             "environment": {
