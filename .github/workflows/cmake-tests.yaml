@@ -43,4 +43,3 @@ jobs:
             # 🧪 Run tests
             - name: Run tests
               run: ctest --preset clang-debug --output-on-failure
- adjust this but keep linux and macOS exactly the same
