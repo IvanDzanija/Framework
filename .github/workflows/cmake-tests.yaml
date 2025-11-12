@@ -8,16 +8,25 @@ on:
 
 jobs:
     build-and-test:
-        runs-on: ubuntu-latest
+        strategy:
+            matrix:
+                os: [ubuntu-latest, windows-latest]
+        runs-on: ${{ matrix.os }}
 
         steps:
             - name: Checkout repository
               uses: actions/checkout@v4
 
-            - name: Install dependencies
+            - name: Install dependencies (Linux)
+              if: runner.os == 'Linux'
               run: |
                   sudo apt-get update
                   sudo apt-get install -y clang ninja-build cmake libomp-dev
+
+            - name: Install dependencies (Windows)
+              if: runner.os == 'Windows'
+              run: |
+                  choco install cmake llvm ninja -y
 
             - name: Configure (clang-debug preset)
               run: cmake --preset clang-debug
