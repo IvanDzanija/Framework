@@ -37,6 +37,17 @@ if(APPLE)
     endif()
 endif()
 
+if(WIN32)
+    set(LLVM_ROOT "C:/Program Files/LLVM")
+    set(OpenMP_CXX_FLAGS "-Xclang -fopenmp -I${LLVM_ROOT}/include")
+    set(OpenMP_CXX_LIB_NAMES "libomp")
+    set(OpenMP_omp_LIBRARY "${LLVM_ROOT}/lib/libomp.lib")
+
+    message(STATUS "Using OpenMP from ${LLVM_ROOT}")
+endif()
+
+find_package(OpenMP REQUIRED)
+
 find_package(OpenMP REQUIRED)
 
 target_include_directories(${PROJECT_NAME}
