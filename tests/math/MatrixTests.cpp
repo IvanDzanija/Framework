@@ -651,7 +651,6 @@ class MatrixTests : public ITest {
     }
 
     void should_decompose_known_small_matrix() {
-        // Famous example from numerical recipes
         math::Matrix<double> A(
             3, 3, {4.0, 12.0, -16.0, 12.0, 37.0, -43.0, -16.0, -43.0, 98.0});
 
@@ -659,10 +658,7 @@ class MatrixTests : public ITest {
             3, 3, {2.0, 0.0, 0.0, 6.0, 1.0, 0.0, -8.0, 5.0, 3.0});
 
         math::Matrix<double> L = cholesky(A);
-        // Check L equals expected
         ASSERT_TRUE(loosely_equal(L, expectedL));
-
-        // Also verify reconstruction A == L * L^T
         math::Matrix<double> LLt = L * L.transposed();
         ASSERT_TRUE(loosely_equal(LLt, A));
     }
@@ -677,7 +673,6 @@ class MatrixTests : public ITest {
     }
 
     void should_reconstruct_from_random_b_times_b_t() {
-        // Construct B and form A = B * B^T which is symmetric positive definite
         math::Matrix<double> B(3, 3,
                                {1.0, 2.0, 3.0, 0.5, -1.0, 2.0, 4.0, 0.0, 1.0});
         math::Matrix<double> A = B * B.transposed();
@@ -691,14 +686,13 @@ class MatrixTests : public ITest {
 
     void should_correctly_decompose_for_known_example() {
         math::Matrix<double> B(3, 3, {1, 2, 1, 2, 5, 2, 1, 2, 10});
-
         math::Matrix<double> L = cholesky(B);
         math::Matrix<double> LLt = L * L.transposed();
         ASSERT_TRUE(math::loosely_equal(LLt, B));
     }
 
     void should_throw_if_non_symmetric() {
-        math::Matrix<double> A(2, 2, {1.0, 2.0, 3.0, 4.0}); // not symmetric
+        math::Matrix<double> A(2, 2, {1.0, 2.0, 3.0, 4.0});
         bool thrown = false;
         try {
             auto L = cholesky(A);
@@ -709,7 +703,6 @@ class MatrixTests : public ITest {
     }
 
     void should_throw_if_not_positive_definite() {
-        // Symmetric but positive semidefinite (rank deficient)
         math::Matrix<double> A(2, 2, {1.0, 2.0, 2.0, 4.0});
         ASSERT_TRUE(A.is_symmetric());
         bool thrown = false;
@@ -719,6 +712,95 @@ class MatrixTests : public ITest {
             thrown = true;
         }
         ASSERT_TRUE(thrown);
+    }
+
+    void should_auto_convert_int_matrix_to_double_in_cholesky() {
+        math::Matrix<int> m_int(3, 3, {4, 12, -16, 12, 37, -43, -16, -43, 98});
+
+        auto L = cholesky(m_int);
+
+        static_assert(std::is_same_v<decltype(L), math::Matrix<double>>,
+                      "Integer matrix should auto-promote to double");
+
+        auto LLt = L * L.transposed();
+        auto m_double = m_int.cast<double>();
+        ASSERT_TRUE(math::loosely_equal(LLt, m_double));
+    }
+
+    void should_preserve_float_type_in_cholesky() {
+        math::Matrix<float> m_float(
+            3, 3,
+            {4.0f, 12.0f, -16.0f, 12.0f, 37.0f, -43.0f, -16.0f, -43.0f, 98.0f});
+        std::cout << "SAD BI TREBP" << std::endl;
+        auto L = cholesky(m_float);
+
+        static_assert(std::is_same_v<decltype(L), math::Matrix<float>>,
+                      "Float matrix should return float");
+
+        auto LLt = L * L.transposed();
+        ASSERT_TRUE(math::loosely_equal(LLt, m_float));
+    }
+
+    void should_preserve_double_type_in_cholesky() {
+        math::Matrix<double> m_double(
+            3, 3, {4.0, 12.0, -16.0, 12.0, 37.0, -43.0, -16.0, -43.0, 98.0});
+
+        auto L = cholesky(m_double);
+
+        static_assert(std::is_same_v<decltype(L), math::Matrix<double>>,
+                      "Double matrix should return double");
+
+        auto LLt = L * L.transposed();
+        ASSERT_TRUE(math::loosely_equal(LLt, m_double));
+    }
+
+    void should_explicitly_convert_int_to_float_in_cholesky() {
+        math::Matrix<int> m_int(3, 3, {4, 12, -16, 12, 37, -43, -16, -43, 98});
+
+        auto L = cholesky<float>(m_int);
+
+        static_assert(std::is_same_v<decltype(L), math::Matrix<float>>,
+                      "Explicit float template should return float");
+
+        auto LLt = L * L.transposed();
+        auto m_float = m_int.cast<float>();
+        ASSERT_TRUE(math::loosely_equal(LLt, m_float));
+    }
+
+    void should_explicitly_convert_float_to_double_in_cholesky() {
+        math::Matrix<float> m_float(
+            3, 3,
+            {4.0f, 12.0f, -16.0f, 12.0f, 37.0f, -43.0f, -16.0f, -43.0f, 98.0f});
+
+        auto L = cholesky<double>(m_float);
+
+        static_assert(std::is_same_v<decltype(L), math::Matrix<double>>,
+                      "Explicit double template should return double");
+
+        auto LLt = L * L.transposed();
+        auto m_double = m_float.cast<double>();
+        ASSERT_TRUE(math::loosely_equal(LLt, m_double));
+    }
+
+    void should_handle_int_identity_matrix_in_cholesky() {
+        auto I_int = math::identity_matrix<int>(4);
+
+        auto L = cholesky(I_int);
+
+        static_assert(std::is_same_v<decltype(L), math::Matrix<double>>);
+
+        auto I_double = math::identity_matrix<double>(4);
+        ASSERT_TRUE(math::loosely_equal(L, I_double));
+    }
+
+    void should_handle_diagonal_int_matrix_in_cholesky() {
+        math::Matrix<int> D(3, 3, {9, 0, 0, 0, 16, 0, 0, 0, 25});
+
+        auto L = cholesky(D);
+
+        math::Matrix<double> expectedL(
+            3, 3, {3.0, 0.0, 0.0, 0.0, 4.0, 0.0, 0.0, 0.0, 5.0});
+        ASSERT_TRUE(math::loosely_equal(L, expectedL));
     }
 
     void cholesky_time_test() {
@@ -805,6 +887,13 @@ class MatrixTests : public ITest {
         should_reconstruct_from_random_b_times_b_t();
         should_throw_if_non_symmetric();
         should_throw_if_not_positive_definite();
+        should_auto_convert_int_matrix_to_double_in_cholesky();
+        should_preserve_float_type_in_cholesky();
+        should_preserve_double_type_in_cholesky();
+        should_explicitly_convert_int_to_float_in_cholesky();
+        should_explicitly_convert_float_to_double_in_cholesky();
+        should_handle_int_identity_matrix_in_cholesky();
+        should_handle_diagonal_int_matrix_in_cholesky();
         cholesky_time_test();
         return 0;
     }

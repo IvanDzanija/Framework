@@ -7,9 +7,9 @@
 namespace maf::math {
 namespace detail {
 /**
- * @brief Internal implementation of Cholesky decomposition.
+ * @brief Internal implementation of PLU decomposition.
  *
- * Computes L where A = LL^T for symmetric positive definite matrix A.
+ * Computes L and U where P * A = L * U for square matrix A.
  * Uses blocked algorithm with OpenMP parallelization.
  */
 template <std::floating_point T>
@@ -162,6 +162,8 @@ _plu(Matrix<T> &&_U) {
  * More information:
  * https://en.wikipedia.org/wiki/LU_decomposition#LU_factorization_with_partial_pivoting
  *
+ * @tparam T The floating point type of the matrix elements (e.g., float,
+ * double).
  * @param matrix The const reference to the square input matrix (A) to
  * decompose.
  * @return A std::tuple containing:
@@ -174,17 +176,20 @@ _plu(Matrix<T> &&_U) {
  * @version 1.0 (Blocked & Parallelized)
  * @since 2025
  */
-template <typename ResultType = double, Numeric T>
-[[nodiscard]] std::tuple<std::vector<uint32>, Matrix<ResultType>,
-                         Matrix<ResultType>>
-plu(const Matrix<T> &matrix) {
-    static_assert(std::is_floating_point_v<ResultType>,
+
+template <typename ResultType = void, Numeric T>
+[[nodiscard]] auto plu(const Matrix<T> &matrix) {
+    using TargetType = std::conditional_t<
+        std::is_same_v<ResultType, void>,
+        std::conditional_t<std::is_floating_point_v<T>, T, double>, ResultType>;
+
+    static_assert(std::is_floating_point_v<TargetType>,
                   "PLU result type must be floating point!");
 
-    if constexpr (std::is_same_v<T, ResultType>) {
-        return detail::_plu(Matrix<ResultType>(matrix));
+    if constexpr (std::is_same_v<TargetType, T>) {
+        return detail::_plu(Matrix<TargetType>(matrix));
     } else {
-        return detail::_plu(matrix.template cast<ResultType>());
+        return detail::_plu(matrix.template cast<TargetType>());
     }
 }
 

@@ -109,15 +109,19 @@ template <std::floating_point T>
  * @version 1.0 (Blocked & Parallelized)
  * @since 2025
  */
-template <typename ResultType = double, Numeric T>
-[[nodiscard]] Matrix<ResultType> cholesky(const Matrix<T> &matrix) {
-    static_assert(std::is_floating_point_v<ResultType>,
+template <typename ResultType = void, Numeric T>
+[[nodiscard]] auto cholesky(const Matrix<T> &matrix) {
+    using TargetType = std::conditional_t<
+        std::is_same_v<ResultType, void>,
+        std::conditional_t<std::is_floating_point_v<T>, T, double>, ResultType>;
+
+    static_assert(std::is_floating_point_v<TargetType>,
                   "Cholesky result type must be floating point!");
 
-    if constexpr (std::is_same_v<T, ResultType>) {
+    if constexpr (std::is_same_v<TargetType, T>) {
         return detail::_cholesky(matrix);
     } else {
-        Matrix<ResultType> converted = matrix.template cast<ResultType>();
+        auto converted = matrix.template cast<TargetType>();
         return detail::_cholesky(converted);
     }
 }
