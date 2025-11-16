@@ -2,12 +2,13 @@
 #include "Vector.hpp"
 
 namespace maf::math {
-
+// Inplace fill
 template <typename T> void Vector<T>::fill(T value) noexcept {
     std::fill(_data.begin(), _data.end(), value);
 }
 
-template <typename T> [[nodiscard]] T Vector<T>::norm() const {
+// L2 Norm
+template <typename T> [[nodiscard]] T Vector<T>::norm() const noexcept {
     T sum = 0.0;
     for (const T &val : _data) {
         sum += val * val;
@@ -15,22 +16,28 @@ template <typename T> [[nodiscard]] T Vector<T>::norm() const {
     return std::sqrt(sum);
 }
 
+// Inplace normalize with L2 norm
 template <typename T> void Vector<T>::normalize() {
-    // This will probably be faster by only calling norm() and checking if
-    // norm is close to 0 since it only loops through the vector once! But
-    // keeping this for clarity
-    if (this->is_null()) {
-        throw std::invalid_argument("Null vector can't be normalized!");
+    T norm = this->norm();
+    if (is_close(norm, 0)) {
+        throw std::invalid_argument("Vector norm is close to 0!");
     }
 
-    T norm = this->norm();
     for (T &val : _data) {
         val /= norm;
     }
 }
-template <typename T> Vector<T> Vector<T>::transposed() const noexcept {
+
+// Inplace transpose
+template <typename T> void Vector<T>::transpose() noexcept {
+    _orientation = (_orientation == COLUMN) ? ROW : COLUMN;
+}
+
+// Creates new transposed vector
+template <typename T>
+[[nodiscard]] Vector<T> Vector<T>::transposed() const noexcept {
     Orientation new_orientation = (_orientation == COLUMN) ? ROW : COLUMN;
-    return ret(this->size(), _data, new_orientation);
+    return Vector<T>(this->size(), _data, new_orientation);
 }
 
 } // namespace maf::math

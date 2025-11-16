@@ -4,257 +4,353 @@
 #pragma once
 #include "MafLib/math/linalg/Matrix.hpp"
 
-#define BLOCK_SIZE 64
-
 namespace maf::math {
+// Forward declaration of Matrix class for operator overloads
+template <typename T> class Matrix;
+
+/**
+ * @brief A general-purpose mathematical vector class.
+ *
+ * This class implements a mathematical vector, wrapping a std::vector
+ * for data storage. It supports both **ROW** and **COLUMN** orientations,
+ * which is crucial for correct algebraic operations with the Matrix class.
+ *
+ * It is templated to support various numeric types (T) and provides
+ * a range of constructors, element-wise operators, and common
+ * vector operations like norm, normalization, and dot product.
+ *
+ * @tparam T The numeric type of the vector elements (e.g., float,
+ * double, int).
+ *
+ * @version 1.0
+ * @since 2025
+ */
 template <typename T> class Vector {
   public:
+    /** @brief The numeric type of the vector's elements. */
     using value_type = T;
+
+    /** @brief Specifies if the vector behaves as a row or column vector. */
     enum Orientation { ROW, COLUMN };
 
   private:
+    /** @brief Stores the vector's orientation (ROW or COLUMN). */
     Orientation _orientation;
+
+    /** @brief Internal contiguous storage for the vector elements. */
     std::vector<T> _data;
 
+    /**
+     * @brief Internal helper to invert the sign of all elements in-place.
+     */
     void _invert_sign() {
+#pragma omp parallel for
         for (auto &element : _data) {
             element = -element;
         }
     }
 
   public:
+    // --- Constructors ---
+
+    /**
+     * @brief Default constructor.
+     * @details Creates an empty vector with default COLUMN orientation.
+     */
     Vector() : _orientation(COLUMN) {}
 
-    // Construct from raw data
-    /// Constructor from data pointed to.
-    /// Elements are copied over from pointer to pointer + size
-    Vector(size_t size, T *data, Orientation orientation = COLUMN)
-        : _orientation(orientation) {
-        if (size == 0) {
-            throw std::invalid_argument(
-                "Vector size must be greater than zero!");
-        }
-        if (data == nullptr) {
-            throw std::invalid_argument("Data pointer cannot be null!");
-        }
+    /**
+     * @brief Constructs an uninitialized vector of a given size.
+     * @param size The number of elements in the vector.
+     * @param orientation The vector's orientation (default: COLUMN).
+     * @throws std::invalid_argument if size is zero.
+     */
+    Vector(size_t size, Orientation orientation = COLUMN);
 
-        _data.assign(data, data + size);
-    }
+    /**
+     * @brief Constructs from a raw data pointer.
+     * @details Elements are COPIED from the data pointer.
+     * @param size The number of elements in the vector.
+     * @param data Pointer to a contiguous memory.
+     * @param orientation The vector's orientation (default: COLUMN).
+     * @throws std::invalid_argument if size is zero or data is nullptr.
+     */
+    template <typename U>
+        requires(std::is_convertible_v<U, T>)
+    Vector(size_t size, const U *data, Orientation orientation = COLUMN);
 
-    // Construct empty of size size
-    /// Construct emptpy vector with given size
-    Vector(size_t size, Orientation orientation = COLUMN)
-        : _orientation(orientation) {
-        if (size == 0) {
-            throw std::invalid_argument(
-                "Vector size must be greater than zero.");
-        }
-        _data.resize(size);
-    }
+    /**
+     * @brief Constructs from a std::vector by copying its data.
+     * @param size The number of elements. Must match data.size().
+     * @param data The std::vector to copy from.
+     * @param orientation The vector's orientation (default: COLUMN).
+     * @throws std::invalid_argument if size is zero or data size
+     * mismatches.
+     */
+    template <typename U>
+        requires(std::is_convertible_v<U, T>)
+    Vector(size_t size, const std::vector<U> &data,
+           Orientation orientation = COLUMN);
 
-    // Construct from std::vector with copying
-    /// Constructor from std::vector
-    /// Elements of std::vector are copied over
-    Vector(size_t size, const std::vector<T> &data,
-           Orientation orientation = COLUMN)
-        : _orientation(orientation) {
-        if (size == 0) {
-            throw std::invalid_argument(
-                "Vector size must be greater than zero.");
-        }
+    /**
+     * @brief Constructs from a std::vector by moving its data.
+     * @param size The number of elements. Must match data.size().
+     * @param data The std::vector to move from (r-value).
+     * @param orientation The vector's orientation (default: COLUMN).
+     * @throws std::invalid_argument if size is zero or data size
+     * mismatches.
+     */
+    Vector(size_t size, std::vector<T> &&data,
+           Orientation orientation = COLUMN);
 
-        if (data.size() != size) {
-            throw std::invalid_argument(
-                "Data size does not match vector size.");
-        }
-        _data = data;
-    }
-
-    // Construct from std::vector with move semantics
-    /// Constructor from std::vector.
-    /// Elements of std::vector are moved over.
-    Vector(size_t size, std::vector<T> &&data, Orientation orientation = COLUMN)
-        : _orientation(orientation) {
-        if (size == 0) {
-            throw std::invalid_argument(
-                "Vector size must be greater than zero.");
-        }
-
-        if (data.size() != size) {
-            throw std::invalid_argument(
-                "Data size does not match vector size.");
-        }
-
-        _data = std::move(data);
-    }
-
-    // Constructor from std::array
-    /// Constructor from std::array.
-    /// Elements of std::array are copied over.
+    /**
+     * @brief Constructs from a std::array by copying its data.
+     * @tparam U Type in the array (allows implicit conversion).
+     * @tparam N Size of the array.
+     * @param size The number of elements. Must match N.
+     * @param data The std::array to copy from.
+     * @param orientation The vector's orientation (default: COLUMN).
+     * @throws std::invalid_argument if size is zero or array size
+     * mismatches.
+     */
     template <typename U, size_t N>
+        requires(std::is_convertible_v<U, T>)
     Vector(size_t size, const std::array<U, N> &data,
-           Orientation orientation = COLUMN)
-        : _orientation(orientation) {
-        if (size == 0) {
-            throw std::invalid_argument(
-                "Vector size must be greater than zero.");
-        }
-        if (N != size) {
-            throw std::invalid_argument(
-                "Data size does not match vector size.");
-        }
+           Orientation orientation = COLUMN);
 
-        _data.assign(data.begin(), data.end());
-    }
-
-    // Iterators
+    // --- Iterators ---
+    /** @brief Returns an iterator to the beginning. */
     [[nodiscard]] auto begin() noexcept { return _data.begin(); }
+    /** @brief Returns an iterator to the end. */
     [[nodiscard]] auto end() noexcept { return _data.end(); }
 
+    /** @brief Returns a const iterator to the beginning. */
     [[nodiscard]] auto begin() const noexcept { return _data.begin(); }
+    /** @brief Returns a const iterator to the end. */
     [[nodiscard]] auto end() const noexcept { return _data.end(); }
 
+    /** @brief Returns a const iterator to the beginning. */
     [[nodiscard]] auto cbegin() const noexcept { return _data.cbegin(); }
+    /** @brief Returns a const iterator to the end. */
     [[nodiscard]] auto cend() const noexcept { return _data.cend(); }
 
+    /** @brief Returns a reverse iterator to the beginning. */
     [[nodiscard]] auto rbegin() noexcept { return _data.rbegin(); }
+    /** @brief Returns a reverse iterator to the end. */
     [[nodiscard]] auto rend() noexcept { return _data.rend(); }
 
+    /** @brief Returns a const reverse iterator to the beginning. */
     [[nodiscard]] auto rbegin() const noexcept { return _data.rbegin(); }
+    /** @brief Returns a const reverse iterator to the end. */
     [[nodiscard]] auto rend() const noexcept { return _data.rend(); }
 
+    /** @brief Returns a const reverse iterator to the beginning. */
     [[nodiscard]] auto crbegin() const noexcept { return _data.crbegin(); }
+    /** @brief Returns a const reverse iterator to the end. */
     [[nodiscard]] auto crend() const noexcept { return _data.crend(); }
 
-    // Getters
+    // --- Getters ---
+
+    /** @brief Gets the number of elements in the vector. */
     [[nodiscard]] size_t size() const noexcept { return _data.size(); }
+
+    /** @brief Gets the vector's orientation (ROW or COLUMN). */
     [[nodiscard]] Orientation orientation() const noexcept {
         return _orientation;
     }
 
+    /**
+     * @brief Gets a mutable reference to the element at a specific index with
+     * bounds check.
+     * @throws std::out_of_range if the index is invalid.
+     */
     T &at(size_t index) { return _data.at(index); }
+
+    /**
+     * @brief Gets a const reference to the element at a specific index with
+     * bounds check.
+     * @throws std::out_of_range if the index is invalid.
+     */
     const T &at(size_t index) const { return this->_data.at(index); }
 
-    T &operator[](size_t index) { return this->_data.at(index); }
-    const T &operator[](size_t index) const { return this->_data.at(index); }
+    /**
+     * @brief Accesses the element at a specific index with no bounds check.
+     * @throws std::out_of_range if the index is invalid.
+     */
+    T &operator[](size_t index) { return this->_data[index]; }
 
-    // Checkers
+    /**
+     * @brief Accesses the element at a specific index with no bounds check.
+     * @throws std::out_of_range if the index is invalid.
+     */
+    const T &operator[](size_t index) const { return this->_data[index]; }
 
-    /// Null vector
-    /// @return true if all values of the vector are/close to 0, false otherwise
-    [[nodiscard]] bool is_null() const noexcept {
-        for (const T &val : _data) {
-            if (!is_close(val, 0)) {
-                return false;
-            }
-        }
-        return true;
-    }
+    // --- Checkers ---
 
-    // Operators
+    /**
+     * @brief Checks if the vector is a null vector.
+     * @return true if all elements are close to zero, false otherwise.
+     */
+    [[nodiscard]] bool is_null() const noexcept;
 
-    /// Checks if 2 matrices are exactly same,
-    /// use loosely_equal if working with floats.
+    // --- Methods ---
+
+    /** @brief Fills the entire vector with a single value. */
+    void fill(T value) noexcept;
+
+    /** @brief Calculates the L2 norm (Euclidean length) of the vector. */
+    [[nodiscard]] T norm() const noexcept;
+
+    /** @brief Normalizes the vector in-place (divides by its L2 norm). */
+    void normalize();
+
+    /** @brief Transposes the vector in-place (flips orientation). */
+    void transpose() noexcept;
+
+    /** @brief Creates and returns a new vector that is the transpose of
+     * this one. */
+    [[nodiscard]] Vector<T> transposed() const noexcept;
+
+    // --- Operators ---
+    // TODO: Refactoring and stopped here. Continue from here
+
+    /**
+     * @brief Checks for exact element-wise equality.
+     * @details For floating-point, use a loose comparison.
+     * @param other The vector to compare against.
+     * @return true if size, orientation, and all elements are identical.
+     */
     [[nodiscard]] bool operator==(const Vector &other) const;
 
-    // Vector + Vector
-    /// Add 2 vectors elementwise.
-    /// @return Vector of common promoted type.
+    /**
+     * @brief Element-wise vector addition (Vector + Vector).
+     * @tparam U Numeric type of the other vector.
+     * @param other The vector to add.
+     * @return A new Vector of the common, promoted type.
+     * @throws std::invalid_argument if dimensions or orientations do not
+     * match.
+     */
     template <typename U>
     [[nodiscard]] auto operator+(const Vector<U> &other) const;
 
-    // Vector + Scalar
-    /// Add a scalar to each element of vector.
-    /// @return Vector of common promoted type
+    /**
+     * @brief Element-wise scalar addition (Vector + scalar).
+     * @tparam U An arithmetic scalar type.
+     * @param scalar The scalar value to add to each element.
+     * @return A new Vector of the common, promoted type.
+     */
     template <typename U> [[nodiscard]] auto operator+(const U &scalar) const;
 
-    // Scalar + Vector
-    /// It's recommended to use Vector + Scalar instead.
-    /// @return Vector of common promoted type.
+    /**
+     * @brief Element-wise scalar addition (scalar + Vector).
+     * @tparam U An arithmetic scalar type.
+     * @param scalar The scalar value.
+     * @param vec The vector.
+     * @return A new Vector of the common, promoted type.
+     */
     template <typename U>
     friend auto operator+(const U &scalar, const Vector<T> &vec);
 
-    // Vector - Vector
-    /// Subtract 2 vectors elementwise.
-    /// Elements of first vector - elements of second vector
-    /// @return Vector of common promoted type
+    /**
+     * @brief Element-wise vector subtraction (Vector - Vector).
+     * @tparam U Numeric type of the other vector.
+     * @param other The vector to subtract.
+     * @return A new Vector of the common, promoted type.
+     * @throws std::invalid_argument if dimensions or orientations do not
+     * match.
+     */
     template <typename U>
     [[nodiscard]] auto operator-(const Vector<U> &other) const;
 
-    // Vector - Scalar
-    /// Subtract a scalar from each element of vector.
-    /// @return Vector of common promoted type.
+    /**
+     * @brief Element-wise scalar subtraction (Vector - scalar).
+     * @tparam U An arithmetic scalar type.
+     * @param scalar The scalar value to subtract from each element.
+     * @return A new Vector of the common, promoted type.
+     */
     template <typename U> [[nodiscard]] auto operator-(const U &scalar) const;
 
-    // Scalar - Vector
-    /// Subtract each element of vector from a scalar.
-    /// @return Vector of common promoted type.
+    /**
+     * @brief Element-wise scalar subtraction (scalar - Vector).
+     * @tparam U An arithmetic scalar type.
+     * @param scalar The scalar value from which elements are subtracted.
+     * @param vec The vector.
+     * @return A new Vector of the common, promoted type.
+     */
     template <typename U>
     friend auto operator-(const U &scalar, const Vector<T> &vec);
 
-    // Vector * Scalar
-    /// Multiply each element of vector by a scalar.
-    /// @return Vector of common promoted type.
+    /**
+     * @brief Element-wise scalar multiplication (Vector * scalar).
+     * @tparam U An arithmetic scalar type.
+     * @param scalar The scalar value to multiply by.
+     * @return A new Vector of the common, promoted type.
+     */
     template <typename U>
         requires(std::is_arithmetic_v<U>)
     [[nodiscard]] auto operator*(const U &scalar) const {
         using R = std::common_type_t<T, U>;
 
         Vector<R> result(_data.size());
-        std::transform(_data.begin(), _data.end(), result.data().begin(),
-                       [scalar](const T &value) { return value * scalar; });
+        std::transform(
+            _data.begin(), _data.end(),
+            result.begin(), // Use result.begin() for std::vector iterator
+            [scalar](const T &value) { return value * scalar; });
         return result;
     }
 
-    // Scalar * Vector
-    /// It's recommended to use Vector * Scalar instead.
-    /// @return Vector of common promoted type.
+    /**
+     * @brief Element-wise scalar multiplication (scalar * Vector).
+     * @tparam U An arithmetic scalar type.
+     * @param scalar The scalar value.
+     * @param vec The vector.
+     * @return A new Vector of the common, promoted type.
+     */
     template <typename U>
         requires(std::is_arithmetic_v<U>)
     [[nodiscard]] friend auto operator*(const U &scalar, const Vector<T> &vec) {
         return vec * scalar;
     }
 
-    // Vector * Vector -> Matrix
-    /// Outer product of 2 vectors.
-    /// First vector has to be a column vector.
-    /// Second vector has to be a row vector.
-    /// @return Matrix of common promoted type.
+    /**
+     * @brief Outer product (Column Vector * Row Vector).
+     * @details This must be a (N x 1) * (1 x M) multiplication.
+     * @tparam U Numeric type of the other vector.
+     * @param other The row vector (this vector must be a column).
+     * @return A new Matrix of size (this.size x other.size).
+     * @throws std::invalid_argument if orientations are not COLUMN * ROW.
+     */
     template <typename U>
     [[nodiscard]] auto operator*(const Vector<U> &other) const;
 
-    // Vector * Matrix -> Vector
-    /// Vector transformation by matrix from the right.
-    /// First element has to be a row vector.
-    /// @return Vector of common promoted type.
+    /**
+     * @brief Matrix-Vector multiplication (Row Vector * Matrix).
+     * @details This must be a (1 x N) * (N x M) multiplication.
+     * @tparam U Numeric type of the matrix.
+     * @param other The matrix to multiply by (this vector must be a row).
+     * @return A new row Vector of size (1 x M).
+     * @throws std::invalid_argument if this is not a row vector or
+     * dimensions mismatch.
+     */
     template <typename U>
     [[nodiscard]] auto operator*(const Matrix<U> &other) const;
 
-    // Vector * Vector -> Scalar (Dot product)
-    /// Vector * Vector dot product
-    /// @return Scalar of common promoted type
+    /**
+     * @brief Calculates the dot product (inner product) of two vectors.
+     * @tparam U Numeric type of the other vector.
+     * @param other The other vector.
+     * @return A scalar value of the common, promoted type.
+     * @throws std::invalid_argument if vector sizes do not match.
+     */
     template <typename U>
     [[nodiscard]] auto dot_product(const Vector<U> &other) const;
 
-    // Methods
+    // --- Printing and debugging ---
 
-    // Inplace fill
-    void fill(T value) noexcept;
-
-    // Vector norm
-    /// L2 vector norm
-    [[nodiscard]] T norm() const;
-
-    // Inplace normalization
-    void normalize();
-
-    // Inplace transpose
-    void transpose() { _orientation = (_orientation == COLUMN) ? ROW : COLUMN; }
-
-    // Create new transposed vector
-    [[nodiscard]] Vector<T> transposed() const noexcept;
-
-    // Printing and debugging
+    /**
+     * @brief Prints the vector contents to std::cout.
+     * @details Sets floating point precision for readability.
+     */
     void print() const {
         if constexpr (std::is_floating_point_v<T>) {
             std::cout << std::setprecision(5);
@@ -275,6 +371,9 @@ template <typename T> class Vector {
 
 } // namespace maf::math
 
+#include "VectorCheckers.hpp"
+#include "VectorConstructors.hpp"
 #include "VectorMethods.hpp"
 #include "VectorOperators.hpp"
+
 #endif

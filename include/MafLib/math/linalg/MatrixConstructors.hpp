@@ -11,6 +11,17 @@
  * should not be included directly anywhere else.
  */
 namespace maf::math {
+// Constructs an uninitialized matrix of size rows x cols.
+template <typename T>
+Matrix<T>::Matrix(size_t rows, size_t cols) : _rows(rows), _cols(cols) {
+    if (rows == 0 || cols == 0) {
+        throw std::invalid_argument(
+            "Matrix dimensions must be greater than zero.");
+    }
+
+    _data.resize(rows * cols);
+}
+
 // Constructs a matrix from a raw data pointer.
 template <typename T>
 Matrix<T>::Matrix(size_t rows, size_t cols, T *data)
@@ -24,17 +35,6 @@ Matrix<T>::Matrix(size_t rows, size_t cols, T *data)
     }
 
     _data.assign(data, data + (rows * cols));
-}
-
-// Constructs an uninitialized matrix of size rows x cols.
-template <typename T>
-Matrix<T>::Matrix(size_t rows, size_t cols) : _rows(rows), _cols(cols) {
-    if (rows == 0 || cols == 0) {
-        throw std::invalid_argument(
-            "Matrix dimensions must be greater than zero.");
-    }
-
-    _data.resize(rows * cols);
 }
 
 // Constructs from a std::vector, filled by rows.
@@ -77,8 +77,8 @@ Matrix<T>::Matrix(size_t rows, size_t cols,
 
 // Constructs from a std::array, filled by rows.
 template <typename T>
-template <typename U, size_t N>
-Matrix<T>::Matrix(size_t rows, size_t cols, const std::array<U, N> &data)
+template <size_t N>
+Matrix<T>::Matrix(size_t rows, size_t cols, const std::array<T, N> &data)
     : _rows(rows), _cols(cols) {
     if (rows == 0 || cols == 0) {
         throw std::invalid_argument(

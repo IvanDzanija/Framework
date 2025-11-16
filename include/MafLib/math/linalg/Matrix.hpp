@@ -56,7 +56,7 @@ template <typename T> class Matrix {
      * @brief Internal helper to invert the sign of all elements in-place.
      */
     void _invert_sign() {
-#pragma omp parallel for
+#pragma omp parallel for if (_data.size() > 5000 * 5000)
         for (size_t i = 0; i < _data.size(); ++i) {
             _data[i] = -_data[i];
         }
@@ -120,8 +120,8 @@ template <typename T> class Matrix {
      * @throws std::invalid_argument if dimensions are zero or array size
      * does not match.
      */
-    template <typename U, size_t N>
-    Matrix(size_t rows, size_t cols, const std::array<U, N> &data);
+    template <size_t N>
+    Matrix(size_t rows, size_t cols, const std::array<T, N> &data);
 
     /**
      * @brief Constructs from a std::initializer_list, filled by rows.
@@ -280,27 +280,24 @@ template <typename T> class Matrix {
      */
     template <typename U>
     [[nodiscard]] auto operator+(const Matrix<U> &other) const {
-        using R = std::common_type_t<T, U>;
-
         if (_rows != other.row_count() || _cols != other.column_count()) {
             throw std::invalid_argument(
                 "Matrices have to be of same dimensions for addition!");
         }
-        Matrix<R> result(_rows, _cols);
+        using R = std::common_type_t<T, U>;
 
-        if (_data.size() < 100 * 100) {
-#pragma omp parallel for collapse(2)
-            for (size_t i = 0; i < _rows; ++i) {
-                for (size_t j = 0; j < _cols; ++j) {
-                    result.at(i, j) = static_cast<R>(this->at(i, j)) +
-                                      static_cast<R>(other.at(i, j));
-                }
+        Matrix<R> result(_rows, _cols);
+        if (_data.size() > 5000 * 5000) {
+#pragma omp parallel for
+            for (size_t i = 0; i < _data.size(); ++i) {
+                result.data()[i] =
+                    static_cast<R>(_data[i]) + static_cast<R>(other.data()[i]);
             }
         } else {
-#pragma omp parallel for schedule(static, 1024)
-            for (size_t idx = 0; idx < _data.size(); ++idx) {
-                result.data()[idx] = static_cast<R>(_data[idx]) +
-                                     static_cast<R>(other.data()[idx]);
+#pragma omp simd
+            for (size_t i = 0; i < _data.size(); ++i) {
+                result.data()[i] =
+                    static_cast<R>(_data[i]) + static_cast<R>(other.data()[i]);
             }
         }
         return result;
@@ -315,12 +312,21 @@ template <typename T> class Matrix {
         requires(std::is_arithmetic_v<U>)
     [[nodiscard]] auto operator+(const U &scalar) const {
         using R = std::common_type_t<T, U>;
+
         Matrix<R> result(_rows, _cols);
-        std::transform(_data.begin(), _data.end(), result.data().begin(),
-                       [scalar](const T &value) {
-                           return static_cast<R>(value) +
-                                  static_cast<R>(scalar);
-                       });
+        if (_data.size() > 5000 * 5000) {
+#pragma omp parallel for
+            for (size_t i = 0; i < _data.size(); ++i) {
+                result.data()[i] =
+                    static_cast<R>(_data[i]) + static_cast<R>(scalar);
+            }
+        } else {
+#pragma omp simd
+            for (size_t i = 0; i < _data.size(); ++i) {
+                result.data()[i] =
+                    static_cast<R>(_data[i]) + static_cast<R>(scalar);
+            }
+        }
         return result;
     }
 
@@ -346,23 +352,20 @@ template <typename T> class Matrix {
             throw std::invalid_argument(
                 "Matrices have to be of same dimensions for subtraction!");
         }
-
         using R = std::common_type_t<T, U>;
-        Matrix<R> result(_rows, _cols);
 
-        if (_data.size() < 100 * 100) {
-#pragma omp parallel for collapse(2)
-            for (size_t i = 0; i < _rows; ++i) {
-                for (size_t j = 0; j < _cols; ++j) {
-                    result.at(i, j) = static_cast<R>(this->at(i, j)) -
-                                      static_cast<R>(other.at(i, j));
-                }
+        Matrix<R> result(_rows, _cols);
+        if (_data.size() > 5000 * 5000) {
+#pragma omp parallel for
+            for (size_t i = 0; i < _data.size(); ++i) {
+                result.data()[i] =
+                    static_cast<R>(_data[i]) - static_cast<R>(other.data()[i]);
             }
         } else {
-#pragma omp parallel for schedule(static, 1024)
-            for (size_t idx = 0; idx < _data.size(); ++idx) {
-                result.data()[idx] = static_cast<R>(_data[idx]) -
-                                     static_cast<R>(other.data()[idx]);
+#pragma omp simd
+            for (size_t i = 0; i < _data.size(); ++i) {
+                result.data()[i] =
+                    static_cast<R>(_data[i]) - static_cast<R>(other.data()[i]);
             }
         }
         return result;
@@ -377,12 +380,21 @@ template <typename T> class Matrix {
         requires(std::is_arithmetic_v<U>)
     [[nodiscard]] auto operator-(const U &scalar) const {
         using R = std::common_type_t<T, U>;
+
         Matrix<R> result(_rows, _cols);
-        std::transform(_data.begin(), _data.end(), result.data().begin(),
-                       [scalar](const T &value) {
-                           return static_cast<R>(value) -
-                                  static_cast<R>(scalar);
-                       });
+        if (_data.size() > 5000 * 5000) {
+#pragma omp parallel for
+            for (size_t i = 0; i < _data.size(); ++i) {
+                result.data()[i] =
+                    static_cast<R>(_data[i]) - static_cast<R>(scalar);
+            }
+        } else {
+#pragma omp simd
+            for (size_t i = 0; i < _data.size(); ++i) {
+                result.data()[i] =
+                    static_cast<R>(_data[i]) - static_cast<R>(scalar);
+            }
+        }
         return result;
     }
 
@@ -398,11 +410,19 @@ template <typename T> class Matrix {
         using R = std::common_type_t<T, U>;
 
         Matrix<R> result(matrix._rows, matrix._cols);
-        std::transform(matrix._data.begin(), matrix._data.end(),
-                       result.data().begin(), [scalar](const T &value) {
-                           return static_cast<R>(scalar) -
-                                  static_cast<R>(value);
-                       });
+        if (matrix.size() > 5000 * 5000) {
+#pragma omp parallel for
+            for (size_t i = 0; i < matrix.size(); ++i) {
+                result.data()[i] =
+                    static_cast<R>(matrix._data[i]) - static_cast<R>(scalar);
+            }
+        } else {
+#pragma omp simd
+            for (size_t i = 0; i < matrix.size(); ++i) {
+                result.data()[i] =
+                    static_cast<R>(matrix._data[i]) - static_cast<R>(scalar);
+            }
+        }
         return result;
     }
 
@@ -414,6 +434,7 @@ template <typename T> class Matrix {
      * @throws std::invalid_argument if inner dimensions do not match
      * (A.cols != B.rows).
      */
+    // TODO: Check for optimization
     template <typename U>
     [[nodiscard]] auto operator*(const Matrix<U> &other) const {
         if (_cols != other.row_count()) {
