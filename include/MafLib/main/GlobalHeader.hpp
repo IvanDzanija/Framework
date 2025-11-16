@@ -7,6 +7,7 @@
 #include <cassert>
 #include <chrono>
 #include <cmath>
+#include <concepts>
 #include <cstdint>
 #include <cstring>
 #include <execution>
@@ -32,7 +33,6 @@ using int64 = int64_t;
 using uint64 = uint64_t;
 
 namespace maf {
-#define BLOCK_SIZE 64
 inline constexpr int8_t OUT_OF_BOUNDS = -1;
 inline constexpr int8_t NOT_SQUARE = -2;
 inline constexpr double EPSILON = 1e-6;

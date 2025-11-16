@@ -2,11 +2,11 @@
 #define VECTOR_H
 
 #pragma once
-#include "MafLib/math/linalg/Matrix.hpp"
+#include "LinAlg.hpp"
 
 namespace maf::math {
 // Forward declaration of Matrix class for operator overloads
-template <typename T> class Matrix;
+template <Numeric T> class Matrix;
 
 /**
  * @brief A general-purpose mathematical vector class.
@@ -25,7 +25,7 @@ template <typename T> class Matrix;
  * @version 1.0
  * @since 2025
  */
-template <typename T> class Vector {
+template <Numeric T> class Vector {
   public:
     /** @brief The numeric type of the vector's elements. */
     using value_type = T;
@@ -75,8 +75,7 @@ template <typename T> class Vector {
      * @param orientation The vector's orientation (default: COLUMN).
      * @throws std::invalid_argument if size is zero or data is nullptr.
      */
-    template <typename U>
-        requires(std::is_convertible_v<U, T>)
+    template <Numeric U>
     Vector(size_t size, const U *data, Orientation orientation = COLUMN);
 
     /**
@@ -87,8 +86,7 @@ template <typename T> class Vector {
      * @throws std::invalid_argument if size is zero or data size
      * mismatches.
      */
-    template <typename U>
-        requires(std::is_convertible_v<U, T>)
+    template <Numeric U>
     Vector(size_t size, const std::vector<U> &data,
            Orientation orientation = COLUMN);
 
@@ -113,8 +111,7 @@ template <typename T> class Vector {
      * @throws std::invalid_argument if size is zero or array size
      * mismatches.
      */
-    template <typename U, size_t N>
-        requires(std::is_convertible_v<U, T>)
+    template <Numeric U, size_t N>
     Vector(size_t size, const std::array<U, N> &data,
            Orientation orientation = COLUMN);
 
@@ -230,7 +227,7 @@ template <typename T> class Vector {
      * @throws std::invalid_argument if dimensions or orientations do not
      * match.
      */
-    template <typename U>
+    template <Numeric U>
     [[nodiscard]] auto operator+(const Vector<U> &other) const;
 
     /**
@@ -239,7 +236,7 @@ template <typename T> class Vector {
      * @param scalar The scalar value to add to each element.
      * @return A new Vector of the common, promoted type.
      */
-    template <typename U> [[nodiscard]] auto operator+(const U &scalar) const;
+    template <Numeric U> [[nodiscard]] auto operator+(const U &scalar) const;
 
     /**
      * @brief Element-wise scalar addition (scalar + Vector).
@@ -248,7 +245,7 @@ template <typename T> class Vector {
      * @param vec The vector.
      * @return A new Vector of the common, promoted type.
      */
-    template <typename U>
+    template <Numeric U>
     friend auto operator+(const U &scalar, const Vector<T> &vec);
 
     /**
@@ -259,7 +256,7 @@ template <typename T> class Vector {
      * @throws std::invalid_argument if dimensions or orientations do not
      * match.
      */
-    template <typename U>
+    template <Numeric U>
     [[nodiscard]] auto operator-(const Vector<U> &other) const;
 
     /**
@@ -268,7 +265,7 @@ template <typename T> class Vector {
      * @param scalar The scalar value to subtract from each element.
      * @return A new Vector of the common, promoted type.
      */
-    template <typename U> [[nodiscard]] auto operator-(const U &scalar) const;
+    template <Numeric U> [[nodiscard]] auto operator-(const U &scalar) const;
 
     /**
      * @brief Element-wise scalar subtraction (scalar - Vector).
@@ -277,7 +274,7 @@ template <typename T> class Vector {
      * @param vec The vector.
      * @return A new Vector of the common, promoted type.
      */
-    template <typename U>
+    template <Numeric U>
     friend auto operator-(const U &scalar, const Vector<T> &vec);
 
     /**
@@ -286,9 +283,7 @@ template <typename T> class Vector {
      * @param scalar The scalar value to multiply by.
      * @return A new Vector of the common, promoted type.
      */
-    template <typename U>
-        requires(std::is_arithmetic_v<U>)
-    [[nodiscard]] auto operator*(const U &scalar) const {
+    template <Numeric U> [[nodiscard]] auto operator*(const U &scalar) const {
         using R = std::common_type_t<T, U>;
 
         Vector<R> result(_data.size());
@@ -306,8 +301,7 @@ template <typename T> class Vector {
      * @param vec The vector.
      * @return A new Vector of the common, promoted type.
      */
-    template <typename U>
-        requires(std::is_arithmetic_v<U>)
+    template <Numeric U>
     [[nodiscard]] friend auto operator*(const U &scalar, const Vector<T> &vec) {
         return vec * scalar;
     }
@@ -320,7 +314,7 @@ template <typename T> class Vector {
      * @return A new Matrix of size (this.size x other.size).
      * @throws std::invalid_argument if orientations are not COLUMN * ROW.
      */
-    template <typename U>
+    template <Numeric U>
     [[nodiscard]] auto operator*(const Vector<U> &other) const;
 
     /**
@@ -332,7 +326,7 @@ template <typename T> class Vector {
      * @throws std::invalid_argument if this is not a row vector or
      * dimensions mismatch.
      */
-    template <typename U>
+    template <Numeric U>
     [[nodiscard]] auto operator*(const Matrix<U> &other) const;
 
     /**
@@ -342,7 +336,7 @@ template <typename T> class Vector {
      * @return A scalar value of the common, promoted type.
      * @throws std::invalid_argument if vector sizes do not match.
      */
-    template <typename U>
+    template <Numeric U>
     [[nodiscard]] auto dot_product(const Vector<U> &other) const;
 
     // --- Printing and debugging ---
@@ -353,7 +347,7 @@ template <typename T> class Vector {
      */
     void print() const {
         if constexpr (std::is_floating_point_v<T>) {
-            std::cout << std::setprecision(5);
+            std::cout << std::setprecision(FLOAT_PRECISION);
         }
         if (_orientation == COLUMN) {
             for (const T &val : _data) {

@@ -13,13 +13,12 @@
  */
 namespace maf::math {
 // Checks if matrix is square.
-template <typename T>
-[[nodiscard]] constexpr bool Matrix<T>::is_square() const {
+template <Numeric T> [[nodiscard]] constexpr bool Matrix<T>::is_square() const {
     return _rows == _cols;
 }
 
 // Checks if matrix is symmetric.
-template <typename T>
+template <Numeric T>
 [[nodiscard]] constexpr bool Matrix<T>::is_symmetric() const {
     if (!is_square()) {
         return false;
@@ -35,7 +34,7 @@ template <typename T>
 }
 
 // Checks if matrix is upper triangular.
-template <typename T>
+template <Numeric T>
 [[nodiscard]] constexpr bool Matrix<T>::is_upper_triangular() const {
     if (!is_square()) {
         return false;
@@ -51,7 +50,7 @@ template <typename T>
 }
 
 // Checks if matrix is lower triangular.
-template <typename T>
+template <Numeric T>
 [[nodiscard]] constexpr bool Matrix<T>::is_lower_triangular() const {
     if (!is_square()) {
         return false;
@@ -67,7 +66,7 @@ template <typename T>
 }
 
 // Checks if matrix is diagonal.
-template <typename T>
+template <Numeric T>
 [[nodiscard]] constexpr bool Matrix<T>::is_diagonal() const {
     if (!is_square()) {
         return false;
@@ -76,7 +75,7 @@ template <typename T>
 }
 
 // Checks if matrix is singular.
-template <typename T>
+template <Numeric T>
 [[nodiscard]] constexpr bool Matrix<T>::is_singular() const {
     if (!is_square()) {
         return true;
@@ -89,7 +88,7 @@ template <typename T>
     }
 }
 
-template <typename T>
+template <Numeric T>
 [[nodiscard]] bool Matrix<T>::is_positive_definite() const {
     try {
         cholesky(*this);
@@ -106,7 +105,7 @@ template <typename T>
  * @param eps The absolute tolerance for equality.
  * @return true if dimensions match and all elements are "close".
  */
-template <typename T, typename U>
+template <Numeric T, Numeric U>
 [[nodiscard]] constexpr bool loosely_equal(const Matrix<T> &first,
                                            const Matrix<U> &second,
                                            double eps = 1e-6) {

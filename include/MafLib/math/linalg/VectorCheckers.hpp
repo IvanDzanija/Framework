@@ -13,7 +13,7 @@
  */
 namespace maf::math {
 // Checks if vector is null vector
-template <typename T> [[nodiscard]] bool Vector<T>::is_null() const noexcept {
+template <Numeric T> [[nodiscard]] bool Vector<T>::is_null() const noexcept {
     for (const T &val : _data) {
         if (!is_close(val, 0)) {
             return false;

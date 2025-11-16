@@ -17,7 +17,7 @@ namespace maf::math {
  * @param size The width and height of the square matrix.
  * @return An identity Matrix<T> of size (size x size).
  */
-template <typename T>
+template <Numeric T>
 [[nodiscard]] Matrix<T> inline identity_matrix(size_t size) {
     Matrix<T> result(size, size);
     result.make_identity();
@@ -31,7 +31,7 @@ template <typename T>
  * @param cols Number of columns.
  * @return A Matrix<U> of size (rows x cols) filled with U(1).
  */
-template <typename U>
+template <Numeric U>
 [[nodiscard]] inline Matrix<U> ones(size_t rows, size_t cols) {
     Matrix<U> result(rows, cols);
     result.fill(U(1));
@@ -45,7 +45,7 @@ template <typename U>
  * column `j`.
  * @return A sparse permutation Matrix<T>.
  */
-template <typename T>
+template <Numeric T>
 [[nodiscard]] Matrix<T> inline make_permutation_matrix(
     const std::vector<uint32> &perm) {
     size_t n = perm.size();

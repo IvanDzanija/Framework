@@ -4,7 +4,7 @@
 namespace maf::math {
 
 // Equality operator
-template <typename T> bool Vector<T>::operator==(const Vector &other) const {
+template <Numeric T> bool Vector<T>::operator==(const Vector &other) const {
     if (this->_orientation != other._orientation ||
         this->size() != other.size()) {
         return false;
@@ -13,8 +13,8 @@ template <typename T> bool Vector<T>::operator==(const Vector &other) const {
 }
 
 // Vector + Vector
-template <typename T>
-template <typename U>
+template <Numeric T>
+template <Numeric U>
 
 auto Vector<T>::operator+(const Vector<U> &other) const {
     using R = std::common_type_t<T, U>;
@@ -33,8 +33,8 @@ auto Vector<T>::operator+(const Vector<U> &other) const {
 }
 
 // Vector + Scalar
-template <typename T>
-template <typename U>
+template <Numeric T>
+template <Numeric U>
 
 auto Vector<T>::operator+(const U &scalar) const {
     using R = std::common_type_t<T, U>;
@@ -46,14 +46,14 @@ auto Vector<T>::operator+(const U &scalar) const {
 }
 
 // Scalar + Vector
-template <typename T, typename U>
+template <Numeric T, Numeric U>
 auto operator+(const U &scalar, const Vector<T> &vec) {
     return vec + scalar;
 }
 
 // Vector - Vector
-template <typename T>
-template <typename U>
+template <Numeric T>
+template <Numeric U>
 auto Vector<T>::operator-(const Vector<U> &other) const {
     using R = std::common_type_t<T, U>;
 
@@ -71,8 +71,8 @@ auto Vector<T>::operator-(const Vector<U> &other) const {
 }
 
 // Vector - Scalar
-template <typename T>
-template <typename U>
+template <Numeric T>
+template <Numeric U>
 auto Vector<T>::operator-(const U &scalar) const {
     using R = std::common_type_t<T, U>;
 
@@ -83,7 +83,7 @@ auto Vector<T>::operator-(const U &scalar) const {
 }
 
 // Scalar - Vector
-template <typename T, typename U>
+template <Numeric T, Numeric U>
 auto operator-(const U &scalar, const Vector<T> &vec) {
     using R = std::common_type_t<T, U>;
 
@@ -94,8 +94,8 @@ auto operator-(const U &scalar, const Vector<T> &vec) {
 }
 
 // Vector * Matrix -> Vector
-template <typename T>
-template <typename U>
+template <Numeric T>
+template <Numeric U>
 auto Vector<T>::operator*(const Matrix<U> &other) const {
     using R = std::common_type_t<T, U>;
 
@@ -122,8 +122,8 @@ auto Vector<T>::operator*(const Matrix<U> &other) const {
 }
 
 // Vector * Vector -> Matrix
-template <typename T>
-template <typename U>
+template <Numeric T>
+template <Numeric U>
 auto Vector<T>::operator*(const Vector<U> &other) const {
     std::cout << "THIS IS AN OUTER PRODUCT OPERATOR!" << std::endl;
 
@@ -166,8 +166,8 @@ auto Vector<T>::operator*(const Vector<U> &other) const {
 }
 
 // Vector * Vector -> Scalar
-template <typename T>
-template <typename U>
+template <Numeric T>
+template <Numeric U>
 auto Vector<T>::dot_product(const Vector<U> &other) const {
     std::common_type_t<T, U> result = 0;
     for (size_t i = 0; i < this->size(); ++i) {

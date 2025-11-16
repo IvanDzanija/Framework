@@ -12,7 +12,7 @@
  */
 namespace maf::math {
 // Constructs an uninitialized vector of size size.
-template <typename T>
+template <Numeric T>
 [[nodiscard]] Vector<T>::Vector(size_t size, Orientation orientation)
     : _orientation(orientation) {
     if (size == 0) {
@@ -22,9 +22,8 @@ template <typename T>
 }
 
 // Constructs a vector from a raw data pointer.
-template <typename T>
-template <typename U>
-    requires(std::is_convertible_v<U, T>)
+template <Numeric T>
+template <Numeric U>
 [[nodiscard]] Vector<T>::Vector(size_t size, const U *data,
                                 Orientation orientation)
     : _orientation(orientation) {
@@ -39,9 +38,8 @@ template <typename U>
 }
 
 // Constructs from a std::vector, copy constructor
-template <typename T>
-template <typename U>
-    requires(std::is_convertible_v<U, T>)
+template <Numeric T>
+template <Numeric U>
 [[nodiscard]] Vector<T>::Vector(size_t size, const std::vector<U> &data,
                                 Orientation orientation)
     : _orientation(orientation) {
@@ -56,7 +54,7 @@ template <typename U>
 }
 
 // Constructs from a std::vector, move constructor
-template <typename T>
+template <Numeric T>
 Vector<T>::Vector(size_t size, std::vector<T> &&data, Orientation orientation)
     : _orientation(orientation) {
     if (size == 0) {
@@ -71,9 +69,8 @@ Vector<T>::Vector(size_t size, std::vector<T> &&data, Orientation orientation)
 }
 
 // Constructs from a std::array, copy constructor
-template <typename T>
-template <typename U, size_t N>
-    requires(std::is_convertible_v<U, T>)
+template <Numeric T>
+template <Numeric U, size_t N>
 [[nodiscard]] Vector<T>::Vector(size_t size, const std::array<U, N> &data,
                                 Orientation orientation)
     : _orientation(orientation) {
@@ -88,4 +85,5 @@ template <typename U, size_t N>
 }
 
 } // namespace maf::math
+
 #endif

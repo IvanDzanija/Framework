@@ -1,10 +1,10 @@
 #ifndef MATRIX_H
 #define MATRIX_H
 #pragma once
-#include "MafLib/main/GlobalHeader.hpp"
+#include "LinAlg.hpp"
 
 namespace maf::math {
-template <typename T> class Vector;
+template <Numeric T> class Vector;
 
 /**
  * @brief A general-purpose, row-major, dense matrix class.
@@ -23,7 +23,7 @@ template <typename T> class Vector;
  * @version 1.0
  * @since 2025
  */
-template <typename T> class Matrix {
+template <Numeric T> class Matrix {
   public:
     using value_type = T;
 
@@ -132,7 +132,7 @@ template <typename T> class Matrix {
      * @throws std::invalid_argument if dimensions are zero or list size
      * does not match.
      */
-    template <typename U>
+    template <Numeric U>
     Matrix(size_t rows, size_t cols, std::initializer_list<U> list);
 
     // --- Getters and setters ---
@@ -224,6 +224,11 @@ template <typename T> class Matrix {
 
     // --- Methods ---
 
+    /** @brief Creates new matrix with same elements but different type.
+     * @details Defined in MatrixMethods.hpp
+     */
+    template <Numeric U> [[nodiscard]] Matrix<U> cast() const;
+
     /** @brief Fills the entire matrix with a single value.*/
     void fill(T value);
 
@@ -278,7 +283,7 @@ template <typename T> class Matrix {
      * @return Matrix of the common, promoted type.
      * @throws std::invalid_argument if dimensions do not match.
      */
-    template <typename U>
+    template <Numeric U>
     [[nodiscard]] auto operator+(const Matrix<U> &other) const {
         if (_rows != other.row_count() || _cols != other.column_count()) {
             throw std::invalid_argument(
@@ -308,9 +313,7 @@ template <typename T> class Matrix {
      * @tparam U An arithmetic scalar type.
      * @return Matrix of the common, promoted type.
      */
-    template <typename U>
-        requires(std::is_arithmetic_v<U>)
-    [[nodiscard]] auto operator+(const U &scalar) const {
+    template <Numeric U> [[nodiscard]] auto operator+(const U &scalar) const {
         using R = std::common_type_t<T, U>;
 
         Matrix<R> result(_rows, _cols);
@@ -333,8 +336,7 @@ template <typename T> class Matrix {
     /**
      * @brief Element-wise scalar addition (scalar + Matrix).
      */
-    template <typename U>
-        requires(std::is_arithmetic_v<U>)
+    template <Numeric U>
     [[nodiscard]] friend auto operator+(const U &scalar,
                                         const Matrix<T> &matrix) {
         return matrix + scalar;
@@ -346,7 +348,7 @@ template <typename T> class Matrix {
      * @return Matrix of the common, promoted type.
      * @throws std::invalid_argument if dimensions do not match.
      */
-    template <typename U>
+    template <Numeric U>
     [[nodiscard]] auto operator-(const Matrix<U> &other) const {
         if (_rows != other.row_count() || _cols != other.column_count()) {
             throw std::invalid_argument(
@@ -376,9 +378,7 @@ template <typename T> class Matrix {
      * @tparam U An arithmetic scalar type.
      * @return Matrix of the common, promoted type.
      */
-    template <typename U>
-        requires(std::is_arithmetic_v<U>)
-    [[nodiscard]] auto operator-(const U &scalar) const {
+    template <Numeric U> [[nodiscard]] auto operator-(const U &scalar) const {
         using R = std::common_type_t<T, U>;
 
         Matrix<R> result(_rows, _cols);
@@ -403,8 +403,7 @@ template <typename T> class Matrix {
      * @tparam U An arithmetic scalar type.
      * @return Matrix of the common, promoted type.
      */
-    template <typename U>
-        requires(std::is_arithmetic_v<U>)
+    template <Numeric U>
     [[nodiscard]] friend auto operator-(const U &scalar,
                                         const Matrix<T> &matrix) {
         using R = std::common_type_t<T, U>;
@@ -435,7 +434,7 @@ template <typename T> class Matrix {
      * (A.cols != B.rows).
      */
     // TODO: Check for optimization
-    template <typename U>
+    template <Numeric U>
     [[nodiscard]] auto operator*(const Matrix<U> &other) const {
         if (_cols != other.row_count()) {
             throw std::invalid_argument(
@@ -488,10 +487,9 @@ template <typename T> class Matrix {
      * @tparam U An arithmetic scalar type.
      * @return Matrix of the common, promoted type.
      */
-    template <typename U>
-        requires(std::is_arithmetic_v<U>)
-    [[nodiscard]] auto operator*(const U &scalar) const {
+    template <Numeric U> [[nodiscard]] auto operator*(const U &scalar) const {
         using R = std::common_type_t<T, U>;
+
         Matrix<R> result(_rows, _cols);
 
         std::transform(_data.begin(), _data.end(), result.data().begin(),
@@ -505,8 +503,7 @@ template <typename T> class Matrix {
     /**
      * @brief Element-wise scalar multiplication (scalar * Matrix).
      */
-    template <typename U>
-        requires(std::is_arithmetic_v<U>)
+    template <Numeric U>
     [[nodiscard]] friend auto operator*(const U &scalar,
                                         const Matrix<T> &matrix) {
         return matrix * scalar;
@@ -519,7 +516,7 @@ template <typename T> class Matrix {
      * @throws std::invalid_argument if vector is not a column vector or
      * dimensions do not match.
      */
-    template <typename U>
+    template <Numeric U>
     [[nodiscard]] auto operator*(const Vector<U> &other) const {
         using R = std::common_type_t<T, U>;
 
@@ -557,9 +554,7 @@ template <typename T> class Matrix {
      * @tparam U An arithmetic scalar type.
      * @return Matrix of the common, promoted type.
      */
-    template <typename U>
-        requires(std::is_arithmetic_v<U>)
-    [[nodiscard]] auto operator/(const U &scalar) const {
+    template <Numeric U> [[nodiscard]] auto operator/(const U &scalar) const {
         // Note: This promotes T to double if T is int, which is
         // usually desired for division.
         using R = std::common_type_t<T, U, double>;
@@ -571,8 +566,7 @@ template <typename T> class Matrix {
      * @tparam U An arithmetic scalar type.
      * @return Matrix of the common, promoted type.
      */
-    template <typename U>
-        requires(std::is_arithmetic_v<U>)
+    template <Numeric U>
     [[nodiscard]] friend auto operator/(const U &scalar,
                                         const Matrix<T> &matrix) {
         using R = std::common_type_t<T, U, double>;
@@ -587,9 +581,7 @@ template <typename T> class Matrix {
     }
 
     /** @brief In-place element-wise scalar addition. */
-    template <typename U>
-        requires(std::is_arithmetic_v<U>)
-    auto &operator+=(const U &scalar) {
+    template <Numeric U> auto &operator+=(const U &scalar) {
         std::transform(
             _data.begin(), _data.end(), _data.begin(),
             [scalar](T val) { return static_cast<T>(val + scalar); });
@@ -597,9 +589,7 @@ template <typename T> class Matrix {
     }
 
     /** @brief In-place element-wise scalar subtraction. */
-    template <typename U>
-        requires(std::is_arithmetic_v<U>)
-    auto &operator-=(const U &scalar) {
+    template <Numeric U> auto &operator-=(const U &scalar) {
         std::transform(
             _data.begin(), _data.end(), _data.begin(),
             [scalar](T val) { return static_cast<T>(val - scalar); });
@@ -607,9 +597,7 @@ template <typename T> class Matrix {
     }
 
     /** @brief In-place element-wise scalar multiplication. */
-    template <typename U>
-        requires(std::is_arithmetic_v<U>)
-    auto &operator*=(const U &scalar) {
+    template <Numeric U> auto &operator*=(const U &scalar) {
         std::transform(
             _data.begin(), _data.end(), _data.begin(),
             [scalar](T val) { return static_cast<T>(val * scalar); });
@@ -617,9 +605,7 @@ template <typename T> class Matrix {
     }
 
     /** @brief In-place element-wise scalar division. */
-    template <typename U>
-        requires(std::is_arithmetic_v<U>)
-    auto &operator/=(const U &scalar) {
+    template <Numeric U> auto &operator/=(const U &scalar) {
         std::transform(
             _data.begin(), _data.end(), _data.begin(),
             [scalar](T val) { return static_cast<T>(val / scalar); });
@@ -634,7 +620,7 @@ template <typename T> class Matrix {
      */
     void print() const {
         if constexpr (std::is_floating_point_v<T>) {
-            std::cout << std::fixed << std::setprecision(5);
+            std::cout << std::fixed << std::setprecision(FLOAT_PRECISION);
         }
         for (size_t i = 0; i < _rows; ++i) {
             for (size_t j = 0; j < _cols; ++j) {
@@ -647,7 +633,7 @@ template <typename T> class Matrix {
 
 } // namespace maf::math
 
-#include "CholeskyDecomposition.hpp"
+#include "Cholesky.hpp"
 #include "MatrixCheckers.hpp"
 #include "MatrixConstructors.hpp"
 #include "MatrixFactories.hpp"

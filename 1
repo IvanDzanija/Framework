@@ -4,20 +4,6 @@
 #include "Matrix.hpp"
 
 namespace maf::math {
-// Cast and create a new matrix
-template <Numeric T>
-template <Numeric U>
-[[nodiscard]] Matrix<U> Matrix<T>::cast() const {
-    // Replace this with explicit constructor casting when implemented
-    Matrix<U> result(_rows, _cols);
-
-    const size_t n = _data.size();
-
-    for (size_t i = 0; i < n; ++i) {
-        result.data().at(i) = static_cast<U>(_data.at(i));
-    }
-    return result;
-}
 
 // Inplace fill
 template <Numeric T> void Matrix<T>::fill(T value) {

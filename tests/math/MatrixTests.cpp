@@ -1,8 +1,6 @@
 #include "ITest.hpp"
 #include "MafLib/main/GlobalHeader.hpp"
-#include "MafLib/math/linalg/CholeskyDecomposition.hpp"
 #include "MafLib/math/linalg/Matrix.hpp"
-#include "MafLib/math/linalg/PLU.hpp"
 #include "MafLib/math/linalg/Vector.hpp"
 
 using namespace maf;
@@ -219,12 +217,120 @@ class MatrixTests : public ITest {
     //=============================================================================
     // MATRIX METHODS TESTS
     //=============================================================================
+    void should_cast_int_matrix_to_float() {
+        math::Matrix<int> m_int(2, 2, {1, 2, 3, 4});
+        auto m_float = m_int.cast<float>();
+
+        ASSERT_TRUE(m_float.row_count() == 2);
+        ASSERT_TRUE(m_float.column_count() == 2);
+        ASSERT_TRUE(is_close(m_float.at(0, 0) + 0.5f, 1.5f));
+    }
+
+    void should_cast_float_matrix_to_int() {
+        math::Matrix<float> m_float(2, 3, {1.7f, 2.3f, 3.9f, 4.1f, 5.5f, 6.8f});
+        auto m_int = m_float.cast<int>();
+
+        ASSERT_TRUE(m_int.row_count() == 2);
+        ASSERT_TRUE(m_int.column_count() == 3);
+        ASSERT_TRUE(m_int.at(0, 0) == 1);
+        ASSERT_TRUE(m_int.at(0, 1) == 2);
+        ASSERT_TRUE(m_int.at(0, 2) == 3);
+        ASSERT_TRUE(m_int.at(1, 0) == 4);
+        ASSERT_TRUE(m_int.at(1, 1) == 5);
+        ASSERT_TRUE(m_int.at(1, 2) == 6);
+    }
+
+    void should_cast_int_matrix_to_double() {
+        math::Matrix<int> m_int(3, 3, {1, 2, 3, 4, 5, 6, 7, 8, 9});
+        auto m_double = m_int.cast<double>();
+
+        ASSERT_TRUE(m_double.row_count() == 3);
+        ASSERT_TRUE(m_double.column_count() == 3);
+        for (size_t i = 0; i < 3; ++i) {
+            for (size_t j = 0; j < 3; ++j) {
+                ASSERT_TRUE(
+                    is_close(m_double.at(i, j) + 0.5f,
+                             static_cast<double>(m_int.at(i, j)) + 0.5f));
+            }
+        }
+    }
+
+    void should_preserve_matrix_properties_after_cast() {
+        auto m_int = math::identity_matrix<int>(4);
+        auto m_double = m_int.cast<double>();
+
+        ASSERT_TRUE(m_double.is_square());
+        ASSERT_TRUE(m_double.is_diagonal());
+        ASSERT_TRUE(m_double.is_symmetric());
+        ASSERT_TRUE(m_double.is_upper_triangular());
+        ASSERT_TRUE(m_double.is_lower_triangular());
+    }
+
+    void should_cast_negative_values_correctly() {
+        math::Matrix<int> m_int(2, 2, {-1, -2, -3, -4});
+        auto m_float = m_int.cast<float>();
+
+        ASSERT_TRUE(is_close(m_float.at(0, 0), -1.0f));
+        ASSERT_TRUE(is_close(m_float.at(0, 1), -2.0f));
+        ASSERT_TRUE(is_close(m_float.at(1, 0), -3.0f));
+        ASSERT_TRUE(is_close(m_float.at(1, 1), -4.0f));
+    }
+
+    void should_cast_large_matrix_efficiently() {
+        const size_t n = 100;
+        math::Matrix<int> m_int(n, n);
+
+        for (size_t i = 0; i < n; ++i) {
+            for (size_t j = 0; j < n; ++j) {
+                m_int.at(i, j) = static_cast<int>(i * n + j);
+            }
+        }
+
+        auto start = std::chrono::high_resolution_clock::now();
+        auto m_double = m_int.cast<double>();
+        auto end = std::chrono::high_resolution_clock::now();
+        std::chrono::duration<double> elapsed = end - start;
+
+        ASSERT_TRUE(is_close(m_double.at(0, 0), 0.0));
+        ASSERT_TRUE(is_close(m_double.at(10, 10), 1010.0));
+        ASSERT_TRUE(is_close(m_double.at(n - 1, n - 1),
+                             static_cast<double>((n - 1) * n + (n - 1))));
+
+        std::cout << "Cast (" << n << "x" << n
+                  << ") elapsed time: " << elapsed.count() << " seconds\n";
+    }
+
+    void should_allow_chaining_cast_with_operations() {
+        math::Matrix<int> m_int(2, 2, {1, 2, 3, 4});
+
+        auto result = m_int.cast<double>() * 2.5;
+
+        ASSERT_TRUE(is_close(result.at(0, 0), 2.5));
+        ASSERT_TRUE(is_close(result.at(0, 1), 5.0));
+        ASSERT_TRUE(is_close(result.at(1, 0), 7.5));
+        ASSERT_TRUE(is_close(result.at(1, 1), 10.0));
+    }
+
+    void should_cast_after_matrix_operations() {
+        math::Matrix<int> a(2, 2, {1, 2, 3, 4});
+        math::Matrix<int> b(2, 2, {5, 6, 7, 8});
+
+        auto c = (a + b).cast<float>();
+
+        ASSERT_TRUE(is_close(c.at(0, 0), 6.0f));
+        ASSERT_TRUE(is_close(c.at(0, 1), 8.0f));
+        ASSERT_TRUE(is_close(c.at(1, 0), 10.0f));
+        ASSERT_TRUE(is_close(c.at(1, 1), 12.0f));
+    }
+
     void should_fill_matrix_with_value() {
         math::Matrix<int> m(2, 3);
         m.fill(9);
-        for (size_t i = 0; i < m.row_count(); ++i)
-            for (size_t j = 0; j < m.column_count(); ++j)
+        for (size_t i = 0; i < m.row_count(); ++i) {
+            for (size_t j = 0; j < m.column_count(); ++j) {
                 ASSERT_TRUE(m.at(i, j) == 9);
+            }
+        }
     }
 
     void should_make_identity_matrix() {
@@ -232,10 +338,11 @@ class MatrixTests : public ITest {
         m1.make_identity();
         for (size_t i = 0; i < 3; ++i) {
             for (size_t j = 0; j < 3; ++j) {
-                if (i == j)
+                if (i == j) {
                     ASSERT_TRUE(m1.at(i, j) == 1);
-                else
+                } else {
                     ASSERT_TRUE(m1.at(i, j) == 0);
+                }
             }
         }
     }
@@ -661,6 +768,14 @@ class MatrixTests : public ITest {
         should_return_false_for_non_singular_matrix();
         should_return_true_for_singular_matrix();
         should_return_false_for_non_singular_matrix();
+        should_cast_int_matrix_to_float();
+        should_cast_float_matrix_to_int();
+        should_cast_int_matrix_to_double();
+        should_preserve_matrix_properties_after_cast();
+        should_cast_negative_values_correctly();
+        should_cast_large_matrix_efficiently();
+        should_allow_chaining_cast_with_operations();
+        should_cast_after_matrix_operations();
         should_fill_matrix_with_value();
         should_make_identity_matrix();
         should_transpose_square_matrix_in_place();

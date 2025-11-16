@@ -1,56 +1,33 @@
-#ifndef MATRIX_PLU_H
-#define MATRIX_PLU_H
+#ifndef PLU_H
+#define PLU_H
 
 #pragma once
 #include "Matrix.hpp"
 
 namespace maf::math {
+namespace detail {
 /**
- * @brief Performs a blocked PLU decomposition on a square matrix.
+ * @brief Internal implementation of Cholesky decomposition.
  *
- * This function computes the PLU factorization (PA = LU) for a given square
- * matrix A, where:
- * - P is a permutation matrix (represented by a vector)
- * - L is a unit lower triangular matrix
- * - U is an upper triangular matrix
- *
- * The decomposition is computed using a right-looking blocked algorithm for
- * improved cache performance. It employs partial pivoting (row swapping) to
- * ensure numerical stability. The implementation is parallelized using OpenMP
- * for further performance gains on multi-core systems.
- *
- * More information:
- * https://en.wikipedia.org/wiki/LU_decomposition#LU_factorization_with_partial_pivoting
- *
- * @param matrix The const reference to the square input matrix (A) to
- * decompose.
- * @return A std::tuple containing:
- * 1. (std::vector<uint32>) The final permutaion of rows.
- * 2. (Matrix<T>) The unit lower triangular matrix (L).
- * 3. (Matrix<T>) The upper triangular matrix (U).
- *
- * @throws std::invalid_argument if the input matrix is not square.
- *
- * @version 1.0 (Blocked & Parallelized)
- * @since 2025
+ * Computes L where A = LL^T for symmetric positive definite matrix A.
+ * Uses blocked algorithm with OpenMP parallelization.
  */
-template <typename T>
+template <std::floating_point T>
 [[nodiscard]] std::tuple<std::vector<uint32>, Matrix<T>, Matrix<T>>
-plu(const Matrix<T> &matrix) {
-    if (!matrix.is_square()) {
+_plu(Matrix<T> &&_U) {
+    if (!_U.is_square()) {
         throw std::invalid_argument(
             "Matrix must be square for PLU decomposition!");
     }
 
-    const size_t n = matrix.row_count();
+    const size_t n = _U.row_count();
     if (n == 0) {
         return {std::vector<uint32>(), Matrix<T>(), Matrix<T>()};
     }
 
     std::vector<uint32> P(n);
-    // Change this to ranges::iota when Apple Clang fully supports c++23
+    // TODO: Change this to ranges::iota when Apple Clang fully supports c++23
     std::iota(P.begin(), P.end(), 0);
-    Matrix<T> _U = matrix;
     Matrix<T> L = identity_matrix<T>(n);
 
     // Conceptual block matrix:
@@ -167,6 +144,50 @@ plu(const Matrix<T> &matrix) {
     return std::make_tuple(std::move(P), std::move(L), std::move(U));
 }
 
+} // namespace detail
+/**
+ * @brief Performs a blocked PLU decomposition on a square matrix.
+ *
+ * This function computes the PLU factorization (PA = LU) for a given square
+ * matrix A, where:
+ * - P is a permutation matrix (represented by a vector)
+ * - L is a unit lower triangular matrix
+ * - U is an upper triangular matrix
+ *
+ * The decomposition is computed using a right-looking blocked algorithm for
+ * improved cache performance. It employs partial pivoting (row swapping) to
+ * ensure numerical stability. The implementation is parallelized using OpenMP
+ * for further performance gains on multi-core systems.
+ *
+ * More information:
+ * https://en.wikipedia.org/wiki/LU_decomposition#LU_factorization_with_partial_pivoting
+ *
+ * @param matrix The const reference to the square input matrix (A) to
+ * decompose.
+ * @return A std::tuple containing:
+ * 1. (std::vector<uint32>) The final permutaion of rows.
+ * 2. (Matrix<T>) The unit lower triangular matrix (L).
+ * 3. (Matrix<T>) The upper triangular matrix (U).
+ *
+ * @throws std::invalid_argument if the input matrix is not square.
+ *
+ * @version 1.0 (Blocked & Parallelized)
+ * @since 2025
+ */
+template <typename ResultType = double, Numeric T>
+[[nodiscard]] std::tuple<std::vector<uint32>, Matrix<ResultType>,
+                         Matrix<ResultType>>
+plu(const Matrix<T> &matrix) {
+    static_assert(std::is_floating_point_v<ResultType>,
+                  "PLU result type must be floating point!");
+
+    if constexpr (std::is_same_v<T, ResultType>) {
+        return detail::_plu(Matrix<ResultType>(matrix));
+    } else {
+        return detail::_plu(matrix.template cast<ResultType>());
+    }
+}
+
 } // namespace maf::math
 
-#endif // MATRIX_PLU_H
+#endif // PLU_H
