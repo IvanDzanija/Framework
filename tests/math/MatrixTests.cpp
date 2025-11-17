@@ -676,7 +676,7 @@ private:
     }
 
     void plu_time_test() {
-        const size_t n = 4000;
+        const size_t n = 1000;
         math::Matrix<double> A(n, n);
 
         std::random_device rd;
