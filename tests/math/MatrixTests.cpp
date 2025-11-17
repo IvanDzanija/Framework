@@ -5,9 +5,9 @@
 
 using namespace maf;
 using namespace std::chrono;
-
+namespace maf::test {
 class MatrixTests : public ITest {
-  private:
+private:
     //=============================================================================
     // MATRIX CONSTRUCTORS TESTS
     //=============================================================================
@@ -27,7 +27,7 @@ class MatrixTests : public ITest {
         bool thrown = false;
         try {
             math::Matrix<double> m(0, 3);
-        } catch (const std::invalid_argument &e) {
+        } catch (const std::invalid_argument& e) {
             thrown = true;
         }
         ASSERT_TRUE(thrown);
@@ -48,7 +48,7 @@ class MatrixTests : public ITest {
         bool thrown = false;
         try {
             math::Matrix<int> m(2, 2, nullptr);
-        } catch (const std::invalid_argument &e) {
+        } catch (const std::invalid_argument& e) {
             thrown = true;
         }
         ASSERT_TRUE(thrown);
@@ -70,7 +70,7 @@ class MatrixTests : public ITest {
         bool thrown = false;
         try {
             math::Matrix<int> m(2, 2, data);
-        } catch (const std::invalid_argument &e) {
+        } catch (const std::invalid_argument& e) {
             thrown = true;
         }
         ASSERT_TRUE(thrown);
@@ -90,7 +90,7 @@ class MatrixTests : public ITest {
         bool thrown = false;
         try {
             math::Matrix<int> m(2, 2, data);
-        } catch (const std::invalid_argument &e) {
+        } catch (const std::invalid_argument& e) {
             thrown = true;
         }
         ASSERT_TRUE(thrown);
@@ -114,7 +114,7 @@ class MatrixTests : public ITest {
         bool thrown = false;
         try {
             math::Matrix<int> m(2, 2, {1, 2, 3});
-        } catch (const std::invalid_argument &e) {
+        } catch (const std::invalid_argument& e) {
             thrown = true;
         }
         ASSERT_TRUE(thrown);
@@ -124,8 +124,7 @@ class MatrixTests : public ITest {
     // MATRIX CHECKERS TESTS
     //=============================================================================
     void should_return_true_for_square_matrix() {
-        std::array<float, 9> data1 = {1.1, 2.2, 3.3, 4.4, 5.5,
-                                      6.6, 7.7, 8.8, 9.9};
+        std::array<float, 9> data1 = {1.1, 2.2, 3.3, 4.4, 5.5, 6.6, 7.7, 8.8, 9.9};
         std::array<float, 6> data2 = {1.0, 2.0, 3.0, 4.0, 5.0, 6.0};
         math::Matrix<float> m1(3, 3, data1);
         math::Matrix<float> m2(2, 3, data2);
@@ -134,11 +133,9 @@ class MatrixTests : public ITest {
     }
 
     void should_return_true_for_symmetric_matrix() {
-        std::array<float, 9> data1 = {1.1, 1.2, 1.3, 1.2, 2.2,
-                                      2.3, 1.3, 2.3, 3.3};
+        std::array<float, 9> data1 = {1.1, 1.2, 1.3, 1.2, 2.2, 2.3, 1.3, 2.3, 3.3};
         std::array<float, 6> data2 = {1.0, 2.0, 3.0, 2.0, 4.0, 5.0};
-        std::array<float, 9> data3 = {1.1, 0.0, 1.3, 1.2, 2.2,
-                                      2.3, 1.3, 2.3, 3.3};
+        std::array<float, 9> data3 = {1.1, 0.0, 1.3, 1.2, 2.2, 2.3, 1.3, 2.3, 3.3};
         math::Matrix<float> m1(3, 3, data1);
         math::Matrix<float> m2(2, 3, data2);
         math::Matrix<float> m3(3, 3, data3);
@@ -148,12 +145,9 @@ class MatrixTests : public ITest {
     }
 
     void should_return_true_for_triangular_matrix() {
-        std::array<float, 9> data1 = {1.1, 1.2, 1.3,  0.0, 2.2,
-                                      2.3, 0.0, 1e-9, 3.3};
-        std::array<float, 9> data2 = {1.1, 0.0, 0.0,  1.5, 2.2,
-                                      0.0, 0.0, 1e-9, 3.3};
-        std::array<float, 9> data3 = {1.1, 0.0, 0.0, 0.0, 0.0,
-                                      0.0, 0.0, 0.0, 3.3};
+        std::array<float, 9> data1 = {1.1, 1.2, 1.3, 0.0, 2.2, 2.3, 0.0, 1e-9, 3.3};
+        std::array<float, 9> data2 = {1.1, 0.0, 0.0, 1.5, 2.2, 0.0, 0.0, 1e-9, 3.3};
+        std::array<float, 9> data3 = {1.1, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 3.3};
         math::Matrix<float> m1(3, 3, data1);
         math::Matrix<float> m2(3, 3, data2);
         math::Matrix<float> m3(3, 3, data3);
@@ -167,8 +161,7 @@ class MatrixTests : public ITest {
     void should_return_true_for_diagonal_matrix() {
         std::array<float, 9> data1 = {1.1, 0, 0, 0, 2.2, 0, 0.0, 1e-9, 3.3};
         std::array<float, 9> data2 = {1.1, 0.0, 0.0, 1, 2.2, 0.0, 0.0, 0, 3.3};
-        std::array<float, 9> data3 = {1.1, 0.0, 0.0, 0.0, 0.0,
-                                      0.0, 0.0, 0.0, 3.3};
+        std::array<float, 9> data3 = {1.1, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 3.3};
         math::Matrix<float> m1(3, 3, data1);
         math::Matrix<float> m2(3, 3, data2);
         math::Matrix<float> m3(3, 3, data3);
@@ -206,11 +199,10 @@ class MatrixTests : public ITest {
     }
 
     void should_return_false_for_big_non_singular_matrix() {
-        math::Matrix<double> A(8, 8, {1, 0, 0, 0, 0,  0, 0, 0, 1,  1, 1, 1, 0,
-                                      0, 0, 0, 0, 1,  2, 3, 0, -1, 0, 0, 0, 0,
-                                      1, 3, 0, 0, -1, 0, 0, 0, 0,  0, 1, 0, 0,
-                                      0, 0, 0, 0, 0,  1, 1, 1, 1,  0, 0, 1, 0,
-                                      0, 0, 0, 0, 0,  0, 0, 0, 0,  0, 1, 3});
+        math::Matrix<double> A(
+            8, 8, {1, 0, 0, 0, 0, 0, 0, 0, 1,  1, 1, 1, 0, 0, 0, 0, 0, 1, 2, 3, 0, -1,
+                   0, 0, 0, 0, 1, 3, 0, 0, -1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0,
+                   1, 1, 1, 1, 0, 0, 1, 0, 0,  0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 3});
         ASSERT_TRUE(!A.is_singular());
     }
 
@@ -248,9 +240,8 @@ class MatrixTests : public ITest {
         ASSERT_TRUE(m_double.column_count() == 3);
         for (size_t i = 0; i < 3; ++i) {
             for (size_t j = 0; j < 3; ++j) {
-                ASSERT_TRUE(
-                    is_close(m_double.at(i, j) + 0.5f,
-                             static_cast<double>(m_int.at(i, j)) + 0.5f));
+                ASSERT_TRUE(is_close(m_double.at(i, j) + 0.5f,
+                                     static_cast<double>(m_int.at(i, j)) + 0.5f));
             }
         }
     }
@@ -296,8 +287,8 @@ class MatrixTests : public ITest {
         ASSERT_TRUE(is_close(m_double.at(n - 1, n - 1),
                              static_cast<double>((n - 1) * n + (n - 1))));
 
-        std::cout << "Cast (" << n << "x" << n
-                  << ") elapsed time: " << elapsed.count() << " seconds\n";
+        std::cout << "Cast (" << n << "x" << n << ") elapsed time: " << elapsed.count()
+                  << " seconds\n";
     }
 
     void should_allow_chaining_cast_with_operations() {
@@ -451,7 +442,7 @@ class MatrixTests : public ITest {
         math::Matrix<float> a(2, 2, {1.5f, 2.5f, 3.5f, 4.5f});
         math::Matrix<int> b(2, 2, {10, 20, 30, 40});
 
-        a += b; // a is modified
+        a += b;  // a is modified
 
         ASSERT_TRUE(is_close(a.at(0, 0), 11.5f));
         ASSERT_TRUE(is_close(a.at(0, 1), 22.5f));
@@ -463,7 +454,7 @@ class MatrixTests : public ITest {
         math::Matrix<float> a(2, 2, {11.5f, 22.5f, 33.5f, 44.5f});
         math::Matrix<int> b(2, 2, {10, 20, 30, 40});
 
-        a -= b; // a is modified
+        a -= b;  // a is modified
 
         ASSERT_TRUE(is_close(a.at(0, 0), 1.5f));
         ASSERT_TRUE(is_close(a.at(0, 1), 2.5f));
@@ -530,10 +521,12 @@ class MatrixTests : public ITest {
         math::Matrix<int> a(2, 3, {1, 2, 3, 4, 5, 6});
         math::Matrix<double> b(3, 2, {0.5, 1.5, -1.0, 2.0, 0.0, 1.0});
 
-        math::Matrix<double> expected(
-            2, 2,
-            {1 * 0.5 + 2 * (-1.0) + 3 * 0.0, 1 * 1.5 + 2 * 2.0 + 3 * 1.0,
-             4 * 0.5 + 5 * (-1.0) + 6 * 0.0, 4 * 1.5 + 5 * 2.0 + 6 * 1.0});
+        math::Matrix<double> expected(2,
+                                      2,
+                                      {1 * 0.5 + 2 * (-1.0) + 3 * 0.0,
+                                       1 * 1.5 + 2 * 2.0 + 3 * 1.0,
+                                       4 * 0.5 + 5 * (-1.0) + 6 * 0.0,
+                                       4 * 1.5 + 5 * 2.0 + 6 * 1.0});
 
         auto result = a * b;
         ASSERT_TRUE(result.row_count() == 2 && result.column_count() == 2);
@@ -546,14 +539,12 @@ class MatrixTests : public ITest {
 
     void should_multiply_matrix_and_vector() {
         math::Matrix<float> m(2, 3, {1.0, 0.5, -2.0, 4.0, 1.0, 3.0});
-        math::Vector<int> v(3, std::vector<int>{2, 4, 6},
-                            math::Vector<int>::COLUMN);
+        math::Vector<int> v(3, std::vector<int>{2, 4, 6}, math::Vector<int>::COLUMN);
 
-        math::Vector<float> expected(
-            2,
-            std::vector<float>{1.0 * 2 + 0.5 * 4 + (-2.0) * 6,
-                               4.0 * 2 + 1.0 * 4 + 3.0 * 6},
-            math::Vector<float>::COLUMN);
+        math::Vector<float> expected(2,
+                                     std::vector<float>{1.0 * 2 + 0.5 * 4 + (-2.0) * 6,
+                                                        4.0 * 2 + 1.0 * 4 + 3.0 * 6},
+                                     math::Vector<float>::COLUMN);
 
         auto result = m * v;
         ASSERT_TRUE(result.size() == 2);
@@ -592,7 +583,7 @@ class MatrixTests : public ITest {
         bool thrown = false;
         try {
             auto [P, L, U] = plu(m);
-        } catch (const std::invalid_argument &e) {
+        } catch (const std::invalid_argument& e) {
             thrown = true;
         }
         ASSERT_TRUE(thrown);
@@ -603,7 +594,7 @@ class MatrixTests : public ITest {
         bool thrown = false;
         try {
             auto [p, L, U] = math::plu(m);
-        } catch (const std::runtime_error &e) {
+        } catch (const std::runtime_error& e) {
             thrown = true;
         }
         ASSERT_TRUE(thrown);
@@ -685,7 +676,7 @@ class MatrixTests : public ITest {
     }
 
     void plu_time_test() {
-        const size_t n = 1000;
+        const size_t n = 4000;
         math::Matrix<double> A(n, n);
 
         std::random_device rd;
@@ -732,8 +723,7 @@ class MatrixTests : public ITest {
     }
 
     void should_decompose_diagonal_matrix() {
-        math::Matrix<double> D(3, 3,
-                               {9.0, 0.0, 0.0, 0.0, 16.0, 0.0, 0.0, 0.0, 25.0});
+        math::Matrix<double> D(3, 3, {9.0, 0.0, 0.0, 0.0, 16.0, 0.0, 0.0, 0.0, 25.0});
         math::Matrix<double> L = cholesky(D);
         math::Matrix<double> expectedL(
             3, 3, {3.0, 0.0, 0.0, 0.0, 4.0, 0.0, 0.0, 0.0, 5.0});
@@ -741,8 +731,7 @@ class MatrixTests : public ITest {
     }
 
     void should_reconstruct_from_random_b_times_b_t() {
-        math::Matrix<double> B(3, 3,
-                               {1.0, 2.0, 3.0, 0.5, -1.0, 2.0, 4.0, 0.0, 1.0});
+        math::Matrix<double> B(3, 3, {1.0, 2.0, 3.0, 0.5, -1.0, 2.0, 4.0, 0.0, 1.0});
         math::Matrix<double> A = B * B.transposed();
         ASSERT_TRUE(A.is_symmetric());
         ASSERT_TRUE(A.is_positive_definite());
@@ -764,7 +753,7 @@ class MatrixTests : public ITest {
         bool thrown = false;
         try {
             auto L = cholesky(A);
-        } catch (const std::invalid_argument &e) {
+        } catch (const std::invalid_argument& e) {
             thrown = true;
         }
         ASSERT_TRUE(thrown);
@@ -776,7 +765,7 @@ class MatrixTests : public ITest {
         bool thrown = false;
         try {
             auto L = cholesky(A);
-        } catch (const std::invalid_argument &e) {
+        } catch (const std::invalid_argument& e) {
             thrown = true;
         }
         ASSERT_TRUE(thrown);
@@ -797,8 +786,7 @@ class MatrixTests : public ITest {
 
     void should_preserve_float_type_in_cholesky() {
         math::Matrix<float> m_float(
-            3, 3,
-            {4.0f, 12.0f, -16.0f, 12.0f, 37.0f, -43.0f, -16.0f, -43.0f, 98.0f});
+            3, 3, {4.0f, 12.0f, -16.0f, 12.0f, 37.0f, -43.0f, -16.0f, -43.0f, 98.0f});
         std::cout << "SAD BI TREBP" << std::endl;
         auto L = cholesky(m_float);
 
@@ -837,8 +825,7 @@ class MatrixTests : public ITest {
 
     void should_explicitly_convert_float_to_double_in_cholesky() {
         math::Matrix<float> m_float(
-            3, 3,
-            {4.0f, 12.0f, -16.0f, 12.0f, 37.0f, -43.0f, -16.0f, -43.0f, 98.0f});
+            3, 3, {4.0f, 12.0f, -16.0f, 12.0f, 37.0f, -43.0f, -16.0f, -43.0f, 98.0f});
 
         auto L = cholesky<double>(m_float);
 
@@ -889,13 +876,12 @@ class MatrixTests : public ITest {
         auto L = math::cholesky(A);
         auto end = high_resolution_clock::now();
         duration<double> elapsed = end - start;
-        std::cout << "Cholesky elapsed time: " << elapsed.count()
-                  << " seconds\n";
+        std::cout << "Cholesky elapsed time: " << elapsed.count() << " seconds\n";
         auto C = L * L.transposed();
         ASSERT_TRUE(math::loosely_equal(C, A));
     }
 
-  public:
+public:
     int run_all_tests() override {
         should_construct_empty_matrix_with_zero_rows_and_columns();
         should_construct_empty_matrix_of_given_size();
@@ -966,3 +952,5 @@ class MatrixTests : public ITest {
         return 0;
     }
 };
+
+}  // namespace maf::test

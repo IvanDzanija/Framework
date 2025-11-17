@@ -4,8 +4,9 @@
 #include "MafLib/math/linalg/Vector.hpp"
 
 using namespace maf;
+namespace maf::test {
 class VectorTests : public ITest {
-  private:
+private:
     //=============================================================================
     // VECTOR CONSTRUCTORS TESTS
     //=============================================================================
@@ -29,7 +30,7 @@ class VectorTests : public ITest {
         bool thrown = false;
         try {
             math::Vector<double> v(0);
-        } catch (const std::invalid_argument &e) {
+        } catch (const std::invalid_argument& e) {
             thrown = true;
         }
         ASSERT_TRUE(thrown);
@@ -50,7 +51,7 @@ class VectorTests : public ITest {
         int data[3] = {1, 2, 3};
         try {
             math::Vector<int> v(0, data);
-        } catch (const std::invalid_argument &e) {
+        } catch (const std::invalid_argument& e) {
             thrown = true;
         }
         ASSERT_TRUE(thrown);
@@ -70,7 +71,7 @@ class VectorTests : public ITest {
         bool thrown = false;
         try {
             math::Vector<int> v(3, data);
-        } catch (const std::invalid_argument &e) {
+        } catch (const std::invalid_argument& e) {
             thrown = true;
         }
         ASSERT_TRUE(thrown);
@@ -88,7 +89,7 @@ class VectorTests : public ITest {
         bool thrown = false;
         try {
             math::Vector<int> v(3, std::move(data));
-        } catch (const std::invalid_argument &e) {
+        } catch (const std::invalid_argument& e) {
             thrown = true;
         }
         ASSERT_TRUE(thrown);
@@ -107,7 +108,7 @@ class VectorTests : public ITest {
         bool thrown = false;
         try {
             math::Vector<int> v(3, data);
-        } catch (const std::invalid_argument &e) {
+        } catch (const std::invalid_argument& e) {
             thrown = true;
         }
         ASSERT_TRUE(thrown);
@@ -126,7 +127,7 @@ class VectorTests : public ITest {
         ASSERT_TRUE(v.at(1) == 2);
         ASSERT_TRUE(v[2] == 3);
 
-        const auto &cv = v;
+        const auto& cv = v;
         ASSERT_TRUE(cv[0] == 1);
         ASSERT_TRUE(cv.at(1) == 2);
     }
@@ -138,7 +139,7 @@ class VectorTests : public ITest {
 
         try {
             v.at(3) = 10;
-        } catch (const std::out_of_range &e) {
+        } catch (const std::out_of_range& e) {
             thrown_at = true;
         }
 
@@ -157,7 +158,7 @@ class VectorTests : public ITest {
         }
         ASSERT_TRUE(sum == 60);
 
-        const auto &cv = v;
+        const auto& cv = v;
         int const_sum = std::accumulate(cv.cbegin(), cv.cend(), 0);
         ASSERT_TRUE(const_sum == 60);
     }
@@ -457,7 +458,7 @@ class VectorTests : public ITest {
     //        ASSERT_TRUE(is_close(res[1], 110.0));
     //    }
 
-  public:
+public:
     int run_all_tests() override {
         should_construct_empty_vector_with_zero_size();
         should_construct_vector_of_given_size();
@@ -502,3 +503,5 @@ class VectorTests : public ITest {
         return 0;
     }
 };
+
+}  // namespace maf::test

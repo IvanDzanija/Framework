@@ -1,12 +1,13 @@
 #pragma once
 #include "MafLib/main/GlobalHeader.hpp"
 
+namespace maf::test {
 class ITest {
-  private:
+private:
     uint32 _passed = 0;
     uint32 _failed = 0;
 
-  public:
+public:
     virtual ~ITest() = default;
 
     virtual int run_all_tests() = 0;
@@ -18,12 +19,13 @@ class ITest {
                   << "====================\n";
     }
 
-  protected:
-    void assert_true(bool condition, const std::string &msg, const char *file,
+protected:
+    void assert_true(bool condition,
+                     const std::string& msg,
+                     const char* file,
                      int line) {
         if (!condition) {
-            std::cerr << "[FAIL] " << file << ":" << line << " → " << msg
-                      << std::endl;
+            std::cerr << "[FAIL] " << file << ":" << line << " → " << msg << std::endl;
             ++_failed;
         } else {
             std::cout << "[PASS] " << msg << std::endl;
@@ -33,3 +35,4 @@ class ITest {
 };
 
 #define ASSERT_TRUE(cond) assert_true((cond), __func__, __FILE__, __LINE__)
+}  // namespace maf::test

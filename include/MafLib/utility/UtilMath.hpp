@@ -1,8 +1,10 @@
 #ifndef UTIL_MATH_H
-#define UTIL_MATH_h
+#define UTIL_MATH_H
 #pragma once
 #include "MafLib/main/GlobalHeader.hpp"
+
 namespace maf {
+inline constexpr double EPSILON = 1e-6;
 template <typename T>
 [[nodiscard]] bool is_close(T v1, T v2, double epsilon = EPSILON) {
     return std::abs(v1 - v2) < epsilon;

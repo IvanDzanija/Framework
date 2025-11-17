@@ -1,5 +1,6 @@
 #ifndef GLOBALHEADER_HPP
 #define GLOBALHEADER_HPP
+
 #pragma once
 #include <omp.h>
 

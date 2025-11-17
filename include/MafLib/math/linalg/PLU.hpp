@@ -16,8 +16,7 @@ template <std::floating_point T>
 [[nodiscard]] std::tuple<std::vector<uint32>, Matrix<T>, Matrix<T>> _plu(
     Matrix<T>&& _U) {
     if (!_U.is_square()) {
-        throw std::invalid_argument(
-            "Matrix must be square for PLU decomposition!");
+        throw std::invalid_argument("Matrix must be square for PLU decomposition!");
     }
 
     const size_t n = _U.row_count();
@@ -52,8 +51,7 @@ template <std::floating_point T>
             }
 
             if (is_close(max_val, static_cast<T>(0), 1e-9)) {
-                throw std::runtime_error(
-                    "Matrix is singular; pivot is near zero.");
+                throw std::runtime_error("Matrix is singular; pivot is near zero.");
             }
 
             if (pivot_row != i) {
@@ -77,7 +75,7 @@ template <std::floating_point T>
             const T pivot = _U.at(i, i);
             const T inv_pivot = T(1) / pivot;
 
-            #pragma omp parallel for schedule(static) if (n - (i + 1) > 256)
+            #pragma omp parallel for if (n - (i + 1) > 256)
             for (size_t j = i + 1; j < n; ++j) {
                 T mult = _U.at(j, i) * inv_pivot;
                 L.at(j, i) = mult;
@@ -93,8 +91,7 @@ template <std::floating_point T>
         if (block_end < n) {
             // Triangular Solve for U_12
             // We must solve L_11 * U_12 = A_12
-            #pragma omp parallel for schedule(static, 8) if (n - block_end >
-            // 128)
+            #pragma omp parallel for if (n - block_end > 128)
             for (size_t j = block_end; j < n; ++j) {
                 for (size_t i = ib; i < block_end; ++i) {
                     T sum = _U.at(i, j);
@@ -108,15 +105,13 @@ template <std::floating_point T>
             }
 
             // Now we can apply all the elimination effects on the next block
-            #pragma omp parallel for schedule(static, 8) if (n - block_end >
-            // 128)
+            #pragma omp parallel for if (n - block_end >128)
             for (size_t i = block_end; i < n; ++i) {
                 auto target_row = _U.row_span(i).subspan(block_end);
                 const size_t len = target_row.size();
                 for (size_t k = ib; k < block_end; ++k) {
                     const T mult = L.at(i, k);
-                    if (is_close(
-                            mult, static_cast<T>(0), static_cast<T>(1e-9))) {
+                    if (is_close(mult, static_cast<T>(0), static_cast<T>(1e-9))) {
                         continue;
                     }
                     auto pivot_row = _U.row_span(k).subspan(block_end);
@@ -181,10 +176,10 @@ template <std::floating_point T>
 
 template <typename ResultType = void, Numeric T>
 [[nodiscard]] auto plu(const Matrix<T>& matrix) {
-    using TargetType = std::conditional_t<
-        std::is_same_v<ResultType, void>,
-        std::conditional_t<std::is_floating_point_v<T>, T, double>,
-        ResultType>;
+    using TargetType =
+        std::conditional_t<std::is_same_v<ResultType, void>,
+                           std::conditional_t<std::is_floating_point_v<T>, T, double>,
+                           ResultType>;
 
     static_assert(std::is_floating_point_v<TargetType>,
                   "PLU result type must be floating point!");

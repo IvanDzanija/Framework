@@ -3,11 +3,10 @@
 #pragma once
 #include "Matrix.hpp"
 
+namespace maf::math {
 namespace {
 constexpr uint32 FIVE_K = 5000;
 }
-
-namespace maf::math {
 // Checks if elements are exactly equal
 template <Numeric T>
 [[nodiscard]] constexpr bool Matrix<T>::operator==(const Matrix& other) const noexcept {
