@@ -9,7 +9,7 @@ namespace maf::math {
 static constexpr uint8 BLOCK_SIZE = 64;
 static constexpr uint8 FLOAT_PRECISION = 5;
 
-} // namespace maf::math
+}  // namespace maf::math
 
 #include "Matrix.hpp"
 #include "Vector.hpp"

@@ -15,29 +15,35 @@
  * @since 2025
  */
 class ExtendedInt {
-  public:
+public:
     enum class InfinityType : uint8 { PosInf, NegInf };
 
     // Factory methods
-    static ExtendedInt pos_inf() { return {InfinityType::PosInf}; }
-    static ExtendedInt neg_inf() { return {InfinityType::NegInf}; }
+    static ExtendedInt pos_inf() {
+        return {InfinityType::PosInf};
+    }
+    static ExtendedInt neg_inf() {
+        return {InfinityType::NegInf};
+    }
 
     // Constructors
-    ExtendedInt() : _value(0) {} // Default constructor initilizes value to 0
+    ExtendedInt() : _value(0) {}  // Default constructor initilizes value to 0
     ExtendedInt(int value) : _value(value) {}
     ExtendedInt(InfinityType value) : _value(value) {}
 
     // Type checking
-    bool is_inf() const { return std::holds_alternative<InfinityType>(_value); }
-    bool is_finite() const { return std::holds_alternative<int>(_value); }
+    bool is_inf() const {
+        return std::holds_alternative<InfinityType>(_value);
+    }
+    bool is_finite() const {
+        return std::holds_alternative<int>(_value);
+    }
 
     bool is_pos_inf() const {
-        return is_inf() &&
-               std::get<InfinityType>(_value) == InfinityType::PosInf;
+        return is_inf() && std::get<InfinityType>(_value) == InfinityType::PosInf;
     }
     [[nodiscard]] bool is_neg_inf() const {
-        return is_inf() &&
-               std::get<InfinityType>(_value) == InfinityType::NegInf;
+        return is_inf() && std::get<InfinityType>(_value) == InfinityType::NegInf;
     }
 
     // Getters and setters
@@ -48,7 +54,7 @@ class ExtendedInt {
         return std::get<int>(_value);
     }
 
-    ExtendedInt operator+(const ExtendedInt &other) const {
+    ExtendedInt operator+(const ExtendedInt& other) const {
         // finite + finite
         if (is_finite() && other.is_finite()) {
             int a = get_value(), b = other.get_value();
@@ -76,7 +82,7 @@ class ExtendedInt {
         }
     }
 
-    ExtendedInt operator-(const ExtendedInt &other) const {
+    ExtendedInt operator-(const ExtendedInt& other) const {
         // finite + finite
         if (is_finite() && other.is_finite()) {
             int a = get_value(), b = other.get_value();
@@ -103,11 +109,11 @@ class ExtendedInt {
             return {get_value()};
         }
     }
-    bool operator==(const ExtendedInt &other) const {
+    bool operator==(const ExtendedInt& other) const {
         return _value == other._value;
     }
 
-  private:
+private:
     std::variant<int, InfinityType> _value;
 };
 

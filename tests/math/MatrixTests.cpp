@@ -447,6 +447,74 @@ class MatrixTests : public ITest {
         ASSERT_TRUE(e.at(1, 1) == 0.5);
     }
 
+    void should_add_assign_matrix() {
+        math::Matrix<float> a(2, 2, {1.5f, 2.5f, 3.5f, 4.5f});
+        math::Matrix<int> b(2, 2, {10, 20, 30, 40});
+
+        a += b; // a is modified
+
+        ASSERT_TRUE(is_close(a.at(0, 0), 11.5f));
+        ASSERT_TRUE(is_close(a.at(0, 1), 22.5f));
+        ASSERT_TRUE(is_close(a.at(1, 0), 33.5f));
+        ASSERT_TRUE(is_close(a.at(1, 1), 44.5f));
+    }
+
+    void should_subtract_assign_matrix() {
+        math::Matrix<float> a(2, 2, {11.5f, 22.5f, 33.5f, 44.5f});
+        math::Matrix<int> b(2, 2, {10, 20, 30, 40});
+
+        a -= b; // a is modified
+
+        ASSERT_TRUE(is_close(a.at(0, 0), 1.5f));
+        ASSERT_TRUE(is_close(a.at(0, 1), 2.5f));
+        ASSERT_TRUE(is_close(a.at(1, 0), 3.5f));
+        ASSERT_TRUE(is_close(a.at(1, 1), 4.5f));
+    }
+
+    void should_add_assign_scalar() {
+        math::Matrix<int> a(2, 2, {1, 2, 3, 4});
+
+        a += 10;
+
+        ASSERT_TRUE(a.at(0, 0) == 11);
+        ASSERT_TRUE(a.at(0, 1) == 12);
+        ASSERT_TRUE(a.at(1, 0) == 13);
+        ASSERT_TRUE(a.at(1, 1) == 14);
+
+        math::Matrix<double> b(2, 2, {1.5, 2.5, 3.5, 4.5});
+                b += 0.5;
+                ASSERT_TRUE(is_close(b.at(0, 0), 2.0));
+                ASSERT_TRUE(is_close(b.at(0, 1), 3.0));
+                ASSERT_TRUE(is_close(b.at(1, 0), 4.0));
+                ASSERT_TRUE(is_close(b.at(1, 1), 5.0));
+
+                b += 10;
+                ASSERT_TRUE(is_close(b.at(0, 0), 12.0));
+                ASSERT_TRUE(is_close(b.at(1, 1), 15.0));
+    }
+
+    void should_subtract_assign_scalar() {
+        math::Matrix<int> a(2, 2, {11, 12, 13, 14});
+
+        a -= 10;
+
+        ASSERT_TRUE(a.at(0, 0) == 1);
+        ASSERT_TRUE(a.at(0, 1) == 2);
+        ASSERT_TRUE(a.at(1, 0) == 3);
+        ASSERT_TRUE(a.at(1, 1) == 4);
+
+        math::Matrix<double> b(2, 2, {12.0, 13.0, 14.0, 15.0});
+        b -= 0.5;
+        ASSERT_TRUE(is_close(b.at(0, 0), 11.5));
+        ASSERT_TRUE(is_close(b.at(0, 1), 12.5));
+        ASSERT_TRUE(is_close(b.at(1, 0), 13.5));
+        ASSERT_TRUE(is_close(b.at(1, 1), 14.5));
+
+        b -= 10;
+        ASSERT_TRUE(is_close(b.at(0, 0), 1.5));
+        ASSERT_TRUE(is_close(b.at(1, 1), 4.5));
+    }
+
     void should_multiply_matrix_and_scalar() {
         math::Matrix<double> a(2, 2, {1.5, 2.0, -3.0, 4.0});
         auto b = a * 2.0;

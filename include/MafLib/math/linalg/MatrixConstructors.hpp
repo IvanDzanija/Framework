@@ -15,8 +15,7 @@ namespace maf::math {
 template <Numeric T>
 Matrix<T>::Matrix(size_t rows, size_t cols) : _rows(rows), _cols(cols) {
     if (rows == 0 || cols == 0) {
-        throw std::invalid_argument(
-            "Matrix dimensions must be greater than zero.");
+        throw std::invalid_argument("Matrix dimensions must be greater than zero.");
     }
 
     _data.resize(rows * cols);
@@ -24,11 +23,9 @@ Matrix<T>::Matrix(size_t rows, size_t cols) : _rows(rows), _cols(cols) {
 
 // Constructs a matrix from a raw data pointer.
 template <Numeric T>
-Matrix<T>::Matrix(size_t rows, size_t cols, T *data)
-    : _rows(rows), _cols(cols) {
+Matrix<T>::Matrix(size_t rows, size_t cols, T* data) : _rows(rows), _cols(cols) {
     if (rows == 0 || cols == 0) {
-        throw std::invalid_argument(
-            "Matrix dimensions must be greater than zero!");
+        throw std::invalid_argument("Matrix dimensions must be greater than zero!");
     }
     if (data == nullptr) {
         throw std::invalid_argument("Data pointer cannot be null!");
@@ -39,11 +36,10 @@ Matrix<T>::Matrix(size_t rows, size_t cols, T *data)
 
 // Constructs from a std::vector, filled by rows.
 template <Numeric T>
-Matrix<T>::Matrix(size_t rows, size_t cols, const std::vector<T> &data)
+Matrix<T>::Matrix(size_t rows, size_t cols, const std::vector<T>& data)
     : _rows(rows), _cols(cols) {
     if (rows == 0 || cols == 0) {
-        throw std::invalid_argument(
-            "Matrix dimensions must be greater than zero.");
+        throw std::invalid_argument("Matrix dimensions must be greater than zero.");
     }
 
     if (data.size() != rows * cols) {
@@ -55,12 +51,10 @@ Matrix<T>::Matrix(size_t rows, size_t cols, const std::vector<T> &data)
 
 // Constructs from a nested std::vector (vector of vectors).
 template <Numeric T>
-Matrix<T>::Matrix(size_t rows, size_t cols,
-                  const std::vector<std::vector<T>> &data)
+Matrix<T>::Matrix(size_t rows, size_t cols, const std::vector<std::vector<T>>& data)
     : _rows(rows), _cols(cols) {
     if (rows == 0 || cols == 0) {
-        throw std::invalid_argument(
-            "Matrix dimensions must be greater than zero.");
+        throw std::invalid_argument("Matrix dimensions must be greater than zero.");
     }
 
     if (data.size() != rows || data.at(0).size() != cols) {
@@ -78,11 +72,10 @@ Matrix<T>::Matrix(size_t rows, size_t cols,
 // Constructs from a std::array, filled by rows.
 template <Numeric T>
 template <size_t N>
-Matrix<T>::Matrix(size_t rows, size_t cols, const std::array<T, N> &data)
+Matrix<T>::Matrix(size_t rows, size_t cols, const std::array<T, N>& data)
     : _rows(rows), _cols(cols) {
     if (rows == 0 || cols == 0) {
-        throw std::invalid_argument(
-            "Matrix dimensions must be greater than zero.");
+        throw std::invalid_argument("Matrix dimensions must be greater than zero.");
     }
     if (N != rows * cols) {
         throw std::invalid_argument("Data size does not match matrix size.");
@@ -97,8 +90,7 @@ template <Numeric U>
 Matrix<T>::Matrix(size_t rows, size_t cols, std::initializer_list<U> list)
     : _rows(rows), _cols(cols) {
     if (rows == 0 || cols == 0) {
-        throw std::invalid_argument(
-            "Matrix dimensions must be greater than zero.");
+        throw std::invalid_argument("Matrix dimensions must be greater than zero.");
     }
     if (static_cast<size_t>(list.size()) != rows * cols) {
         throw std::invalid_argument("Data size does not match matrix size.");
@@ -106,6 +98,6 @@ Matrix<T>::Matrix(size_t rows, size_t cols, std::initializer_list<U> list)
     _data.assign(list.begin(), list.end());
 }
 
-} // namespace maf::math
+}  // namespace maf::math
 
 #endif

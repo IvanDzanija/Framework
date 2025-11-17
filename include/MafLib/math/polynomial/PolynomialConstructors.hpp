@@ -15,8 +15,7 @@ namespace maf::math {
 template <typename T>
 Polynomial<T>::Polynomial(size_t degree) : _degree(degree) {
     if (degree == 0) {
-        throw std::invalid_argument(
-            "Polynomial degree must be greater than zero.");
+        throw std::invalid_argument("Polynomial degree must be greater than zero.");
     }
 
     _coeffs.resize(degree);
@@ -24,10 +23,9 @@ Polynomial<T>::Polynomial(size_t degree) : _degree(degree) {
 
 // Constructs a polynomial from a raw data pointer.
 template <typename T>
-Polynomial<T>::Polynomial(size_t degree, T *data) : _degree(degree) {
+Polynomial<T>::Polynomial(size_t degree, T* data) : _degree(degree) {
     if (degree == 0) {
-        throw std::invalid_argument(
-            "Polynomial degree must be greater than zero!");
+        throw std::invalid_argument("Polynomial degree must be greater than zero!");
     }
     if (data == nullptr) {
         throw std::invalid_argument("Data pointer cannot be null!");
@@ -38,11 +36,10 @@ Polynomial<T>::Polynomial(size_t degree, T *data) : _degree(degree) {
 
 // Constructs from a std::vector
 template <typename T>
-Polynomial<T>::Polynomial(size_t degree, const std::vector<T> &coeffs)
+Polynomial<T>::Polynomial(size_t degree, const std::vector<T>& coeffs)
     : _degree(degree) {
     if (degree == 0) {
-        throw std::invalid_argument(
-            "Polynomial degree must be greater than zero.");
+        throw std::invalid_argument("Polynomial degree must be greater than zero.");
     }
 
     if (coeffs.size() != degree) {
@@ -56,11 +53,10 @@ Polynomial<T>::Polynomial(size_t degree, const std::vector<T> &coeffs)
 // Constructs from a std::array
 template <typename T>
 template <typename U, size_t N>
-Polynomial<T>::Polynomial(size_t degree, const std::array<U, N> &coeffs)
+Polynomial<T>::Polynomial(size_t degree, const std::array<U, N>& coeffs)
     : _degree(degree) {
     if (degree == 0) {
-        throw std::invalid_argument(
-            "Polynomial degree must be greater than zero.");
+        throw std::invalid_argument("Polynomial degree must be greater than zero.");
     }
 
     if (coeffs.size() != degree) {
@@ -77,8 +73,7 @@ template <typename U>
 Polynomial<T>::Polynomial(size_t degree, std::initializer_list<U> coeffs)
     : _degree(degree) {
     if (degree == 0) {
-        throw std::invalid_argument(
-            "Polynomial degree must be greater than zero.");
+        throw std::invalid_argument("Polynomial degree must be greater than zero.");
     }
 
     if (static_cast<size_t>(coeffs.size()) != degree) {
@@ -88,6 +83,6 @@ Polynomial<T>::Polynomial(size_t degree, std::initializer_list<U> coeffs)
     _coeffs.assign(coeffs.begin(), coeffs.end());
 }
 
-} // namespace maf::math
+}  // namespace maf::math
 
 #endif

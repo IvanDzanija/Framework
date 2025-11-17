@@ -4,7 +4,8 @@
 #include "LinAlg.hpp"
 
 namespace maf::math {
-template <Numeric T> class Vector;
+template <Numeric T>
+class Vector;
 
 /**
  * @brief A general-purpose, row-major, dense matrix class.
@@ -23,47 +24,11 @@ template <Numeric T> class Vector;
  * @version 1.0
  * @since 2025
  */
-template <Numeric T> class Matrix {
-  public:
+template <Numeric T>
+class Matrix {
+public:
     using value_type = T;
-
-  private:
-    size_t _rows;
-    size_t _cols;
-    std::vector<T> _data;
-
-    /**
-     * @brief Internal check if a row/column index is within bounds.
-     * @return true if 0 <= row < _rows and 0 <= col < _cols.
-     */
-    [[nodiscard]] constexpr bool _is_valid_index(size_t row, size_t col) const {
-        return row < _rows && col < _cols;
-    }
-
-    /**
-     * @brief Converts a 2D (row, col) index to a 1D internal vector index.
-     * @throws std::out_of_range if the index is invalid.
-     * @return The 1D index into the _data vector.
-     */
-    [[nodiscard]] constexpr size_t _get_index(size_t row, size_t col) const {
-        if (!_is_valid_index(row, col)) {
-            throw std::out_of_range("Index out of bounds.");
-        }
-        return (row * _cols) + col;
-    }
-
-    /**
-     * @brief Internal helper to invert the sign of all elements in-place.
-     */
-    void _invert_sign() {
-#pragma omp parallel for if (_data.size() > 5000 * 5000)
-        for (size_t i = 0; i < _data.size(); ++i) {
-            _data[i] = -_data[i];
-        }
-    }
-
-  public:
-    // --- Constructors and destructors ---
+    // --- Constructors ---
 
     /**
      * @brief Default constructor. Creates an empty 0x0 matrix.
@@ -87,7 +52,7 @@ template <Numeric T> class Matrix {
      * @throws std::invalid_argument if dimensions are zero or data is
      * nullptr.
      */
-    Matrix(size_t rows, size_t cols, T *data);
+    Matrix(size_t rows, size_t cols, T* data);
 
     /**
      * @brief Constructs from a std::vector, filled by rows.
@@ -97,7 +62,7 @@ template <Numeric T> class Matrix {
      * @throws std::invalid_argument if dimensions are zero or data size
      * does not match.
      */
-    Matrix(size_t rows, size_t cols, const std::vector<T> &data);
+    Matrix(size_t rows, size_t cols, const std::vector<T>& data);
 
     /**
      * @brief Constructs from a nested std::vector (vector of vectors).
@@ -108,7 +73,7 @@ template <Numeric T> class Matrix {
      * @throws std::invalid_argument if dimensions are zero or data shape
      * does not match.
      */
-    Matrix(size_t rows, size_t cols, const std::vector<std::vector<T>> &data);
+    Matrix(size_t rows, size_t cols, const std::vector<std::vector<T>>& data);
 
     /**
      * @brief Constructs from a std::array, filled by rows.
@@ -121,7 +86,7 @@ template <Numeric T> class Matrix {
      * does not match.
      */
     template <size_t N>
-    Matrix(size_t rows, size_t cols, const std::array<T, N> &data);
+    Matrix(size_t rows, size_t cols, const std::array<T, N>& data);
 
     /**
      * @brief Constructs from a std::initializer_list, filled by rows.
@@ -142,35 +107,47 @@ template <Numeric T> class Matrix {
      * data store.
      * @return std::vector<T>&
      */
-    [[nodiscard]] std::vector<T> &data() noexcept { return _data; }
+    [[nodiscard]] std::vector<T>& data() noexcept {
+        return _data;
+    }
 
     /**
      * @brief Gets a const reference to the underlying std::vector data
      * store.
      * @return const std::vector<T>&
      */
-    [[nodiscard]] const std::vector<T> &data() const noexcept { return _data; }
+    [[nodiscard]] const std::vector<T>& data() const noexcept {
+        return _data;
+    }
 
     /** @brief Gets the number of rows. */
-    [[nodiscard]] size_t row_count() const noexcept { return _rows; }
+    [[nodiscard]] size_t row_count() const noexcept {
+        return _rows;
+    }
 
     /** @brief Gets the number of columns. */
-    [[nodiscard]] size_t column_count() const noexcept { return _cols; }
+    [[nodiscard]] size_t column_count() const noexcept {
+        return _cols;
+    }
 
     /** @brief Gets the total number of elements (rows * cols). */
-    [[nodiscard]] size_t size() const noexcept { return _data.size(); }
+    [[nodiscard]] size_t size() const noexcept {
+        return _data.size();
+    }
 
     /**
      * @brief Gets a mutable reference to the element at (row, col).
      * @throws std::out_of_range if the index is invalid.
      */
-    T &at(size_t row, size_t col) { return _data.at(_get_index(row, col)); }
+    T& at(size_t row, size_t col) {
+        return _data.at(_get_index(row, col));
+    }
 
     /**
      * @brief Gets a const reference to the element at (row, col).
      * @throws std::out_of_range if the index is invalid.
      */
-    const T &at(size_t row, size_t col) const {
+    const T& at(size_t row, size_t col) const {
         return _data.at(_get_index(row, col));
     }
 
@@ -227,7 +204,8 @@ template <Numeric T> class Matrix {
     /** @brief Creates new matrix with same elements but different type.
      * @details Defined in MatrixMethods.hpp
      */
-    template <Numeric U> [[nodiscard]] Matrix<U> cast() const;
+    template <Numeric U>
+    [[nodiscard]] Matrix<U> cast() const;
 
     /** @brief Fills the entire matrix with a single value.*/
     void fill(T value);
@@ -260,22 +238,13 @@ template <Numeric T> class Matrix {
      * @brief Checks for exact element-wise equality.
      * @details For floating-point, use `loosely_equal()`.
      */
-    [[nodiscard]] constexpr bool operator==(const Matrix &other) const {
-        if (_rows != other._rows || _cols != other._cols) {
-            return false;
-        }
-        return _data == other._data;
-    }
+    [[nodiscard]] constexpr bool operator==(const Matrix& other) const noexcept;
 
     /**
      * @brief Unary minus. Returns a new matrix with all elements negated.
      * @return `Matrix<T>`
      */
-    [[nodiscard]] auto operator-() const {
-        Matrix<T> result = *this;
-        result._invert_sign();
-        return result;
-    }
+    [[nodiscard]] auto operator-() const noexcept;
 
     /**
      * @brief Element-wise matrix addition.
@@ -284,63 +253,33 @@ template <Numeric T> class Matrix {
      * @throws std::invalid_argument if dimensions do not match.
      */
     template <Numeric U>
-    [[nodiscard]] auto operator+(const Matrix<U> &other) const {
-        if (_rows != other.row_count() || _cols != other.column_count()) {
-            throw std::invalid_argument(
-                "Matrices have to be of same dimensions for addition!");
-        }
-        using R = std::common_type_t<T, U>;
-
-        Matrix<R> result(_rows, _cols);
-        if (_data.size() > 5000 * 5000) {
-#pragma omp parallel for
-            for (size_t i = 0; i < _data.size(); ++i) {
-                result.data()[i] =
-                    static_cast<R>(_data[i]) + static_cast<R>(other.data()[i]);
-            }
-        } else {
-#pragma omp simd
-            for (size_t i = 0; i < _data.size(); ++i) {
-                result.data()[i] =
-                    static_cast<R>(_data[i]) + static_cast<R>(other.data()[i]);
-            }
-        }
-        return result;
-    }
+    [[nodiscard]] auto operator+(const Matrix<U>& other) const;
 
     /**
      * @brief Element-wise scalar addition (Matrix + scalar).
      * @tparam U An arithmetic scalar type.
      * @return Matrix of the common, promoted type.
      */
-    template <Numeric U> [[nodiscard]] auto operator+(const U &scalar) const {
-        using R = std::common_type_t<T, U>;
-
-        Matrix<R> result(_rows, _cols);
-        if (_data.size() > 5000 * 5000) {
-#pragma omp parallel for
-            for (size_t i = 0; i < _data.size(); ++i) {
-                result.data()[i] =
-                    static_cast<R>(_data[i]) + static_cast<R>(scalar);
-            }
-        } else {
-#pragma omp simd
-            for (size_t i = 0; i < _data.size(); ++i) {
-                result.data()[i] =
-                    static_cast<R>(_data[i]) + static_cast<R>(scalar);
-            }
-        }
-        return result;
-    }
+    template <Numeric U>
+    [[nodiscard]] auto operator+(const U& scalar) const noexcept;
 
     /**
-     * @brief Element-wise scalar addition (scalar + Matrix).
+     * @brief Element-wise matrix addition.
+     * @tparam U Numeric type of the other matrix.
+     * @attention This method doesn't cast the matrix is U is broader type
+     * @throws std::invalid_argument if dimensions do not match.
      */
     template <Numeric U>
-    [[nodiscard]] friend auto operator+(const U &scalar,
-                                        const Matrix<T> &matrix) {
-        return matrix + scalar;
-    }
+    Matrix<T>& operator+=(const Matrix<U>& other);
+
+    /**
+     * @brief Element-wise scalar addition (Matrix + scalar).
+     * @tparam U An arithmetic scalar type.
+     * @attention This method doesn't cast the matrix is U is broader type
+     * @return Matrix of the original matrix type.
+     */
+    template <Numeric U>
+    Matrix<T>& operator+=(const U& scalar) noexcept;
 
     /**
      * @brief Element-wise matrix subtraction.
@@ -349,81 +288,33 @@ template <Numeric T> class Matrix {
      * @throws std::invalid_argument if dimensions do not match.
      */
     template <Numeric U>
-    [[nodiscard]] auto operator-(const Matrix<U> &other) const {
-        if (_rows != other.row_count() || _cols != other.column_count()) {
-            throw std::invalid_argument(
-                "Matrices have to be of same dimensions for subtraction!");
-        }
-        using R = std::common_type_t<T, U>;
-
-        Matrix<R> result(_rows, _cols);
-        if (_data.size() > 5000 * 5000) {
-#pragma omp parallel for
-            for (size_t i = 0; i < _data.size(); ++i) {
-                result.data()[i] =
-                    static_cast<R>(_data[i]) - static_cast<R>(other.data()[i]);
-            }
-        } else {
-#pragma omp simd
-            for (size_t i = 0; i < _data.size(); ++i) {
-                result.data()[i] =
-                    static_cast<R>(_data[i]) - static_cast<R>(other.data()[i]);
-            }
-        }
-        return result;
-    }
+    [[nodiscard]] auto operator-(const Matrix<U>& other) const;
 
     /**
      * @brief Element-wise scalar subtraction (Matrix - scalar).
      * @tparam U An arithmetic scalar type.
      * @return Matrix of the common, promoted type.
      */
-    template <Numeric U> [[nodiscard]] auto operator-(const U &scalar) const {
-        using R = std::common_type_t<T, U>;
-
-        Matrix<R> result(_rows, _cols);
-        if (_data.size() > 5000 * 5000) {
-#pragma omp parallel for
-            for (size_t i = 0; i < _data.size(); ++i) {
-                result.data()[i] =
-                    static_cast<R>(_data[i]) - static_cast<R>(scalar);
-            }
-        } else {
-#pragma omp simd
-            for (size_t i = 0; i < _data.size(); ++i) {
-                result.data()[i] =
-                    static_cast<R>(_data[i]) - static_cast<R>(scalar);
-            }
-        }
-        return result;
-    }
+    template <Numeric U>
+    [[nodiscard]] auto operator-(const U& scalar) const noexcept;
 
     /**
-     * @brief Element-wise scalar subtraction (scalar - Matrix).
-     * @tparam U An arithmetic scalar type.
-     * @return Matrix of the common, promoted type.
+     * @brief Element-wise matrix subtraction.
+     * @tparam U Numeric type of the other matrix.
+     * @attention This method doesn't cast the matrix is U is broader type
+     * @throws std::invalid_argument if dimensions do not match.
      */
     template <Numeric U>
-    [[nodiscard]] friend auto operator-(const U &scalar,
-                                        const Matrix<T> &matrix) {
-        using R = std::common_type_t<T, U>;
+    Matrix<T>& operator-=(const Matrix<U>& other);
 
-        Matrix<R> result(matrix._rows, matrix._cols);
-        if (matrix.size() > 5000 * 5000) {
-#pragma omp parallel for
-            for (size_t i = 0; i < matrix.size(); ++i) {
-                result.data()[i] =
-                    static_cast<R>(matrix._data[i]) - static_cast<R>(scalar);
-            }
-        } else {
-#pragma omp simd
-            for (size_t i = 0; i < matrix.size(); ++i) {
-                result.data()[i] =
-                    static_cast<R>(matrix._data[i]) - static_cast<R>(scalar);
-            }
-        }
-        return result;
-    }
+    /**
+     * @brief Element-wise scalar subtraction (Matrix - scalar).
+     * @tparam U An arithmetic scalar type.
+     * @attention This method doesn't cast the matrix is U is broader type
+     * @return Matrix of the original matrix type.
+     */
+    template <Numeric U>
+    Matrix<T>& operator-=(const U& scalar) noexcept;
 
     /**
      * @brief Standard algebraic matrix multiplication (A * B).
@@ -435,7 +326,7 @@ template <Numeric T> class Matrix {
      */
     // TODO: Check for optimization
     template <Numeric U>
-    [[nodiscard]] auto operator*(const Matrix<U> &other) const {
+    [[nodiscard]] auto operator*(const Matrix<U>& other) const {
         if (_cols != other.row_count()) {
             throw std::invalid_argument(
                 "Matrix inner dimensions do not match for multiplication!");
@@ -447,13 +338,13 @@ template <Numeric T> class Matrix {
         const size_t a_cols = _cols;
         Matrix<R> result(a_rows, b_cols);
 
-        const T *a_data = this->_data.data();
-        const U *b_data = other.data().data();
-        R *c_data = result.data().data();
+        const T* a_data = this->_data.data();
+        const U* b_data = other.data().data();
+        R* c_data = result.data().data();
 
         result.fill(R(0));
 
-#pragma omp parallel for collapse(2) if (a_rows * b_cols > 10000)
+        #pragma omp parallel for collapse(2) if (a_rows * b_cols > 10000)
         for (size_t ii = 0; ii < a_rows; ii += BLOCK_SIZE) {
             for (size_t jj = 0; jj < b_cols; jj += BLOCK_SIZE) {
                 for (size_t kk = 0; kk < a_cols; kk += BLOCK_SIZE) {
@@ -464,12 +355,11 @@ template <Numeric T> class Matrix {
 
                     for (size_t i = ii; i < i_end; ++i) {
                         for (size_t k = kk; k < k_end; ++k) {
-                            const R a_ik =
-                                static_cast<R>(a_data[(i * a_cols) + k]);
+                            const R a_ik = static_cast<R>(a_data[(i * a_cols) + k]);
                             const size_t b_offset = k * b_cols;
                             const size_t c_offset = i * b_cols;
 
-#pragma omp simd
+                            #pragma omp simd
                             for (size_t j = jj; j < j_end; ++j) {
                                 c_data[c_offset + j] +=
                                     a_ik * static_cast<R>(b_data[b_offset + j]);
@@ -487,15 +377,17 @@ template <Numeric T> class Matrix {
      * @tparam U An arithmetic scalar type.
      * @return Matrix of the common, promoted type.
      */
-    template <Numeric U> [[nodiscard]] auto operator*(const U &scalar) const {
+    template <Numeric U>
+    [[nodiscard]] auto operator*(const U& scalar) const {
         using R = std::common_type_t<T, U>;
 
         Matrix<R> result(_rows, _cols);
 
-        std::transform(_data.begin(), _data.end(), result.data().begin(),
-                       [scalar](const T &value) {
-                           return static_cast<R>(value) *
-                                  static_cast<R>(scalar);
+        std::transform(_data.begin(),
+                       _data.end(),
+                       result.data().begin(),
+                       [scalar](const T& value) {
+                           return static_cast<R>(value) * static_cast<R>(scalar);
                        });
         return result;
     }
@@ -504,8 +396,7 @@ template <Numeric T> class Matrix {
      * @brief Element-wise scalar multiplication (scalar * Matrix).
      */
     template <Numeric U>
-    [[nodiscard]] friend auto operator*(const U &scalar,
-                                        const Matrix<T> &matrix) {
+    [[nodiscard]] friend auto operator*(const U& scalar, const Matrix<T>& matrix) {
         return matrix * scalar;
     }
 
@@ -517,7 +408,7 @@ template <Numeric T> class Matrix {
      * dimensions do not match.
      */
     template <Numeric U>
-    [[nodiscard]] auto operator*(const Vector<U> &other) const {
+    [[nodiscard]] auto operator*(const Vector<U>& other) const {
         using R = std::common_type_t<T, U>;
 
         const size_t n = this->row_count();
@@ -536,11 +427,11 @@ template <Numeric T> class Matrix {
 
         Vector<R> result(n, std::vector<R>(n, R(0)), Vector<R>::COLUMN);
 
-#pragma omp parallel for
+        #pragma omp parallel for
         for (size_t i = 0; i < n; ++i) {
             R sum = R(0);
             auto L_row_i = this->row_span(i);
-#pragma omp simd reduction(+ : sum)
+            #pragma omp simd reduction(+ : sum)
             for (size_t j = 0; j < m; ++j) {
                 sum += static_cast<R>(L_row_i[j]) * static_cast<R>(other.at(j));
             }
@@ -554,7 +445,8 @@ template <Numeric T> class Matrix {
      * @tparam U An arithmetic scalar type.
      * @return Matrix of the common, promoted type.
      */
-    template <Numeric U> [[nodiscard]] auto operator/(const U &scalar) const {
+    template <Numeric U>
+    [[nodiscard]] auto operator/(const U& scalar) const {
         // Note: This promotes T to double if T is int, which is
         // usually desired for division.
         using R = std::common_type_t<T, U, double>;
@@ -567,49 +459,17 @@ template <Numeric T> class Matrix {
      * @return Matrix of the common, promoted type.
      */
     template <Numeric U>
-    [[nodiscard]] friend auto operator/(const U &scalar,
-                                        const Matrix<T> &matrix) {
+    [[nodiscard]] friend auto operator/(const U& scalar, const Matrix<T>& matrix) {
         using R = std::common_type_t<T, U, double>;
 
         Matrix<R> result(matrix._rows, matrix._cols);
-        std::transform(matrix._data.begin(), matrix._data.end(),
-                       result.data().begin(), [scalar](const T &value) {
-                           return static_cast<R>(scalar) /
-                                  static_cast<R>(value);
+        std::transform(matrix._data.begin(),
+                       matrix._data.end(),
+                       result.data().begin(),
+                       [scalar](const T& value) {
+                           return static_cast<R>(scalar) / static_cast<R>(value);
                        });
         return result;
-    }
-
-    /** @brief In-place element-wise scalar addition. */
-    template <Numeric U> auto &operator+=(const U &scalar) {
-        std::transform(
-            _data.begin(), _data.end(), _data.begin(),
-            [scalar](T val) { return static_cast<T>(val + scalar); });
-        return *this;
-    }
-
-    /** @brief In-place element-wise scalar subtraction. */
-    template <Numeric U> auto &operator-=(const U &scalar) {
-        std::transform(
-            _data.begin(), _data.end(), _data.begin(),
-            [scalar](T val) { return static_cast<T>(val - scalar); });
-        return *this;
-    }
-
-    /** @brief In-place element-wise scalar multiplication. */
-    template <Numeric U> auto &operator*=(const U &scalar) {
-        std::transform(
-            _data.begin(), _data.end(), _data.begin(),
-            [scalar](T val) { return static_cast<T>(val * scalar); });
-        return *this;
-    }
-
-    /** @brief In-place element-wise scalar division. */
-    template <Numeric U> auto &operator/=(const U &scalar) {
-        std::transform(
-            _data.begin(), _data.end(), _data.begin(),
-            [scalar](T val) { return static_cast<T>(val / scalar); });
-        return *this;
     }
 
     // --- Debugging and printing ---
@@ -629,15 +489,51 @@ template <Numeric T> class Matrix {
             std::cout << std::endl;
         }
     }
+
+private:
+    size_t _rows;
+    size_t _cols;
+    std::vector<T> _data;
+
+    /**
+     * @brief Internal check if a row/column index is within bounds.
+     * @return true if 0 <= row < _rows and 0 <= col < _cols.
+     */
+    [[nodiscard]] constexpr bool _is_valid_index(size_t row, size_t col) const {
+        return row < _rows && col < _cols;
+    }
+
+    /**
+     * @brief Converts a 2D (row, col) index to a 1D internal vector index.
+     * @throws std::out_of_range if the index is invalid.
+     * @return The 1D index into the _data vector.
+     */
+    [[nodiscard]] constexpr size_t _get_index(size_t row, size_t col) const {
+        if (!_is_valid_index(row, col)) {
+            throw std::out_of_range("Index out of bounds.");
+        }
+        return (row * _cols) + col;
+    }
+
+    /**
+     * @brief Internal helper to invert the sign of all elements in-place.
+     */
+    void _invert_sign() {
+        #pragma omp parallel for if (_data.size() > 5000 * 5000)
+        for (size_t i = 0; i < _data.size(); ++i) {
+            _data[i] = -_data[i];
+        }
+    }
 };
 
-} // namespace maf::math
+}  // namespace maf::math
 
 #include "Cholesky.hpp"
 #include "MatrixCheckers.hpp"
 #include "MatrixConstructors.hpp"
 #include "MatrixFactories.hpp"
 #include "MatrixMethods.hpp"
+#include "MatrixOperators.hpp"
 #include "PLU.hpp"
 
 #endif

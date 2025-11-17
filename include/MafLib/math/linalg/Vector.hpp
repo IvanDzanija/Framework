@@ -1,12 +1,12 @@
 #ifndef VECTOR_H
 #define VECTOR_H
-
 #pragma once
 #include "LinAlg.hpp"
 
 namespace maf::math {
 // Forward declaration of Matrix class for operator overloads
-template <Numeric T> class Matrix;
+template <Numeric T>
+class Matrix;
 
 /**
  * @brief A general-purpose mathematical vector class.
@@ -25,15 +25,16 @@ template <Numeric T> class Matrix;
  * @version 1.0
  * @since 2025
  */
-template <Numeric T> class Vector {
-  public:
+template <Numeric T>
+class Vector {
+public:
     /** @brief The numeric type of the vector's elements. */
     using value_type = T;
 
     /** @brief Specifies if the vector behaves as a row or column vector. */
     enum Orientation { ROW, COLUMN };
 
-  private:
+private:
     /** @brief Stores the vector's orientation (ROW or COLUMN). */
     Orientation _orientation;
 
@@ -44,13 +45,13 @@ template <Numeric T> class Vector {
      * @brief Internal helper to invert the sign of all elements in-place.
      */
     void _invert_sign() {
-#pragma omp parallel for
-        for (auto &element : _data) {
+        #pragma omp parallel for
+        for (auto& element : _data) {
             element = -element;
         }
     }
 
-  public:
+public:
     // --- Constructors ---
 
     /**
@@ -76,7 +77,7 @@ template <Numeric T> class Vector {
      * @throws std::invalid_argument if size is zero or data is nullptr.
      */
     template <Numeric U>
-    Vector(size_t size, const U *data, Orientation orientation = COLUMN);
+    Vector(size_t size, const U* data, Orientation orientation = COLUMN);
 
     /**
      * @brief Constructs from a std::vector by copying its data.
@@ -87,8 +88,7 @@ template <Numeric T> class Vector {
      * mismatches.
      */
     template <Numeric U>
-    Vector(size_t size, const std::vector<U> &data,
-           Orientation orientation = COLUMN);
+    Vector(size_t size, const std::vector<U>& data, Orientation orientation = COLUMN);
 
     /**
      * @brief Constructs from a std::vector by moving its data.
@@ -98,8 +98,7 @@ template <Numeric T> class Vector {
      * @throws std::invalid_argument if size is zero or data size
      * mismatches.
      */
-    Vector(size_t size, std::vector<T> &&data,
-           Orientation orientation = COLUMN);
+    Vector(size_t size, std::vector<T>&& data, Orientation orientation = COLUMN);
 
     /**
      * @brief Constructs from a std::array by copying its data.
@@ -112,44 +111,69 @@ template <Numeric T> class Vector {
      * mismatches.
      */
     template <Numeric U, size_t N>
-    Vector(size_t size, const std::array<U, N> &data,
-           Orientation orientation = COLUMN);
+    Vector(size_t size, const std::array<U, N>& data, Orientation orientation = COLUMN);
 
     // --- Iterators ---
     /** @brief Returns an iterator to the beginning. */
-    [[nodiscard]] auto begin() noexcept { return _data.begin(); }
+    [[nodiscard]] auto begin() noexcept {
+        return _data.begin();
+    }
     /** @brief Returns an iterator to the end. */
-    [[nodiscard]] auto end() noexcept { return _data.end(); }
+    [[nodiscard]] auto end() noexcept {
+        return _data.end();
+    }
 
     /** @brief Returns a const iterator to the beginning. */
-    [[nodiscard]] auto begin() const noexcept { return _data.begin(); }
+    [[nodiscard]] auto begin() const noexcept {
+        return _data.begin();
+    }
     /** @brief Returns a const iterator to the end. */
-    [[nodiscard]] auto end() const noexcept { return _data.end(); }
+    [[nodiscard]] auto end() const noexcept {
+        return _data.end();
+    }
 
     /** @brief Returns a const iterator to the beginning. */
-    [[nodiscard]] auto cbegin() const noexcept { return _data.cbegin(); }
+    [[nodiscard]] auto cbegin() const noexcept {
+        return _data.cbegin();
+    }
     /** @brief Returns a const iterator to the end. */
-    [[nodiscard]] auto cend() const noexcept { return _data.cend(); }
+    [[nodiscard]] auto cend() const noexcept {
+        return _data.cend();
+    }
 
     /** @brief Returns a reverse iterator to the beginning. */
-    [[nodiscard]] auto rbegin() noexcept { return _data.rbegin(); }
+    [[nodiscard]] auto rbegin() noexcept {
+        return _data.rbegin();
+    }
     /** @brief Returns a reverse iterator to the end. */
-    [[nodiscard]] auto rend() noexcept { return _data.rend(); }
+    [[nodiscard]] auto rend() noexcept {
+        return _data.rend();
+    }
 
     /** @brief Returns a const reverse iterator to the beginning. */
-    [[nodiscard]] auto rbegin() const noexcept { return _data.rbegin(); }
+    [[nodiscard]] auto rbegin() const noexcept {
+        return _data.rbegin();
+    }
     /** @brief Returns a const reverse iterator to the end. */
-    [[nodiscard]] auto rend() const noexcept { return _data.rend(); }
+    [[nodiscard]] auto rend() const noexcept {
+        return _data.rend();
+    }
 
     /** @brief Returns a const reverse iterator to the beginning. */
-    [[nodiscard]] auto crbegin() const noexcept { return _data.crbegin(); }
+    [[nodiscard]] auto crbegin() const noexcept {
+        return _data.crbegin();
+    }
     /** @brief Returns a const reverse iterator to the end. */
-    [[nodiscard]] auto crend() const noexcept { return _data.crend(); }
+    [[nodiscard]] auto crend() const noexcept {
+        return _data.crend();
+    }
 
     // --- Getters ---
 
     /** @brief Gets the number of elements in the vector. */
-    [[nodiscard]] size_t size() const noexcept { return _data.size(); }
+    [[nodiscard]] size_t size() const noexcept {
+        return _data.size();
+    }
 
     /** @brief Gets the vector's orientation (ROW or COLUMN). */
     [[nodiscard]] Orientation orientation() const noexcept {
@@ -161,26 +185,34 @@ template <Numeric T> class Vector {
      * bounds check.
      * @throws std::out_of_range if the index is invalid.
      */
-    T &at(size_t index) { return _data.at(index); }
+    T& at(size_t index) {
+        return _data.at(index);
+    }
 
     /**
      * @brief Gets a const reference to the element at a specific index with
      * bounds check.
      * @throws std::out_of_range if the index is invalid.
      */
-    const T &at(size_t index) const { return this->_data.at(index); }
+    const T& at(size_t index) const {
+        return this->_data.at(index);
+    }
 
     /**
      * @brief Accesses the element at a specific index with no bounds check.
      * @throws std::out_of_range if the index is invalid.
      */
-    T &operator[](size_t index) { return this->_data[index]; }
+    T& operator[](size_t index) {
+        return this->_data[index];
+    }
 
     /**
      * @brief Accesses the element at a specific index with no bounds check.
      * @throws std::out_of_range if the index is invalid.
      */
-    const T &operator[](size_t index) const { return this->_data[index]; }
+    const T& operator[](size_t index) const {
+        return this->_data[index];
+    }
 
     // --- Checkers ---
 
@@ -217,7 +249,7 @@ template <Numeric T> class Vector {
      * @param other The vector to compare against.
      * @return true if size, orientation, and all elements are identical.
      */
-    [[nodiscard]] bool operator==(const Vector &other) const;
+    [[nodiscard]] bool operator==(const Vector& other) const;
 
     /**
      * @brief Element-wise vector addition (Vector + Vector).
@@ -228,7 +260,7 @@ template <Numeric T> class Vector {
      * match.
      */
     template <Numeric U>
-    [[nodiscard]] auto operator+(const Vector<U> &other) const;
+    [[nodiscard]] auto operator+(const Vector<U>& other) const;
 
     /**
      * @brief Element-wise scalar addition (Vector + scalar).
@@ -236,7 +268,8 @@ template <Numeric T> class Vector {
      * @param scalar The scalar value to add to each element.
      * @return A new Vector of the common, promoted type.
      */
-    template <Numeric U> [[nodiscard]] auto operator+(const U &scalar) const;
+    template <Numeric U>
+    [[nodiscard]] auto operator+(const U& scalar) const;
 
     /**
      * @brief Element-wise scalar addition (scalar + Vector).
@@ -246,7 +279,7 @@ template <Numeric T> class Vector {
      * @return A new Vector of the common, promoted type.
      */
     template <Numeric U>
-    friend auto operator+(const U &scalar, const Vector<T> &vec);
+    friend auto operator+(const U& scalar, const Vector<T>& vec);
 
     /**
      * @brief Element-wise vector subtraction (Vector - Vector).
@@ -257,7 +290,7 @@ template <Numeric T> class Vector {
      * match.
      */
     template <Numeric U>
-    [[nodiscard]] auto operator-(const Vector<U> &other) const;
+    [[nodiscard]] auto operator-(const Vector<U>& other) const;
 
     /**
      * @brief Element-wise scalar subtraction (Vector - scalar).
@@ -265,7 +298,8 @@ template <Numeric T> class Vector {
      * @param scalar The scalar value to subtract from each element.
      * @return A new Vector of the common, promoted type.
      */
-    template <Numeric U> [[nodiscard]] auto operator-(const U &scalar) const;
+    template <Numeric U>
+    [[nodiscard]] auto operator-(const U& scalar) const;
 
     /**
      * @brief Element-wise scalar subtraction (scalar - Vector).
@@ -275,7 +309,7 @@ template <Numeric T> class Vector {
      * @return A new Vector of the common, promoted type.
      */
     template <Numeric U>
-    friend auto operator-(const U &scalar, const Vector<T> &vec);
+    friend auto operator-(const U& scalar, const Vector<T>& vec);
 
     /**
      * @brief Element-wise scalar multiplication (Vector * scalar).
@@ -283,14 +317,15 @@ template <Numeric T> class Vector {
      * @param scalar The scalar value to multiply by.
      * @return A new Vector of the common, promoted type.
      */
-    template <Numeric U> [[nodiscard]] auto operator*(const U &scalar) const {
+    template <Numeric U>
+    [[nodiscard]] auto operator*(const U& scalar) const {
         using R = std::common_type_t<T, U>;
 
         Vector<R> result(_data.size());
-        std::transform(
-            _data.begin(), _data.end(),
-            result.begin(), // Use result.begin() for std::vector iterator
-            [scalar](const T &value) { return value * scalar; });
+        std::transform(_data.begin(),
+                       _data.end(),
+                       result.begin(),  // Use result.begin() for std::vector iterator
+                       [scalar](const T& value) { return value * scalar; });
         return result;
     }
 
@@ -302,7 +337,7 @@ template <Numeric T> class Vector {
      * @return A new Vector of the common, promoted type.
      */
     template <Numeric U>
-    [[nodiscard]] friend auto operator*(const U &scalar, const Vector<T> &vec) {
+    [[nodiscard]] friend auto operator*(const U& scalar, const Vector<T>& vec) {
         return vec * scalar;
     }
 
@@ -315,7 +350,7 @@ template <Numeric T> class Vector {
      * @throws std::invalid_argument if orientations are not COLUMN * ROW.
      */
     template <Numeric U>
-    [[nodiscard]] auto operator*(const Vector<U> &other) const;
+    [[nodiscard]] auto operator*(const Vector<U>& other) const;
 
     /**
      * @brief Matrix-Vector multiplication (Row Vector * Matrix).
@@ -327,7 +362,7 @@ template <Numeric T> class Vector {
      * dimensions mismatch.
      */
     template <Numeric U>
-    [[nodiscard]] auto operator*(const Matrix<U> &other) const;
+    [[nodiscard]] auto operator*(const Matrix<U>& other) const;
 
     /**
      * @brief Calculates the dot product (inner product) of two vectors.
@@ -337,7 +372,7 @@ template <Numeric T> class Vector {
      * @throws std::invalid_argument if vector sizes do not match.
      */
     template <Numeric U>
-    [[nodiscard]] auto dot_product(const Vector<U> &other) const;
+    [[nodiscard]] auto dot_product(const Vector<U>& other) const;
 
     // --- Printing and debugging ---
 
@@ -350,11 +385,11 @@ template <Numeric T> class Vector {
             std::cout << std::setprecision(FLOAT_PRECISION);
         }
         if (_orientation == COLUMN) {
-            for (const T &val : _data) {
+            for (const T& val : _data) {
                 std::cout << val << std::endl;
             }
         } else {
-            for (const T &val : _data) {
+            for (const T& val : _data) {
                 std::cout << val << ' ';
             }
             std::cout << std::endl;
@@ -363,7 +398,7 @@ template <Numeric T> class Vector {
     }
 };
 
-} // namespace maf::math
+}  // namespace maf::math
 
 #include "VectorCheckers.hpp"
 #include "VectorConstructors.hpp"

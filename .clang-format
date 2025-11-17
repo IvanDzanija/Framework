@@ -22,4 +22,3 @@ SpaceAfterCStyleCast: false
 SpaceBeforeParens: ControlStatements
 SpacesInParentheses: false
 Standard: c++20
-IndentPPDirectives: BeforeHash

@@ -1,12 +1,14 @@
+#ifndef VECTOR_OPERATORS_H
+#define VECTOR_OPERATORS_H
+#pragma once
 #include "Vector.hpp"
-#include <type_traits>
 
 namespace maf::math {
 
 // Equality operator
-template <Numeric T> bool Vector<T>::operator==(const Vector &other) const {
-    if (this->_orientation != other._orientation ||
-        this->size() != other.size()) {
+template <Numeric T>
+bool Vector<T>::operator==(const Vector& other) const {
+    if (this->_orientation != other._orientation || this->size() != other.size()) {
         return false;
     }
     return _data == other._data;
@@ -16,13 +18,11 @@ template <Numeric T> bool Vector<T>::operator==(const Vector &other) const {
 template <Numeric T>
 template <Numeric U>
 
-auto Vector<T>::operator+(const Vector<U> &other) const {
+auto Vector<T>::operator+(const Vector<U>& other) const {
     using R = std::common_type_t<T, U>;
 
-    if (_orientation != other._orientation ||
-        _data.size() != other._data.size()) {
-        throw std::invalid_argument(
-            "Vectors must be same orientation and size!");
+    if (_orientation != other._orientation || _data.size() != other._data.size()) {
+        throw std::invalid_argument("Vectors must be same orientation and size!");
     }
     size_t n = _data.size();
     Vector<R> result(n);
@@ -36,31 +36,32 @@ auto Vector<T>::operator+(const Vector<U> &other) const {
 template <Numeric T>
 template <Numeric U>
 
-auto Vector<T>::operator+(const U &scalar) const {
+auto Vector<T>::operator+(const U& scalar) const {
     using R = std::common_type_t<T, U>;
 
     Vector<R> result(this->_data.size());
-    std::transform(this->_data.begin(), this->_data.end(), result._data.begin(),
-                   [scalar](const T &value) { return value + scalar; });
+    std::transform(this->_data.begin(),
+                   this->_data.end(),
+                   result._data.begin(),
+                   [scalar](const T& value) { return value + scalar; });
     return result;
 }
 
 // Scalar + Vector
 template <Numeric T, Numeric U>
-auto operator+(const U &scalar, const Vector<T> &vec) {
+auto operator+(const U& scalar, const Vector<T>& vec) {
     return vec + scalar;
 }
 
 // Vector - Vector
 template <Numeric T>
 template <Numeric U>
-auto Vector<T>::operator-(const Vector<U> &other) const {
+auto Vector<T>::operator-(const Vector<U>& other) const {
     using R = std::common_type_t<T, U>;
 
     if (this->_orientation != other._orientation ||
         this->_data.size() != other._data.size()) {
-        throw std::invalid_argument(
-            "Vectors must be same orientation and size!");
+        throw std::invalid_argument("Vectors must be same orientation and size!");
     }
     size_t n = size();
     Vector<R> result(n);
@@ -73,30 +74,34 @@ auto Vector<T>::operator-(const Vector<U> &other) const {
 // Vector - Scalar
 template <Numeric T>
 template <Numeric U>
-auto Vector<T>::operator-(const U &scalar) const {
+auto Vector<T>::operator-(const U& scalar) const {
     using R = std::common_type_t<T, U>;
 
     Vector<R> result(this->_data.size());
-    std::transform(this->_data.begin(), this->_data.end(), result._data.begin(),
-                   [scalar](const T &value) { return value - scalar; });
+    std::transform(this->_data.begin(),
+                   this->_data.end(),
+                   result._data.begin(),
+                   [scalar](const T& value) { return value - scalar; });
     return result;
 }
 
 // Scalar - Vector
 template <Numeric T, Numeric U>
-auto operator-(const U &scalar, const Vector<T> &vec) {
+auto operator-(const U& scalar, const Vector<T>& vec) {
     using R = std::common_type_t<T, U>;
 
     Vector<R> result(vec.size());
-    std::transform(vec._data.begin(), vec._data.end(), result._data.begin(),
-                   [scalar](const T &value) { return scalar - value; });
+    std::transform(vec._data.begin(),
+                   vec._data.end(),
+                   result._data.begin(),
+                   [scalar](const T& value) { return scalar - value; });
     return result;
 }
 
 // Vector * Matrix -> Vector
 template <Numeric T>
 template <Numeric U>
-auto Vector<T>::operator*(const Matrix<U> &other) const {
+auto Vector<T>::operator*(const Matrix<U>& other) const {
     using R = std::common_type_t<T, U>;
 
     size_t n = this->size();
@@ -124,7 +129,7 @@ auto Vector<T>::operator*(const Matrix<U> &other) const {
 // Vector * Vector -> Matrix
 template <Numeric T>
 template <Numeric U>
-auto Vector<T>::operator*(const Vector<U> &other) const {
+auto Vector<T>::operator*(const Vector<U>& other) const {
     std::cout << "THIS IS AN OUTER PRODUCT OPERATOR!" << std::endl;
 
     using R = std::common_type_t<T, U>;
@@ -140,35 +145,35 @@ auto Vector<T>::operator*(const Vector<U> &other) const {
             "vector dot product.");
     }
     switch (_orientation) {
-    case Vector<T>::COLUMN: {
-        Matrix<R> result(n, m);
-        for (size_t i = 0; i < n; ++i) {
-            for (size_t j = 0; j < m; ++j) {
-                result.at(i, j) = this->at(i) * other.at(j);
+        case Vector<T>::COLUMN: {
+            Matrix<R> result(n, m);
+            for (size_t i = 0; i < n; ++i) {
+                for (size_t j = 0; j < m; ++j) {
+                    result.at(i, j) = this->at(i) * other.at(j);
+                }
             }
+            return result;
         }
-        return result;
-    }
 
-    default:
-        std::cout << "This results in a 1x1 matrix. Consider using vector "
-                     "dot product."
-                  << std::endl;
+        default:
+            std::cout << "This results in a 1x1 matrix. Consider using vector "
+                         "dot product."
+                      << std::endl;
 
-        R result = 0;
-        for (size_t i = 0; i < n; ++i) {
-            for (size_t j = 0; j < m; ++j) {
-                result += this->at(i) * other.at(j);
+            R result = 0;
+            for (size_t i = 0; i < n; ++i) {
+                for (size_t j = 0; j < m; ++j) {
+                    result += this->at(i) * other.at(j);
+                }
             }
-        }
-        return Matrix<R>(1, 1, {result});
+            return Matrix<R>(1, 1, {result});
     }
 }
 
 // Vector * Vector -> Scalar
 template <Numeric T>
 template <Numeric U>
-auto Vector<T>::dot_product(const Vector<U> &other) const {
+auto Vector<T>::dot_product(const Vector<U>& other) const {
     std::common_type_t<T, U> result = 0;
     for (size_t i = 0; i < this->size(); ++i) {
         for (size_t j = 0; j < other.size(); ++j) {
@@ -178,4 +183,6 @@ auto Vector<T>::dot_product(const Vector<U> &other) const {
     return result;
 }
 
-} // namespace maf::math
+}  // namespace maf::math
+
+#endif

@@ -20,15 +20,16 @@ template <Numeric U>
 }
 
 // Inplace fill
-template <Numeric T> void Matrix<T>::fill(T value) {
+template <Numeric T>
+void Matrix<T>::fill(T value) {
     std::fill(_data.begin(), _data.end(), value);
 }
 
 // Set to identity
-template <Numeric T> void Matrix<T>::make_identity() {
+template <Numeric T>
+void Matrix<T>::make_identity() {
     if (!is_square()) {
-        throw std::invalid_argument(
-            "Only square matrices can be set to identity!");
+        throw std::invalid_argument("Only square matrices can be set to identity!");
     }
 
     fill(T(0));
@@ -38,13 +39,13 @@ template <Numeric T> void Matrix<T>::make_identity() {
 }
 
 // Performs an in-place transpose of the matrix.
-template <Numeric T> void Matrix<T>::transpose() {
+template <Numeric T>
+void Matrix<T>::transpose() {
     if (!is_square()) {
-        throw std::invalid_argument(
-            "Matrix must be square to transpose in-place.");
+        throw std::invalid_argument("Matrix must be square to transpose in-place.");
     }
 
-#pragma omp parallel for
+    #pragma omp parallel for
     for (size_t i = 0; i < _rows; i += BLOCK_SIZE) {
         for (size_t j = i; j < _cols; j += BLOCK_SIZE) {
             const size_t n = std::min(i + BLOCK_SIZE, _rows);
@@ -69,10 +70,11 @@ template <Numeric T> void Matrix<T>::transpose() {
 }
 
 // Creates new transposed matrix
-template <Numeric T> Matrix<T> Matrix<T>::transposed() const {
+template <Numeric T>
+Matrix<T> Matrix<T>::transposed() const {
     Matrix<T> result(_cols, _rows);
 
-#pragma omp parallel for if (_data.size() > 100 * 100)
+    #pragma omp parallel for if (_data.size() > 100 * 100)
     for (size_t i = 0; i < _rows; ++i) {
         for (size_t j = 0; j < _cols; ++j) {
             result.at(j, i) = this->at(i, j);
@@ -81,6 +83,6 @@ template <Numeric T> Matrix<T> Matrix<T>::transposed() const {
     return result;
 }
 
-} // namespace maf::math
+}  // namespace maf::math
 
 #endif

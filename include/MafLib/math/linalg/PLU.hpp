@@ -13,8 +13,8 @@ namespace detail {
  * Uses blocked algorithm with OpenMP parallelization.
  */
 template <std::floating_point T>
-[[nodiscard]] std::tuple<std::vector<uint32>, Matrix<T>, Matrix<T>>
-_plu(Matrix<T> &&_U) {
+[[nodiscard]] std::tuple<std::vector<uint32>, Matrix<T>, Matrix<T>> _plu(
+    Matrix<T>&& _U) {
     if (!_U.is_square()) {
         throw std::invalid_argument(
             "Matrix must be square for PLU decomposition!");
@@ -77,12 +77,12 @@ _plu(Matrix<T> &&_U) {
             const T pivot = _U.at(i, i);
             const T inv_pivot = T(1) / pivot;
 
-#pragma omp parallel for schedule(static) if (n - (i + 1) > 256)
+            #pragma omp parallel for schedule(static) if (n - (i + 1) > 256)
             for (size_t j = i + 1; j < n; ++j) {
                 T mult = _U.at(j, i) * inv_pivot;
                 L.at(j, i) = mult;
 
-#pragma omp simd
+                #pragma omp simd
                 for (size_t k = i + 1; k < block_end; ++k) {
                     _U.at(j, k) -= mult * _U.at(i, k);
                 }
@@ -93,7 +93,8 @@ _plu(Matrix<T> &&_U) {
         if (block_end < n) {
             // Triangular Solve for U_12
             // We must solve L_11 * U_12 = A_12
-#pragma omp parallel for schedule(static, 8) if (n - block_end > 128)
+            #pragma omp parallel for schedule(static, 8) if (n - block_end >
+            // 128)
             for (size_t j = block_end; j < n; ++j) {
                 for (size_t i = ib; i < block_end; ++i) {
                     T sum = _U.at(i, j);
@@ -107,19 +108,20 @@ _plu(Matrix<T> &&_U) {
             }
 
             // Now we can apply all the elimination effects on the next block
-#pragma omp parallel for schedule(static, 8) if (n - block_end > 128)
+            #pragma omp parallel for schedule(static, 8) if (n - block_end >
+            // 128)
             for (size_t i = block_end; i < n; ++i) {
                 auto target_row = _U.row_span(i).subspan(block_end);
                 const size_t len = target_row.size();
                 for (size_t k = ib; k < block_end; ++k) {
                     const T mult = L.at(i, k);
-                    if (is_close(mult, static_cast<T>(0),
-                                 static_cast<T>(1e-9))) {
+                    if (is_close(
+                            mult, static_cast<T>(0), static_cast<T>(1e-9))) {
                         continue;
                     }
                     auto pivot_row = _U.row_span(k).subspan(block_end);
 
-#pragma omp simd
+                    #pragma omp simd
                     for (size_t j = 0; j < len; ++j) {
                         target_row[j] -= mult * pivot_row[j];
                     }
@@ -133,10 +135,10 @@ _plu(Matrix<T> &&_U) {
 
     // Extract U
     Matrix<T> U(n, n);
-#pragma omp parallel for schedule(static) if (n > 256)
+    #pragma omp parallel for schedule(static) if (n > 256)
     for (size_t i = 0; i < n; ++i) {
-        T *u_row = &U.at(i, i);
-        const T *a_row = &_U.at(i, i);
+        T* u_row = &U.at(i, i);
+        const T* a_row = &_U.at(i, i);
         const size_t len = n - i;
         std::copy_n(a_row, len, u_row);
     }
@@ -144,7 +146,7 @@ _plu(Matrix<T> &&_U) {
     return std::make_tuple(std::move(P), std::move(L), std::move(U));
 }
 
-} // namespace detail
+}  // namespace detail
 /**
  * @brief Performs a blocked PLU decomposition on a square matrix.
  *
@@ -178,10 +180,11 @@ _plu(Matrix<T> &&_U) {
  */
 
 template <typename ResultType = void, Numeric T>
-[[nodiscard]] auto plu(const Matrix<T> &matrix) {
+[[nodiscard]] auto plu(const Matrix<T>& matrix) {
     using TargetType = std::conditional_t<
         std::is_same_v<ResultType, void>,
-        std::conditional_t<std::is_floating_point_v<T>, T, double>, ResultType>;
+        std::conditional_t<std::is_floating_point_v<T>, T, double>,
+        ResultType>;
 
     static_assert(std::is_floating_point_v<TargetType>,
                   "PLU result type must be floating point!");
@@ -193,6 +196,6 @@ template <typename ResultType = void, Numeric T>
     }
 }
 
-} // namespace maf::math
+}  // namespace maf::math
 
-#endif // PLU_H
+#endif  // PLU_H

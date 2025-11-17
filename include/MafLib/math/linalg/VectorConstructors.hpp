@@ -24,8 +24,7 @@ template <Numeric T>
 // Constructs a vector from a raw data pointer.
 template <Numeric T>
 template <Numeric U>
-[[nodiscard]] Vector<T>::Vector(size_t size, const U *data,
-                                Orientation orientation)
+[[nodiscard]] Vector<T>::Vector(size_t size, const U* data, Orientation orientation)
     : _orientation(orientation) {
     if (size == 0) {
         throw std::invalid_argument("Vector size must be greater than zero!");
@@ -40,7 +39,8 @@ template <Numeric U>
 // Constructs from a std::vector, copy constructor
 template <Numeric T>
 template <Numeric U>
-[[nodiscard]] Vector<T>::Vector(size_t size, const std::vector<U> &data,
+[[nodiscard]] Vector<T>::Vector(size_t size,
+                                const std::vector<U>& data,
                                 Orientation orientation)
     : _orientation(orientation) {
     if (size == 0) {
@@ -55,7 +55,7 @@ template <Numeric U>
 
 // Constructs from a std::vector, move constructor
 template <Numeric T>
-Vector<T>::Vector(size_t size, std::vector<T> &&data, Orientation orientation)
+Vector<T>::Vector(size_t size, std::vector<T>&& data, Orientation orientation)
     : _orientation(orientation) {
     if (size == 0) {
         throw std::invalid_argument("Vector size must be greater than zero.");
@@ -71,7 +71,8 @@ Vector<T>::Vector(size_t size, std::vector<T> &&data, Orientation orientation)
 // Constructs from a std::array, copy constructor
 template <Numeric T>
 template <Numeric U, size_t N>
-[[nodiscard]] Vector<T>::Vector(size_t size, const std::array<U, N> &data,
+[[nodiscard]] Vector<T>::Vector(size_t size,
+                                const std::array<U, N>& data,
                                 Orientation orientation)
     : _orientation(orientation) {
     if (size == 0) {
@@ -84,6 +85,6 @@ template <Numeric U, size_t N>
     _data.assign(data.begin(), data.end());
 }
 
-} // namespace maf::math
+}  // namespace maf::math
 
 #endif
