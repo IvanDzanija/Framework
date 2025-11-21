@@ -1,4 +1,6 @@
+#if defined(__APPLE__) && defined(ACCELERATE_AVAILABLE)
 #include <vecLib/cblas_new.h>
+#endif
 
 #include "MafLib/main/GlobalHeader.hpp"
 #include "MafLib/utility/UtilMath.hpp"
