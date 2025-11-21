@@ -1,6 +1,7 @@
 #ifndef MATRIX_H
 #define MATRIX_H
 #pragma once
+
 #include "LinAlg.hpp"
 
 namespace maf::math {
@@ -324,7 +325,6 @@ public:
      * @throws std::invalid_argument if inner dimensions do not match
      * (A.cols != B.rows).
      */
-    // TODO: Check for optimization
     template <Numeric U>
     [[nodiscard]] auto operator*(const Matrix<U>& other) const {
         if (_cols != other.row_count()) {
@@ -344,31 +344,106 @@ public:
 
         result.fill(R(0));
 
-        #pragma omp parallel for collapse(2) if (a_rows * b_cols > 10000)
-        for (size_t ii = 0; ii < a_rows; ii += BLOCK_SIZE) {
-            for (size_t jj = 0; jj < b_cols; jj += BLOCK_SIZE) {
-                for (size_t kk = 0; kk < a_cols; kk += BLOCK_SIZE) {
-                    // Process block
-                    const size_t i_end = std::min(ii + BLOCK_SIZE, a_rows);
-                    const size_t j_end = std::min(jj + BLOCK_SIZE, b_cols);
-                    const size_t k_end = std::min(kk + BLOCK_SIZE, a_cols);
+#if defined(__APPLE__) && defined(ACCELERATE_AVAILABLE)
+        // Handle all floating-point combinations with proper conversion
+        if constexpr (std::is_floating_point_v<R>) {
+            if constexpr (std::is_same_v<R, float>) {
+                // Both matrices are float or can be safely converted to float
+                std::vector<float> a_converted, b_converted;
+                const float* a_ptr = a_data;
+                const float* b_ptr = b_data;
 
-                    for (size_t i = ii; i < i_end; ++i) {
-                        for (size_t k = kk; k < k_end; ++k) {
-                            const R a_ik = static_cast<R>(a_data[(i * a_cols) + k]);
-                            const size_t b_offset = k * b_cols;
-                            const size_t c_offset = i * b_cols;
-
-                            #pragma omp simd
-                            for (size_t j = jj; j < j_end; ++j) {
-                                c_data[c_offset + j] +=
-                                    a_ik * static_cast<R>(b_data[b_offset + j]);
-                            }
-                        }
-                    }
+                // Convert matrix A if needed
+                if constexpr (!std::is_same_v<T, float>) {
+                    a_converted.resize(_data.size());
+                    std::transform(
+                        _data.begin(), _data.end(), a_converted.begin(), [](T val) {
+                            return static_cast<float>(val);
+                        });
+                    a_ptr = a_converted.data();
+                } else {
+                    a_ptr = a_data;
                 }
+
+                // Convert matrix B if needed
+                if constexpr (!std::is_same_v<U, float>) {
+                    b_converted.resize(other.data().size());
+                    std::transform(other.data().begin(),
+                                   other.data().end(),
+                                   b_converted.begin(),
+                                   [](U val) { return static_cast<float>(val); });
+                    b_ptr = b_converted.data();
+                } else {
+                    b_ptr = b_data;
+                }
+
+                cblas_sgemm(CblasRowMajor,
+                            CblasNoTrans,
+                            CblasNoTrans,
+                            a_rows,
+                            b_cols,
+                            a_cols,
+                            1.0f,
+                            a_ptr,
+                            a_cols,
+                            b_ptr,
+                            b_cols,
+                            0.0f,
+                            c_data,
+                            b_cols);
+            } else if constexpr (std::is_same_v<R, double>) {
+                // Both matrices are double or can be safely converted to double
+                std::vector<double> a_converted, b_converted;
+                const double* a_ptr;
+                const double* b_ptr;
+
+                // Convert matrix A if needed
+                if constexpr (!std::is_same_v<T, double>) {
+                    a_converted.resize(_data.size());
+                    std::transform(
+                        _data.begin(), _data.end(), a_converted.begin(), [](T val) {
+                            return static_cast<double>(val);
+                        });
+                    a_ptr = a_converted.data();
+                } else {
+                    a_ptr = a_data;
+                }
+
+                // Convert matrix B if needed
+                if constexpr (!std::is_same_v<U, double>) {
+                    b_converted.resize(other.data().size());
+                    std::transform(other.data().begin(),
+                                   other.data().end(),
+                                   b_converted.begin(),
+                                   [](U val) { return static_cast<double>(val); });
+                    b_ptr = b_converted.data();
+                } else {
+                    b_ptr = b_data;
+                }
+
+                cblas_dgemm(CblasRowMajor,
+                            CblasNoTrans,
+                            CblasNoTrans,
+                            a_rows,
+                            b_cols,
+                            a_cols,
+                            1.0,
+                            a_ptr,
+                            a_cols,
+                            b_ptr,
+                            b_cols,
+                            0.0,
+                            c_data,
+                            b_cols);
             }
+        } else {
+            // Integer types - use fallback
+            _fallback_matrix_multiply(a_data, b_data, c_data, a_rows, a_cols, b_cols);
         }
+#else
+        // Default non-Apple implementation
+        _fallback_matrix_multiply(a_data, b_data, c_data, a_rows, a_cols, b_cols);
+#endif
         return result;
     }
 
@@ -522,6 +597,41 @@ private:
         #pragma omp parallel for if (_data.size() > 5000 * 5000)
         for (size_t i = 0; i < _data.size(); ++i) {
             _data[i] = -_data[i];
+        }
+    }
+
+    // Fallback matrix multiplication implementation
+    template <typename A, typename B, typename C>
+    void _fallback_matrix_multiply(const A* a_data,
+                                   const B* b_data,
+                                   C* c_data,
+                                   size_t a_rows,
+                                   size_t a_cols,
+                                   size_t b_cols) const {
+        #pragma omp parallel for collapse(2) if (a_rows * b_cols > 10000)
+        for (size_t ii = 0; ii < a_rows; ii += BLOCK_SIZE) {
+            for (size_t jj = 0; jj < b_cols; jj += BLOCK_SIZE) {
+                for (size_t kk = 0; kk < a_cols; kk += BLOCK_SIZE) {
+                    // Process block (your existing blocked implementation)
+                    const size_t i_end = std::min(ii + BLOCK_SIZE, a_rows);
+                    const size_t j_end = std::min(jj + BLOCK_SIZE, b_cols);
+                    const size_t k_end = std::min(kk + BLOCK_SIZE, a_cols);
+
+                    for (size_t i = ii; i < i_end; ++i) {
+                        for (size_t k = kk; k < k_end; ++k) {
+                            const C a_ik = static_cast<C>(a_data[(i * a_cols) + k]);
+                            const size_t b_offset = k * b_cols;
+                            const size_t c_offset = i * b_cols;
+
+                            #pragma omp simd
+                            for (size_t j = jj; j < j_end; ++j) {
+                                c_data[c_offset + j] +=
+                                    a_ik * static_cast<C>(b_data[b_offset + j]);
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 };

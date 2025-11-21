@@ -1,7 +1,9 @@
 #include <MafLib/main/GlobalHeader.hpp>
 
-template <typename T> class BTree {
-  private:
+// TODO: revisit this. Add it to namespace
+template <typename T>
+class BTree {
+private:
     struct BTValue;
     struct BTNode;
 
@@ -12,24 +14,28 @@ template <typename T> class BTree {
         std::shared_ptr<BTNode> _left_child = nullptr;
         std::shared_ptr<BTNode> _right_child = nullptr;
 
-        explicit BTValue(const T &value) : _value(value) {}
+        explicit BTValue(const T& value) : _value(value) {}
 
-        void set_next(const std::shared_ptr<BTValue> &next) {
+        void set_next(const std::shared_ptr<BTValue>& next) {
             _next = next;
             if (next) {
                 next->_prev = this->shared_from_this();
             }
         }
 
-        void set_prev(const std::shared_ptr<BTValue> &prev) {
+        void set_prev(const std::shared_ptr<BTValue>& prev) {
             _prev = prev;
             if (prev) {
                 prev->_next = this->shared_from_this();
             }
         }
 
-        void reset_left_child() { _left_child = nullptr; }
-        void reset_right_child() { _right_child = nullptr; }
+        void reset_left_child() {
+            _left_child = nullptr;
+        }
+        void reset_right_child() {
+            _right_child = nullptr;
+        }
     };
 
     struct BTNode : std::enable_shared_from_this<BTNode> {
@@ -42,7 +48,7 @@ template <typename T> class BTree {
         std::shared_ptr<BTNode> orphan = nullptr;
 
         BTNode() = default;
-        explicit BTNode(const T &val, uint8 deg = 5, size_t size = 1)
+        explicit BTNode(const T& val, uint8 deg = 5, size_t size = 1)
             : _deg(deg), _size(size) {
             _first = new BTValue(val);
             _last = _first;
@@ -57,8 +63,8 @@ template <typename T> class BTree {
             }
         }
 
-        std::pair<std::shared_ptr<BTNode>, std::shared_ptr<BTValue>>
-        search(const T &value) {
+        std::pair<std::shared_ptr<BTNode>, std::shared_ptr<BTValue>> search(
+            const T& value) {
             if (!_first) {
                 return std::make_pair(this->shared_from_this(), nullptr);
             }
@@ -83,7 +89,7 @@ template <typename T> class BTree {
             return std::make_pair(this->shared_from_this(), nullptr);
         }
 
-        std::shared_ptr<BTValue> insert(const T &value) {
+        std::shared_ptr<BTValue> insert(const T& value) {
             std::shared_ptr<BTValue> val = _first;
             while (val && val->_value <= value) {
                 val = val->_next;
@@ -116,18 +122,20 @@ template <typename T> class BTree {
     std::shared_ptr<BTNode> _root;
     uint8 _deg;
 
-  public:
-    BTree(const T &val, int deg = 5) : _deg(deg) {
+public:
+    BTree(const T& val, int deg = 5) : _deg(deg) {
         _root = std::make_shared<BTNode>(val, _deg);
     }
 
-    std::shared_ptr<BTNode> get_root() { return _root; }
+    std::shared_ptr<BTNode> get_root() {
+        return _root;
+    }
 
-    std::shared_ptr<BTValue> search(const T &val) {
+    std::shared_ptr<BTValue> search(const T& val) {
         return _root->search(val).second;
     }
 
-    void insert(const T &val) {
+    void insert(const T& val) {
         auto [node, value] = _root->search(val);
         node->insert(val);
         auto nroot = node->split();

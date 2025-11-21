@@ -1,7 +1,6 @@
 CompileFlags:
     # Path to CMake's compile_commands.json
     CompilationDatabase: build/clang-debug
-
     # Extra flags to inject
     Add:
         - -std=c++20
@@ -9,14 +8,18 @@ CompileFlags:
         - -Wextra
         - -Wpedantic
         - -I${project_root}/include
-
-    # Flags to remove if they show up
+        - -DACCELERATE_NEW_LAPACK
+        - -DACCELERATE_LAPACK_ILP64
+        # Link/lookup for framework (for clangd, helps with headers from Accelerate)
+        - -framework
+        - Accelerate
+        # OpenMP compile flag (clang + OpenMP)
+        - -Xclang
+        - -fopenmp
     Remove:
         - -Werror
-
 Index:
     Background: Skip
-
 Diagnostics:
     ClangTidy:
         Add:

@@ -1,3 +1,5 @@
+#include <vecLib/cblas_new.h>
+
 #include "MafLib/main/GlobalHeader.hpp"
 #include "MafLib/utility/UtilMath.hpp"
 

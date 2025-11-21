@@ -1,7 +1,8 @@
 #include "MafLib/main/GlobalHeader.hpp"
 
-template <typename T> class AVLTree {
-  private:
+template <typename T>
+class AVLTree {
+private:
     struct AVLNode {
         T value;
         AVLNode *left, right;
@@ -14,5 +15,5 @@ template <typename T> class AVLTree {
         }
     };
 
-    AVLNode *root;
+    AVLNode* root;
 };

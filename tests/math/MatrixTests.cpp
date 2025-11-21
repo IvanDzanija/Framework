@@ -473,15 +473,15 @@ private:
         ASSERT_TRUE(a.at(1, 1) == 14);
 
         math::Matrix<double> b(2, 2, {1.5, 2.5, 3.5, 4.5});
-                b += 0.5;
-                ASSERT_TRUE(is_close(b.at(0, 0), 2.0));
-                ASSERT_TRUE(is_close(b.at(0, 1), 3.0));
-                ASSERT_TRUE(is_close(b.at(1, 0), 4.0));
-                ASSERT_TRUE(is_close(b.at(1, 1), 5.0));
+        b += 0.5;
+        ASSERT_TRUE(is_close(b.at(0, 0), 2.0));
+        ASSERT_TRUE(is_close(b.at(0, 1), 3.0));
+        ASSERT_TRUE(is_close(b.at(1, 0), 4.0));
+        ASSERT_TRUE(is_close(b.at(1, 1), 5.0));
 
-                b += 10;
-                ASSERT_TRUE(is_close(b.at(0, 0), 12.0));
-                ASSERT_TRUE(is_close(b.at(1, 1), 15.0));
+        b += 10;
+        ASSERT_TRUE(is_close(b.at(0, 0), 12.0));
+        ASSERT_TRUE(is_close(b.at(1, 1), 15.0));
     }
 
     void should_subtract_assign_scalar() {
@@ -554,7 +554,7 @@ private:
     }
 
     void matmul_time_test() {
-        const size_t n = 1024;
+        const size_t n = 4000;
         math::Matrix<double> A(n, n);
         math::Matrix<double> B(n, n);
 

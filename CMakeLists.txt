@@ -21,6 +21,10 @@ add_library(${PROJECT_NAME}::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
 
 
 if(APPLE)
+    set(CMAKE_OSX_SYSROOT "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.1.sdk")
+    set(CMAKE_OSX_ARCHITECTURES "arm64")
+    set(CMAKE_OSX_DEPLOYMENT_TARGET "26.1")
+    # Find and report Homebrew paths
     find_program(HOMEBREW brew)
     if(HOMEBREW)
         execute_process(COMMAND ${HOMEBREW} --prefix libomp
@@ -29,26 +33,30 @@ if(APPLE)
         execute_process(COMMAND ${HOMEBREW} --prefix llvm
             OUTPUT_VARIABLE LLVM_PREFIX
             OUTPUT_STRIP_TRAILING_WHITESPACE)
-
         set(OpenMP_CXX_FLAGS "-Xpreprocessor -fopenmp -I${LIBOMP_PREFIX}/include")
         set(OpenMP_CXX_LIB_NAMES omp)
         set(OpenMP_omp_LIBRARY ${LIBOMP_PREFIX}/lib/libomp.dylib)
+        message(STATUS "Found Homebrew libomp at: ${LIBOMP_PREFIX}")
     endif()
-elseif(WIN32)
-    set(LLVM_ROOT "C:/Program Files/LLVM")
-    set(OpenMP_CXX_FLAGS "-Xclang -fopenmp -I${LLVM_ROOT}/include")
 
-    if(EXISTS "${LLVM_ROOT}/lib/libomp.lib")
-        set(OpenMP_CXX_LIB_NAMES "libomp")
-        set(OpenMP_omp_LIBRARY "${LLVM_ROOT}/lib/libomp.lib")
-        set(OPENMP_FOUND TRUE)
-    elseif(EXISTS "${LLVM_ROOT}/lib/libiomp5md.lib")
-        set(OpenMP_CXX_LIB_NAMES "libiomp5md")
-        set(OpenMP_omp_LIBRARY "${LLVM_ROOT}/lib/libiomp5md.lib")
-        set(OPENMP_FOUND TRUE)
-    else()
-        message(WARNING "OpenMP library not found on Windows — continuing without OpenMP support.")
+    find_library(ACCELERATE_FRAMEWORK Accelerate)
+
+    if(NOT ACCELERATE_FRAMEWORK)
+        message(FATAL_ERROR "Could not find Accelerate framework")
     endif()
+
+    target_link_libraries(${PROJECT_NAME}
+        INTERFACE
+          "${ACCELERATE_FRAMEWORK}"
+    )
+
+    # Definitions for new CBLAS/LAPACK interface
+    target_compile_definitions(${PROJECT_NAME}
+        INTERFACE
+            ACCELERATE_AVAILABLE
+            ACCELERATE_NEW_LAPACK
+            ACCELERATE_LAPACK_ILP64
+    )
 endif()
 find_package(OpenMP REQUIRED)
 
