@@ -3,9 +3,11 @@
 #include "MafLib/math/linalg/Matrix.hpp"
 #include "MafLib/math/linalg/Vector.hpp"
 
-using namespace maf;
-using namespace std::chrono;
 namespace maf::test {
+using namespace maf;
+using namespace util;
+using namespace std::chrono;
+
 class MatrixTests : public ITest {
 private:
     //=============================================================================

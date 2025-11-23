@@ -3,7 +3,7 @@
 #pragma once
 #include "MafLib/main/GlobalHeader.hpp"
 
-namespace maf {
+namespace maf::util {
 inline constexpr double EPSILON = 1e-6;
 template <typename T>
 [[nodiscard]] bool is_close(T v1, T v2, double epsilon = EPSILON) {
@@ -16,6 +16,6 @@ template <typename T, typename U>
     return std::abs(static_cast<R>(v1) - static_cast<R>(v2)) < epsilon;
 }
 
-}  // namespace maf
+}  // namespace maf::util
 
 #endif

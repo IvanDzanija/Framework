@@ -19,6 +19,9 @@ class Vector;
  * Many operations (like multiplication and addition) are parallelized
  * using OpenMP and employ blocking strategies for cache efficiency.
  *
+ * Additional optimizations in the form of LAPACK/BLAS subroutines
+ * are automatically included on all **WORTHY** operating systems.
+ *
  * @tparam T The numeric type of the matrix elements (e.g., float,
  * double, int).
  *
@@ -383,12 +386,12 @@ public:
                             a_rows,
                             b_cols,
                             a_cols,
-                            1.0f,
+                            1.0F,
                             a_ptr,
                             a_cols,
                             b_ptr,
                             b_cols,
-                            0.0f,
+                            0.0F,
                             c_data,
                             b_cols);
             } else if constexpr (std::is_same_v<R, double>) {

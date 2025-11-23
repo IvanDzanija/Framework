@@ -13,6 +13,7 @@
  */
 namespace maf::math {
 // Checks if matrix is square.
+using namespace util;
 template <Numeric T>
 [[nodiscard]] constexpr bool Matrix<T>::is_square() const {
     return _rows == _cols;

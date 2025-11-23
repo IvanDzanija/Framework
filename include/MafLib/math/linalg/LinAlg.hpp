@@ -1,5 +1,10 @@
 #ifndef LINALG_H
 #define LINALG_H
+
+#if defined(__APPLE__) && defined(ACCELERATE_AVAILABLE)
+#include <vecLib/cblas_new.h>
+#include <vecLib/clapack.h>
+#endif
 #include "MafLib/math/Math.hpp"
 #pragma once
 
