@@ -1,9 +1,10 @@
 #ifndef BIT_TWIDDLING_H
 #define BIT_TWIDDLING_H
-#include <cmath>
+#pragma once
+#include "MafLib/main/GlobalHeader.hpp"
 
 namespace maf::util {
-
+// TODO: Change to integral template, floating point to?
 inline bool same_sign(int a, int b) {
     return ((a ^ b) >= 0);
 }
