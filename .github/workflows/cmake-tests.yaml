@@ -8,13 +8,25 @@ on:
 jobs:
     build-and-test:
         strategy:
+            fail-fast: false # Optional: prevents canceling other jobs if one fails
             matrix:
-                os: [ubuntu-latest, macos-latest]
+                # macos-latest = Apple Silicon (ARM64)
+                # macos-13     = Intel (x86_64)
+                os: [ubuntu-latest, macos-latest, macos-13]
         runs-on: ${{ matrix.os }}
 
         steps:
             - name: Checkout repository
               uses: actions/checkout@v4
+
+            # 🔍 Optional: Verify which CPU is running
+            - name: Check Architecture
+              run: |
+                  echo "OS: ${{ runner.os }}"
+                  echo "Architecture: $(uname -m)"
+                  if [[ "${{ runner.os }}" == "macOS" ]]; then
+                    sysctl -n machdep.cpu.brand_string
+                  fi
 
             # Linux setup
             - name: Install dependencies (Linux)
@@ -23,7 +35,7 @@ jobs:
                   sudo apt-get update
                   sudo apt-get install -y clang ninja-build cmake libomp-dev
 
-            # macOS setup
+            # macOS setup (Runs on both Intel and Apple Silicon runners)
             - name: Install dependencies (macOS)
               if: runner.os == 'macOS'
               run: |
