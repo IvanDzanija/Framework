@@ -596,9 +596,15 @@ private:
      * @brief Internal helper to invert the sign of all elements in-place.
      */
     void _invert_sign() {
-        #pragma omp parallel for if (_data.size() > 5000 * 5000)
-        for (size_t i = 0; i < _data.size(); ++i) {
-            _data[i] = -_data[i];
+        if (_data.size() > OMP_LINEAR_LIMIT) {
+            #pragma omp parallel for
+            for (size_t i = 0; i < _data.size(); ++i) {
+                _data[i] = -_data[i];
+            }
+        } else {
+            for (size_t i = 0; i < _data.size(); ++i) {
+                _data[i] = -_data[i];
+            }
         }
     }
 
