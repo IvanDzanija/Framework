@@ -387,8 +387,8 @@ private:
      */
     void _invert_sign() {
         #pragma omp parallel for
-        for (auto& element : _data) {
-            element = -element;
+        for (size_t i = 0; i < _data.size(); ++i) {
+            _data[i] = -_data[i];
         }
     }
 };
