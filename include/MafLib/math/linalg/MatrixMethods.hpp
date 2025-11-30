@@ -22,7 +22,18 @@ template <Numeric U>
 // Inplace fill
 template <Numeric T>
 void Matrix<T>::fill(T value) {
-    std::fill(_data.begin(), _data.end(), value);
+    if (_data.size() > OMP_LINEAR_LIMIT) {
+        #pragma omp parallel for
+        for (size_t i = 0; i < _data.size(); ++i) {
+            _data[i] = value;
+        }
+    } else {
+        for (size_t i = 0; i < _data.size(); ++i) {
+            _data[i] = value;
+        }
+    }
+
+    // std::fill(_data.begin(), _data.end(), value);
 }
 
 // Set to identity
