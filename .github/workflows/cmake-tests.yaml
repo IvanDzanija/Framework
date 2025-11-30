@@ -8,7 +8,7 @@ on:
 jobs:
     build-and-test:
         strategy:
-            fail-fast: false # Optional: prevents canceling other jobs if one fails
+            fail-fast: false # Prevent canceling other jobs if one fails
             matrix:
                 # macos-latest = Apple Silicon (ARM64)
                 # macos-13     = Intel (x86_64)
@@ -19,7 +19,7 @@ jobs:
             - name: Checkout repository
               uses: actions/checkout@v4
 
-            # 🔍 Optional: Verify which CPU is running
+            # Verify which CPU is running
             - name: Check Architecture
               run: |
                   echo "OS: ${{ runner.os }}"

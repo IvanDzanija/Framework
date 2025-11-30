@@ -14,6 +14,15 @@ namespace maf::math {
 static constexpr uint8 BLOCK_SIZE = 64;
 static constexpr uint8 FLOAT_PRECISION = 5;
 
+// Classes
+template <Numeric T>
+class Vector;
+
+template <Numeric T>
+class Matrix;
+
+// Functions
+
 }  // namespace maf::math
 
 #include "Matrix.hpp"

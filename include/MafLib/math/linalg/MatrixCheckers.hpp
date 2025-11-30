@@ -26,7 +26,7 @@ template <Numeric T>
     }
     for (size_t i = 0; i < _rows; ++i) {
         for (size_t j = i + 1; j < _cols; ++j) {
-            if (!is_close(this->at(i, j), this->at(j, i))) {
+            if (!is_close(at(i, j), at(j, i))) {
                 return false;
             }
         }
@@ -40,9 +40,12 @@ template <Numeric T>
     if (!is_square()) {
         return false;
     }
+
+    static T ZERO = static_cast<T>(0);
+
     for (size_t i = 1; i < _rows; ++i) {
         for (size_t j = 0; j < i; ++j) {
-            if (!is_close(this->at(i, j), static_cast<T>(0))) {
+            if (!is_close(at(i, j), ZERO)) {
                 return false;
             }
         }
@@ -56,9 +59,12 @@ template <Numeric T>
     if (!is_square()) {
         return false;
     }
+
+    static T ZERO = static_cast<T>(0);
+
     for (size_t i = 0; i < _rows - 1; ++i) {
         for (size_t j = i + 1; j < _cols; ++j) {
-            if (!is_close(this->at(i, j), static_cast<T>(0))) {
+            if (!is_close(at(i, j), ZERO)) {
                 return false;
             }
         }
@@ -72,6 +78,7 @@ template <Numeric T>
     if (!is_square()) {
         return false;
     }
+    // TODO: We can skip the checks for is square in both?
     return is_upper_triangular() && is_lower_triangular();
 }
 
@@ -90,7 +97,7 @@ template <Numeric T>
 }
 
 template <Numeric T>
-[[nodiscard]] bool Matrix<T>::is_positive_definite() const {
+[[nodiscard]] constexpr bool Matrix<T>::is_positive_definite() const {
     try {
         cholesky(*this);
         return true;

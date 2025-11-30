@@ -5,9 +5,6 @@
 #include "LinAlg.hpp"
 
 namespace maf::math {
-template <Numeric T>
-class Vector;
-
 /**
  * @brief A general-purpose, row-major, dense matrix class.
  *
@@ -31,7 +28,9 @@ class Vector;
 template <Numeric T>
 class Matrix {
 public:
+    /** @brief The numeric type of the matrix elements. */
     using value_type = T;
+
     // --- Constructors ---
 
     /**
@@ -194,7 +193,7 @@ public:
      * TODO: Add Sylvester's criterion for non-symmetric.
      * Defined in MatrixCheckers.hpp
      */
-    [[nodiscard]] bool is_positive_definite() const;
+    [[nodiscard]] constexpr bool is_positive_definite() const;
 
     /**
      * @brief Checks if the matrix is singular (non-invertible).

@@ -4,10 +4,6 @@
 #include "LinAlg.hpp"
 
 namespace maf::math {
-// Forward declaration of Matrix class for operator overloads
-template <Numeric T>
-class Matrix;
-
 /**
  * @brief A general-purpose mathematical vector class.
  *
@@ -34,24 +30,6 @@ public:
     /** @brief Specifies if the vector behaves as a row or column vector. */
     enum Orientation { ROW, COLUMN };
 
-private:
-    /** @brief Stores the vector's orientation (ROW or COLUMN). */
-    Orientation _orientation;
-
-    /** @brief Internal contiguous storage for the vector elements. */
-    std::vector<T> _data;
-
-    /**
-     * @brief Internal helper to invert the sign of all elements in-place.
-     */
-    void _invert_sign() {
-        #pragma omp parallel for
-        for (auto& element : _data) {
-            element = -element;
-        }
-    }
-
-public:
     // --- Constructors ---
 
     /**
@@ -195,7 +173,7 @@ public:
      * @throws std::out_of_range if the index is invalid.
      */
     const T& at(size_t index) const {
-        return this->_data.at(index);
+        return _data.at(index);
     }
 
     /**
@@ -203,7 +181,7 @@ public:
      * @throws std::out_of_range if the index is invalid.
      */
     T& operator[](size_t index) {
-        return this->_data[index];
+        return _data[index];
     }
 
     /**
@@ -211,7 +189,7 @@ public:
      * @throws std::out_of_range if the index is invalid.
      */
     const T& operator[](size_t index) const {
-        return this->_data[index];
+        return _data[index];
     }
 
     // --- Checkers ---
@@ -395,6 +373,23 @@ public:
             std::cout << std::endl;
         }
         std::cout << std::fixed;
+    }
+
+private:
+    /** @brief Stores the vector's orientation (ROW or COLUMN). */
+    Orientation _orientation;
+
+    /** @brief Internal contiguous storage for the vector elements. */
+    std::vector<T> _data;
+
+    /**
+     * @brief Internal helper to invert the sign of all elements in-place.
+     */
+    void _invert_sign() {
+        #pragma omp parallel for
+        for (auto& element : _data) {
+            element = -element;
+        }
     }
 };
 

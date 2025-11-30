@@ -561,6 +561,7 @@ private:
         math::Matrix<double> B(n, n);
 
         std::random_device rd;
+        auto a = omp_get_wtime();
         std::mt19937 gen(rd());
         std::uniform_real_distribution<> dis(-10.0, 10.0);
         for (size_t i = 0; i < n; ++i) {
