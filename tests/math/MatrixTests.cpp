@@ -541,12 +541,12 @@ private:
 
     void should_multiply_matrix_and_vector() {
         math::Matrix<float> m(2, 3, {1.0, 0.5, -2.0, 4.0, 1.0, 3.0});
-        math::Vector<int> v(3, std::vector<int>{2, 4, 6}, math::Vector<int>::COLUMN);
+        math::Vector<int> v(3, std::vector<int>{2, 4, 6}, math::COLUMN);
 
         math::Vector<float> expected(2,
                                      std::vector<float>{1.0 * 2 + 0.5 * 4 + (-2.0) * 6,
                                                         4.0 * 2 + 1.0 * 4 + 3.0 * 6},
-                                     math::Vector<float>::COLUMN);
+                                     math::COLUMN);
 
         auto result = m * v;
         ASSERT_TRUE(result.size() == 2);
@@ -694,7 +694,7 @@ private:
         auto start = std::chrono::high_resolution_clock::now();
         auto [p, L, U] = plu(A);
 
-        auto P = math::make_permutation_matrix<double>(p);
+        auto P = math::permutation_matrix<double>(p);
         auto end = std::chrono::high_resolution_clock::now();
         std::chrono::duration<double> elapsed = end - start;
         std::cout << "PLU elapsed time:" << elapsed.count() << " seconds.\n";

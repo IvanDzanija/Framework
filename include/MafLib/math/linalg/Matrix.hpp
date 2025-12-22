@@ -491,7 +491,7 @@ public:
         const size_t n = this->row_count();
         const size_t m = this->column_count();
 
-        if (other.orientation() == Vector<U>::ROW) {
+        if (other.orientation() == Orientation::ROW) {
             throw std::invalid_argument(
                 "Invalid multiplication: matrix * row vector.\n"
                 "Did you mean Vector * Matrix?");
@@ -502,7 +502,7 @@ public:
                 "Dimension mismatch in Matrix * Vector multiplication.");
         }
 
-        Vector<R> result(n, std::vector<R>(n, R(0)), Vector<R>::COLUMN);
+        Vector<R> result(n, std::vector<R>(n, R(0)), COLUMN);
 
         #pragma omp parallel for
         for (size_t i = 0; i < n; ++i) {
@@ -596,9 +596,15 @@ private:
      * @brief Internal helper to invert the sign of all elements in-place.
      */
     void _invert_sign() {
-        #pragma omp parallel for if (_data.size() > 5000 * 5000)
-        for (size_t i = 0; i < _data.size(); ++i) {
-            _data[i] = -_data[i];
+        if (_data.size() > OMP_LINEAR_LIMIT) {
+            #pragma omp parallel for
+            for (size_t i = 0; i < _data.size(); ++i) {
+                _data[i] = -_data[i];
+            }
+        } else {
+            for (size_t i = 0; i < _data.size(); ++i) {
+                _data[i] = -_data[i];
+            }
         }
     }
 

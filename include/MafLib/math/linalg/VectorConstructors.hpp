@@ -13,8 +13,7 @@
 namespace maf::math {
 // Constructs an uninitialized vector of size size.
 template <Numeric T>
-[[nodiscard]] Vector<T>::Vector(size_t size, Orientation orientation)
-    : _orientation(orientation) {
+Vector<T>::Vector(size_t size, Orientation orientation) : _orientation(orientation) {
     if (size == 0) {
         throw std::invalid_argument("Vector size must be greater than zero.");
     }
@@ -24,7 +23,7 @@ template <Numeric T>
 // Constructs a vector from a raw data pointer.
 template <Numeric T>
 template <Numeric U>
-[[nodiscard]] Vector<T>::Vector(size_t size, const U* data, Orientation orientation)
+Vector<T>::Vector(size_t size, const U* data, Orientation orientation)
     : _orientation(orientation) {
     if (size == 0) {
         throw std::invalid_argument("Vector size must be greater than zero!");
@@ -39,9 +38,7 @@ template <Numeric U>
 // Constructs from a std::vector, copy constructor
 template <Numeric T>
 template <Numeric U>
-[[nodiscard]] Vector<T>::Vector(size_t size,
-                                const std::vector<U>& data,
-                                Orientation orientation)
+Vector<T>::Vector(size_t size, const std::vector<U>& data, Orientation orientation)
     : _orientation(orientation) {
     if (size == 0) {
         throw std::invalid_argument("Vector size must be greater than zero.");
@@ -71,9 +68,7 @@ Vector<T>::Vector(size_t size, std::vector<T>&& data, Orientation orientation)
 // Constructs from a std::array, copy constructor
 template <Numeric T>
 template <Numeric U, size_t N>
-[[nodiscard]] Vector<T>::Vector(size_t size,
-                                const std::array<U, N>& data,
-                                Orientation orientation)
+Vector<T>::Vector(size_t size, const std::array<U, N>& data, Orientation orientation)
     : _orientation(orientation) {
     if (size == 0) {
         throw std::invalid_argument("Vector size must be greater than zero.");
@@ -84,6 +79,13 @@ template <Numeric U, size_t N>
 
     _data.assign(data.begin(), data.end());
 }
+
+// Converting constructor
+template <Numeric T>
+template <Numeric U>
+Vector<T>::Vector(const Vector<U>& other)
+    : _orientation(other.orientation()),
+      _data(other.data().begin(), other.data().end()) {}
 
 }  // namespace maf::math
 

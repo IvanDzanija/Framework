@@ -14,7 +14,7 @@ template <Numeric U>
     const size_t n = _data.size();
 
     for (size_t i = 0; i < n; ++i) {
-        result.data().at(i) = static_cast<U>(_data.at(i));
+        result.data()[i] = static_cast<U>(_data[i]);
     }
     return result;
 }
@@ -22,7 +22,16 @@ template <Numeric U>
 // Inplace fill
 template <Numeric T>
 void Matrix<T>::fill(T value) {
-    std::fill(_data.begin(), _data.end(), value);
+    if (_data.size() > OMP_LINEAR_LIMIT) {
+        #pragma omp parallel for
+        for (size_t i = 0; i < _data.size(); ++i) {
+            _data[i] = value;
+        }
+    } else {
+        for (size_t i = 0; i < _data.size(); ++i) {
+            _data[i] = value;
+        }
+    }
 }
 
 // Set to identity

@@ -2,9 +2,9 @@
 #define LINALG_H
 
 #if defined(__APPLE__) && defined(ACCELERATE_AVAILABLE)
-#include <vecLib/cblas_new.h>
-#include <vecLib/clapack.h>
+#include "MafLib/math/linalg/AccelerateWrappers/AccelerateWrapper.hpp"
 #endif
+
 #include "MafLib/math/Math.hpp"
 #pragma once
 
@@ -20,6 +20,9 @@ class Vector;
 
 template <Numeric T>
 class Matrix;
+
+/** @brief Specifies if the vector behaves as a row or column vector. */
+enum Orientation : uint8 { ROW, COLUMN };
 
 // Functions
 

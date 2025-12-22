@@ -46,11 +46,11 @@ template <Numeric U>
  * @return A sparse permutation Matrix<T>.
  */
 template <Numeric T>
-[[nodiscard]] Matrix<T> inline make_permutation_matrix(
-    const std::vector<uint32>& perm) {
+[[nodiscard]] Matrix<T> inline permutation_matrix(const std::vector<uint32>& perm) {
     size_t n = perm.size();
     Matrix<T> result(n, n);  // Initializes to zero
-#pragma omp parallel for if (n > 256)
+
+    #pragma omp parallel for if (n > 256)
     for (size_t i = 0; i < n; ++i) {
         const size_t j = perm.at(i);
         result.at(i, j) = static_cast<T>(1);
