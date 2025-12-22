@@ -58,7 +58,7 @@ auto Vector<T>::operator+(const Vector<U>& other) const {
     }
 
 #else
-    Vector<R> result();
+    Vector<R> result;
     result.data().reserve(_data.size());
     for (size_t i = 0; i < n; ++i) {
         result[i] = static_cast<R>(_data[i]) + static_cast<R>(other._data[i]);
