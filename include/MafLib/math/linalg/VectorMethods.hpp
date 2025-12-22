@@ -25,7 +25,7 @@ template <Numeric T>
     T sum = 0.0;
     size_t n = _data.size();
     if (n > OMP_LINEAR_LIMIT) {
-        #pragma omp parallel for
+        #pragma omp parallel for reduction(+:sum)
         for (size_t i = 0; i < n; ++i) {
             sum += _data[i] * _data[i];
         }
