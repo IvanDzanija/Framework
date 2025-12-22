@@ -32,8 +32,6 @@ void Matrix<T>::fill(T value) {
             _data[i] = value;
         }
     }
-
-    // std::fill(_data.begin(), _data.end(), value);
 }
 
 // Set to identity
