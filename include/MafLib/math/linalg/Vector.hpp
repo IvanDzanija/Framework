@@ -4,6 +4,9 @@
 #include "LinAlg.hpp"
 
 namespace maf::math {
+/** @brief Specifies if the vector behaves as a row or column vector. */
+enum Orientation : uint8 { ROW, COLUMN };
+
 /**
  * @brief A general-purpose mathematical vector class.
  *
@@ -26,9 +29,6 @@ class Vector {
 public:
     /** @brief The numeric type of the vector's elements. */
     using value_type = T;
-
-    /** @brief Specifies if the vector behaves as a row or column vector. */
-    enum Orientation { ROW, COLUMN };
 
     // --- Constructors ---
 
@@ -91,6 +91,12 @@ public:
     template <Numeric U, size_t N>
     Vector(size_t size, const std::array<U, N>& data, Orientation orientation = COLUMN);
 
+    /**
+     * @brief Converting constructor.
+     */
+    template <Numeric U>
+    [[nodiscard]] Vector(const Vector<U>& other);
+
     // --- Iterators ---
     /** @brief Returns an iterator to the beginning. */
     [[nodiscard]] auto begin() noexcept {
@@ -147,6 +153,24 @@ public:
     }
 
     // --- Getters ---
+
+    /**
+     * @brief Gets a mutable reference to the underlying std::vector
+     * data store.
+     * @return std::vector<T>&
+     */
+    [[nodiscard]] std::vector<T>& data() noexcept {
+        return _data;
+    }
+
+    /**
+     * @brief Gets a const reference to the underlying std::vector data
+     * store.
+     * @return const std::vector<T>&
+     */
+    [[nodiscard]] const std::vector<T>& data() const noexcept {
+        return _data;
+    }
 
     /** @brief Gets the number of elements in the vector. */
     [[nodiscard]] size_t size() const noexcept {

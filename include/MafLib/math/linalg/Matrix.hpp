@@ -491,7 +491,7 @@ public:
         const size_t n = this->row_count();
         const size_t m = this->column_count();
 
-        if (other.orientation() == Vector<U>::ROW) {
+        if (other.orientation() == ROW) {
             throw std::invalid_argument(
                 "Invalid multiplication: matrix * row vector.\n"
                 "Did you mean Vector * Matrix?");
@@ -502,7 +502,7 @@ public:
                 "Dimension mismatch in Matrix * Vector multiplication.");
         }
 
-        Vector<R> result(n, std::vector<R>(n, R(0)), Vector<R>::COLUMN);
+        Vector<R> result(n, std::vector<R>(n, R(0)), COLUMN);
 
         #pragma omp parallel for
         for (size_t i = 0; i < n; ++i) {

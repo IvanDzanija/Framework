@@ -85,6 +85,13 @@ template <Numeric U, size_t N>
     _data.assign(data.begin(), data.end());
 }
 
+// Converting constructor
+template <Numeric T>
+template <Numeric U>
+[[nodiscard]] Vector<T>::Vector(const Vector<U>& other)
+    : _orientation(other.orientation()),
+      _data(other.data().begin(), other.data().end()) {}
+
 }  // namespace maf::math
 
 #endif

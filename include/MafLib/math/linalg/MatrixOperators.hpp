@@ -4,9 +4,6 @@
 #include "Matrix.hpp"
 
 namespace maf::math {
-namespace {
-constexpr uint32 FIVE_K = 5000;
-}
 // Checks if elements are exactly equal
 template <Numeric T>
 [[nodiscard]] constexpr bool Matrix<T>::operator==(const Matrix& other) const noexcept {
@@ -36,8 +33,8 @@ template <Numeric U>
 
     Matrix<R> result(_rows, _cols);
 
-    if (_data.size() > FIVE_K * FIVE_K) {
-        // #pragma omp parallel for
+    if (_data.size() > OMP_LINEAR_LIMIT) {
+        #pragma omp parallel for
         for (size_t i = 0; i < _data.size(); ++i) {
             result.data()[i] =
                 static_cast<R>(_data[i]) + static_cast<R>(other.data()[i]);
@@ -61,7 +58,7 @@ template <Numeric U>
     Matrix<R> result(_rows, _cols);
     R r_scalar = static_cast<R>(scalar);
 
-    if (_data.size() > FIVE_K * FIVE_K) {
+    if (_data.size() > OMP_LINEAR_LIMIT) {
         #pragma omp parallel for
         for (size_t i = 0; i < _data.size(); ++i) {
             result.data()[i] = static_cast<R>(_data[i]) + r_scalar;
@@ -92,7 +89,7 @@ Matrix<T>& Matrix<T>::operator+=(const Matrix<U>& other) {
             "Matrices have to be of same dimensions for addition!");
     }
 
-    if (_data.size() > FIVE_K * FIVE_K) {
+    if (_data.size() > OMP_LINEAR_LIMIT) {
         #pragma omp parallel for
         for (size_t i = 0; i < _data.size(); ++i) {
             _data[i] += static_cast<T>(other.data()[i]);
@@ -115,7 +112,7 @@ Matrix<T>& Matrix<T>::operator+=(const U& scalar) noexcept {
 
     R r_scalar = static_cast<R>(scalar);
 
-    if (_data.size() > FIVE_K * FIVE_K) {
+    if (_data.size() > OMP_LINEAR_LIMIT) {
         #pragma omp parallel for
         for (size_t i = 0; i < _data.size(); ++i) {
             _data[i] += r_scalar;
@@ -140,7 +137,7 @@ template <Numeric U>
     using R = std::common_type_t<T, U>;
 
     Matrix<R> result(_rows, _cols);
-    if (_data.size() > FIVE_K * FIVE_K) {
+    if (_data.size() > OMP_LINEAR_LIMIT) {
         #pragma omp parallel for
         for (size_t i = 0; i < _data.size(); ++i) {
             result.data()[i] =
@@ -165,7 +162,7 @@ template <Numeric U>
     Matrix<R> result(_rows, _cols);
     R r_scalar = static_cast<R>(scalar);
 
-    if (_data.size() > FIVE_K * FIVE_K) {
+    if (_data.size() > OMP_LINEAR_LIMIT) {
         #pragma omp parallel for
         for (size_t i = 0; i < _data.size(); ++i) {
             result.data()[i] = static_cast<R>(_data[i]) - r_scalar;
@@ -191,7 +188,7 @@ template <Numeric T, Numeric U>
     Matrix<R> result(matrix.row_count(), matrix.column_count());
     R r_scalar = static_cast<R>(scalar);
 
-    if (matrix.size() > FIVE_K * FIVE_K) {
+    if (matrix.size() > OMP_LINEAR_LIMIT) {
         #pragma omp parallel for
         for (size_t i = 0; i < matrix.size(); ++i) {
             result.data()[i] = r_scalar - static_cast<R>(matrix.data()[i]);
@@ -214,7 +211,7 @@ Matrix<T>& Matrix<T>::operator-=(const Matrix<U>& other) {
             "Matrices have to be of same dimensions for addition!");
     }
 
-    if (_data.size() > FIVE_K * FIVE_K) {
+    if (_data.size() > OMP_LINEAR_LIMIT) {
         #pragma omp parallel for
         for (size_t i = 0; i < _data.size(); ++i) {
             _data[i] -= static_cast<T>(other.data()[i]);
@@ -237,7 +234,7 @@ Matrix<T>& Matrix<T>::operator-=(const U& scalar) noexcept {
 
     R r_scalar = static_cast<R>(scalar);
 
-    if (_data.size() > FIVE_K * FIVE_K) {
+    if (_data.size() > OMP_LINEAR_LIMIT) {
         #pragma omp parallel for
         for (size_t i = 0; i < _data.size(); ++i) {
             _data[i] -= r_scalar;

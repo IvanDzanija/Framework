@@ -16,17 +16,17 @@ private:
     void should_construct_empty_vector_with_zero_size() {
         math::Vector<int> v;
         ASSERT_TRUE(v.size() == 0);
-        ASSERT_TRUE(v.orientation() == math::Vector<int>::COLUMN);
+        ASSERT_TRUE(v.orientation() == math::COLUMN);
     }
 
     void should_construct_vector_of_given_size() {
         math::Vector<int> v_col(5);
         ASSERT_TRUE(v_col.size() == 5);
-        ASSERT_TRUE(v_col.orientation() == math::Vector<int>::COLUMN);
+        ASSERT_TRUE(v_col.orientation() == math::COLUMN);
 
-        math::Vector<double> v_row(3, math::Vector<double>::ROW);
+        math::Vector<double> v_row(3, math::ROW);
         ASSERT_TRUE(v_row.size() == 3);
-        ASSERT_TRUE(v_row.orientation() == math::Vector<double>::ROW);
+        ASSERT_TRUE(v_row.orientation() == math::ROW);
     }
 
     void should_throw_if_constructed_with_zero_size() {
@@ -41,9 +41,9 @@ private:
 
     void should_construct_from_raw_data() {
         int data[3] = {10, 20, 30};
-        math::Vector<int> v(3, data, math::Vector<int>::ROW);
+        math::Vector<int> v(3, data, math::ROW);
         ASSERT_TRUE(v.size() == 3);
-        ASSERT_TRUE(v.orientation() == math::Vector<int>::ROW);
+        ASSERT_TRUE(v.orientation() == math::ROW);
         ASSERT_TRUE(v[0] == 10);
         ASSERT_TRUE(v[1] == 20);
         ASSERT_TRUE(v[2] == 30);
@@ -100,9 +100,9 @@ private:
 
     void should_construct_from_std_array() {
         std::array<float, 3> data = {1.1f, 2.2f, 3.3f};
-        math::Vector<float> v(3, data, math::Vector<float>::ROW);
+        math::Vector<float> v(3, data, math::ROW);
         ASSERT_TRUE(v.size() == 3);
-        ASSERT_TRUE(v.orientation() == math::Vector<float>::ROW);
+        ASSERT_TRUE(v.orientation() == math::ROW);
         ASSERT_TRUE(is_close(v[1], 2.2f));
     }
 
@@ -221,20 +221,20 @@ private:
     }
 
     void should_transpose_vector_in_place() {
-        math::Vector<int> v(3, math::Vector<int>::COLUMN);
-        ASSERT_TRUE(v.orientation() == math::Vector<int>::COLUMN);
+        math::Vector<int> v(3, math::COLUMN);
+        ASSERT_TRUE(v.orientation() == math::COLUMN);
         v.transpose();
-        ASSERT_TRUE(v.orientation() == math::Vector<int>::ROW);
+        ASSERT_TRUE(v.orientation() == math::ROW);
         v.transpose();
-        ASSERT_TRUE(v.orientation() == math::Vector<int>::COLUMN);
+        ASSERT_TRUE(v.orientation() == math::COLUMN);
     }
 
     void should_return_transposed_copy() {
-        math::Vector<int> v_col(3, math::Vector<int>::COLUMN);
+        math::Vector<int> v_col(3, math::COLUMN);
         auto v_row = v_col.transposed();
 
-        ASSERT_TRUE(v_col.orientation() == math::Vector<int>::COLUMN);
-        ASSERT_TRUE(v_row.orientation() == math::Vector<int>::ROW);
+        ASSERT_TRUE(v_col.orientation() == math::COLUMN);
+        ASSERT_TRUE(v_row.orientation() == math::ROW);
         ASSERT_TRUE(v_row.size() == 3);
     }
 
@@ -273,19 +273,19 @@ private:
     //        ASSERT_TRUE(v_neg[1] == 10);
     //    }
     //
-    //    void should_add_two_vectors() {
-    //        math::Vector<int> v1(2);
-    //        v1[0] = 1;
-    //        v1[1] = 2;
-    //        math::Vector<int> v2(2);
-    //        v2[0] = 10;
-    //        v2[1] = 20;
-    //        auto v_sum = v1 + v2;
-    //
-    //        ASSERT_TRUE(v_sum.size() == 2);
-    //        ASSERT_TRUE(v_sum[0] == 11);
-    //        ASSERT_TRUE(v_sum[1] == 22);
-    //    }
+    void should_add_two_vectors() {
+        math::Vector<int> v1(2);
+        v1[0] = 1;
+        v1[1] = 2;
+        math::Vector<float> v2(2);
+        v2[0] = 10;
+        v2[1] = 20;
+        auto v_sum = v1 + v2;
+
+        ASSERT_TRUE(v_sum.size() == 2);
+        ASSERT_TRUE(v_sum[0] == 11);
+        ASSERT_TRUE(v_sum[1] == 22);
+    }
     //
     //    void should_add_scalar_to_vector() {
     //        math::Vector<int> v(2);
@@ -489,7 +489,7 @@ public:
         //    // Operators
         //    should_check_equality();
         //    should_perform_unary_minus();
-        //    should_add_two_vectors();
+        should_add_two_vectors();
         //    should_add_scalar_to_vector();
         //    should_subtract_two_vectors();
         //    should_subtract_scalar_from_vector();
