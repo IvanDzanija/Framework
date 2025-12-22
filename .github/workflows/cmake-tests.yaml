@@ -10,9 +10,7 @@ jobs:
         strategy:
             fail-fast: false # Prevent canceling other jobs if one fails
             matrix:
-                # macos-latest = Apple Silicon (ARM64)
-                # macos-13     = Intel (x86_64)
-                os: [ubuntu-latest, macos-latest, macos-13]
+                os: [ubuntu-latest, macos-latest]
         runs-on: ${{ matrix.os }}
 
         steps:
