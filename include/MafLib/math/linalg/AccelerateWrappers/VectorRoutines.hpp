@@ -94,14 +94,14 @@ inline void inplace_vsaddi(std::vector<int32>& x, const int32 alpha = 1) {
 // TODO: Fix rest
 // R = X * Alpha
 [[nodiscard]] inline std::vector<float> sscal(const std::vector<float>& x,
-                                              int32 alpha = 1) {
+                                              float alpha = 1.0f) {
     std::vector<float> result(x.begin(), x.end());
     cblas_sscal(x.size(), alpha, result.data(), 1);
     return result;
 }
 
 // X = X * Alpha
-inline void inplace_sscal(std::vector<float>& x, int32 alpha = 1) {
+inline void inplace_sscal(std::vector<float>& x, float alpha = 1.0f) {
     cblas_sscal(x.size(), alpha, x.data(), 1);
 }
 
