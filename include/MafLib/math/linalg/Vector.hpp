@@ -380,6 +380,7 @@ private:
                 _data[i] = -_data[i];
             }
         } else {
+            #pragma omp simd
             for (size_t i = 0; i < _data.size(); ++i) {
                 _data[i] = -_data[i];
             }

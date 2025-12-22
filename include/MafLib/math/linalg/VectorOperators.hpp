@@ -203,6 +203,8 @@ template <Numeric T, Numeric U>
     return vec * scalar;
 }
 
+// TODO: Check if makes sense to use BLAS on routines below
+
 // Vector * Matrix -> Vector
 template <Numeric T>
 template <Numeric U>
