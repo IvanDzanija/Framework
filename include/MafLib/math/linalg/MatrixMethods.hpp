@@ -14,7 +14,7 @@ template <Numeric U>
     const size_t n = _data.size();
 
     for (size_t i = 0; i < n; ++i) {
-        result.data().at(i) = static_cast<U>(_data.at(i));
+        result.data()[i] = static_cast<U>(_data[i]);
     }
     return result;
 }

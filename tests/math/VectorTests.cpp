@@ -1,5 +1,6 @@
 #include "ITest.hpp"
 #include "MafLib/main/GlobalHeader.hpp"
+#include "MafLib/math/linalg/LinAlg.hpp"
 #include "MafLib/math/linalg/Matrix.hpp"
 #include "MafLib/math/linalg/Vector.hpp"
 
@@ -138,7 +139,6 @@ private:
     void should_throw_on_out_of_bounds_access() {
         math::Vector<int> v(3);
         bool thrown_at = false;
-        bool thrown_op = false;
 
         try {
             v.at(3) = 10;
@@ -241,38 +241,42 @@ private:
     //    //=============================================================================
     //    // Operators
     //    //=============================================================================
-    //    void should_check_equality() {
-    //        math::Vector<int> v1(2);
-    //        v1[0] = 1;
-    //        v1[1] = 2;
-    //        math::Vector<int> v2(2);
-    //        v2[0] = 1;
-    //        v2[1] = 2;
-    //        math::Vector<int> v3(2);
-    //        v3[0] = 1;
-    //        v3[1] = 9;
-    //        math::Vector<int> v4(3);
-    //        math::Vector<int> v5(2, math::Vector<int>::ROW);
-    //        v5[0] = 1;
-    //        v5[1] = 2;
-    //
-    //        ASSERT_TRUE(v1 == v2);
-    //        ASSERT_TRUE(!(v1 == v3));
-    //        ASSERT_TRUE(!(v1 == v4)); // Different size
-    //        ASSERT_TRUE(!(v1 == v5)); // Different orientation
-    //    }
-    //
-    //    void should_perform_unary_minus() {
-    //        math::Vector<int> v(2);
-    //        v[0] = 5;
-    //        v[1] = -10;
-    //        auto v_neg = -v;
-    //
-    //        ASSERT_TRUE(v[0] == 5); // Original unchanged
-    //        ASSERT_TRUE(v_neg[0] == -5);
-    //        ASSERT_TRUE(v_neg[1] == 10);
-    //    }
-    //
+    void should_check_equality() {
+        math::Vector<int> v1(2);
+        v1[0] = 1;
+        v1[1] = 2;
+        math::Vector<int> v2(2);
+        v2[0] = 1;
+        v2[1] = 2;
+        math::Vector<int> v3(2);
+        v3[0] = 1;
+        v3[1] = 9;
+        math::Vector<int> v4(3);
+        math::Vector<int> v5(2, math::ROW);
+        v5[0] = 1;
+        v5[1] = 2;
+        math::Vector<float> v6(2);
+        v5[0] = 1.F;
+        v5[1] = 2.F;
+
+        ASSERT_TRUE(v1 == v2);
+        ASSERT_TRUE(!(v1 == v3));
+        ASSERT_TRUE(!(v1 == v4));  // Different size
+        ASSERT_TRUE(!(v1 == v5));  // Different orientation
+        // ASSERT_TRUE(v1 == v6); // Different types -> doesn't compile
+    }
+
+    void should_perform_unary_minus() {
+        math::Vector<int> v(2);
+        v[0] = 5;
+        v[1] = -10;
+        auto v_neg = -v;
+
+        ASSERT_TRUE(v[0] == 5);  // Original unchanged
+        ASSERT_TRUE(v_neg[0] == -5);
+        ASSERT_TRUE(v_neg[1] == 10);
+    }
+
     void should_add_two_vectors() {
         math::Vector<int> v1(2);
         v1[0] = 1;
@@ -284,62 +288,70 @@ private:
 
         ASSERT_TRUE(v_sum.size() == 2);
         ASSERT_TRUE(v_sum[0] == 11);
-        ASSERT_TRUE(v_sum[1] == 22);
+        ASSERT_TRUE(v_sum[1] + 0.5F == 22.5F);
     }
-    //
-    //    void should_add_scalar_to_vector() {
-    //        math::Vector<int> v(2);
-    //        v[0] = 1;
-    //        v[1] = 2;
-    //        auto v_sum = v + 10;
-    //        ASSERT_TRUE(v_sum[0] == 11);
-    //        ASSERT_TRUE(v_sum[1] == 12);
-    //
-    //        auto v_sum2 = 10 + v;
-    //        ASSERT_TRUE(v_sum2[0] == 11);
-    //        ASSERT_TRUE(v_sum2[1] == 12);
-    //    }
-    //
-    //    void should_subtract_two_vectors() {
-    //        math::Vector<int> v1(2);
-    //        v1[0] = 10;
-    //        v1[1] = 20;
-    //        math::Vector<int> v2(2);
-    //        v2[0] = 1;
-    //        v2[1] = 2;
-    //        auto v_diff = v1 - v2;
-    //
-    //        ASSERT_TRUE(v_diff.size() == 2);
-    //        ASSERT_TRUE(v_diff[0] == 9);
-    //        ASSERT_TRUE(v_diff[1] == 18);
-    //    }
-    //
-    //    void should_subtract_scalar_from_vector() {
-    //        math::Vector<int> v(2);
-    //        v[0] = 11;
-    //        v[1] = 12;
-    //        auto v_diff = v - 1;
-    //        ASSERT_TRUE(v_diff[0] == 10);
-    //        ASSERT_TRUE(v_diff[1] == 11);
-    //
-    //        auto v_diff2 = 100 - v;
-    //        ASSERT_TRUE(v_diff2[0] == 89);
-    //        ASSERT_TRUE(v_diff2[1] == 88);
-    //    }
-    //
-    //    void should_multiply_vector_by_scalar() {
-    //        math::Vector<int> v(2);
-    //        v[0] = 2;
-    //        v[1] = 3;
-    //        auto v_prod = v * 5;
-    //        ASSERT_TRUE(v_prod[0] == 10);
-    //        ASSERT_TRUE(v_prod[1] == 15);
-    //
-    //        auto v_prod2 = 5 * v;
-    //        ASSERT_TRUE(v_prod2[0] == 10);
-    //        ASSERT_TRUE(v_prod2[1] == 15);
-    //    }
-    //
+
+    void should_add_scalar_to_vector() {
+        math::Vector<int> v(2);
+        v[0] = 1;
+        v[1] = 2;
+        auto v_sum = v + 10;
+        ASSERT_TRUE(v_sum[0] == 11);
+        ASSERT_TRUE(v_sum[1] == 12);
+
+        auto v_sum2 = 10 + v;
+        ASSERT_TRUE(v_sum2[0] == 11);
+        ASSERT_TRUE(v_sum2[1] == 12);
+
+        auto v_sum3 = 10.F + v;
+        ASSERT_TRUE(v_sum3[0] == 11);
+        ASSERT_TRUE(v_sum3[1] == 12);
+
+        auto v_sum4 = v + 10.F;
+        ASSERT_TRUE(v_sum4[0] + 0.5F == 11.5F);
+        ASSERT_TRUE(v_sum4[1] + 0.5F == 12.5F);
+    }
+
+    void should_subtract_two_vectors() {
+        math::Vector<int> v1(2);
+        v1[0] = 10;
+        v1[1] = 20;
+        math::Vector<double> v2(2);
+        v2[0] = 1;
+        v2[1] = 2;
+        auto v_diff = v1 - v2;
+
+        ASSERT_TRUE(v_diff.size() == 2);
+        ASSERT_TRUE(v_diff[0] + 0.5F == 9.5F);
+        ASSERT_TRUE(v_diff[1] == 18);
+    }
+
+    void should_subtract_scalar_from_vector() {
+        math::Vector<int> v(2);
+        v[0] = 11;
+        v[1] = 12;
+        auto v_diff = v - 1;
+        ASSERT_TRUE(v_diff[0] == 10);
+        ASSERT_TRUE(v_diff[1] == 11);
+
+        auto v_diff2 = 100 - v;
+        ASSERT_TRUE(v_diff2[0] == 89);
+        ASSERT_TRUE(v_diff2[1] == 88);
+    }
+
+    void should_multiply_vector_by_scalar() {
+        math::Vector<int> v(2);
+        v[0] = 2;
+        v[1] = 3;
+        auto v_prod = v * 5;
+        ASSERT_TRUE(v_prod[0] == 10);
+        ASSERT_TRUE(v_prod[1] == 15);
+
+        auto v_prod2 = 5.F * v;
+        ASSERT_TRUE(v_prod2[0] + 0.5F == 10.5F);
+        ASSERT_TRUE(v_prod2[1] == 15);
+    }
+
     //    void should_calculate_dot_product() {
     //        math::Vector<int> v1(3);
     //        v1[0] = 1;
@@ -479,7 +491,6 @@ public:
         should_iterate_over_elements();
         should_check_if_vector_is_null();
 
-        // Methods
         should_fill_vector_with_value();
         should_calculate_l2_norm();
         should_normalize_vector_in_place();
@@ -487,8 +498,8 @@ public:
         should_return_transposed_copy();
         //
         //    // Operators
-        //    should_check_equality();
-        //    should_perform_unary_minus();
+        should_check_equality();
+        should_perform_unary_minus();
         should_add_two_vectors();
         //    should_add_scalar_to_vector();
         //    should_subtract_two_vectors();

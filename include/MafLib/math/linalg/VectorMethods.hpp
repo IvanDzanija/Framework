@@ -7,15 +7,35 @@ namespace maf::math {
 // Inplace fill
 template <Numeric T>
 void Vector<T>::fill(T value) noexcept {
-    std::fill(_data.begin(), _data.end(), value);
+    if (_data.size() > OMP_LINEAR_LIMIT) {
+        #pragma omp parallel for
+        for (size_t i = 0; i < _data.size(); ++i) {
+            _data[i] = value;
+        }
+    } else {
+        for (size_t i = 0; i < _data.size(); ++i) {
+            _data[i] = value;
+        }
+    }
+
+    // std::fill(_data.begin(), _data.end(), value);
 }
 
 // L2 Norm
 template <Numeric T>
 [[nodiscard]] T Vector<T>::norm() const noexcept {
     T sum = 0.0;
-    for (const T& val : _data) {
-        sum += val * val;
+    size_t n = _data.size();
+    if (n > OMP_LINEAR_LIMIT) {
+        #pragma omp parallel for
+        for (size_t i = 0; i < n; ++i) {
+            sum += _data[i] * _data[i];
+        }
+    } else {
+        #pragma omp simd
+        for (size_t i = 0; i < n; ++i) {
+            sum += _data[i] * _data[i];
+        }
     }
     return std::sqrt(sum);
 }
@@ -28,8 +48,19 @@ void Vector<T>::normalize() {
         throw std::invalid_argument("Vector norm is close to 0!");
     }
 
-    for (T& val : _data) {
-        val /= norm;
+    T norm_inv = T(1) / norm;
+    size_t n = _data.size();
+
+    if (n > OMP_LINEAR_LIMIT) {
+        #pragma omp parallel for
+        for (size_t i = 0; i < n; ++i) {
+            _data[i] *= norm_inv;
+        }
+    } else {
+        #pragma omp simd
+        for (size_t i = 0; i < n; ++i) {
+            _data[i] *= norm_inv;
+        }
     }
 }
 

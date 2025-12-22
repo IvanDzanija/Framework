@@ -4,8 +4,6 @@
 #include "LinAlg.hpp"
 
 namespace maf::math {
-/** @brief Specifies if the vector behaves as a row or column vector. */
-enum Orientation : uint8 { ROW, COLUMN };
 
 /**
  * @brief A general-purpose mathematical vector class.
@@ -243,15 +241,20 @@ public:
     [[nodiscard]] Vector<T> transposed() const noexcept;
 
     // --- Operators ---
-    // TODO: Refactoring and stopped here. Continue from here
 
     /**
      * @brief Checks for exact element-wise equality.
-     * @details For floating-point, use a loose comparison.
+     * @details For floating-point, use `loosely_equal()`
      * @param other The vector to compare against.
      * @return true if size, orientation, and all elements are identical.
      */
-    [[nodiscard]] bool operator==(const Vector& other) const;
+    [[nodiscard]] constexpr bool operator==(const Vector& other) const noexcept;
+
+    /**
+     * @brief Unary minus. Returns a new Vector with all elements negated.
+     * @return `Vector<T>`
+     */
+    [[nodiscard]] auto operator-() const noexcept;
 
     /**
      * @brief Element-wise vector addition (Vector + Vector).
@@ -271,17 +274,7 @@ public:
      * @return A new Vector of the common, promoted type.
      */
     template <Numeric U>
-    [[nodiscard]] auto operator+(const U& scalar) const;
-
-    /**
-     * @brief Element-wise scalar addition (scalar + Vector).
-     * @tparam U An arithmetic scalar type.
-     * @param scalar The scalar value.
-     * @param vec The vector.
-     * @return A new Vector of the common, promoted type.
-     */
-    template <Numeric U>
-    friend auto operator+(const U& scalar, const Vector<T>& vec);
+    [[nodiscard]] auto operator+(const U& scalar) const noexcept;
 
     /**
      * @brief Element-wise vector subtraction (Vector - Vector).
@@ -301,17 +294,7 @@ public:
      * @return A new Vector of the common, promoted type.
      */
     template <Numeric U>
-    [[nodiscard]] auto operator-(const U& scalar) const;
-
-    /**
-     * @brief Element-wise scalar subtraction (scalar - Vector).
-     * @tparam U An arithmetic scalar type.
-     * @param scalar The scalar value from which elements are subtracted.
-     * @param vec The vector.
-     * @return A new Vector of the common, promoted type.
-     */
-    template <Numeric U>
-    friend auto operator-(const U& scalar, const Vector<T>& vec);
+    [[nodiscard]] auto operator-(const U& scalar) const noexcept;
 
     /**
      * @brief Element-wise scalar multiplication (Vector * scalar).
@@ -320,29 +303,10 @@ public:
      * @return A new Vector of the common, promoted type.
      */
     template <Numeric U>
-    [[nodiscard]] auto operator*(const U& scalar) const {
-        using R = std::common_type_t<T, U>;
+    [[nodiscard]] auto operator*(const U& scalar) const noexcept;
 
-        Vector<R> result(_data.size());
-        std::transform(_data.begin(),
-                       _data.end(),
-                       result.begin(),  // Use result.begin() for std::vector iterator
-                       [scalar](const T& value) { return value * scalar; });
-        return result;
-    }
-
-    /**
-     * @brief Element-wise scalar multiplication (scalar * Vector).
-     * @tparam U An arithmetic scalar type.
-     * @param scalar The scalar value.
-     * @param vec The vector.
-     * @return A new Vector of the common, promoted type.
-     */
-    template <Numeric U>
-    [[nodiscard]] friend auto operator*(const U& scalar, const Vector<T>& vec) {
-        return vec * scalar;
-    }
-
+    // TODO: Refactoring and stopped here. Continue from here
+    // COMPARE BLAS ROUTINES TO OMP ONES
     /**
      * @brief Outer product (Column Vector * Row Vector).
      * @details This must be a (N x 1) * (1 x M) multiplication.

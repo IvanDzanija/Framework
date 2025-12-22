@@ -491,7 +491,7 @@ public:
         const size_t n = this->row_count();
         const size_t m = this->column_count();
 
-        if (other.orientation() == ROW) {
+        if (other.orientation() == Orientation::ROW) {
             throw std::invalid_argument(
                 "Invalid multiplication: matrix * row vector.\n"
                 "Did you mean Vector * Matrix?");

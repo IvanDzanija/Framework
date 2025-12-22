@@ -21,6 +21,9 @@ class Vector;
 template <Numeric T>
 class Matrix;
 
+/** @brief Specifies if the vector behaves as a row or column vector. */
+enum Orientation : uint8 { ROW, COLUMN };
+
 // Functions
 
 }  // namespace maf::math

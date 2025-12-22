@@ -10,7 +10,7 @@ namespace maf::math::acc {
 // R = Alpha * X + Y (double)
 [[nodiscard]] inline std::vector<double> daxpy(const std::vector<double>& x,
                                                const std::vector<double>& y,
-                                               int32 alpha = 1) {
+                                               const double alpha = 1) {
     std::vector<double> result(y);
     cblas_daxpy(x.size(), alpha, x.data(), 1, result.data(), 1);
     return result;
@@ -19,14 +19,14 @@ namespace maf::math::acc {
 // Y = Alpha * X + Y (double)
 inline void inplace_daxpy(const std::vector<double>& x,
                           std::vector<double>& y,
-                          int32 alpha = 1) {
+                          const double alpha = 1) {
     cblas_daxpy(x.size(), alpha, x.data(), 1, y.data(), 1);
 }
 
 // R = Alpha * X + Y (float)
 [[nodiscard]] inline std::vector<float> saxpy(const std::vector<float>& x,
                                               const std::vector<float>& y,
-                                              int32 alpha = 1) {
+                                              const float alpha = 1) {
     std::vector<float> result(y);
     cblas_saxpy(x.size(), alpha, x.data(), 1, result.data(), 1);
     return result;
@@ -35,11 +35,11 @@ inline void inplace_daxpy(const std::vector<double>& x,
 // Y = Alpha * X + Y (float)
 inline void inplace_saxpy(const std::vector<float>& x,
                           std::vector<float>& y,
-                          int32 alpha = 1) {
+                          const float alpha = 1) {
     cblas_saxpy(x.size(), alpha, x.data(), 1, y.data(), 1);
 }
 
-// R = Alpha * X + Y (int32)
+// R = X + Y (int32)
 [[nodiscard]] inline std::vector<int> vaddi(const std::vector<int>& x,
                                             const std::vector<int>& y) {
     std::vector<int> result(y);
@@ -47,12 +47,52 @@ inline void inplace_saxpy(const std::vector<float>& x,
     return result;
 }
 
-// Y = Alpha * X + Y (int32)
+// Y = X + Y (int32)
 inline void inplace_vaddi(const std::vector<int>& x, std::vector<int>& y) {
     vDSP_vaddi(x.data(), 1, y.data(), 1, y.data(), 1, x.size());
 }
 
-// R = Alpha * X
+// R = X + Alpha (float)
+[[nodiscard]] inline std::vector<float> vsadds(const std::vector<float>& x,
+                                               const float alpha = 1) {
+    std::vector<float> result(x.size());
+    vDSP_vsadd(x.data(), 1, &alpha, result.data(), 1, x.size());
+    return result;
+}
+
+// X = Alpha + X (float)
+inline void inplace_vsadds(std::vector<float>& x, const float alpha = 1) {
+    vDSP_vsadd(x.data(), 1, &alpha, x.data(), 1, x.size());
+}
+
+// R = X + Alpha (double)
+[[nodiscard]] inline std::vector<double> vsaddd(const std::vector<double>& x,
+                                                const double alpha = 1) {
+    std::vector<double> result(x.size());
+    vDSP_vsaddD(x.data(), 1, &alpha, result.data(), 1, x.size());
+    return result;
+}
+
+// X = Alpha + X (double)
+inline void inplace_vsaddd(std::vector<double>& x, const double alpha = 1) {
+    vDSP_vsaddD(x.data(), 1, &alpha, x.data(), 1, x.size());
+}
+
+// R = X + Alpha (int32)
+[[nodiscard]] inline std::vector<int32> vsaddi(const std::vector<int32>& x,
+                                               const int32 alpha = 1) {
+    std::vector<int32> result(x.size());
+    vDSP_vsaddi(x.data(), 1, &alpha, result.data(), 1, x.size());
+    return result;
+}
+
+// X = Alpha + X (int32)
+inline void inplace_vsaddi(std::vector<int32>& x, const int32 alpha = 1) {
+    vDSP_vsaddi(x.data(), 1, &alpha, x.data(), 1, x.size());
+}
+
+// TODO: Fix rest
+// R = X * Alpha
 [[nodiscard]] inline std::vector<float> sscal(const std::vector<float>& x,
                                               int32 alpha = 1) {
     std::vector<float> result(x.begin(), x.end());
@@ -60,7 +100,7 @@ inline void inplace_vaddi(const std::vector<int>& x, std::vector<int>& y) {
     return result;
 }
 
-// X = Alpha * X
+// X = X * Alpha
 inline void inplace_sscal(std::vector<float>& x, int32 alpha = 1) {
     cblas_sscal(x.size(), alpha, x.data(), 1);
 }
