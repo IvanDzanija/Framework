@@ -17,8 +17,6 @@ void Vector<T>::fill(T value) noexcept {
             _data[i] = value;
         }
     }
-
-    // std::fill(_data.begin(), _data.end(), value);
 }
 
 // L2 Norm
