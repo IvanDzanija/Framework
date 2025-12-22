@@ -153,15 +153,6 @@ public:
     // --- Getters ---
 
     /**
-     * @brief Gets a mutable reference to the underlying std::vector
-     * data store.
-     * @return std::vector<T>&
-     */
-    [[nodiscard]] std::vector<T>& data() noexcept {
-        return _data;
-    }
-
-    /**
      * @brief Gets a const reference to the underlying std::vector data
      * store.
      * @return const std::vector<T>&

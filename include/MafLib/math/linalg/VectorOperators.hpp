@@ -41,12 +41,12 @@ template <Numeric U>
     if (n > OMP_LINEAR_LIMIT) {
         #pragma omp parallel for
         for (size_t i = 0; i < n; ++i) {
-            result[i] = static_cast<R>(_data[i]) + static_cast<R>(other.data()[i]);
+            result[i] = static_cast<R>(_data[i]) + static_cast<R>(other[i]);
         }
     } else {
         #pragma omp simd
         for (size_t i = 0; i < n; ++i) {
-            result[i] = static_cast<R>(_data[i]) + static_cast<R>(other.data()[i]);
+            result[i] = static_cast<R>(_data[i]) + static_cast<R>(other[i]);
         }
     }
     return result;
@@ -94,7 +94,7 @@ template <Numeric U>
 [[nodiscard]] auto Vector<T>::operator-(const Vector<U>& other) const {
     using R = std::common_type_t<T, U>;
 
-    if (_orientation != other.orientation() || _data.size() != other.data().size()) {
+    if (_orientation != other.orientation() || _data.size() != other.size()) {
         throw std::invalid_argument("Vectors must be same orientation and size!");
     }
 
@@ -103,12 +103,12 @@ template <Numeric U>
     if (n > OMP_LINEAR_LIMIT) {
         #pragma omp parallel for
         for (size_t i = 0; i < n; ++i) {
-            result[i] = static_cast<R>(_data[i]) - static_cast<R>(other.data()[i]);
+            result[i] = static_cast<R>(_data[i]) - static_cast<R>(other[i]);
         }
     } else {
         #pragma omp simd
         for (size_t i = 0; i < n; ++i) {
-            result[i] = static_cast<R>(_data[i]) - static_cast<R>(other.data()[i]);
+            result[i] = static_cast<R>(_data[i]) - static_cast<R>(other[i]);
         }
     }
     return result;
@@ -150,18 +150,18 @@ auto operator-(const U& scalar, const Vector<T>& vec) noexcept {
     using R = std::common_type_t<T, U>;
 
     R r_scalar = static_cast<R>(scalar);
-    size_t n = vec.data().size();
+    size_t n = vec.size();
 
     Vector<R> result(n, vec.orientation());
     if (n > OMP_LINEAR_LIMIT) {
         #pragma omp parallel for
         for (size_t i = 0; i < n; ++i) {
-            result[i] = r_scalar - static_cast<R>(vec.data()[i]);
+            result[i] = r_scalar - static_cast<R>(vec[i]);
         }
     } else {
         #pragma omp simd
         for (size_t i = 0; i < n; ++i) {
-            result[i] = r_scalar - static_cast<R>(vec.data()[i]);
+            result[i] = r_scalar - static_cast<R>(vec[i]);
         }
     }
     return result;
