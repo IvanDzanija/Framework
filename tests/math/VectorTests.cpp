@@ -256,8 +256,8 @@ private:
         v5[0] = 1;
         v5[1] = 2;
         math::Vector<float> v6(2);
-        v5[0] = 1.F;
-        v5[1] = 2.F;
+        v6[0] = 1.F;
+        v6[1] = 2.F;
 
         ASSERT_TRUE(v1 == v2);
         ASSERT_TRUE(!(v1 == v3));
