@@ -1,6 +1,7 @@
 #include "ITest.hpp"
 #include "MafLib/main/GlobalHeader.hpp"
 #include "MafLib/math/linalg/Matrix.hpp"
+#include "MafLib/math/linalg/MatrixCheckers.hpp"
 #include "MafLib/math/linalg/Vector.hpp"
 
 namespace maf::test {
@@ -556,12 +557,11 @@ private:
     }
 
     void matmul_time_test() {
-        const size_t n = 1000;
+        const size_t n = 1024;
         math::Matrix<double> A(n, n);
         math::Matrix<double> B(n, n);
 
         std::random_device rd;
-        auto a = omp_get_wtime();
         std::mt19937 gen(rd());
         std::uniform_real_distribution<> dis(-10.0, 10.0);
         for (size_t i = 0; i < n; ++i) {
@@ -576,6 +576,16 @@ private:
         auto end = std::chrono::high_resolution_clock::now();
         std::chrono::duration<double> elapsed = end - start;
         std::cout << "MATMUL elapsed time:" << elapsed.count() << " seconds.\n";
+
+        math::Matrix<double> D(n, n);
+        for (size_t i = 0; i < n; ++i) {
+            for (size_t j = 0; j < n; ++j) {
+                for (size_t k = 0; k < n; ++k) {
+                    D.at(i, j) += A.at(i, k) * B.at(k, j);
+                }
+            }
+        }
+        ASSERT_TRUE(math::loosely_equal(C, D));
     }
 
     //=============================================================================
@@ -790,7 +800,6 @@ private:
     void should_preserve_float_type_in_cholesky() {
         math::Matrix<float> m_float(
             3, 3, {4.0f, 12.0f, -16.0f, 12.0f, 37.0f, -43.0f, -16.0f, -43.0f, 98.0f});
-        std::cout << "SAD BI TREBP" << std::endl;
         auto L = cholesky(m_float);
 
         static_assert(std::is_same_v<decltype(L), math::Matrix<float>>,

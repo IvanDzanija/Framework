@@ -25,6 +25,7 @@ protected:
                      const char* file,
                      int line) {
         if (!condition) {
+            assert(condition);
             std::cerr << "[FAIL] " << file << ":" << line << " → " << msg << std::endl;
             ++_failed;
         } else {
