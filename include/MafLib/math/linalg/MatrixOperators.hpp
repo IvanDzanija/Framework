@@ -301,17 +301,35 @@ template <Numeric U>
 Matrix<T>& Matrix<T>::operator/=(const U& scalar) noexcept {
     using R = std::common_type_t<T, U>;
 
-    R r_scalar = static_cast<R>(scalar);
-
-    if (_data.size() > OMP_LINEAR_LIMIT) {
-        #pragma omp parallel for
-        for (size_t i = 0; i < _data.size(); ++i) {
-            _data[i] /= r_scalar;
+    // For floating-point types, use multiplication by inverse (faster)
+    // For integer types, use direct division to preserve integer semantics
+    if constexpr (std::is_floating_point_v<R>) {
+        R r_scalar_inv = R(1) / static_cast<R>(scalar);
+        
+        if (_data.size() > OMP_LINEAR_LIMIT) {
+            #pragma omp parallel for
+            for (size_t i = 0; i < _data.size(); ++i) {
+                _data[i] *= r_scalar_inv;
+            }
+        } else {
+            #pragma omp simd
+            for (size_t i = 0; i < _data.size(); ++i) {
+                _data[i] *= r_scalar_inv;
+            }
         }
     } else {
-        #pragma omp simd
-        for (size_t i = 0; i < _data.size(); ++i) {
-            _data[i] /= r_scalar;
+        R r_scalar = static_cast<R>(scalar);
+        
+        if (_data.size() > OMP_LINEAR_LIMIT) {
+            #pragma omp parallel for
+            for (size_t i = 0; i < _data.size(); ++i) {
+                _data[i] /= r_scalar;
+            }
+        } else {
+            #pragma omp simd
+            for (size_t i = 0; i < _data.size(); ++i) {
+                _data[i] /= r_scalar;
+            }
         }
     }
     return *this;
