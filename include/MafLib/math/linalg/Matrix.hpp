@@ -320,6 +320,33 @@ public:
     Matrix<T>& operator-=(const U& scalar) noexcept;
 
     /**
+     * @brief Element-wise matrix multiplication assignment (in-place).
+     * @tparam U Numeric type of the other matrix.
+     * @attention This method doesn't cast the matrix if U is broader type
+     * @throws std::invalid_argument if dimensions do not match.
+     */
+    template <Numeric U>
+    Matrix<T>& operator*=(const Matrix<U>& other);
+
+    /**
+     * @brief Element-wise scalar multiplication assignment (Matrix *= scalar).
+     * @tparam U An arithmetic scalar type.
+     * @attention This method doesn't cast the matrix if U is broader type
+     * @return Matrix of the original matrix type.
+     */
+    template <Numeric U>
+    Matrix<T>& operator*=(const U& scalar) noexcept;
+
+    /**
+     * @brief Element-wise scalar division assignment (Matrix /= scalar).
+     * @tparam U An arithmetic scalar type.
+     * @attention This method doesn't cast the matrix if U is broader type
+     * @return Matrix of the original matrix type.
+     */
+    template <Numeric U>
+    Matrix<T>& operator/=(const U& scalar) noexcept;
+
+    /**
      * @brief Standard algebraic matrix multiplication (A * B).
      * @details Implemented with a parallelized, cache-blocked algorithm.
      * @tparam U Numeric type of the other matrix.

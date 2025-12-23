@@ -509,6 +509,62 @@ private:
         ASSERT_TRUE(is_close(b.at(1, 1), 4.5));
     }
 
+    void should_multiply_assign_matrix() {
+        math::Matrix<float> a(2, 2, {2.0f, 3.0f, 4.0f, 5.0f});
+        math::Matrix<int> b(2, 2, {2, 3, 4, 5});
+
+        a *= b;  // a is modified element-wise
+
+        ASSERT_TRUE(is_close(a.at(0, 0), 4.0f));
+        ASSERT_TRUE(is_close(a.at(0, 1), 9.0f));
+        ASSERT_TRUE(is_close(a.at(1, 0), 16.0f));
+        ASSERT_TRUE(is_close(a.at(1, 1), 25.0f));
+    }
+
+    void should_multiply_assign_scalar() {
+        math::Matrix<int> a(2, 2, {1, 2, 3, 4});
+
+        a *= 10;
+
+        ASSERT_TRUE(a.at(0, 0) == 10);
+        ASSERT_TRUE(a.at(0, 1) == 20);
+        ASSERT_TRUE(a.at(1, 0) == 30);
+        ASSERT_TRUE(a.at(1, 1) == 40);
+
+        math::Matrix<double> b(2, 2, {1.5, 2.5, 3.5, 4.5});
+        b *= 2.0;
+        ASSERT_TRUE(is_close(b.at(0, 0), 3.0));
+        ASSERT_TRUE(is_close(b.at(0, 1), 5.0));
+        ASSERT_TRUE(is_close(b.at(1, 0), 7.0));
+        ASSERT_TRUE(is_close(b.at(1, 1), 9.0));
+
+        b *= 0.5;
+        ASSERT_TRUE(is_close(b.at(0, 0), 1.5));
+        ASSERT_TRUE(is_close(b.at(1, 1), 4.5));
+    }
+
+    void should_divide_assign_scalar() {
+        math::Matrix<int> a(2, 2, {10, 20, 30, 40});
+
+        a /= 10;
+
+        ASSERT_TRUE(a.at(0, 0) == 1);
+        ASSERT_TRUE(a.at(0, 1) == 2);
+        ASSERT_TRUE(a.at(1, 0) == 3);
+        ASSERT_TRUE(a.at(1, 1) == 4);
+
+        math::Matrix<double> b(2, 2, {3.0, 5.0, 7.0, 9.0});
+        b /= 2.0;
+        ASSERT_TRUE(is_close(b.at(0, 0), 1.5));
+        ASSERT_TRUE(is_close(b.at(0, 1), 2.5));
+        ASSERT_TRUE(is_close(b.at(1, 0), 3.5));
+        ASSERT_TRUE(is_close(b.at(1, 1), 4.5));
+
+        b /= 0.5;
+        ASSERT_TRUE(is_close(b.at(0, 0), 3.0));
+        ASSERT_TRUE(is_close(b.at(1, 1), 9.0));
+    }
+
     void should_multiply_matrix_and_scalar() {
         math::Matrix<double> a(2, 2, {1.5, 2.0, -3.0, 4.0});
         auto b = a * 2.0;
@@ -935,6 +991,13 @@ public:
         should_add_scalar_and_matrix();
         should_subtract_two_matrices_of_same_size();
         should_subtract_scalar_and_matrix();
+        should_add_assign_matrix();
+        should_subtract_assign_matrix();
+        should_add_assign_scalar();
+        should_subtract_assign_scalar();
+        should_multiply_assign_matrix();
+        should_multiply_assign_scalar();
+        should_divide_assign_scalar();
         should_multiply_matrix_and_scalar();
         should_multiply_matrices();
         should_multiply_matrix_and_vector();

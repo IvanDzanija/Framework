@@ -248,6 +248,74 @@ Matrix<T>& Matrix<T>::operator-=(const U& scalar) noexcept {
     return *this;
 }
 
+// Multiply 2 matrices element-wise (in-place)
+template <Numeric T>
+template <Numeric U>
+Matrix<T>& Matrix<T>::operator*=(const Matrix<U>& other) {
+    if (_rows != other.row_count() || _cols != other.column_count()) {
+        throw std::invalid_argument(
+            "Matrices have to be of same dimensions for element-wise multiplication!");
+    }
+
+    if (_data.size() > OMP_LINEAR_LIMIT) {
+        #pragma omp parallel for
+        for (size_t i = 0; i < _data.size(); ++i) {
+            _data[i] *= static_cast<T>(other.data()[i]);
+        }
+    } else {
+        #pragma omp simd
+        for (size_t i = 0; i < _data.size(); ++i) {
+            _data[i] *= static_cast<T>(other.data()[i]);
+        }
+    }
+
+    return *this;
+}
+
+// Multiply a scalar to each element of matrix (in-place)
+template <Numeric T>
+template <Numeric U>
+Matrix<T>& Matrix<T>::operator*=(const U& scalar) noexcept {
+    using R = std::common_type_t<T, U>;
+
+    R r_scalar = static_cast<R>(scalar);
+
+    if (_data.size() > OMP_LINEAR_LIMIT) {
+        #pragma omp parallel for
+        for (size_t i = 0; i < _data.size(); ++i) {
+            _data[i] *= r_scalar;
+        }
+    } else {
+        #pragma omp simd
+        for (size_t i = 0; i < _data.size(); ++i) {
+            _data[i] *= r_scalar;
+        }
+    }
+    return *this;
+}
+
+// Divide each element of matrix by a scalar (in-place)
+template <Numeric T>
+template <Numeric U>
+Matrix<T>& Matrix<T>::operator/=(const U& scalar) noexcept {
+    using R = std::common_type_t<T, U>;
+
+    R r_scalar = static_cast<R>(scalar);
+
+    if (_data.size() > OMP_LINEAR_LIMIT) {
+        #pragma omp parallel for
+        for (size_t i = 0; i < _data.size(); ++i) {
+            _data[i] /= r_scalar;
+        }
+    } else {
+        #pragma omp simd
+        for (size_t i = 0; i < _data.size(); ++i) {
+            _data[i] /= r_scalar;
+        }
+    }
+    return *this;
+}
+
 }  // namespace maf::math
 
 #endif
