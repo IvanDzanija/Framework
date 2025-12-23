@@ -295,6 +295,7 @@ Matrix<T>& Matrix<T>::operator*=(const U& scalar) noexcept {
 }
 
 // Divide each element of matrix by a scalar (in-place)
+// Note: Does not check for division by zero, consistent with operator/ and C++ conventions
 template <Numeric T>
 template <Numeric U>
 Matrix<T>& Matrix<T>::operator/=(const U& scalar) noexcept {
