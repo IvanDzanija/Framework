@@ -307,6 +307,8 @@ class Matrix {
    */
   [[nodiscard]] Matrix<T> transposed() const;
 
+  [[nodiscard]] Matrix<T> inverted() const;
+
   // --- Operators ---
 
   /**

@@ -42,6 +42,7 @@ template <std::floating_point T>
 
   std::vector<uint32> P(n);
   // TODO: Change this to ranges::iota when Apple Clang fully supports c++23
+  // std::ranges::iota(P, 0);
   std::iota(P.begin(), P.end(), 0);
   Matrix<T> L = identity_matrix<T>(n);
 
