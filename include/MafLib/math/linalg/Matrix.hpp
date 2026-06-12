@@ -288,10 +288,14 @@ class Matrix {
   // ----------------------------------
 
   /** @brief Creates new matrix with same elements but different type.
-   * @details Defined in MatrixMethods.hpp
    */
   template <Numeric U>
-  [[nodiscard]] Matrix<U> cast() const;
+  [[nodiscard]] Matrix<U> cast() const {
+    // Replace this with explicit constructor casting when implemented
+    Matrix<U> result(_rows, _cols);
+    omp_loop(_data.size(), [&](size_t i) { result[i] = static_cast<U>(_data[i]); });
+    return result;
+  }
 
   /** @brief Fills the entire matrix with a single value.*/
   void fill(T value) {
@@ -301,7 +305,6 @@ class Matrix {
   /**
    * @brief Converts this matrix into an identity matrix.
    * @throws std::runtime_error if the matrix is not square.
-   * @details Defined in MatrixMethods.hpp
    */
   void make_identity() {
     if (!is_square()) {
@@ -316,7 +319,7 @@ class Matrix {
 
   /**
    * @brief Performs an in-place transpose of the matrix.
-   * @details Uses a parallelized, blocked algorithm.
+   * @details Calls `transposed()` and moves the result back into this matrix.
    * @throws std::invalid_argument if the matrix is not square.
    */
   void transpose() {
@@ -328,7 +331,6 @@ class Matrix {
    * @brief Creates and returns a new matrix that is the transpose of
    * this one.
    * @return A new Matrix<T> of size (cols x rows).
-   * @details Defined in MatrixMethods.hpp
    */
   [[nodiscard]] Matrix<T> transposed() const {
     Matrix<T> result(_cols, _rows);
@@ -359,9 +361,13 @@ class Matrix {
     return result;
   }
 
+  // TODO: Implement
   [[nodiscard]] Matrix<T> inverted() const;
 
-  // --- Operators ---
+#pragma mark operators
+  // ----------------------------------
+  // OPERATORS
+  // ----------------------------------
 
   /**
    * @brief Checks for exact element-wise equality.
