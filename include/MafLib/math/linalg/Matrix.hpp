@@ -324,8 +324,28 @@ class Matrix {
    * @throws std::invalid_argument if the matrix is not square.
    */
   void transpose() {
-    Matrix<T> temp = this->transposed();
-    *this = std::move(temp);
+    if (!is_square()) {
+      throw std::invalid_argument("Matrix must be square to transpose in-place.");
+    }
+#if defined(__APPLE__) && defined(ACCELERATE_AVAILABLE)
+    if constexpr (std::is_same_v<T, float> || std::is_same_v<T, double>) {
+      Matrix<T> temp = this->transposed();
+      *this = std::move(temp);
+      return;
+    }
+#endif
+#pragma omp parallel for schedule(static) default(none)
+    for (size_t i = 0; i < _rows; i += BLOCK_SIZE) {
+      for (size_t j = i; j < _cols; j += BLOCK_SIZE) {
+        const size_t n = std::min(i + BLOCK_SIZE, _rows);
+        const size_t m = std::min(j + BLOCK_SIZE, _cols);
+        for (size_t k = i; k < n; ++k) {
+          for (size_t l = (i == j) ? k + 1 : j; l < m; ++l) {
+            std::swap(this->at(k, l), this->at(l, k));
+          }
+        }
+      }
+    }
   }
 
   /**
@@ -345,10 +365,9 @@ class Matrix {
     }
 #endif
     // Default non-Apple implementation
-
 #pragma omp parallel for collapse(2) schedule(static) default(none) shared(result)
     for (size_t i = 0; i < _rows; i += BLOCK_SIZE) {
-      for (size_t j = i; j < _cols; j += BLOCK_SIZE) {
+      for (size_t j = 0; j < _cols; j += BLOCK_SIZE) {
         size_t i_max = std::min(i + BLOCK_SIZE, _rows);
         size_t j_max = std::min(j + BLOCK_SIZE, _cols);
 
