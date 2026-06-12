@@ -220,10 +220,10 @@ class MatrixTests : public ITest {
 
     ASSERT_TRUE(m_float.row_count() == 2);
     ASSERT_TRUE(m_float.column_count() == 2);
-    ASSERT_TRUE(is_close(m_float.at(0, 0), 1.0f));
-    ASSERT_TRUE(is_close(m_float.at(0, 1), 2.0f));
-    ASSERT_TRUE(is_close(m_float.at(1, 0), 3.0f));
-    ASSERT_TRUE(is_close(m_float.at(1, 1), 4.0f));
+    ASSERT_TRUE(is_close(m_float.at(0, 0), 1.0F));
+    ASSERT_TRUE(is_close(m_float.at(0, 1), 2.0F));
+    ASSERT_TRUE(is_close(m_float.at(1, 0), 3.0F));
+    ASSERT_TRUE(is_close(m_float.at(1, 1), 4.0F));
   }
 
   void should_cast_float_matrix_to_int() {

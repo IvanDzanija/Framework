@@ -293,7 +293,8 @@ class Matrix {
   [[nodiscard]] Matrix<U> cast() const {
     // Replace this with explicit constructor casting when implemented
     Matrix<U> result(_rows, _cols);
-    omp_loop(_data.size(), [&](size_t i) { result[i] = static_cast<U>(_data[i]); });
+    omp_loop(_data.size(),
+             [&](size_t i) { result.data()[i] = static_cast<U>(_data[i]); });
     return result;
   }
 
@@ -690,7 +691,6 @@ class Matrix {
 #include "MatrixCheckers.hpp"
 #include "MatrixConstructors.hpp"
 #include "MatrixFactories.hpp"
-#include "MatrixMethods.hpp"
 #include "MatrixOperators.hpp"
 #include "PLU.hpp"
 #include "QR.hpp"
