@@ -1,19 +1,19 @@
 ---
 Checks: >
     *, -abseil-*, -altera-*, -android-*, -fuchsia-*, -google-*, -llvm-*,
-    -zircon-*, -readability-else-after-return,
+    -llvmlibc-*, -zircon-*, readability-*, modernize-*,
+    -readability-else-after-return,
     -readability-static-accessed-through-instance,
-    -readability-avoid-const-params-in-decls,
+    -readability-identifier-length, -readability-avoid-const-params-in-decls,
     -cppcoreguidelines-non-private-member-variables-in-classes,
     -misc-non-private-member-variables-in-classes,
     -modernize-return-braced-init-list, -modernize-use-trailing-return-type,
-    -modernize-avoid-c-arrays, -cppcoreguidelines-avoid-c-arrays,
-    -hicpp-avoid-c-arrays, -cppcoreguidelines-pro-bounds-constant-array-index,
-    -cppcoreguidelines-pro-bounds-array-to-pointer-decay, -hicpp-no-array-decay
+    -cppcoreguidelines-pro-bounds-constant-array-index,
+    -cppcoreguidelines-pro-bounds-array-to-pointer-decay, -hicpp-no-array-decay,
+    modernize-use-nodiscard, bugprone-unused-return-value
 
 WarningsAsErrors: ''
 HeaderFilterRegex: '(src|include)/.*'
-AnalyzeTemporaryDtors: false
 FormatStyle: file
 
 CheckOptions:
@@ -37,24 +37,55 @@ CheckOptions:
     - key: readability-identifier-naming.MethodCase
       value: lower_case
 
+    # Overrides for Private Methods
+    - key: readability-identifier-naming.PrivateMethodCase
+      value: lower_case
+    - key: readability-identifier-naming.PrivateMethodPrefix
+      value: _
+
+    # Overrides for Public/Protected Methods (Explicitly clearing prefix)
+    - key: readability-identifier-naming.PublicMethodPrefix
+      value: ''
+    - key: readability-identifier-naming.ProtectedMethodPrefix
+      value: ''
+
     # Variables
     - key: readability-identifier-naming.VariableCase
       value: lower_case
     - key: readability-identifier-naming.MemberCase
       value: lower_case
-    # If you want suffix for members, uncomment:
-    # - key: readability-identifier-naming.MemberSuffix
-    #   value: _
+
+    # Overrides for Private Members
+    - key: readability-identifier-naming.PrivateMemberCase
+      value: lower_case
+    - key: readability-identifier-naming.PrivateMemberPrefix
+      value: _
+
+    # Overrides for Public/Protected Members (Explicitly clearing prefix)
+    - key: readability-identifier-naming.PublicMemberPrefix
+      value: ''
+    - key: readability-identifier-naming.ProtectedMemberPrefix
+      value: ''
 
     # Parameters
     - key: readability-identifier-naming.ParameterCase
       value: lower_case
 
+    # Constexpr overrides
+    - key: readability-identifier-naming.ConstexprVariableCase
+      value: UPPER_CASE
+
     # Global / constants
     - key: readability-identifier-naming.GlobalConstantCase
-      value: UPPER_CASE
+      value: lower_case
     - key: readability-identifier-naming.ConstantCase
-      value: UPPER_CASE
+      value: lower_case
+
+    - key: readability-identifier-length.MinimumVariableNameLength
+      value: 1
+
+    - key: readability-identifier-length.MinimumParameterNameLength
+      value: 1
 
     # Macros (only UPPER_CASE is sane)
     - key: readability-identifier-naming.MacroDefinitionCase

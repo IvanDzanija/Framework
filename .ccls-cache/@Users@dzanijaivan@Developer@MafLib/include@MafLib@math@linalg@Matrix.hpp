@@ -294,8 +294,18 @@ class Matrix {
   [[nodiscard]] Matrix<U> cast() const;
 
   /** @brief Fills the entire matrix with a single value.*/
+
   void fill(T value) {
-    omp_loop(_data.size(), [&](size_t i) { _data[i] = value; });
+    //    if (_data.size() > OMP_LINEAR_LIMIT) {
+    // #pragma omp parallel for
+    //      for (size_t i = 0; i < _data.size(); ++i) {
+    //        _data[i] = value;
+    //      }
+    //    } else {
+    //      for (size_t i = 0; i < _data.size(); ++i) {
+    //        _data[i] = value;
+    //      }
+    //    }
   }
 
   /**

@@ -20,11 +20,3 @@ CompileFlags:
         - -Werror
 Index:
     Background: Skip
-Diagnostics:
-    ClangTidy:
-        Add:
-            - modernize-*
-            - performance-*
-            - readability-*
-        Remove:
-            - modernize-use-trailing-return-type
