@@ -185,7 +185,7 @@ class Matrix {
    */
   [[nodiscard]] T &operator[](size_t row, size_t col) noexcept {
     // TODO: add tests
-    return &_data[(row * _cols) + col];
+    return _data[(row * _cols) + col];
   }
 
   /**
@@ -194,7 +194,7 @@ class Matrix {
    */
   [[nodiscard]] const T &operator[](size_t row, size_t col) const noexcept {
     // TODO: add tests
-    return &_data[(row * _cols) + col];
+    return _data[(row * _cols) + col];
   }
 
   /**
@@ -303,14 +303,26 @@ class Matrix {
    * @throws std::runtime_error if the matrix is not square.
    * @details Defined in MatrixMethods.hpp
    */
-  void make_identity();
+  void make_identity() {
+    if (!is_square()) {
+      throw std::invalid_argument("Only square matrices can be set to identity!");
+    }
+
+    fill(T(0));
+    for (size_t i = 0; i < _rows; ++i) {
+      (*this)[i, i] = T(1);
+    }
+  }
 
   /**
    * @brief Performs an in-place transpose of the matrix.
    * @details Uses a parallelized, blocked algorithm.
    * @throws std::invalid_argument if the matrix is not square.
    */
-  void transpose();
+  void transpose() {
+    Matrix<T> temp = this->transposed();
+    *this = std::move(temp);
+  }
 
   /**
    * @brief Creates and returns a new matrix that is the transpose of
@@ -318,7 +330,34 @@ class Matrix {
    * @return A new Matrix<T> of size (cols x rows).
    * @details Defined in MatrixMethods.hpp
    */
-  [[nodiscard]] Matrix<T> transposed() const;
+  [[nodiscard]] Matrix<T> transposed() const {
+    Matrix<T> result(_cols, _rows);
+#if defined(__APPLE__) && defined(ACCELERATE_AVAILABLE)
+    if constexpr (std::is_same_v<T, float>) {
+      vDSP_mtrans(_data.data(), 1, result.data(), 1, _cols, _rows);
+      return result;
+    } else if constexpr (std::is_same_v<T, double>) {
+      vDSP_mtransD(_data.data(), 1, result.data(), 1, _cols, _rows);
+      return result;
+    }
+#endif
+    // Default non-Apple implementation
+
+#pragma omp parallel for collapse(2) schedule(static) default(none) shared(result)
+    for (size_t i = 0; i < _rows; i += BLOCK_SIZE) {
+      for (size_t j = i; j < _cols; j += BLOCK_SIZE) {
+        size_t i_max = std::min(i + BLOCK_SIZE, _rows);
+        size_t j_max = std::min(j + BLOCK_SIZE, _cols);
+
+        for (size_t k = i; k < i_max; ++k) {
+          for (size_t l = j; l < j_max; ++l) {
+            result[l, k] = (*this)[k, l];
+          }
+        }
+      }
+    }
+    return result;
+  }
 
   [[nodiscard]] Matrix<T> inverted() const;
 
