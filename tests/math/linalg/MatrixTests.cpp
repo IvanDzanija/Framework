@@ -688,7 +688,7 @@ class MatrixTests : public ITest {
     math::Matrix<double> m(2, 3, {1, 2, 3, 4, 5, 6});
     bool thrown = false;
     try {
-      auto [P, L, U] = plu(m);
+      auto [P, L, U, s] = plu(m);
     } catch (const std::invalid_argument &e) {
       thrown = true;
     }
@@ -699,7 +699,7 @@ class MatrixTests : public ITest {
     math::Matrix<double> m(3, 3, {1, 2, 3, 2, 4, 6, 1, 2, 3});
     bool thrown = false;
     try {
-      auto [p, L, U] = math::plu(m);
+      auto [p, L, U, s] = plu(m);
     } catch (const std::runtime_error &e) {
       thrown = true;
     }
@@ -709,7 +709,7 @@ class MatrixTests : public ITest {
   void should_correctly_perform_plu_decomposition_on_small_matrix() {
     math::Matrix<double> A(3, 3, {2, 1, 1, 4, -6, 0, -2, 7, 2});
 
-    auto [p, L, U] = plu(A);
+    auto [p, L, U, s] = plu(A);
 
     ASSERT_TRUE(L.is_square() && U.is_square());
     ASSERT_TRUE(L.row_count() == 3 && U.row_count() == 3);
@@ -741,7 +741,7 @@ class MatrixTests : public ITest {
 
   void should_correctly_handle_identity_matrix_in_plu() {
     math::Matrix<double> I = math::identity_matrix<double>(3);
-    auto [P, L, U] = plu(I);
+    auto [P, L, U, s] = plu(I);
     ASSERT_TRUE(L == I);
     ASSERT_TRUE(U == I);
     for (size_t i = 0; i < 3; ++i) {
@@ -751,7 +751,7 @@ class MatrixTests : public ITest {
 
   void should_correctly_decompose_upper_triangular_matrix() {
     math::Matrix<double> U_true(3, 3, {1, 2, 3, 0, 4, 5, 0, 0, 6});
-    auto [P, L, U] = plu(U_true);
+    auto [P, L, U, s] = plu(U_true);
     for (size_t i = 0; i < 3; ++i) {
       for (size_t j = 0; j < 3; ++j) {
         ASSERT_TRUE(is_close(L.at(i, j), (i == j ? 1.0 : 0.0)));
@@ -770,7 +770,7 @@ class MatrixTests : public ITest {
 
   void should_correctly_handle_negative_pivots_in_plu() {
     math::Matrix<double> A(2, 2, {-4, -5, -2, -1});
-    auto [P, L, U] = plu(A);
+    auto [P, L, U, s] = plu(A);
     math::Matrix<double> Pm(2, 2);
 
     for (size_t i = 0; i < 2; ++i) {
@@ -795,7 +795,7 @@ class MatrixTests : public ITest {
     }
 
     auto start = std::chrono::high_resolution_clock::now();
-    auto [p, L, U] = plu(A);
+    auto [p, L, U, s] = plu(A);
 
     auto P = math::permutation_matrix<double>(p);
     auto end = std::chrono::high_resolution_clock::now();
