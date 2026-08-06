@@ -398,26 +398,38 @@ class Matrix {
       throw std::invalid_argument("Determinant is only defined for square matrices.");
     }
 
+    // PLU/Cholesky compute in floating point, so accumulate there to avoid
+    // truncating intermediate products for integral element types (T).
+    using AccumType = std::conditional_t<std::is_floating_point_v<T>, T, double>;
+
+    const auto finalize = [](AccumType value) -> T {
+      if constexpr (std::is_integral_v<T>) {
+        return static_cast<T>(std::round(value));
+      } else {
+        return static_cast<T>(value);
+      }
+    };
+
     if constexpr (is_spd) {
       // res = det(L)^2
-      T det = 1;
       auto L = cholesky(*this);
+      AccumType det = 1;
 
       for (size_t i = 0; i < _rows; ++i) {
-        det *= L(i, i);
+        det *= L.at(i, i);
       }
 
-      return det * det;
+      return finalize(det * det);
     } else {
       // res = det(U) * det(P), det(L) = 1
       auto plu_res = plu(*this);
-      T det = plu_res.sign;
+      AccumType det = static_cast<AccumType>(plu_res.sign);
 
       for (size_t i = 0; i < _rows; ++i) {
-        det *= plu_res.U(i, i);
+        det *= plu_res.U.at(i, i);
       }
 
-      return det;
+      return finalize(det);
     }
   }
 
