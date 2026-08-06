@@ -363,8 +363,19 @@ class Matrix {
       vDSP_mtransD(_data.data(), 1, result.data(), 1, _cols, _rows);
       return result;
     }
+#elif defined(__OPENBLAS_AVAILABLE)
+    if constexpr (std::is_same_v<T, float>) {
+      cblas_somatcopy(CblasRowMajor, CblasTrans, _rows, _cols, 1.0f, _data.data(),
+                      _cols, result.data(), _rows);
+      return result;
+    } else if constexpr (std::is_same_v<T, double>) {
+      cblas_domatcopy(CblasRowMajor, CblasTrans, _rows, _cols, 1.0, _data.data(), _cols,
+                      result.data(), _rows);
+      return result;
+    }
+  }
 #endif
-    // Default non-Apple implementation
+    // Generic implementation
 #pragma omp parallel for collapse(2) schedule(static) default(none) shared(result)
     for (size_t i = 0; i < _rows; i += BLOCK_SIZE) {
       for (size_t j = 0; j < _cols; j += BLOCK_SIZE) {
@@ -379,6 +390,38 @@ class Matrix {
       }
     }
     return result;
+  }
+
+  template <bool is_spd = false>
+  [[nodiscard]] auto determinant() const {
+    if (!is_square()) {
+      throw std::invalid_argument("Determinant is only defined for square matrices.");
+    }
+
+    if constexpr (is_spd) {
+      // res = det(L)^2
+      auto L = cholesky(*this);
+      using AccumType =
+          typename std::decay_t<decltype(L)>::value_type;  // Get the promoted type
+      AccumType det = 1;
+
+      for (size_t i = 0; i < _rows; ++i) {
+        det *= L.at(i, i);
+      }
+      return det * det;
+    } else {
+      // res = det(U) * det(P), det(L) = 1
+      auto plu_res = plu(*this);
+      using AccumType =
+          typename std::decay_t<decltype(plu_res.U)>::value_type;  // Get the promoted
+                                                                   // type
+      auto det = static_cast<AccumType>(plu_res.sign);
+
+      for (size_t i = 0; i < _rows; ++i) {
+        det *= plu_res.U.at(i, i);
+      }
+      return det;
+    }
   }
 
   // TODO: Implement
@@ -564,8 +607,8 @@ class Matrix {
       _fallback_matrix_multiply(a_data, b_data, c_data, a_rows, a_cols, b_cols);
     }
 #else
-    // Default non-Apple implementation
-    _fallback_matrix_multiply(a_data, b_data, c_data, a_rows, a_cols, b_cols);
+  // Default non-Apple implementation
+  _fallback_matrix_multiply(a_data, b_data, c_data, a_rows, a_cols, b_cols);
 #endif
     return result;
   }

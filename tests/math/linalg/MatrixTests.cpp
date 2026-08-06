@@ -688,7 +688,7 @@ class MatrixTests : public ITest {
     math::Matrix<double> m(2, 3, {1, 2, 3, 4, 5, 6});
     bool thrown = false;
     try {
-      auto [P, L, U] = plu(m);
+      (void)plu(m);
     } catch (const std::invalid_argument &e) {
       thrown = true;
     }
@@ -699,7 +699,7 @@ class MatrixTests : public ITest {
     math::Matrix<double> m(3, 3, {1, 2, 3, 2, 4, 6, 1, 2, 3});
     bool thrown = false;
     try {
-      auto [p, L, U] = math::plu(m);
+      auto [p, L, U, s] = plu(m);
     } catch (const std::runtime_error &e) {
       thrown = true;
     }
@@ -709,7 +709,7 @@ class MatrixTests : public ITest {
   void should_correctly_perform_plu_decomposition_on_small_matrix() {
     math::Matrix<double> A(3, 3, {2, 1, 1, 4, -6, 0, -2, 7, 2});
 
-    auto [p, L, U] = plu(A);
+    auto [p, L, U, s] = plu(A);
 
     ASSERT_TRUE(L.is_square() && U.is_square());
     ASSERT_TRUE(L.row_count() == 3 && U.row_count() == 3);
@@ -741,7 +741,7 @@ class MatrixTests : public ITest {
 
   void should_correctly_handle_identity_matrix_in_plu() {
     math::Matrix<double> I = math::identity_matrix<double>(3);
-    auto [P, L, U] = plu(I);
+    auto [P, L, U, s] = plu(I);
     ASSERT_TRUE(L == I);
     ASSERT_TRUE(U == I);
     for (size_t i = 0; i < 3; ++i) {
@@ -751,7 +751,7 @@ class MatrixTests : public ITest {
 
   void should_correctly_decompose_upper_triangular_matrix() {
     math::Matrix<double> U_true(3, 3, {1, 2, 3, 0, 4, 5, 0, 0, 6});
-    auto [P, L, U] = plu(U_true);
+    auto [P, L, U, s] = plu(U_true);
     for (size_t i = 0; i < 3; ++i) {
       for (size_t j = 0; j < 3; ++j) {
         ASSERT_TRUE(is_close(L.at(i, j), (i == j ? 1.0 : 0.0)));
@@ -770,7 +770,7 @@ class MatrixTests : public ITest {
 
   void should_correctly_handle_negative_pivots_in_plu() {
     math::Matrix<double> A(2, 2, {-4, -5, -2, -1});
-    auto [P, L, U] = plu(A);
+    auto [P, L, U, s] = plu(A);
     math::Matrix<double> Pm(2, 2);
 
     for (size_t i = 0; i < 2; ++i) {
@@ -795,7 +795,7 @@ class MatrixTests : public ITest {
     }
 
     auto start = std::chrono::high_resolution_clock::now();
-    auto [p, L, U] = plu(A);
+    auto [p, L, U, s] = plu(A);
 
     auto P = math::permutation_matrix<double>(p);
     auto end = std::chrono::high_resolution_clock::now();
@@ -977,6 +977,166 @@ class MatrixTests : public ITest {
     std::cout << "Cholesky elapsed time: " << elapsed.count() << " seconds\n";
     auto C = L * L.transposed();
     ASSERT_TRUE(math::loosely_equal(C, A));
+  }
+
+  //=============================================================================
+  // MATRIX DETERMINANT TESTS
+  //=============================================================================
+  void should_compute_determinant_of_1x1_matrix() {
+    math::Matrix<double> m1(1, 1, {-7.25});
+    math::Matrix<double> m2(1, 1, {3.0});
+    ASSERT_TRUE(is_close(m1.determinant(), -7.25));
+    ASSERT_TRUE(is_close(m2.determinant(), 3.0));
+  }
+
+  void should_compute_determinant_of_2x2_matrix() {
+    math::Matrix<double> m1(2, 2, {1, 2, 3, 4});
+    math::Matrix<double> m2(2, 2, {-4, -5, -2, -1});
+    ASSERT_TRUE(is_close(m1.determinant(), -2.0));
+    ASSERT_TRUE(is_close(m2.determinant(), -6.0));
+  }
+
+  void should_compute_determinant_of_3x3_matrix() {
+    math::Matrix<double> m(3, 3, {2, 1, 1, 4, -6, 0, -2, 7, 2});
+    ASSERT_TRUE(is_close(m.determinant(), -16.0));
+  }
+
+  void should_compute_determinant_of_4x4_matrix() {
+    math::Matrix<double> m(4, 4, {1, 2, 3, 4, 5, 6, 7, 8, 2, -1, 0, 3, 9, 1, -2, 5});
+    static constexpr double EXPECTED = -120.0;
+    ASSERT_TRUE(is_close(m.determinant(), EXPECTED));
+  }
+
+  void should_compute_determinant_of_identity_matrix() {
+    math::Matrix<double> I3 = math::identity_matrix<double>(3);
+    math::Matrix<double> I4 = math::identity_matrix<double>(4);
+    ASSERT_TRUE(is_close(I3.determinant(), 1.0));
+    ASSERT_TRUE(is_close(I4.determinant(), 1.0));
+  }
+
+  void should_compute_determinant_of_diagonal_matrix() {
+    math::Matrix<double> m(3, 3, {9, 0, 0, 0, 16, 0, 0, 0, 25});
+    static constexpr double EXPECTED = 3600.0;
+    ASSERT_TRUE(is_close(m.determinant(), EXPECTED));
+  }
+
+  void should_compute_determinant_of_triangular_matrix() {
+    math::Matrix<double> m(3, 3, {1, 2, 3, 0, 4, 5, 0, 0, 6});
+    static constexpr double EXPECTED = 24.0;
+    ASSERT_TRUE(is_close(m.determinant(), EXPECTED));
+  }
+
+  void should_compute_determinant_of_permutation_matrix() {
+    math::Matrix<double> m1(4, 4, {0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1});
+    math::Matrix<double> m2(3, 3, {1, 0, 0, 0, 0, 1, 0, 1, 0});
+    math::Matrix<double> m3(3, 3, {0, 0, 1, 1, 0, 0, 0, 1, 0});
+    ASSERT_TRUE(is_close(m1.determinant(), -1.0));
+    ASSERT_TRUE(is_close(m2.determinant(), -1.0));
+    ASSERT_TRUE(is_close(m3.determinant(), 1.0));
+  }
+
+  void should_throw_if_determinant_called_on_non_square_matrix() {
+    math::Matrix<double> m1(2, 3, {1, 2, 3, 4, 5, 6});
+    math::Matrix<double> m2(3, 2, {1, 2, 3, 4, 5, 6});
+    ASSERT_THROW((void)m1.determinant(), std::invalid_argument);
+    ASSERT_THROW((void)m2.determinant(), std::invalid_argument);
+  }
+
+  void should_throw_for_singular_matrix_when_computing_determinant() {
+    math::Matrix<double> m(2, 2, {1, 2, 2, 4});
+    math::Matrix<double> z(3, 3, {0, 0, 0, 0, 0, 0, 0, 0, 0});
+    ASSERT_THROW((void)m.determinant(), std::runtime_error);
+    ASSERT_THROW((void)z.determinant(), std::runtime_error);
+  }
+
+  void should_throw_for_empty_matrix_when_computing_determinant() {
+    math::Matrix<int> m0;
+    ASSERT_THROW((void)m0.determinant(), std::invalid_argument);
+  }
+
+  void should_compute_determinant_of_int_matrix() {
+    math::Matrix<int> m1(2, 2, {1, 2, 3, 4});
+    math::Matrix<int> m2(2, 2, {3, 1, 1, 1});
+    math::Matrix<int> m3(3, 3, {2, 1, 1, 4, -6, 0, -2, 7, 2});
+    math::Matrix<int> m4(3, 3, {9, 0, 0, 0, 16, 0, 0, 0, 25});
+    math::Matrix<int> I = math::identity_matrix<int>(3);
+
+    ASSERT_SAME_TYPE(m1.determinant(), double);
+    ASSERT_TRUE(m1.determinant() == -2.0);
+    ASSERT_TRUE(m2.determinant() == 2.0);
+    ASSERT_TRUE(m3.determinant() == -16.0);
+    ASSERT_TRUE(m4.determinant() == 3600.0);
+    ASSERT_TRUE(I.determinant() == 1.0);
+  }
+
+  void should_promote_int_matrix_to_double_when_computing_determinant() {
+    math::Matrix<int> m1(3, 3, {2, 3, 1, 4, 7, 5, 6, 8, 9});
+    math::Matrix<int> m2(3, 3, {-7, -4, -8, -5, 0, -4, -7, -8, 8});
+    math::Matrix<int> m3(2, 2, {3, 1, 1, 1});
+
+    ASSERT_TRUE(is_close(m1.determinant(), 18));
+    ASSERT_TRUE(is_close(m2.determinant(), -368));
+    ASSERT_TRUE(is_close(m3.determinant(), 2));
+  }
+  void should_compute_determinant_of_spd_int_matrix() {
+    math::Matrix<int> spd(3, 3, {4, 12, -16, 12, 37, -43, -16, -43, 98});
+    static constexpr double EXPECTED = 36.0;
+    ASSERT_TRUE(is_close(spd.determinant<true>(), EXPECTED));
+  }
+
+  void should_compute_determinant_of_float_matrix() {
+    math::Matrix<float> m(
+        3, 3, {4.0F, 12.0F, -16.0F, 12.0F, 37.0F, -43.0F, -16.0F, -43.0F, 98.0F});
+    static constexpr double EXPECTED = 36.0F;
+    ASSERT_SAME_TYPE(m.determinant(), float);
+    ASSERT_TRUE(is_close(m.determinant(), EXPECTED, 1e-4));
+  }
+
+  void should_equal_determinant_of_transpose() {
+    math::Matrix<double> m(4, 4, {1, 2, 3, 4, 5, 6, 7, 8, 2, -1, 0, 3, 9, 1, -2, 5});
+    double det = m.determinant();
+    double det_t = m.transposed().determinant();
+    static constexpr double EXPECTED = -120.0;
+    ASSERT_TRUE(is_close(det, EXPECTED));
+    ASSERT_TRUE(is_close(det, det_t));
+  }
+
+  void should_satisfy_determinant_multiplicativity() {
+    math::Matrix<double> A(3, 3, {2, 1, 1, 4, -6, 0, -2, 7, 2});
+    math::Matrix<double> B(3, 3, {1, 2, 3, 0, 4, 5, 0, 0, 6});
+    double det_A = A.determinant();
+    double det_B = B.determinant();
+    double det_AB = (A * B).determinant();
+    ASSERT_TRUE(is_close(det_A, -16.0));
+    ASSERT_TRUE(is_close(det_B, 24.0));
+    ASSERT_TRUE(is_close(det_AB, det_A * det_B));
+    ASSERT_TRUE(is_close(det_AB, -384.0));
+  }
+
+  void should_compute_determinant_of_spd_matrix() {
+    math::Matrix<double> m(3, 3, {4, 12, -16, 12, 37, -43, -16, -43, 98});
+    math::Matrix<double> m2(3, 3, {1, 2, 1, 2, 5, 2, 1, 2, 10});
+    ASSERT_TRUE(is_close(m.determinant<true>(), 36.0));
+    ASSERT_TRUE(is_close(m2.determinant<true>(), 9.0));
+  }
+
+  void should_match_spd_and_plu_determinant_paths() {
+    math::Matrix<double> m(3, 3, {4, 12, -16, 12, 37, -43, -16, -43, 98});
+    math::Matrix<double> d(3, 3, {9, 0, 0, 0, 16, 0, 0, 0, 25});
+    ASSERT_TRUE(is_close(m.determinant(), m.determinant<true>()));
+    ASSERT_TRUE(is_close(m.determinant(), 36.0));
+    ASSERT_TRUE(is_close(d.determinant(), d.determinant<true>()));
+    ASSERT_TRUE(is_close(d.determinant(), 3600.0));
+  }
+
+  void should_throw_if_spd_determinant_on_non_symmetric_matrix() {
+    math::Matrix<double> m(2, 2, {1.0, 2.0, 3.0, 4.0});
+    ASSERT_THROW((void)m.determinant<true>(), std::invalid_argument);
+  }
+
+  void should_throw_if_spd_determinant_on_non_positive_definite_matrix() {
+    math::Matrix<double> m(2, 2, {1.0, 2.0, 2.0, 4.0});
+    ASSERT_THROW((void)m.determinant<true>(), std::invalid_argument);
   }
 
   //=============================================================================
@@ -1503,6 +1663,27 @@ class MatrixTests : public ITest {
     should_handle_int_identity_matrix_in_cholesky();
     should_handle_diagonal_int_matrix_in_cholesky();
     cholesky_time_test();
+    should_compute_determinant_of_1x1_matrix();
+    should_compute_determinant_of_2x2_matrix();
+    should_compute_determinant_of_3x3_matrix();
+    should_compute_determinant_of_4x4_matrix();
+    should_compute_determinant_of_identity_matrix();
+    should_compute_determinant_of_diagonal_matrix();
+    should_compute_determinant_of_triangular_matrix();
+    should_compute_determinant_of_permutation_matrix();
+    should_throw_if_determinant_called_on_non_square_matrix();
+    should_throw_for_singular_matrix_when_computing_determinant();
+    should_throw_for_empty_matrix_when_computing_determinant();
+    should_compute_determinant_of_int_matrix();
+    should_promote_int_matrix_to_double_when_computing_determinant();
+    should_compute_determinant_of_spd_int_matrix();
+    should_compute_determinant_of_float_matrix();
+    should_equal_determinant_of_transpose();
+    should_satisfy_determinant_multiplicativity();
+    should_compute_determinant_of_spd_matrix();
+    should_match_spd_and_plu_determinant_paths();
+    should_throw_if_spd_determinant_on_non_symmetric_matrix();
+    should_throw_if_spd_determinant_on_non_positive_definite_matrix();
     should_decompose_identity_matrix_qr();
     should_decompose_known_small_matrix_qr();
     should_throw_on_empty_matrix();

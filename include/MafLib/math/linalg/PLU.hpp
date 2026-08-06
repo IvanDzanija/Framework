@@ -21,6 +21,23 @@
  * https://en.wikipedia.org/wiki/LU_decomposition#LU_factorization_with_partial_pivoting
  */
 namespace maf::math {
+/**
+ * @brief Struct to hold the result of a PLU decomposition.
+ *
+ * This struct contains the permutation vector P, the lower triangular
+ * matrix L, the upper triangular matrix U, and the sign of the permutation.
+ *
+ * @tparam T The floating point type of the matrix elements (e.g., float,
+ * double).
+ */
+template <std::floating_point T>
+struct PLUResult {
+  std::vector<uint32> P;  // Permutation vector
+  Matrix<T> L;            // Lower triangular matrix
+  Matrix<T> U;            // Upper triangular matrix
+  int8 sign = 1;          // Sign of the permutation (+1 or -1)
+};
+
 namespace detail {
 /**
  * @brief Internal implementation of PLU decomposition.
@@ -29,8 +46,7 @@ namespace detail {
  * Uses blocked algorithm with OpenMP parallelization.
  */
 template <std::floating_point T>
-[[nodiscard]] std::tuple<std::vector<uint32>, Matrix<T>, Matrix<T>> _plu(
-    Matrix<T> &&_U) {
+[[nodiscard]] PLUResult<T> _plu(Matrix<T> &&_U) {
   if (!_U.is_square()) {
     throw std::invalid_argument("Matrix must be square for PLU decomposition!");
   }
@@ -45,6 +61,7 @@ template <std::floating_point T>
   // std::ranges::iota(P, 0);
   std::iota(P.begin(), P.end(), 0);
   Matrix<T> L = identity_matrix<T>(n);
+  int8 sign = 1;
 
   // Conceptual block matrix:
   // A = [A_11, A_12]
@@ -74,6 +91,7 @@ template <std::floating_point T>
       if (pivot_row != i) {
         // Swap permutation vector
         std::swap(P[i], P[pivot_row]);
+        sign *= -1;
 
         // Swap entire rows in our working matrix
         auto row_i = _U.row_span(i);
@@ -155,7 +173,7 @@ template <std::floating_point T>
     std::copy_n(a_row, len, u_row);
   }
 
-  return std::make_tuple(std::move(P), std::move(L), std::move(U));
+  return PLUResult<T>{std::move(P), std::move(L), std::move(U), sign};
 }
 
 }  // namespace detail
