@@ -688,7 +688,7 @@ class MatrixTests : public ITest {
     math::Matrix<double> m(2, 3, {1, 2, 3, 4, 5, 6});
     bool thrown = false;
     try {
-      auto [P, L, U, s] = plu(m);
+      (void)plu(m);
     } catch (const std::invalid_argument &e) {
       thrown = true;
     }
