@@ -393,43 +393,34 @@ class Matrix {
   }
 
   template <bool is_spd = false>
-  [[nodiscard]] T determinant() const {
+  [[nodiscard]] auto determinant() const {
     if (!is_square()) {
       throw std::invalid_argument("Determinant is only defined for square matrices.");
     }
 
-    // PLU/Cholesky compute in floating point, so accumulate there to avoid
-    // truncating intermediate products for integral element types (T).
-    using AccumType = std::conditional_t<std::is_floating_point_v<T>, T, double>;
-
-    const auto finalize = [](AccumType value) -> T {
-      if constexpr (std::is_integral_v<T>) {
-        return static_cast<T>(std::round(value));
-      } else {
-        return static_cast<T>(value);
-      }
-    };
-
     if constexpr (is_spd) {
       // res = det(L)^2
       auto L = cholesky(*this);
+      using AccumType =
+          typename std::decay_t<decltype(L)>::value_type;  // Get the promoted type
       AccumType det = 1;
 
       for (size_t i = 0; i < _rows; ++i) {
         det *= L.at(i, i);
       }
-
-      return finalize(det * det);
+      return det * det;
     } else {
       // res = det(U) * det(P), det(L) = 1
       auto plu_res = plu(*this);
-      AccumType det = static_cast<AccumType>(plu_res.sign);
+      using AccumType =
+          typename std::decay_t<decltype(plu_res.U)>::value_type;  // Get the promoted
+                                                                   // type
+      auto det = static_cast<AccumType>(plu_res.sign);
 
       for (size_t i = 0; i < _rows; ++i) {
         det *= plu_res.U.at(i, i);
       }
-
-      return finalize(det);
+      return det;
     }
   }
 

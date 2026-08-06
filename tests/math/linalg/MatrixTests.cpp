@@ -1003,7 +1003,8 @@ class MatrixTests : public ITest {
 
   void should_compute_determinant_of_4x4_matrix() {
     math::Matrix<double> m(4, 4, {1, 2, 3, 4, 5, 6, 7, 8, 2, -1, 0, 3, 9, 1, -2, 5});
-    ASSERT_TRUE(is_close(m.determinant(), -120.0));
+    static constexpr double EXPECTED = -120.0;
+    ASSERT_TRUE(is_close(m.determinant(), EXPECTED));
   }
 
   void should_compute_determinant_of_identity_matrix() {
@@ -1015,19 +1016,23 @@ class MatrixTests : public ITest {
 
   void should_compute_determinant_of_diagonal_matrix() {
     math::Matrix<double> m(3, 3, {9, 0, 0, 0, 16, 0, 0, 0, 25});
-    ASSERT_TRUE(is_close(m.determinant(), 3600.0));
+    static constexpr double EXPECTED = 3600.0;
+    ASSERT_TRUE(is_close(m.determinant(), EXPECTED));
   }
 
   void should_compute_determinant_of_triangular_matrix() {
     math::Matrix<double> m(3, 3, {1, 2, 3, 0, 4, 5, 0, 0, 6});
-    ASSERT_TRUE(is_close(m.determinant(), 24.0));
+    static constexpr double EXPECTED = 24.0;
+    ASSERT_TRUE(is_close(m.determinant(), EXPECTED));
   }
 
   void should_compute_determinant_of_permutation_matrix() {
-    math::Matrix<double> m(4, 4, {0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1});
+    math::Matrix<double> m1(4, 4, {0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1});
     math::Matrix<double> m2(3, 3, {1, 0, 0, 0, 0, 1, 0, 1, 0});
-    ASSERT_TRUE(is_close(m.determinant(), -1.0));
+    math::Matrix<double> m3(3, 3, {0, 0, 1, 1, 0, 0, 0, 1, 0});
+    ASSERT_TRUE(is_close(m1.determinant(), -1.0));
     ASSERT_TRUE(is_close(m2.determinant(), -1.0));
+    ASSERT_TRUE(is_close(m3.determinant(), 1.0));
   }
 
   void should_throw_if_determinant_called_on_non_square_matrix() {
@@ -1056,54 +1061,56 @@ class MatrixTests : public ITest {
     math::Matrix<int> m4(3, 3, {9, 0, 0, 0, 16, 0, 0, 0, 25});
     math::Matrix<int> I = math::identity_matrix<int>(3);
 
-    ASSERT_SAME_TYPE(m1.determinant(), int);
-    ASSERT_TRUE(m1.determinant() == -2);
-    ASSERT_TRUE(m2.determinant() == 2);
-    ASSERT_TRUE(m3.determinant() == -16);
-    ASSERT_TRUE(m4.determinant() == 3600);
-    ASSERT_TRUE(I.determinant() == 1);
+    ASSERT_SAME_TYPE(m1.determinant(), double);
+    ASSERT_TRUE(m1.determinant() == -2.0);
+    ASSERT_TRUE(m2.determinant() == 2.0);
+    ASSERT_TRUE(m3.determinant() == -16.0);
+    ASSERT_TRUE(m4.determinant() == 3600.0);
+    ASSERT_TRUE(I.determinant() == 1.0);
   }
 
   void should_promote_int_matrix_to_double_when_computing_determinant() {
-    // PLU/Cholesky promote integral matrices to double internally. These
-    // matrices have exact integer determinants but fractional intermediate
-    // factors, so the accumulator must not truncate during the computation.
     math::Matrix<int> m1(3, 3, {2, 3, 1, 4, 7, 5, 6, 8, 9});
     math::Matrix<int> m2(3, 3, {-7, -4, -8, -5, 0, -4, -7, -8, 8});
     math::Matrix<int> m3(2, 2, {3, 1, 1, 1});
-    ASSERT_TRUE(m1.determinant() == 18);
-    ASSERT_TRUE(m2.determinant() == -368);
-    ASSERT_TRUE(m3.determinant() == 2);
 
+    ASSERT_TRUE(is_close(m1.determinant(), 18));
+    ASSERT_TRUE(is_close(m2.determinant(), -368));
+    ASSERT_TRUE(is_close(m3.determinant(), 2));
+  }
+  void should_compute_determinant_of_spd_int_matrix() {
     math::Matrix<int> spd(3, 3, {4, 12, -16, 12, 37, -43, -16, -43, 98});
-    ASSERT_TRUE(spd.determinant<true>() == 36);
+    static constexpr double EXPECTED = 36.0;
+    ASSERT_TRUE(is_close(spd.determinant<true>(), EXPECTED));
   }
 
   void should_compute_determinant_of_float_matrix() {
     math::Matrix<float> m(
-        3, 3, {4.0f, 12.0f, -16.0f, 12.0f, 37.0f, -43.0f, -16.0f, -43.0f, 98.0f});
+        3, 3, {4.0F, 12.0F, -16.0F, 12.0F, 37.0F, -43.0F, -16.0F, -43.0F, 98.0F});
+    static constexpr double EXPECTED = 36.0F;
     ASSERT_SAME_TYPE(m.determinant(), float);
-    ASSERT_TRUE(is_close(m.determinant(), 36.0f, 1e-4f));
+    ASSERT_TRUE(is_close(m.determinant(), EXPECTED, 1e-4));
   }
 
   void should_equal_determinant_of_transpose() {
     math::Matrix<double> m(4, 4, {1, 2, 3, 4, 5, 6, 7, 8, 2, -1, 0, 3, 9, 1, -2, 5});
     double det = m.determinant();
     double det_t = m.transposed().determinant();
-    ASSERT_TRUE(is_close(det, -120.0));
+    static constexpr double EXPECTED = -120.0;
+    ASSERT_TRUE(is_close(det, EXPECTED));
     ASSERT_TRUE(is_close(det, det_t));
   }
 
   void should_satisfy_determinant_multiplicativity() {
     math::Matrix<double> A(3, 3, {2, 1, 1, 4, -6, 0, -2, 7, 2});
     math::Matrix<double> B(3, 3, {1, 2, 3, 0, 4, 5, 0, 0, 6});
-    double detA = A.determinant();
-    double detB = B.determinant();
-    double detAB = (A * B).determinant();
-    ASSERT_TRUE(is_close(detA, -16.0));
-    ASSERT_TRUE(is_close(detB, 24.0));
-    ASSERT_TRUE(is_close(detAB, detA * detB));
-    ASSERT_TRUE(is_close(detAB, -384.0));
+    double det_A = A.determinant();
+    double det_B = B.determinant();
+    double det_AB = (A * B).determinant();
+    ASSERT_TRUE(is_close(det_A, -16.0));
+    ASSERT_TRUE(is_close(det_B, 24.0));
+    ASSERT_TRUE(is_close(det_AB, det_A * det_B));
+    ASSERT_TRUE(is_close(det_AB, -384.0));
   }
 
   void should_compute_determinant_of_spd_matrix() {
@@ -1130,41 +1137,6 @@ class MatrixTests : public ITest {
   void should_throw_if_spd_determinant_on_non_positive_definite_matrix() {
     math::Matrix<double> m(2, 2, {1.0, 2.0, 2.0, 4.0});
     ASSERT_THROW((void)m.determinant<true>(), std::invalid_argument);
-  }
-
-  void should_match_int_determinant_with_double_precision_computation() {
-    std::mt19937 gen(42);
-    std::uniform_int_distribution<int> dis(-9, 9);
-    size_t checked = 0;
-    size_t mismatches = 0;
-
-    for (size_t trial = 0; trial < 500; ++trial) {
-      math::Matrix<int> A(3, 3);
-      for (size_t i = 0; i < 9; ++i) {
-        A.at(i / 3, i % 3) = dis(gen);
-      }
-
-      int int_det = 0;
-      bool singular = false;
-      try {
-        int_det = A.determinant();
-      } catch (const std::runtime_error &) {
-        singular = true;
-      }
-      if (singular) continue;
-
-      double dbl_det = A.cast<double>().determinant();
-      double rounded = std::round(dbl_det);
-      if (std::abs(dbl_det - rounded) > 1e-6) continue;
-
-      ++checked;
-      if (int_det != static_cast<int>(rounded)) {
-        ++mismatches;
-      }
-    }
-
-    ASSERT_TRUE(checked > 100);
-    ASSERT_TRUE(mismatches == 0);
   }
 
   //=============================================================================
@@ -1704,6 +1676,7 @@ class MatrixTests : public ITest {
     should_throw_for_empty_matrix_when_computing_determinant();
     should_compute_determinant_of_int_matrix();
     should_promote_int_matrix_to_double_when_computing_determinant();
+    should_compute_determinant_of_spd_int_matrix();
     should_compute_determinant_of_float_matrix();
     should_equal_determinant_of_transpose();
     should_satisfy_determinant_multiplicativity();
@@ -1711,7 +1684,6 @@ class MatrixTests : public ITest {
     should_match_spd_and_plu_determinant_paths();
     should_throw_if_spd_determinant_on_non_symmetric_matrix();
     should_throw_if_spd_determinant_on_non_positive_definite_matrix();
-    should_match_int_determinant_with_double_precision_computation();
     should_decompose_identity_matrix_qr();
     should_decompose_known_small_matrix_qr();
     should_throw_on_empty_matrix();
